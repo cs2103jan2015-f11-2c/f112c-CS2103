@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "Library\Library.vcxproj", "{4F2CDBDE-B6EE-4267-89B8-2D3A4AE117AC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "UI\UI.vcxproj", "{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F2CDBDE-B6EE-4267-89B8-2D3A4AE117AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F2CDBDE-B6EE-4267-89B8-2D3A4AE117AC}.Debug|Win32.Build.0 = Debug|Win32
+		{4F2CDBDE-B6EE-4267-89B8-2D3A4AE117AC}.Release|Win32.ActiveCfg = Release|Win32
+		{4F2CDBDE-B6EE-4267-89B8-2D3A4AE117AC}.Release|Win32.Build.0 = Release|Win32
+		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Debug|Win32.Build.0 = Debug|Win32
+		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Release|Win32.ActiveCfg = Release|Win32
+		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
