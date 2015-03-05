@@ -506,10 +506,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 				 vector<Event> displayEvent = lG->executeUserInput(input);
 				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() );
-				 feedbackBox->Text = feedbackToUser;
-
-				 /*
-				 if (feedbackToUser == "exit"){
+			     feedbackBox->Text = feedbackToUser;
 				
 				 if (temp == "exit"){
 					 Application::Exit();
@@ -520,7 +517,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 					 EventArgs^ e;
 					 helpButton_Click(sender,e);
 				 }
-				 */
+				 
 				 
 			 }
 		 }

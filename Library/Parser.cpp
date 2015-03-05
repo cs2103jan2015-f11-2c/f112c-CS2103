@@ -94,9 +94,9 @@ void Parser::identifyAddCommand(){
 	//whenever an information is extracted and there is no preceding information left to extract, it will exit the if.. statements with commandType identified
 	if(this->extractEventName()){
 		if(this->extractEventDate()){
-			if(this->extractEventTime()){
-				typeOfCommand = ERROR_;
-			}
+			//if(this->extractEventTime()){
+				//typeOfCommand = ERROR_;
+			//}
 		}
 	}
 }

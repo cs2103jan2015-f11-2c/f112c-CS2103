@@ -3,9 +3,9 @@
 
 
 	//CONSTRUCTOR
-//Logic::Logic() {
+Logic::Logic(void) {
 	//parserPtr = NULL;
-//}
+}
 
 
 	//GETTERS

@@ -23,7 +23,7 @@ private:
 
 public:
 	//constructor
-	Logic();
+	Logic(void);
 	
 
 	//getters

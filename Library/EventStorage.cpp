@@ -16,6 +16,9 @@ auto::iterator search(int ID)
 
 	//CONSTRUCTOR, DESTRUCTOR
 //read all from text file first to have past memory
+
+const std::string EventStorage::currentFile = "mytext.txt";
+
 EventStorage::EventStorage(void)
 {
 	readToCurrentContent();
