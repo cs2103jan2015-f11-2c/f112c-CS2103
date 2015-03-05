@@ -18,15 +18,7 @@ auto::iterator search(int ID)
 //read all from text file first to have past memory
 EventStorage::EventStorage(void)
 {
-	std::ifstream readFromCurrentFile(currentFile);
-	std::string textLine;
-
-	
-	while(getline(readFromCurrentFile, textLine)){
-	Parser* parserPtr = new Parser(textLine);	
-	currentContent.push_back(parserPtr->getEvent());
-	}
-	readFromCurrentFile.close();
+	readToCurrentContent();
 }
 
 EventStorage::~EventStorage(void)
@@ -37,34 +29,96 @@ EventStorage::~EventStorage(void)
 //>>>>>>> HEAD
 	//METHODS
 //>>>>>>> origin/master
-/*
+void EventStorage::readToCurrentContent(){
+	
+	std::ifstream readFile(currentFile);
+	std::string textLine, name, description, feedback, tags, startDateYear, startDateMonth, startDateDay, startDateHour, startDateMin, endDateYear, endDateMonth, endDateDay, endDateHour, endDateMin, id;
+
+	getline(readFile, textLine);
+	while(readFile.eof()){
+
+		Event* tempEvent = new Event;
+
+		if(textLine == "0"){					//Normal case
+			//getinfo from textfile;
+			getline(readFile, name);
+			//cin event times
+			getline(readFile, startDateYear);
+			getline(readFile, startDateMonth);
+			getline(readFile, startDateDay);
+			getline(readFile, startDateHour);
+			getline(readFile, startDateMin);
+			getline(readFile, endDateYear);
+			getline(readFile, endDateMonth);
+			getline(readFile, endDateDay);
+			getline(readFile, endDateHour);
+			getline(readFile, endDateMin);
+		
+			getline(readFile, description);
+			getline(readFile, feedback);
+			getline(readFile, id);
+			getline(readFile, tags);
+			//createFile
+			tempEvent->setIsFloating("0");
+			tempEvent->setName(name);
+			tempEvent->setDescription(description);
+			tempEvent->setFeedback(feedback);
+			tempEvent->setID(atoi(id.c_str()));
+			tempEvent->setStartTime(atoi(startDateHour.c_str()),atoi(startDateMin.c_str()));
+			tempEvent->setStartDate(atoi(startDateDay.c_str()),atoi(startDateMonth.c_str()),atoi(startDateYear.c_str()));
+			tempEvent->setEndTime(atoi(endDateHour.c_str()),atoi(endDateMin.c_str()));
+			tempEvent->setEndDate(atoi(endDateDay.c_str()),atoi(endDateMonth.c_str()),atoi(endDateYear.c_str()));
+			//split tags
+			tempEvent->setTags();
+		}
+		else if(textLine == "1"){				//floatingEvent
+			//getinfo from textfile
+			getline(readFile, name);
+			getline(readFile, description);
+			getline(readFile, feedback);
+			getline(readFile, id);
+			getline(readFile, tags);
+			//createFile
+			tempEvent->setIsFloating("0");
+			tempEvent->setName(name);
+			tempEvent->setDescription(description);
+			tempEvent->setFeedback(feedback);
+			tempEvent->setID(atoi(id.c_str()));
+			//split tags
+			tempEvent->setTags();
+		}
+		currentContent.push_back(*tempEvent);
+		delete tempEvent;
+	}
+	readFile.close();
+}
+
 void EventStorage::writeToCurrentFile(){
 	std::ofstream writeFile(currentFile);
 	
 	for(int i=0;i<currentContent.size();i++){
-		writeFile << currentContent[i].getIsFloating() << std::endl 
+		writeFile 
+			<< currentContent[i].getIsFloating() << std::endl 
 			<< currentContent[i].getName() << std::endl 
 			<< tmToString(currentContent[i]) << std::endl
 			<< currentContent[i].getDescription() << std::endl
 			<< currentContent[i].getFeedback() << std::endl
 			<< currentContent[i].getID() << std::endl;
 		
-		for(auto iter = currentContent[i].getTags.begin(); iter != currentContent[i].getTags.end(); iter++)
+		for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
 			writeFile << " " << *iter << std::endl;
-	}
+	}	
 	writeFile.close();
-
 }
-*/
 
 string EventStorage::tmToString(Event convertEvent){
 	std::ostringstream oss;
 
-	oss << convertEvent.getStartDate().tm_year << " " << convertEvent.getStartDate().tm_mon << " " << convertEvent.getStartDate().tm_mday
-		<< " " << convertEvent.getStartDate().tm_hour << " " << convertEvent.getStartDate().tm_min;
+	oss << convertEvent.getStartDate().tm_year << std::endl << convertEvent.getStartDate().tm_mon << std::endl << convertEvent.getStartDate().tm_mday
+		<< std::endl << convertEvent.getStartDate().tm_hour << std::endl << convertEvent.getStartDate().tm_min << std::endl;
 	
-	oss << convertEvent.getEndDate().tm_year << " " << convertEvent.getEndDate().tm_mon << " " << convertEvent.getEndDate().tm_mday
-		<< " " << convertEvent.getEndDate().tm_hour << " " << convertEvent.getEndDate().tm_min;
+	oss << convertEvent.getEndDate().tm_year << std::endl << convertEvent.getEndDate().tm_mon << std::endl << convertEvent.getEndDate().tm_mday
+		<< std::endl << convertEvent.getEndDate().tm_hour << std::endl << convertEvent.getEndDate().tm_min;
 
 	return oss.str();
 }
@@ -76,20 +130,27 @@ vector<Event> EventStorage::addEvent(Event eventName){
 	returnToLogicVector.push_back(eventName);
 	return returnToLogicVector; 
 }
-/*
-void EventStorage::deleteEvent(Event newEvent){
-	searchEventID(newEvent.getID);
+Event EventStorage::userInputIndexToEvent(int userIndex)
+{
+	return searchResults[userIndex-1];
+}
+void EventStorage::deleteEvent(int userIndex){
+	
+	Event eventToBeDeleted;
+	int indexOfEventID;
+	
+	eventToBeDeleted = userInputIndexToEvent(userIndex);
 
 	//saving in archive for Undo
 	archiveObject.setCommandType("delete");
-	archiveObject.setArchiveEvent(searchResults[0]);
+	archiveObject.setArchiveEvent(eventToBeDeleted);
 	archiveContent.push_back(archiveObject);
 
+	//find event in currentContent and delete
+	indexOfEventID = searchCurrentContentWithEventID(eventToBeDeleted.getID());
+	currentContent.erase(currentContent.begin() + indexOfEventID);
 
-	//delete in vector
-	//copy to file
-	//save in archiveVector
-
+	writeToCurrentFile();
 }
 
 //search all vector and all component of events save into events of vector results
@@ -98,12 +159,34 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	searchResults.clear();
 
 	for(int i=0;i<currentContent.size();i++){
-		isFound = currentContent[i].getDescription.find(informationToSearch);
-		isFound = currentContent[i].getName.find(informationToSearch);
-		isFound = currentContent[i].getStartDate.find(informationToSearch);
-		isFound = currentContent[i].getEndDate.find(informationToSearch);
-		isFound = currentContent[i].getID.find(informationToSearch);
-		isFound = currentContent[i].getTags.find(informationToSearch);
+		isFound = currentContent[i].getDescription().find(informationToSearch);
+		isFound = currentContent[i].getName().find(informationToSearch);
+		//search for tags not yet included			
+		if(currentContent[i].getID() == atoi(informationToSearch.c_str())){
+			isFound = true;
+		}
+
+		if(currentContent[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_min == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
+			isFound = true;
+
 	if(isFound){
 		searchResults.push_back(currentContent[i]);
 	}
@@ -113,17 +196,15 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 }
 
 //search base on event ID
-vector<Event> EventStorage::searchEventID(int eventID){
+int EventStorage::searchCurrentContentWithEventID(int eventID){
 	bool isFound=false;
 	
 	searchResults.clear();
 	for(int i=0;i<currentContent.size();i++){
-		isFound = currentContent[i].getID.find(eventID);
-	
-		if(isFound){
-			searchResults.push_back(currentContent[i]);
-			return searchResults;
+		if(currentContent[i].getID() == eventID){
+			isFound = true;
+			return i;
 		}
 	}
-	return searchResults;
-}*/
+	return -1;
+}

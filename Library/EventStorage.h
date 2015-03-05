@@ -43,15 +43,19 @@ public:
 	~EventStorage(void);
 
 	//Methods
-	void writeToCurrentFile(); //Write as One event One String One line of text.
+	void writeToCurrentFile();
+	void readToCurrentContent();
 	vector<Event> addEvent(Event newEvent);
-	void deleteEvent(Event newEvent); 
-	void showEvent();
+	void deleteEvent(int userIndex); 
 	void EditEvent(int ID, Event newEvent);
 	vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
-	vector<Event> searchEventID(int eventID);
+	int searchCurrentContentWithEventID(int eventID);
 	void searchEventname();
-	string tmToString(Event current);
+	string tmToString(Event convertEvent);
+	Event userInputIndexToEvent(int userIndex);
+	//void createFloatingEvent();
+	//void createEvent();
+	void showEvent();
 
 };
 
