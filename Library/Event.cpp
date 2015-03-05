@@ -122,7 +122,7 @@ void Event::setIsFloating(bool floating) {
 	isFloating = floating;
 }
 
-void Event::setTags();{//vector<string> userTags) {
+void Event::setTags(vector<string> userTags){
 	tags = userTags;
 }
 

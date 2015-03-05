@@ -69,7 +69,7 @@ void EventStorage::readToCurrentContent(){
 			tempEvent->setEndTime(atoi(endDateHour.c_str()),atoi(endDateMin.c_str()));
 			tempEvent->setEndDate(atoi(endDateDay.c_str()),atoi(endDateMonth.c_str()),atoi(endDateYear.c_str()));
 			//split tags
-			tempEvent->setTags();
+			//tempEvent->setTags();
 		}
 		else if(textLine == "1"){				//floatingEvent
 			//getinfo from textfile
@@ -85,7 +85,7 @@ void EventStorage::readToCurrentContent(){
 			tempEvent->setFeedback(feedback);
 			tempEvent->setID(atoi(id.c_str()));
 			//split tags
-			tempEvent->setTags();
+			//tempEvent->setTags();
 		}
 		currentContent.push_back(*tempEvent);
 		delete tempEvent;

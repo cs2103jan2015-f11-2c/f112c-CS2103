@@ -54,7 +54,7 @@ public:
 	void setStartTime(int hour, int minute);
 	void setEndTime(int hour, int minute);
 	void setIsFloating(bool floating);
-	void setTags();//(vector<string> userTags);
+	void setTags(vector<string> userTags);
 	void setDescription(string desc);
 	void setFeedback(string feedbackToUser);
 	void setID(int number);
