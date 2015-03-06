@@ -211,3 +211,25 @@ int EventStorage::searchCurrentContentWithEventID(int eventID){
 	}
 	return -1;
 }
+
+vector<Event> EventStorage::showAllEvent(){
+	sortEventVectorByDate();
+	return currentContent;
+}
+
+void EventStorage::sortEventVectorByDate(){
+
+	time_t timeSmaller, timeBigger;
+	Event tempEvent;
+	for(int i=0;i<currentContent.size()-1;i++){
+		for(int j=i+1;j<currentContent.size();i++){
+			timeSmaller = mktime(&currentContent[i].getStartDate());
+			timeBigger = mktime(&currentContent[j].getStartDate());
+			if(difftime(timeBigger,timeSmaller)>0){
+				tempEvent = currentContent[j];
+				currentContent[j] = currentContent[i];
+				currentContent[i] = tempEvent;
+			}
+		}
+	}
+}

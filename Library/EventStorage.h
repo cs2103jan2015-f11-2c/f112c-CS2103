@@ -28,6 +28,7 @@ auto::iterator search(int ID)
 class EventStorage{
 private:
 	std::vector<Event> currentContent;
+	std::vector<Event> currentFloatingContent;
 	std::vector<EventArchive> archiveContent;
 	std::vector<Event> searchResults;
 	std::vector<Event> undoVector;
@@ -55,7 +56,8 @@ public:
 	Event userInputIndexToEvent(int userIndex);
 	//void createFloatingEvent();
 	//void createEvent();
-	void showEvent();
+	vector<Event> showAllEvent();
+	void sortEventVectorByDate();
 
 };
 
