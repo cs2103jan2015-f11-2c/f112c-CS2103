@@ -53,6 +53,8 @@ public:
 	int searchCurrentContentWithEventID(int eventID);
 	void searchEventname();
 	string tmToString(Event convertEvent);
+	string boolToString(bool isFloatingBool);
+
 	Event userInputIndexToEvent(int userIndex);
 	//void createFloatingEvent();
 	//void createEvent();

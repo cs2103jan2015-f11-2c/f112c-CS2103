@@ -101,17 +101,26 @@ void EventStorage::writeToCurrentFile(){
 	
 	for(int i=0;i<currentContent.size();i++){
 		writeFile 
-			<< currentContent[i].getIsFloating() << std::endl 
+			<< boolToString(currentContent[i].getIsFloating()) << std::endl 
 			<< currentContent[i].getName() << std::endl 
 			<< tmToString(currentContent[i]) << std::endl
 			<< currentContent[i].getDescription() << std::endl
 			<< currentContent[i].getFeedback() << std::endl
 			<< currentContent[i].getID() << std::endl;
 		
-		for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
-			writeFile << " " << *iter << std::endl;
+		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
+		//	writeFile << " " << *iter << std::endl;
 	}	
 	writeFile.close();
+}
+
+string EventStorage::boolToString(bool isFloatingBool){
+	if(isFloatingBool){
+		return "1";
+	}
+	else{
+		return "0";
+	}
 }
 
 string EventStorage::tmToString(Event convertEvent){
