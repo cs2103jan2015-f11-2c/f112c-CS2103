@@ -60,7 +60,7 @@ public:
 	void timeToInt(int&, int&, std::string);	//converts time from string to integers
 	bool extractEventName();	//extract name of event from details string
 	bool extractEventDate();	//extract date of event from details string
-	//bool extractEventTime();	//extract time of event from details string
+	bool extractEventTime();	//extract time of event from details string
 
 	//delete
 	void setDeleteCommand();	//set index and cType for delete

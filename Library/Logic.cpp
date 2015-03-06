@@ -4,24 +4,24 @@
 
 	//CONSTRUCTOR
 Logic::Logic(void) {
-	//parserPtr = NULL;
+	parserPtr = NULL;
 }
 
 
 	//GETTERS
-//Parser::commandType Logic::getCommand() {
-	//return parserPtr->getCommandType();
-//}
+Parser::commandType Logic::getCommand() {
+	return parserPtr->getCommandType();
+}
 
-//Event Logic::getEvent() {
-	//return parserPtr->getEvent();
-//}
+Event Logic::getEvent() {
+	return parserPtr->getEvent();
+}
 
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
 vector<Event> Logic::executeUserInput(string input) {
-	/*parserPtr = new Parser(input);
+	parserPtr = new Parser(input);
 	
 	Parser::commandType command = getCommand();
 	Event userEvent = getEvent();
@@ -30,8 +30,8 @@ vector<Event> Logic::executeUserInput(string input) {
 
 	deleteParserPtr();
 
-	return resultEvent;*/
-
+	return resultEvent;
+	/*
 	Event e;
 
 	vector<string> svec;
@@ -50,16 +50,18 @@ vector<Event> Logic::executeUserInput(string input) {
 
 	vector<Event> v;
 	v.push_back(e);
-
+	
 	return v;
+	*/
 }
 
 //executes exact user command after parsing
-/*vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent) {
+vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	vector<Event> resultEvent;
 	
 	switch (command) {
 	case Parser::ADDFLOAT:
+		resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDFULLDAY:
@@ -78,7 +80,7 @@ vector<Event> Logic::executeUserInput(string input) {
 	case Parser::ADDMULDAYS:
 		break;
 
-	case Parser::DELETE:
+	case Parser::DELETE_:
 		break;
 
 	case Parser::EDIT:
@@ -96,7 +98,7 @@ vector<Event> Logic::executeUserInput(string input) {
 	case Parser::SHOWUSER:
 		break;
 
-	case Parser::ERROR:
+	case Parser::ERROR_:
 		break;
 
 	default:
@@ -109,4 +111,4 @@ vector<Event> Logic::executeUserInput(string input) {
 void Logic::deleteParserPtr() {
 	delete parserPtr;
 	parserPtr = NULL;
-}*/
+}

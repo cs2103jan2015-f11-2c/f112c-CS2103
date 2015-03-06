@@ -94,9 +94,9 @@ void Parser::identifyAddCommand(){
 	//whenever an information is extracted and there is no preceding information left to extract, it will exit the if.. statements with commandType identified
 	if(this->extractEventName()){
 		if(this->extractEventDate()){
-			//if(this->extractEventTime()){
-				//typeOfCommand = ERROR_;
-			//}
+			if(this->extractEventTime()){
+				typeOfCommand = ERROR_;
+			}
 		}
 	}
 }
@@ -214,7 +214,7 @@ int Parser::mthToInt(std::string month){
 	}
 }
 
-/*
+
 bool Parser::extractEventTime(){
 	std::string tempTime;
 	std::string tempStartTime;
@@ -224,6 +224,7 @@ bool Parser::extractEventTime(){
 	std::string::size_type strCutIndex;
 	std::string::size_type strTimeDashIndex;
 	
+	strCutIndex = details.find_first_of(" ");
 	tempTime = details;
 
 	//split time into startTime and endTime if it exists
@@ -265,7 +266,6 @@ bool Parser::extractEventTime(){
 
 	return true;
 }
-*/
 
 	//DELETE
 //Possible delete commands:

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-//#include "Parser.h"
+#include "Parser.h"
 #include "EventStorage.h"
 #include "Event.h"
 
@@ -17,7 +17,7 @@ using std::vector;
 
 class Logic {
 private:
-	//Parser* parserPtr;
+	Parser* parserPtr;
 	EventStorage eventStore;
 
 
@@ -27,14 +27,14 @@ public:
 	
 
 	//getters
-	//Parser::commandType getCommand();
-	//Event getEvent();
+	Parser::commandType getCommand();
+	Event getEvent();
 
 
 	//executors
 	vector<Event> executeUserInput(string input);
-	//vector<Event> executeCommand(Parser::commandType command, Event userEvent);
-	//void deleteParserPtr();
+	vector<Event> executeCommand(Parser::commandType command, Event userEvent);
+	void deleteParserPtr();
 
 };
 
