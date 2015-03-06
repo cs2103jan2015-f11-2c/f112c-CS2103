@@ -34,6 +34,9 @@ vector<Event> Logic::executeUserInput(string input) {
 
 	Event e;
 
+	vector<string> svec;
+	svec.push_back("#school");
+
 	e.setName("exam");
 	e.setFeedback("event added");
 	e.setStartDate(6, 2, 2015);
@@ -42,6 +45,8 @@ vector<Event> Logic::executeUserInput(string input) {
 	e.setEndTime(12, 0);
 	e.setIsFloating(false);
 	e.setDescription("foo");
+	e.setTags(svec);
+
 
 	vector<Event> v;
 	v.push_back(e);
