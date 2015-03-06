@@ -56,6 +56,7 @@ public:
 	string boolToString(bool isFloatingBool);
 
 	Event userInputIndexToEvent(int userIndex);
+
 	//void createFloatingEvent();
 	//void createEvent();
 	vector<Event> showAllEvent();

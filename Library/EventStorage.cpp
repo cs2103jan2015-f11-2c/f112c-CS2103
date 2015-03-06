@@ -179,25 +179,25 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 			isFound = true;
 		}
 
-		if(currentContent[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getStartDate().tm_year == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getStartDate().tm_mon == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getStartDate().tm_mday == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getStartDate().tm_hour == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_min == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getStartDate().tm_min == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getEndDate().tm_year == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getEndDate().tm_mon == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getEndDate().tm_mday == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getEndDate().tm_hour == stoi(informationToSearch))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
+		if(currentContent[i].getEndDate().tm_min == stoi(informationToSearch))
 			isFound = true;
 
 	if(isFound){
