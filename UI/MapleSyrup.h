@@ -508,18 +508,17 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 				 vector<Event> displayEvent = lGPtr->executeUserInput(input);
 
-				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName());
+				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName()) + ".";
 			     feedbackBox->Text = feedbackToUser;
 
 				 for (int i=0; i< displayEvent.size(); i++){
 					String^ toMainDisplay = "";
-					int index = i+1;
-					toMainDisplay += index.ToString();
+					int tempIndex = i+1;
+					String^ index = tempIndex.ToString();
 					
 
 					String^ eventName = convertToSys (displayEvent[i].getName());
 
-					String^ start;
 					int tempStartHr = displayEvent[i].getStartDate().tm_hour;
 					String^ startHr = tempStartHr.ToString();
 
@@ -537,12 +536,14 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 					String^ tags = "";
 					vector<std::string> tempTags = displayEvent[i].getTags(); 
 					
-					for (int i=0; i<displayEvent[i].getTags().size(); i++){
-						
-
+					for (int i=0; i<tempTags.size(); i++){
+						String^ temp = convertToSys(tempTags[i]);
+						tags+= temp;
 					}
 
+					toMainDisplay = index + ". " + startHr + startMin + "-" + endHr + endMin + "  " + eventName + "  " + tags + "\n" + description;   
 
+					display->Text = toMainDisplay;
 					
 
 				 }
