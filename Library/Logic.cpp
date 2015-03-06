@@ -36,9 +36,14 @@ vector<Event> Logic::executeUserInput(string input) {
 
 	e.setName("exam");
 	e.setFeedback("event added");
+	e.setStartDate(6, 2, 2015);
+	e.setStartTime(11, 0);
+	e.setEndDate(6, 2, 2015);
+	e.setEndTime(12, 0);
+	e.setIsFloating(false);
+	e.setDescription("foo");
 
 	vector<Event> v;
-
 	v.push_back(e);
 
 	return v;
