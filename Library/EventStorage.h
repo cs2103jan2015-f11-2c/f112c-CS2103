@@ -1,16 +1,3 @@
-/*EventStorage {
-vector allEvents
-
-void retrieve() {open file stream to collect data from storage txt file}
-void addEvent(Event)
-..... and all other forms of add
-void deleteEvent(int ID) {search(ID) and erase}
-void showEvents() {create a vector and push in events that are found starting from floating}
-.... and all other forms of show
-void editEvent(int ID, Event) {search(ID) and use this event to call editEvent(Event)} 
-auto::iterator search(int ID)
-}
-*/
 #pragma once
 
 #ifndef EVENTSTORAGE_H
