@@ -20,7 +20,7 @@ void EventStorage::readToCurrentContent(){
 	std::string textLine, name, description, feedback, tags, startDateYear, startDateMonth, startDateDay, startDateHour, startDateMin, endDateYear, endDateMonth, endDateDay, endDateHour, endDateMin, id;
 
 	getline(readFile, textLine);
-	while(readFile.eof()){
+	while(!readFile.eof()){
 
 		Event* tempEvent = new Event;
 
@@ -213,7 +213,7 @@ int EventStorage::searchCurrentContentWithEventID(int eventID){
 }
 
 vector<Event> EventStorage::showAllEvent(){
-	sortEventVectorByDate();
+	//sortEventVectorByDate();
 	return currentContent;
 }
 
