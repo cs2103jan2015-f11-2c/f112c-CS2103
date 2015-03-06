@@ -172,13 +172,13 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	searchResults.clear();
 
 	for(int i=0;i<currentContent.size();i++){
-		isFound = currentContent[i].getDescription().find(informationToSearch);
-		isFound = currentContent[i].getName().find(informationToSearch);
-		//search for tags not yet included			
-		if(currentContent[i].getID() == atoi(informationToSearch.c_str())){
+		if(currentContent[i].getDescription().find(informationToSearch) != std::string::npos)
 			isFound = true;
-		}
-
+		if(currentContent[i].getName().find(informationToSearch) != std::string::npos)
+			isFound = true;
+		//search for tags not yet included			
+		if(currentContent[i].getID() == stoi(informationToSearch))
+			isFound = true;
 		if(currentContent[i].getStartDate().tm_year == stoi(informationToSearch))
 			isFound = true;
 		if(currentContent[i].getStartDate().tm_mon == stoi(informationToSearch))
