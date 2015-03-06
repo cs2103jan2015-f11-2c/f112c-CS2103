@@ -62,6 +62,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventArchive.cpp" />
     <ClCompile Include="EventStorage.cpp" />
@@ -70,6 +71,7 @@
     <ClCompile Include="Parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Conversion.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventArchive.h" />
     <ClInclude Include="EventStorage.h" />
