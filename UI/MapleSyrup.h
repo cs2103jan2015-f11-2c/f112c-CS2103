@@ -496,7 +496,6 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 
 		 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 // Test code
 			 if (e->KeyCode == Keys::Enter){
 				 String^ temp = commandBox->Text;
 				 std::string input = convertTostd(temp);
@@ -507,6 +506,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 suggestBar->Items->Clear();
 
 				 vector<Event> displayEvent = lGPtr->executeUserInput(input);
+				 
 
 				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName()) + ".";
 			     feedbackBox->Text = feedbackToUser;
@@ -579,6 +579,14 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 
 			 }
 		 }
+/*
+public: String^ convertEventToString (Event input){
+
+
+
+
+		}
+		*/
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::F1){

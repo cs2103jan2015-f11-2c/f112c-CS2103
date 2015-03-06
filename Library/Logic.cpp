@@ -65,6 +65,7 @@ vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent
 		break;
 
 	case Parser::ADDFULLDAY:
+		resultEvent = eventStore.addEvent(userEvent);
 		break;
 	
 	case Parser::ADD:
@@ -72,12 +73,15 @@ vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent
 		break;
 
 	case Parser::ADDSTART:
+		resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDMULFULLDAYS:
+		resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDMULDAYS:
+		resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::DELETE_:
@@ -96,6 +100,7 @@ vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent
 		break;
 
 	case Parser::SHOWUSER:
+		return eventStore.searchAllComponentsOfEvent(userEvent.getName());
 		break;
 
 	case Parser::ERROR_:

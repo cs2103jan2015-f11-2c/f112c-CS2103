@@ -372,19 +372,20 @@ void Parser::identifyShowCommand(){
 		typeOfCommand = SHOWYR;
 	}
 	else {  //check if category exists for user categories
-		bool userCategoryFound = false;
+		/*bool userCategoryFound = false;
 		for(int i = 0; i < categories.size() && !userCategoryFound; i++){
 			if(details == categories[i]){
 				userCategoryFound = true;
 			}
 		}
 		if(userCategoryFound){
-			typeOfCommand = SHOWUSER;
-		} 
+		*/	typeOfCommand = SHOWUSER;
+			tempEventStore.setName(details);
+		} /*
 		else {
 			typeOfCommand = ERROR_;
-		}
-	}
+		}*/
+	
 	return;
 //<<<<<<< HEAD
 }
