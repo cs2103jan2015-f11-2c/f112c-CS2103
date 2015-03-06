@@ -4,6 +4,7 @@
 
 //constructors
 Event::Event() {
+	isFloating = false;
 	ID = time(0);
 	startDateTime.tm_sec = 0;
 	endDateTime.tm_sec = 0;
