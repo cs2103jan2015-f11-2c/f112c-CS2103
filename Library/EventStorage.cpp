@@ -159,8 +159,6 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 		if(currentContent[i].getName().find(informationToSearch) != std::string::npos)
 			isFound = true;
 		//search for tags not yet included			
-		if(currentContent[i].getID() == stoi(informationToSearch))
-			isFound = true;
 		if(currentContent[i].getStartDate().tm_year == stoi(informationToSearch))
 			isFound = true;
 		if(currentContent[i].getStartDate().tm_mon == stoi(informationToSearch))
