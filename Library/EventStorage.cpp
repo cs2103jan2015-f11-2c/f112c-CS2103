@@ -60,9 +60,9 @@ void EventStorage::readToCurrentContent(){
 			getline(readFile, description);
 			getline(readFile, feedback);
 			getline(readFile, id);
-			getline(readFile, tags);
+			//getline(readFile, tags);
 			//createFile
-			tempEvent->setIsFloating("0");
+			tempEvent->setIsFloating("0"); //stringToBool
 			tempEvent->setName(name);
 			tempEvent->setDescription(description);
 			tempEvent->setFeedback(feedback);
@@ -80,7 +80,7 @@ void EventStorage::readToCurrentContent(){
 			getline(readFile, description);
 			getline(readFile, feedback);
 			getline(readFile, id);
-			getline(readFile, tags);
+			//getline(readFile, tags);
 			//createFile
 			tempEvent->setIsFloating("0");
 			tempEvent->setName(name);
@@ -92,6 +92,7 @@ void EventStorage::readToCurrentContent(){
 		}
 		currentContent.push_back(*tempEvent);
 		delete tempEvent;
+		getline(readFile, textLine);			//takes in 0/1 for isFloating check
 	}
 	readFile.close();
 }
