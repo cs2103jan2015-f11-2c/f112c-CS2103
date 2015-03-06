@@ -20,10 +20,12 @@ namespace UI {
 	/// </summary>
 	public ref class MapleSyrup : public System::Windows::Forms::Form
 	{
-	public:
-		GuideInfor* gI;
+	private:
+		GuideInfor* gIPtr;
 
-		Logic* lG;
+		Logic* lGPtr;
+
+	public:
 		MapleSyrup(void)
 		{
 			InitializeComponent();
@@ -33,9 +35,9 @@ namespace UI {
 			//TODO: Add the constructor code here
 
 			//Initialization
-			gI = new GuideInfor;
+			gIPtr = new GuideInfor;
 
-			lG = new Logic;
+			lGPtr = new Logic;
 		}
 
 	protected:
@@ -504,10 +506,48 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 suggestBar->Visible = false;
 				 suggestBar->Items->Clear();
 
-				 vector<Event> displayEvent = lG->executeUserInput(input);
-				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() );
+				 vector<Event> displayEvent = lGPtr->executeUserInput(input);
+
+				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName());
 			     feedbackBox->Text = feedbackToUser;
+
+				 for (int i=0; i< displayEvent.size(); i++){
+					String^ toMainDisplay = "";
+					int index = i+1;
+					toMainDisplay += index.ToString();
+					
+
+					String^ eventName = convertToSys (displayEvent[i].getName());
+
+					String^ start;
+					int tempStartHr = displayEvent[i].getStartDate().tm_hour;
+					String^ startHr = tempStartHr.ToString();
+
+					int tempStartMin = displayEvent[i].getStartDate().tm_min;
+					String^ startMin = tempStartMin.ToString();
+
+					int tempEndHr = displayEvent[i].getEndDate().tm_hour;
+					String^ endHr = tempEndHr.ToString();
+
+					int tempEndMin = displayEvent[i].getEndDate().tm_min;
+					String^ endMin = tempEndMin.ToString();
+
+					String^ description = convertToSys (displayEvent[i].getDescription());
+
+					String^ tags = "";
+					vector<std::string> tempTags = displayEvent[i].getTags(); 
+					
+					for (int i=0; i<displayEvent[i].getTags().size(); i++){
+						
+
+					}
+
+
+					
+
+				 }
 				
+				 /*
 				 if (temp == "exit"){
 					 Application::Exit();
 				 }
@@ -517,7 +557,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 					 EventArgs^ e;
 					 helpButton_Click(sender,e);
 				 }
-				 
+				 */
 				 
 			 }
 		 }
@@ -542,12 +582,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 		 
 			 
 			 //Add
-			 if (tempCommand == gI->getCommandAdd() ){
+			 if (tempCommand == gIPtr->getCommandAdd() ){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionAddArrarySize();i++){
-					std::string temp = gI->getSuggestionAdd(i);
+				for (int i=0; i<gIPtr->getSuggestionAddArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionAdd(i);
 					String^ toAdd = convertToSys(temp);
 					
 					suggestBar->Items->Add(toAdd);
@@ -559,12 +599,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 				 suggestBar->Visible = false;
 			 }
 
-			 if (tempCommand == gI->getCommandDelete()){
+			 if (tempCommand == gIPtr->getCommandDelete()){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionDeleteArrarySize();i++){
-					std::string temp = gI->getSuggestionDelete(i);
+				for (int i=0; i<gIPtr->getSuggestionDeleteArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionDelete(i);
 					String^ toAdd = convertToSys(temp);
 					
 					suggestBar->Items->Add(toAdd);
@@ -572,12 +612,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 }
 
 			 //Delete
-			 if (tempCommand == gI->getCommandDelete()){
+			 if (tempCommand == gIPtr->getCommandDelete()){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionDeleteArrarySize();i++){
-					std::string temp = gI->getSuggestionDelete(i);
+				for (int i=0; i<gIPtr->getSuggestionDeleteArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionDelete(i);
 					String^ toAdd = convertToSys(temp);
 
 					suggestBar->Items->Add(toAdd);
@@ -590,12 +630,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 }
 
 			 //Edit
-			 if (tempCommand == gI->getCommandEdit()){
+			 if (tempCommand == gIPtr->getCommandEdit()){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionEditArrarySize();i++){
-					std::string temp = gI->getSuggestionEdit(i);
+				for (int i=0; i<gIPtr->getSuggestionEditArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionEdit(i);
 					String^ toAdd = convertToSys(temp);
 
 					suggestBar->Items->Add(toAdd);
@@ -608,12 +648,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 }
 
 			 //Search
-			 if (tempCommand == gI->getCommandSearch()){
+			 if (tempCommand == gIPtr->getCommandSearch()){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionSearchArrarySize();i++){
-					std::string temp = gI->getSuggestionSearch(i);
+				for (int i=0; i<gIPtr->getSuggestionSearchArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionSearch(i);
 					String^ toAdd = convertToSys(temp);
 
 					suggestBar->Items->Add(toAdd);
@@ -626,12 +666,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 }
 
 			 //Show
-			 if (tempCommand == gI->getCommandShow()){
+			 if (tempCommand == gIPtr->getCommandShow()){
 				suggestBar->Visible = true;
 				suggestBar->Items->Clear();
 
-				for (int i=0; i<gI->getSuggestionShowArrarySize();i++){
-					std::string temp = gI->getSuggestionShow(i);
+				for (int i=0; i<gIPtr->getSuggestionShowArrarySize();i++){
+					std::string temp = gIPtr->getSuggestionShow(i);
 					String^ toAdd = convertToSys(temp);
 
 					suggestBar->Items->Add(toAdd);
@@ -654,29 +694,29 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 
 public: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,11,FontStyle::Bold);
-			std::string helpIntro = gI->getHelpIntro();
+			std::string helpIntro = gIPtr->getHelpIntro();
 			display->SelectedText = convertToSys(helpIntro);
 
 			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,10,FontStyle::Underline);
 			display->SelectionColor = Color::Blue;
-			std::string helpAdd1 = gI->getCommandAdd() + ": \n";
+			std::string helpAdd1 = gIPtr->getCommandAdd() + ": \n";
 			display->SelectedText = convertToSys(helpAdd1);
 
 			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
 			display->SelectionColor = Color::Blue;
-			std::string helpAdd2 = gI->getHelpAdd();
+			std::string helpAdd2 = gIPtr->getHelpAdd();
 			display->SelectedText = convertToSys(helpAdd2);
 
 			display->SelectedText = "\n";
 
 			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,10,FontStyle::Underline);
 			display->SelectionColor = Color::Black;
-			std::string helpDel1 = gI->getCommandDelete() + ": \n";
+			std::string helpDel1 = gIPtr->getCommandDelete() + ": \n";
 			display->SelectedText = convertToSys(helpDel1);
 
 			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
 			display->SelectionColor = Color::Black;
-			std::string helpDel2 = gI->getHelpDelete();
+			std::string helpDel2 = gIPtr->getHelpDelete();
 			display->SelectedText = convertToSys(helpDel2);
 
 		
