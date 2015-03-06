@@ -511,19 +511,33 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName()) + ".";
 			     feedbackBox->Text = feedbackToUser;
 
+				 String^ toMainDisplay = "";
+
+
+				 // Capture this in function later
 				 for (int i=0; i< displayEvent.size(); i++){
-					String^ toMainDisplay = "";
 					int tempIndex = i+1;
 					String^ index = tempIndex.ToString();
 					
-
 					String^ eventName = convertToSys (displayEvent[i].getName());
+
+					int tempStartDay = displayEvent[i].getStartDate().tm_mday;
+					String^ startDay = tempStartDay.ToString();
+
+					int tempStartMonth = displayEvent[i].getStartDate().tm_mon;
+					String^ startMonth = tempStartMonth.ToString();
 
 					int tempStartHr = displayEvent[i].getStartDate().tm_hour;
 					String^ startHr = tempStartHr.ToString();
 
 					int tempStartMin = displayEvent[i].getStartDate().tm_min;
 					String^ startMin = tempStartMin.ToString();
+
+					int tempEndDay = displayEvent[i].getEndDate().tm_mday;
+					String^ endDay = tempEndDay.ToString();
+
+					int tempEndMonth = displayEvent[i].getEndDate().tm_mon;
+					String^ endMonth = tempEndMonth.ToString();
 
 					int tempEndHr = displayEvent[i].getEndDate().tm_hour;
 					String^ endHr = tempEndHr.ToString();
@@ -541,9 +555,12 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 						tags+= temp;
 					}
 
-					toMainDisplay = index + ". " + startHr + startMin + "-" + endHr + endMin + "  " + eventName + "  " + tags + "\n" + description;   
+					toMainDisplay = index + ".  " + startMonth + startDay + " " + startHr + startMin + " - " + endMonth + endDay + " " + endHr + endMin + "      " + eventName + "      " + tags + "\n" + description;   
 
-					display->Text = toMainDisplay;
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,15,FontStyle::Bold);
+					display->SelectionColor = Color::Blue;
+					display->SelectedText = toMainDisplay;
+
 					
 
 				 }
