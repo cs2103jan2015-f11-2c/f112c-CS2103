@@ -48,6 +48,7 @@ public:
 	//void createEvent();
 	vector<Event> showAllEvent();
 	void sortEventVectorByDate();
+	vector<Event> showDay();
 
 };
 

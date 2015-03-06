@@ -59,6 +59,16 @@ void EventStorage::readToCurrentContent(){
 		else if(textLine == "1"){				//floatingEvent
 			//getinfo from textfile
 			getline(readFile, name);
+			getline(readFile, startDateYear);
+			getline(readFile, startDateMonth);
+			getline(readFile, startDateDay);
+			getline(readFile, startDateHour);
+			getline(readFile, startDateMin);
+			getline(readFile, endDateYear);
+			getline(readFile, endDateMonth);
+			getline(readFile, endDateDay);
+			getline(readFile, endDateHour);
+			getline(readFile, endDateMin);
 			getline(readFile, description);
 			getline(readFile, feedback);
 			getline(readFile, id);
@@ -118,10 +128,10 @@ string EventStorage::tmToString(Event convertEvent){
 	return oss.str();
 }
 
-vector<Event> EventStorage::addEvent(Event eventName){
+vector<Event> EventStorage::addEvent(Event eventName){  //return eventvector with all events on that day
 	currentContent.push_back(eventName);
 	writeToCurrentFile();
-	eventName.setFeedback("Your event has been added"); //Change to static msg wj adding
+	eventName.setFeedback("Your event has been added"); 
 	returnToLogicVector.push_back(eventName);
 	return returnToLogicVector; 
 }
@@ -207,6 +217,9 @@ vector<Event> EventStorage::showAllEvent(){
 	return currentContent;
 }
 
+vector<Event> EventStorage::showDay(){
+
+}
 void EventStorage::sortEventVectorByDate(){
 
 	time_t timeSmaller, timeBigger;
