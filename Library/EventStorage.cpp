@@ -169,25 +169,25 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 		if(currentContent[i].getName().find(informationToSearch) != std::string::npos)
 			isFound = true;
 		//search for tags not yet included			
-		if(currentContent[i].getStartDate().tm_year == stoi(informationToSearch))
+		if(currentContent[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_mon == stoi(informationToSearch))
+		if(currentContent[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_mday == stoi(informationToSearch))
+		if(currentContent[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_hour == stoi(informationToSearch))
+		if(currentContent[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getStartDate().tm_min == stoi(informationToSearch))
+		if(currentContent[i].getStartDate().tm_min == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_year == stoi(informationToSearch))
+		if(currentContent[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_mon == stoi(informationToSearch))
+		if(currentContent[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_mday == stoi(informationToSearch))
+		if(currentContent[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_hour == stoi(informationToSearch))
+		if(currentContent[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
 			isFound = true;
-		if(currentContent[i].getEndDate().tm_min == stoi(informationToSearch))
+		if(currentContent[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
 			isFound = true;
 
 	if(isFound){
@@ -218,7 +218,7 @@ vector<Event> EventStorage::showAllEvent(){
 }
 
 vector<Event> EventStorage::showDay(){
-
+	return currentContent;
 }
 void EventStorage::sortEventVectorByDate(){
 

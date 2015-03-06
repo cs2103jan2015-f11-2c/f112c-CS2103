@@ -102,6 +102,5 @@ public:
 	//To convert all inputs into lowercase
 	std::string lowerCase(std::string);
 };
-
 #endif
 
