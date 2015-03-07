@@ -86,13 +86,14 @@ std::string Conversion::eventToString(Event eventToDisplay){
 	eventInString += startDate + " ";
 
 
-	startMonth + startDay + " " + startHr + startMin + " - " + endMonth + endDay + " " + endHr + endMin + "      " + eventName + "      " + tags + "\n" + description;   
+	startMonth + startWDay + " " + startHr + startMin + " - " + endMonth + endWDay + " " + endHr + endMin + "      " + eventName + "      " + tags + "\n" + description;   
 
 
 
 }
 
 Event Conversion::stringToEvent(std::string){
+
 }
 
 
@@ -200,10 +201,65 @@ int dayOfWeekToInt (std::string day){
 }
 
 std::string Conversion::intToTime (int timeInInt){
+	int hours;
+	int minutes;
+	bool afterTwelve = false;
+	std::ostringstream oss;
+	hours = timeInInt/100;
+	minutes = timeInInt%100;
 
+	if(hours > 12){
+		hours = hours - 12;
+		afterTwelve = true;
+	}
+	
+	if(afterTwelve){
+		oss << hours << "." << minutes << "pm";
+	}
+	else {
+		oss << hours << "." << minutes << "am";
+	}
+	
+	return oss.str();
 }
 
 int Conversion::timeToInt (std::string time){
+	std::string::size_type strDotIndex;
+	std::string strHour;
+	std::string strMinute;
+	int hours;
+	int minutes;
+	int combinedHoursMinutes;
+	bool afterTwelve = false;
+
+	if(time.find("am") != std::string::npos){
+		afterTwelve = false;
+	} else if(time.find("pm") != std::string::npos){
+		afterTwelve = true;
+	}
+
+	strDotIndex = time.find_first_of(".");
+	if(strDotIndex != std::string::npos){
+		strHour = time.substr(0,strDotIndex);
+		strMinute = time.substr(strDotIndex+1);
+	} else {
+		strHour = time.substr(0,strDotIndex);
+	}
+
+	if(afterTwelve){
+		hours = std::stoi(strHour) + 12;
+	} else {
+		hours = std::stoi(strHour);
+	}
+
+	if(strDotIndex != std::string::npos){
+		minutes = std::stoi(strMinute);
+	} else {
+		minutes = 0;
+	}
+
+	combinedHoursMinutes = hours*100 + minutes;
+	return combinedHoursMinutes;
 }
 
 std::string Conversion::intToString (int num){
