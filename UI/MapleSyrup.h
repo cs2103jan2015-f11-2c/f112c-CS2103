@@ -5,6 +5,7 @@
 
 #include "GuideInfor.h"
 #include "Logic.h"
+#include "Conversion.h"
 
 namespace UI {
 
@@ -25,6 +26,8 @@ namespace UI {
 
 		Logic* lGPtr;
 
+		Conversion* cVPtr;
+
 	public:
 		MapleSyrup(void)
 		{
@@ -38,6 +41,8 @@ namespace UI {
 			gIPtr = new GuideInfor;
 
 			lGPtr = new Logic;
+
+			cVPtr = new Conversion;
 		}
 
 	protected:
@@ -494,90 +499,60 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
 }
 
+public: bool isOdd (int num){
+	if (num%2 == 0){
+		return false;
+	} else{
+		return true;
+	}
+}
+
+public: void displayInMainDisplay (vector<Event> toDisplay){
+	display->Text = "";
+	for (int i=0;i<toDisplay.size();i++){
+		int index = i+1;
+		String^ indexInString = index.ToString();
+		String^ toMainDisplay = indexInString + "." + convertToSys(cVPtr->eventToString(toDisplay[i]));
+		if ( isOdd(index) ){
+			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
+			display->SelectionColor = Color::Blue;
+			display->SelectedText = toMainDisplay;
+		} else {
+			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
+			display->SelectionColor = Color::Red;
+			display->SelectedText = toMainDisplay;
+		}
+
+	}
+
+	return;
+}
 		 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Enter){
 				 String^ temp = commandBox->Text;
-				 std::string input = convertTostd(temp);
-
 				 commandBox->Text = "";
+				 if (temp == "exit"){
+					 Application::Exit();
+					 return;
+				 }
+
+				 if (temp == "help"){
+					 display->Text = "";
+					 System::Object^ sender;
+					 EventArgs^ e;
+					 helpButton_Click(sender,e);
+					 return;
+				 }
 				 
+				 std::string input = convertTostd(temp);
 				 suggestBar->Visible = false;
 				 suggestBar->Items->Clear();
 
 				 vector<Event> displayEvent = lGPtr->executeUserInput(input);
-				 
 
-				 String^ feedbackToUser = convertToSys( displayEvent[0].getFeedback() + ": " + displayEvent[0].getName()) + ".";
-			     feedbackBox->Text = feedbackToUser;
-
-				 String^ toMainDisplay = "";
-
-
-				 // Capture this in function later
-				 for (int i=0; i< displayEvent.size(); i++){
-					int tempIndex = i+1;
-					String^ index = tempIndex.ToString();
-					
-					String^ eventName = convertToSys (displayEvent[i].getName());
-
-					int tempStartDay = displayEvent[i].getStartDate().tm_mday;
-					String^ startDay = tempStartDay.ToString();
-
-					int tempStartMonth = displayEvent[i].getStartDate().tm_mon;
-					String^ startMonth = tempStartMonth.ToString();
-
-					int tempStartHr = displayEvent[i].getStartDate().tm_hour;
-					String^ startHr = tempStartHr.ToString();
-
-					int tempStartMin = displayEvent[i].getStartDate().tm_min;
-					String^ startMin = tempStartMin.ToString();
-
-					int tempEndDay = displayEvent[i].getEndDate().tm_mday;
-					String^ endDay = tempEndDay.ToString();
-
-					int tempEndMonth = displayEvent[i].getEndDate().tm_mon;
-					String^ endMonth = tempEndMonth.ToString();
-
-					int tempEndHr = displayEvent[i].getEndDate().tm_hour;
-					String^ endHr = tempEndHr.ToString();
-
-					int tempEndMin = displayEvent[i].getEndDate().tm_min;
-					String^ endMin = tempEndMin.ToString();
-
-					String^ description = convertToSys (displayEvent[i].getDescription());
-
-					String^ tags = "";
-					vector<std::string> tempTags = displayEvent[i].getTags(); 
-					
-					for (int i=0; i<tempTags.size(); i++){
-						String^ temp = convertToSys(tempTags[i]);
-						tags+= temp;
-					}
-
-					toMainDisplay = index + ".  " + startMonth + startDay + " " + startHr + startMin + " - " + endMonth + endDay + " " + endHr + endMin + "      " + eventName + "      " + tags + "\n" + description;   
-
-					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,15,FontStyle::Bold);
-					display->SelectionColor = Color::Blue;
-					display->SelectedText = toMainDisplay;
-
-					
-
-				 }
-				
-				 /*
-				 if (temp == "exit"){
-					 Application::Exit();
-				 }
-
-				 if (temp == "help"){
-					 System::Object^ sender;
-					 EventArgs^ e;
-					 helpButton_Click(sender,e);
-				 }
-				 */
-				 
-			 }
+				 displayInMainDisplay (displayEvent);	 
+			}
 		 }
 /*
 public: String^ convertEventToString (Event input){

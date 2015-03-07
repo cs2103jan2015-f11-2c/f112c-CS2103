@@ -49,10 +49,9 @@ std::string Conversion::eventToString(Event eventToDisplay){
 	std::string startWDay = intToDayOfWeek (tempStartWDay);
 
 	int tempStartHr  = eventToDisplay.getStartDate().tm_hour;
-	std::string startHr = intToString (tempStartHr);
-
 	int tempStartMin = eventToDisplay.getStartDate().tm_min;
-	std::string startMin = intToString (tempStartMin);
+	int tempStartTime = tempStartHr*100 + tempStartMin;
+	std::string startTime = intToTime(tempStartTime);
 
 	int tempEndDate = eventToDisplay.getEndDate().tm_mday;
 	std::string endDate = intToString(tempEndDate);
@@ -64,10 +63,9 @@ std::string Conversion::eventToString(Event eventToDisplay){
 	std::string endWDay = intToDayOfWeek (tempEndWDay);
 
 	int tempEndHr  = eventToDisplay.getEndDate().tm_hour;
-	std::string  endHr = intToString (tempEndHr);
-
 	int tempEndMin = eventToDisplay.getEndDate().tm_min;
-	std::string endMin = intToString (tempEndMin);
+	int tempEndTime = tempEndHr*100 + tempEndMin;
+	std::string endTime = intToTime(tempEndTime);
 
 	std::string description = eventToDisplay.getDescription();
 
@@ -82,18 +80,33 @@ std::string Conversion::eventToString(Event eventToDisplay){
 	std::string eventInString = "";
 	eventInString += startDate + " ";
 	eventInString += startMonth;
-	eventInString += "(" + startWDay + ")";
-	eventInString += startDate + " ";
+	eventInString += "(" + startWDay + ")" + "   ";
+	eventInString += startTime;
+	eventInString += " - ";
+	eventInString += endDate + " ";
+	eventInString += endMonth;
+	eventInString += "(" + endWDay + ")" + "   ";
+	eventInString += endTime;
+	eventInString += "		";
+	eventInString += eventName;
+	eventInString += "		";
+	eventInString += tags;
+	
+	if (description != ""){
+	eventInString += "\n";
+	eventInString += "*" + description;
+	}
+	
+	eventInString += "\n\n";
 
-
-	startMonth + startWDay + " " + startHr + startMin + " - " + endMonth + endWDay + " " + endHr + endMin + "      " + eventName + "      " + tags + "\n" + description;   
-
-
+	return eventInString;
 
 }
 
 Event Conversion::stringToEvent(std::string){
+	Event a;
 
+	return a;
 }
 
 
