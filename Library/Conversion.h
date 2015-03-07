@@ -5,12 +5,16 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include "Event.h"
 
 class Conversion
 {
 public:
+	// Variables
+	static const int base;
+
 	Conversion(void);
 	~Conversion(void);
 
@@ -25,6 +29,9 @@ public:
 
 	std::string intToDayOfWeek (int);
 	int dayOfWeekToInt (std::string);
+
+	std::string intToTime (int);
+	int timeToInt (std::string);
 
 	std::string intToString (int);
 	int stringToInt (std::string);
