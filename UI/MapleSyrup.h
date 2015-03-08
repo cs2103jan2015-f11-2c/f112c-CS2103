@@ -25,8 +25,9 @@ namespace UI {
 		GuideInfor* gIPtr;
 
 		Logic* lGPtr;
-	private: System::Windows::Forms::PictureBox^  vertLineDisplayDate1;
-	private: System::Windows::Forms::PictureBox^  vertLineDisplayDate2;
+	private: System::Windows::Forms::Button^  displayButton;
+
+
 
 
 
@@ -47,6 +48,10 @@ namespace UI {
 			lGPtr = new Logic;
 
 			cVPtr = new Conversion;
+
+			vector<Event> mainDisplay;
+			vector<Event> floatingDisplay;
+
 		}
 
 	protected:
@@ -60,6 +65,7 @@ namespace UI {
 				delete components;
 			}
 		}
+
 
 	private: System::Windows::Forms::RichTextBox^  feedbackBox;
 	private: System::Windows::Forms::TextBox^  searchBox;
@@ -77,13 +83,13 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  comdIcon;
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
 
-	private: System::Windows::Forms::PictureBox^  pictureBox4;
+
 	private: System::Windows::Forms::Button^  dayDisplay;
-	private: System::Windows::Forms::PictureBox^  pictureBox6;
+
 	private: System::Windows::Forms::Button^  weekDisplay;
-	private: System::Windows::Forms::PictureBox^  pictureBox5;
+
 	private: System::Windows::Forms::Button^  monthDisplay;
-	private: System::Windows::Forms::PictureBox^  pictureBox7;
+
 	private: System::Windows::Forms::Button^  allDisplay;
 	private: System::Windows::Forms::Button^  archiveDisplay;
 
@@ -133,13 +139,9 @@ namespace UI {
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
-			this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
 			this->dayDisplay = (gcnew System::Windows::Forms::Button());
-			this->pictureBox6 = (gcnew System::Windows::Forms::PictureBox());
 			this->weekDisplay = (gcnew System::Windows::Forms::Button());
-			this->pictureBox5 = (gcnew System::Windows::Forms::PictureBox());
 			this->monthDisplay = (gcnew System::Windows::Forms::Button());
-			this->pictureBox7 = (gcnew System::Windows::Forms::PictureBox());
 			this->allDisplay = (gcnew System::Windows::Forms::Button());
 			this->archiveDisplay = (gcnew System::Windows::Forms::Button());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
@@ -149,24 +151,17 @@ namespace UI {
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
 			this->Redo = (gcnew System::Windows::Forms::Button());
+			this->displayButton = (gcnew System::Windows::Forms::Button());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
-			this->vertLineDisplayDate1 = (gcnew System::Windows::Forms::PictureBox());
-			this->vertLineDisplayDate2 = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox4))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox6))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox7))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate2))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -287,12 +282,6 @@ namespace UI {
 			this->pictureBox3->TabStop = false;
 			this->toolTip1->SetToolTip(this->pictureBox3, resources->GetString(L"pictureBox3.ToolTip"));
 			// 
-			// pictureBox4
-			// 
-			resources->ApplyResources(this->pictureBox4, L"pictureBox4");
-			this->pictureBox4->Name = L"pictureBox4";
-			this->pictureBox4->TabStop = false;
-			// 
 			// dayDisplay
 			// 
 			this->dayDisplay->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -302,12 +291,8 @@ namespace UI {
 			this->dayDisplay->Name = L"dayDisplay";
 			this->toolTip1->SetToolTip(this->dayDisplay, resources->GetString(L"dayDisplay.ToolTip"));
 			this->dayDisplay->UseVisualStyleBackColor = false;
-			// 
-			// pictureBox6
-			// 
-			resources->ApplyResources(this->pictureBox6, L"pictureBox6");
-			this->pictureBox6->Name = L"pictureBox6";
-			this->pictureBox6->TabStop = false;
+			this->dayDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::dayDisplay_Click);
+			this->dayDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::dayDisplay_MouseLeave);
 			// 
 			// weekDisplay
 			// 
@@ -318,12 +303,8 @@ namespace UI {
 			this->weekDisplay->Name = L"weekDisplay";
 			this->toolTip1->SetToolTip(this->weekDisplay, resources->GetString(L"weekDisplay.ToolTip"));
 			this->weekDisplay->UseVisualStyleBackColor = false;
-			// 
-			// pictureBox5
-			// 
-			resources->ApplyResources(this->pictureBox5, L"pictureBox5");
-			this->pictureBox5->Name = L"pictureBox5";
-			this->pictureBox5->TabStop = false;
+			this->weekDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::weekDisplay_Click);
+			this->weekDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::weekDisplay_MouseLeave);
 			// 
 			// monthDisplay
 			// 
@@ -334,12 +315,7 @@ namespace UI {
 			this->monthDisplay->Name = L"monthDisplay";
 			this->toolTip1->SetToolTip(this->monthDisplay, resources->GetString(L"monthDisplay.ToolTip"));
 			this->monthDisplay->UseVisualStyleBackColor = false;
-			// 
-			// pictureBox7
-			// 
-			resources->ApplyResources(this->pictureBox7, L"pictureBox7");
-			this->pictureBox7->Name = L"pictureBox7";
-			this->pictureBox7->TabStop = false;
+			this->monthDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::monthDisplay_MouseLeave);
 			// 
 			// allDisplay
 			// 
@@ -350,6 +326,7 @@ namespace UI {
 			this->allDisplay->Name = L"allDisplay";
 			this->toolTip1->SetToolTip(this->allDisplay, resources->GetString(L"allDisplay.ToolTip"));
 			this->allDisplay->UseVisualStyleBackColor = false;
+			this->allDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::allDisplay_MouseLeave);
 			// 
 			// archiveDisplay
 			// 
@@ -360,6 +337,7 @@ namespace UI {
 			this->archiveDisplay->Name = L"archiveDisplay";
 			this->toolTip1->SetToolTip(this->archiveDisplay, resources->GetString(L"archiveDisplay.ToolTip"));
 			this->archiveDisplay->UseVisualStyleBackColor = false;
+			this->archiveDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::archiveDisplay_MouseLeave);
 			// 
 			// pictureBox1
 			// 
@@ -415,6 +393,17 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->Redo, resources->GetString(L"Redo.ToolTip"));
 			this->Redo->UseVisualStyleBackColor = false;
 			// 
+			// displayButton
+			// 
+			this->displayButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->displayButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->displayButton, L"displayButton");
+			this->displayButton->ForeColor = System::Drawing::Color::DimGray;
+			this->displayButton->Name = L"displayButton";
+			this->toolTip1->SetToolTip(this->displayButton, resources->GetString(L"displayButton.ToolTip"));
+			this->displayButton->UseVisualStyleBackColor = false;
+			this->displayButton->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::displayButton_MouseClick);
+			// 
 			// suggestBar
 			// 
 			this->suggestBar->BackColor = System::Drawing::Color::White;
@@ -423,20 +412,6 @@ namespace UI {
 			this->suggestBar->Name = L"suggestBar";
 			this->suggestBar->TabStop = false;
 			// 
-			// vertLineDisplayDate1
-			// 
-			this->vertLineDisplayDate1->BackColor = System::Drawing::Color::White;
-			resources->ApplyResources(this->vertLineDisplayDate1, L"vertLineDisplayDate1");
-			this->vertLineDisplayDate1->Name = L"vertLineDisplayDate1";
-			this->vertLineDisplayDate1->TabStop = false;
-			// 
-			// vertLineDisplayDate2
-			// 
-			this->vertLineDisplayDate2->BackColor = System::Drawing::Color::White;
-			resources->ApplyResources(this->vertLineDisplayDate2, L"vertLineDisplayDate2");
-			this->vertLineDisplayDate2->Name = L"vertLineDisplayDate2";
-			this->vertLineDisplayDate2->TabStop = false;
-			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -444,35 +419,30 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->Controls->Add(this->vertLineDisplayDate2);
-			this->Controls->Add(this->vertLineDisplayDate1);
+			this->Controls->Add(this->displayButton);
 			this->Controls->Add(this->Redo);
 			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->searchIcon);
-			this->Controls->Add(this->pictureBox8);
-			this->Controls->Add(this->floatingIcon);
-			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->comdIcon);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->dateDisplay);
 			this->Controls->Add(this->richTextBox1);
-			this->Controls->Add(this->floatingTasksDisplay);
-			this->Controls->Add(this->display);
 			this->Controls->Add(this->searchBox);
 			this->Controls->Add(this->feedbackBox);
 			this->Controls->Add(this->commandBox);
+			this->Controls->Add(this->display);
 			this->Controls->Add(this->weekDisplay);
 			this->Controls->Add(this->monthDisplay);
 			this->Controls->Add(this->allDisplay);
 			this->Controls->Add(this->archiveDisplay);
-			this->Controls->Add(this->pictureBox7);
-			this->Controls->Add(this->pictureBox5);
-			this->Controls->Add(this->pictureBox6);
-			this->Controls->Add(this->pictureBox4);
 			this->Controls->Add(this->dayDisplay);
+			this->Controls->Add(this->floatingTasksDisplay);
+			this->Controls->Add(this->pictureBox8);
+			this->Controls->Add(this->floatingIcon);
+			this->Controls->Add(this->pictureBox1);
 			this->ForeColor = System::Drawing::Color::Black;
 			this->HelpButton = true;
 			this->KeyPreview = true;
@@ -483,16 +453,10 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox4))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox6))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox7))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate2))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -512,12 +476,6 @@ public: String^ convertToSys(std::string stdStr){
 			return newString;
 		}
 
-public: std::string lowerCase(std::string word){
-	for (int i=0;i<word.size();i++){
-		 word[i] = tolower(word[i]);
-	 }
-	return word;
- }
 
 public: bool isOdd (int num){
 	if (num%2 == 0){
@@ -550,12 +508,14 @@ public: void displayInMainDisplay (vector<Event> toDisplay){
 
 //UI system functions
 
+private: bool optionsDisplayed;
+
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
 			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
-			display->Text = "123.  09.30am -     Lunch with Mum Dad Sis Brother Dog Dog Dog Cat Cat Cat Cat Cat Cat Cat Cat          #EatLunch #Family" + "\n";
-			floatingTasksDisplay->Text = "123. Buy my lunch and dinner together";
 
+			//initialize
+			optionsDisplayed = false;
 }
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -599,9 +559,11 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 }
 		 }
 
+//This function is triggered whenever there is a textchange in the commandBox
+//Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 std::string temp = convertTostd(commandBox->Text);
-			 std::string tempCommand = lowerCase(temp);
+			 std::string tempCommand = cVPtr->toLowerCase(temp);
 		 
 			 
 			 //Add
@@ -743,6 +705,65 @@ public: System::Void helpButton_Click(System::Object^  sender, System::EventArgs
 			display->SelectedText = convertToSys(helpDel2);
 
 		
+		 }
+private: System::Void dayDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+
+private: System::Void pictureBox4_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void weekDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void monthDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void pictureBox6_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void pictureBox5_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void allDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void pictureBox7_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+		 }
+private: System::Void archiveDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+
+
+		 }
+private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+
+public: void displayOptions (){
+		dayDisplay->Visible = true;
+		weekDisplay->Visible = true;
+		monthDisplay->Visible = true;
+		allDisplay->Visible = true;
+		archiveDisplay->Visible = true;
+		}
+
+public: void unDisplayOptions (){
+		dayDisplay->Visible = false;
+		weekDisplay->Visible = false;
+		monthDisplay->Visible = false;
+		allDisplay->Visible = false;
+		archiveDisplay->Visible = false;
+		}
+
+private: System::Void displayButton_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			 if (optionsDisplayed == false){
+				 displayOptions();
+				 optionsDisplayed = true;
+			 } else {
+				 unDisplayOptions();
+				 optionsDisplayed = false;
+			 }
 		 }
 };
 }

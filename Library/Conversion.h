@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cctype>
 
 #include "Event.h"
 
@@ -35,6 +36,8 @@ public:
 
 	std::string intToString (int);
 	int stringToInt (std::string);
+
+	std::string toLowerCase(std::string);
 
 };
 

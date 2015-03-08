@@ -287,3 +287,10 @@ int Conversion::stringToInt (std::string str){
 	in >> outNum;
 	return outNum;
 }
+
+std::string Conversion::toLowerCase(std::string word){
+	for (int i=0;i<word.size();i++){
+		 word[i] = tolower(word[i]);
+	 }
+	return word;
+ }
