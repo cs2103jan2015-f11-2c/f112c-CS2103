@@ -25,6 +25,10 @@ namespace UI {
 		GuideInfor* gIPtr;
 
 		Logic* lGPtr;
+	private: System::Windows::Forms::PictureBox^  vertLineDisplayDate1;
+	private: System::Windows::Forms::PictureBox^  vertLineDisplayDate2;
+
+
 
 		Conversion* cVPtr;
 
@@ -144,10 +148,12 @@ namespace UI {
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
+			this->Redo = (gcnew System::Windows::Forms::Button());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
-			this->Redo = (gcnew System::Windows::Forms::Button());
+			this->vertLineDisplayDate1 = (gcnew System::Windows::Forms::PictureBox());
+			this->vertLineDisplayDate2 = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->BeginInit();
@@ -159,6 +165,8 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate2))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -399,14 +407,6 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
 			this->undoButton->UseVisualStyleBackColor = false;
 			// 
-			// suggestBar
-			// 
-			this->suggestBar->BackColor = System::Drawing::Color::White;
-			this->suggestBar->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			resources->ApplyResources(this->suggestBar, L"suggestBar");
-			this->suggestBar->Name = L"suggestBar";
-			this->suggestBar->TabStop = false;
-			// 
 			// Redo
 			// 
 			this->Redo->BackColor = System::Drawing::Color::White;
@@ -415,6 +415,28 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->Redo, resources->GetString(L"Redo.ToolTip"));
 			this->Redo->UseVisualStyleBackColor = false;
 			// 
+			// suggestBar
+			// 
+			this->suggestBar->BackColor = System::Drawing::Color::White;
+			this->suggestBar->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			resources->ApplyResources(this->suggestBar, L"suggestBar");
+			this->suggestBar->Name = L"suggestBar";
+			this->suggestBar->TabStop = false;
+			// 
+			// vertLineDisplayDate1
+			// 
+			this->vertLineDisplayDate1->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->vertLineDisplayDate1, L"vertLineDisplayDate1");
+			this->vertLineDisplayDate1->Name = L"vertLineDisplayDate1";
+			this->vertLineDisplayDate1->TabStop = false;
+			// 
+			// vertLineDisplayDate2
+			// 
+			this->vertLineDisplayDate2->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->vertLineDisplayDate2, L"vertLineDisplayDate2");
+			this->vertLineDisplayDate2->Name = L"vertLineDisplayDate2";
+			this->vertLineDisplayDate2->TabStop = false;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -422,6 +444,8 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->vertLineDisplayDate2);
+			this->Controls->Add(this->vertLineDisplayDate1);
 			this->Controls->Add(this->Redo);
 			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->undoButton);
@@ -467,13 +491,14 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->vertLineDisplayDate2))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 
 // Programmer Code
-
 #pragma endregion
 
 public: std::string convertTostd(String^ sysStr){
@@ -493,11 +518,6 @@ public: std::string lowerCase(std::string word){
 	 }
 	return word;
  }
-
-private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
-			DateTime current = DateTime::Now;
-			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
-}
 
 public: bool isOdd (int num){
 	if (num%2 == 0){
@@ -527,7 +547,17 @@ public: void displayInMainDisplay (vector<Event> toDisplay){
 
 	return;
 }
-		 
+
+//UI system functions
+
+private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
+			DateTime current = DateTime::Now;
+			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
+			display->Text = "123.  09.30am -     Lunch with Mum Dad Sis Brother Dog Dog Dog Cat Cat Cat Cat Cat Cat Cat Cat          #EatLunch #Family" + "\n";
+			floatingTasksDisplay->Text = "123. Buy my lunch and dinner together";
+
+}
+
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Enter){
 				 String^ temp = commandBox->Text;
@@ -554,14 +584,6 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 displayInMainDisplay (displayEvent);	 
 			}
 		 }
-/*
-public: String^ convertEventToString (Event input){
-
-
-
-
-		}
-		*/
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::F1){
