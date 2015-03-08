@@ -29,6 +29,7 @@ public:
 	//getters
 	Parser::commandType getCommand();
 	Event getEvent();
+	EventStorage getEventStorage();
 
 
 	//executors

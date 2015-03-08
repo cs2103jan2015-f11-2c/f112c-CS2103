@@ -17,6 +17,9 @@ Event Logic::getEvent() {
 	return parserPtr->getEvent();
 }
 
+EventStorage Logic::getEventStorage() {
+	return eventStore;
+}
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
