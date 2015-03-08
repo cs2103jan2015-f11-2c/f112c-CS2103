@@ -244,7 +244,7 @@
     <value>ForcedVertical</value>
   </data>
   <data name="display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>702, 474</value>
+    <value>692, 474</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -370,7 +370,7 @@
 </value>
   </data>
   <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 33</value>
+    <value>2, 35</value>
   </data>
   <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>930, 10</value>
@@ -4779,7 +4779,7 @@
     <value>5, 45</value>
   </data>
   <data name="displayButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 32</value>
+    <value>133, 32</value>
   </data>
   <data name="displayButton.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>

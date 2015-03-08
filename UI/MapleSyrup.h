@@ -402,6 +402,7 @@ namespace UI {
 			this->displayButton->Name = L"displayButton";
 			this->toolTip1->SetToolTip(this->displayButton, resources->GetString(L"displayButton.ToolTip"));
 			this->displayButton->UseVisualStyleBackColor = false;
+			this->displayButton->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::displayButton_KeyDown);
 			this->displayButton->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::displayButton_MouseClick);
 			// 
 			// suggestBar
@@ -555,7 +556,9 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 }
 
 			 if (e->KeyCode == Keys::F3){
-				 display->Select();
+				 System::Object^  sender;
+				 System::Windows::Forms::MouseEventArgs^  a;
+				 displayButton_MouseClick(sender, a);
 			 }
 		 }
 
@@ -765,5 +768,13 @@ private: System::Void displayButton_MouseClick(System::Object^  sender, System::
 				 optionsDisplayed = false;
 			 }
 		 }
+private: System::Void displayButton_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::Enter){
+				 System::Object^  sender;
+				 System::Windows::Forms::MouseEventArgs^  a;
+				 displayButton_MouseClick(sender, a);
+			}
+		 }
+
 };
 }
