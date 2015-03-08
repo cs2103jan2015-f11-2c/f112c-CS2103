@@ -27,10 +27,6 @@ namespace UI {
 		Logic* lGPtr;
 	private: System::Windows::Forms::Button^  displayButton;
 
-
-
-
-
 		Conversion* cVPtr;
 
 	public:
@@ -48,10 +44,6 @@ namespace UI {
 			lGPtr = new Logic;
 
 			cVPtr = new Conversion;
-
-			vector<Event> mainDisplay;
-			vector<Event> floatingDisplay;
-
 		}
 
 	protected:
@@ -709,6 +701,8 @@ public: System::Void helpButton_Click(System::Object^  sender, System::EventArgs
 
 		
 		 }
+
+//View Options
 private: System::Void dayDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
 
 		 }

@@ -149,10 +149,10 @@
     <value>Microsoft Sans Serif, 11.25pt</value>
   </data>
   <data name="commandBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 530</value>
+    <value>271, 534</value>
   </data>
   <data name="commandBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>671, 24</value>
+    <value>662, 24</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="commandBox.TabIndex" type="System.Int32, mscorlib">
@@ -180,7 +180,7 @@
     <value>271, 567</value>
   </data>
   <data name="feedbackBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>671, 90</value>
+    <value>662, 90</value>
   </data>
   <data name="feedbackBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -238,13 +238,13 @@
     <value>On</value>
   </data>
   <data name="display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 49</value>
+    <value>240, 61</value>
   </data>
   <data name="display.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
     <value>ForcedVertical</value>
   </data>
   <data name="display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>692, 474</value>
+    <value>692, 462</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -271,10 +271,10 @@
     <value>Arial, 9.75pt</value>
   </data>
   <data name="floatingTasksDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 111</value>
+    <value>5, 114</value>
   </data>
   <data name="floatingTasksDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 412</value>
+    <value>229, 409</value>
   </data>
   <data name="floatingTasksDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -328,7 +328,7 @@
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
   <data name="dateDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>62, 11</value>
+    <value>62, 13</value>
   </data>
   <data name="dateDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>263, 19</value>
@@ -370,7 +370,7 @@
 </value>
   </data>
   <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 35</value>
+    <value>2, 41</value>
   </data>
   <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>930, 10</value>
@@ -1104,7 +1104,7 @@
     <value>Stretch</value>
   </data>
   <data name="comdIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 530</value>
+    <value>240, 534</value>
   </data>
   <data name="comdIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>26, 25</value>
@@ -1876,7 +1876,7 @@
     <value>Stretch</value>
   </data>
   <data name="pictureBox3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 3</value>
+    <value>16, 5</value>
   </data>
   <data name="pictureBox3.Size" type="System.Drawing.Size, System.Drawing">
     <value>33, 33</value>
@@ -1906,7 +1906,7 @@
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
   <data name="dayDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 78</value>
+    <value>7, 84</value>
   </data>
   <data name="dayDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 30</value>
@@ -1948,7 +1948,7 @@
     <value>NoControl</value>
   </data>
   <data name="weekDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 108</value>
+    <value>7, 114</value>
   </data>
   <data name="weekDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 30</value>
@@ -1990,7 +1990,7 @@
     <value>NoControl</value>
   </data>
   <data name="monthDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 138</value>
+    <value>7, 144</value>
   </data>
   <data name="monthDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 30</value>
@@ -2032,7 +2032,7 @@
     <value>NoControl</value>
   </data>
   <data name="allDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 167</value>
+    <value>7, 173</value>
   </data>
   <data name="allDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 30</value>
@@ -2074,7 +2074,7 @@
     <value>NoControl</value>
   </data>
   <data name="archiveDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 196</value>
+    <value>7, 202</value>
   </data>
   <data name="archiveDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 30</value>
@@ -2666,7 +2666,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 77</value>
+    <value>55, 83</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3252,7 +3252,7 @@
     <value>NoControl</value>
   </data>
   <data name="floatingIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>104, 77</value>
+    <value>104, 83</value>
   </data>
   <data name="floatingIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3838,7 +3838,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 77</value>
+    <value>154, 83</value>
   </data>
   <data name="pictureBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -4776,7 +4776,7 @@
     <value>NoControl</value>
   </data>
   <data name="displayButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 45</value>
+    <value>7, 51</value>
   </data>
   <data name="displayButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 32</value>
@@ -4812,10 +4812,10 @@
     <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
   <data name="suggestBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 554</value>
+    <value>271, 558</value>
   </data>
   <data name="suggestBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>671, 54</value>
+    <value>662, 54</value>
   </data>
   <data name="suggestBar.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -4854,7 +4854,7 @@
     <value>Stretch</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>944, 657</value>
+    <value>937, 657</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
