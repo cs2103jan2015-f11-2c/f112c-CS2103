@@ -44,7 +44,7 @@ void EventStorage::readToCurrentContent(){
 			getline(readFile, id);
 			//getline(readFile, tags);
 			//createFile
-			tempEvent->setIsFloating("0"); //stringToBool
+			tempEvent->setIsFloating(false); //stringToBool
 			tempEvent->setName(name);
 			tempEvent->setDescription(description);
 			tempEvent->setFeedback(feedback);
@@ -55,6 +55,7 @@ void EventStorage::readToCurrentContent(){
 			tempEvent->setEndDate(atoi(endDateDay.c_str()),atoi(endDateMonth.c_str()),atoi(endDateYear.c_str()));
 			//split tags
 			//tempEvent->setTags();
+			currentContent.push_back(*tempEvent);
 		}
 		else if(textLine == "1"){				//floatingEvent
 			//getinfo from textfile
@@ -74,15 +75,15 @@ void EventStorage::readToCurrentContent(){
 			getline(readFile, id);
 			//getline(readFile, tags);
 			//createFile
-			tempEvent->setIsFloating("0");
+			tempEvent->setIsFloating(true);
 			tempEvent->setName(name);
 			tempEvent->setDescription(description);
 			tempEvent->setFeedback(feedback);
 			tempEvent->setID(atoi(id.c_str()));
 			//split tags
 			//tempEvent->setTags();
+			currentFloatingContent.push_back(*tempEvent);
 		}
-		currentContent.push_back(*tempEvent);
 		delete tempEvent;
 		getline(readFile, textLine);			//takes in 0/1 for isFloating check
 	}
@@ -104,6 +105,20 @@ void EventStorage::writeToCurrentFile(){
 		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
 		//	writeFile << " " << *iter << std::endl;
 	}	
+	for(int i=0;i<currentFloatingContent.size();i++){
+		writeFile 
+			<< boolToString(currentFloatingContent[i].getIsFloating()) << std::endl 
+			<< currentFloatingContent[i].getName() << std::endl 
+			<< '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << std::endl
+			<< currentFloatingContent[i].getDescription() << std::endl
+			<< currentFloatingContent[i].getFeedback() << std::endl
+			<< currentFloatingContent[i].getID() << std::endl;
+		
+		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
+		//	writeFile << " " << *iter << std::endl;
+	}
+
+
 	writeFile.close();
 }
 
@@ -128,17 +143,29 @@ string EventStorage::tmToString(Event convertEvent){
 	return oss.str();
 }
 
-vector<Event> EventStorage::addEvent(Event eventName){  //return eventvector with all events on that day
-	currentContent.push_back(eventName);
+vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with all events on that day
+	vector<Event> returnToLogicVector;
+
+	if(newEvent.getIsFloating()){
+		newEvent.setFeedback("Your event has been added to float"); 
+		currentFloatingContent.push_back(newEvent);
+		returnToLogicVector = currentFloatingContent;
+	}
+	else{
+		newEvent.setFeedback("Your event has been added to normal"); 
+		currentContent.push_back(newEvent);
+		returnToLogicVector = showDay(newEvent.getStartDate().tm_mday,newEvent.getStartDate().tm_mon,newEvent.getStartDate().tm_year);
+	}
 	writeToCurrentFile();
-	eventName.setFeedback("Your event has been added"); 
-	returnToLogicVector.push_back(eventName);
+
 	return returnToLogicVector; 
 }
+/*
 Event EventStorage::userInputIndexToEvent(int userIndex)
 {
 	return searchResults[userIndex-1];
 }
+
 void EventStorage::deleteEvent(int userIndex){
 	
 	Event eventToBeDeleted;
@@ -157,11 +184,12 @@ void EventStorage::deleteEvent(int userIndex){
 
 	writeToCurrentFile();
 }
-
+*/
+/*
 //search all vector and all component of events save into events of vector results
 vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearch){
 	bool isFound=false;
-	searchResults.clear();
+	vector<Event> searchResults;
 
 	for(int i=0;i<currentContent.size();i++){
 		if(currentContent[i].getDescription().find(informationToSearch) != std::string::npos)
@@ -197,12 +225,12 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	}
 	return searchResults;
 }
-
+*/
 //search base on event ID
+/*
 int EventStorage::searchCurrentContentWithEventID(int eventID){
 	bool isFound=false;
 	
-	searchResults.clear();
 	for(int i=0;i<currentContent.size();i++){
 		if(currentContent[i].getID() == eventID){
 			isFound = true;
@@ -211,28 +239,137 @@ int EventStorage::searchCurrentContentWithEventID(int eventID){
 	}
 	return -1;
 }
-
-vector<Event> EventStorage::showAllEvent(){
-	//sortEventVectorByDate();
-	return currentContent;
+*/
+vector<Event> EventStorage::showAllNormalEvent(){
+	vector<Event> sortResults;
+	sortResults = sortEventVectorByDate(currentContent);
+	return sortResults; 
+}
+vector<Event> EventStorage::showAllFloatingEvent(){
+	return currentFloatingContent;
 }
 
-vector<Event> EventStorage::showDay(){
-	return currentContent;
-}
-void EventStorage::sortEventVectorByDate(){
+vector<Event> EventStorage::sortEventVectorByDate(vector<Event> eventVectorToSort){
 
-	time_t timeSmaller, timeBigger;
 	Event tempEvent;
-	for(int i=0;i<currentContent.size()-1;i++){
-		for(int j=i+1;j<currentContent.size();i++){
-			timeSmaller = mktime(&currentContent[i].getStartDate());
-			timeBigger = mktime(&currentContent[j].getStartDate());
-			if(difftime(timeBigger,timeSmaller)>0){
-				tempEvent = currentContent[j];
-				currentContent[j] = currentContent[i];
-				currentContent[i] = tempEvent;
+	if(eventVectorToSort.size()<=1){
+		return eventVectorToSort;
+	}
+	else{
+		for(int i=0;i<(eventVectorToSort.size()-1);i++){
+			for(int j=i+1;j<eventVectorToSort.size();j++){
+				if(isLatterTimeSmaller(eventVectorToSort[i],eventVectorToSort[j])){
+					tempEvent = eventVectorToSort[j];
+					eventVectorToSort[j] = eventVectorToSort[i];
+					eventVectorToSort[i] = tempEvent;
+				}
 			}
 		}
 	}
+	return eventVectorToSort;
+}
+	
+bool EventStorage::isLatterTimeSmaller(Event eventTime1,Event eventTime2) //returns true is latter time is smaller
+{	
+	bool isEarlier = false;
+
+	if(eventTime1.getStartDate().tm_year != eventTime2.getStartDate().tm_year){
+		return isLatterYearSmaller(eventTime1,eventTime2);
+	}
+	else if(eventTime1.getStartDate().tm_mon != eventTime2.getStartDate().tm_mon){
+		return isLatterMonthSmaller(eventTime1,eventTime2);
+	}
+	else if(eventTime1.getStartDate().tm_mday != eventTime2.getStartDate().tm_mday){
+		return isLatterDaySmaller(eventTime1,eventTime2);
+	}
+	else if(eventTime1.getStartDate().tm_hour != eventTime2.getStartDate().tm_hour){
+		return isLatterHourSmaller(eventTime1,eventTime2);
+	}
+	else if(eventTime1.getStartDate().tm_min != eventTime2.getStartDate().tm_min){
+		return isLatterMinSmaller(eventTime1,eventTime2);
+	}
+	else		//Start time is equal
+		return isEarlier;
+}
+bool EventStorage::isLatterHourSmaller(Event eventTime1, Event eventTime2) //returns true is eT2 is earlier
+{
+	int startHour, endHour;
+	bool isHourBigger = false;
+
+	startHour = eventTime1.getStartDate().tm_hour;
+	endHour = eventTime2.getStartDate().tm_hour;
+	if(startHour > endHour)
+		isHourBigger = true;
+
+	return isHourBigger;
+}
+
+bool EventStorage::isLatterYearSmaller(Event eventTime1, Event eventTime2) //returns true is eT2 is earlier
+{
+	int startYear, endYear;
+	bool isYearBigger = false;
+
+	startYear = eventTime1.getStartDate().tm_year;
+	endYear = eventTime2.getStartDate().tm_year;
+	if(startYear > endYear){
+		isYearBigger = true;
+	}
+	return isYearBigger;
+}
+
+bool EventStorage::isLatterMonthSmaller(Event eventTime1, Event eventTime2)  //returns true is eT2 is earlier
+{
+	int startMonth, endMonth;
+	bool isMonthBigger = false;
+
+	startMonth = eventTime1.getStartDate().tm_mon;
+	endMonth = eventTime2.getStartDate().tm_mon;
+	if(startMonth > endMonth)
+		isMonthBigger = true;
+
+	return isMonthBigger;
+}
+
+bool EventStorage::isLatterDaySmaller(Event eventTime1, Event eventTime2)  //returns true is eT2 is earlier
+{
+	int startDay, endDay;
+	bool isDayBigger = false;
+
+	startDay = eventTime1.getStartDate().tm_mday;
+	endDay = eventTime2.getStartDate().tm_mday;
+	if(startDay > endDay)
+		isDayBigger = true;
+
+	return isDayBigger;
+}
+
+bool EventStorage::isLatterMinSmaller(Event eventTime1, Event eventTime2) //returns true is eT2 is earlier
+{
+	int startMin, endMin;
+	bool isMinBigger = false;
+
+	startMin = eventTime1.getStartDate().tm_min;
+	endMin = eventTime2.getStartDate().tm_min;
+	if(startMin > endMin)
+		isMinBigger = true;
+
+	return isMinBigger;
+}
+
+vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToShow){
+	
+	bool isFound=false;
+	vector<Event> showDayResults;
+	vector<Event> sortResults;
+
+	sortResults = sortEventVectorByDate(currentContent);
+
+	for(int i=0;i<sortResults.size();i++){
+		if((sortResults[i].getStartDate().tm_year == yearToShow) && (sortResults[i].getStartDate().tm_mon == monthToShow) && (sortResults[i].getStartDate().tm_mday == dayToShow)){
+			isFound = true;
+			showDayResults.push_back(sortResults[i]);
+			isFound = false;
+		}
+	}
+	return showDayResults;
 }

@@ -5,24 +5,23 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include "Event.h"
 #include "EventArchive.h"
-#include "Parser.h"
+//#include parser.h
 
 class EventStorage{
 private:
-	std::vector<Event> currentContent;
-	std::vector<Event> currentFloatingContent;
-	std::vector<EventArchive> archiveContent;
-	std::vector<Event> searchResults;
-	std::vector<Event> undoVector;
-	std::vector<Event> redoVector;
-	std::vector<Event> returnToLogicVector;
+	vector<Event> currentContent;
+	vector<Event> currentFloatingContent;
+	vector<EventArchive> archiveContent;
+	vector<Event> undoVector;
+	vector<Event> redoVector;
 	EventArchive archiveObject; 
-	static const std::string currentFile;	
+	static const std::string currentFile;
 
 
 public:
@@ -46,9 +45,16 @@ public:
 
 	//void createFloatingEvent();
 	//void createEvent();
-	vector<Event> showAllEvent();
-	void sortEventVectorByDate();
-	vector<Event> showDay();
+	vector<Event> showAllNormalEvent();
+	vector<Event> showAllFloatingEvent();
+	vector<Event> sortEventVectorByDate(vector<Event> eventVectorToSort);
+	vector<Event> showDay(int dayToShow, int monthToShow, int yearToShow);
+	bool isLatterTimeSmaller(const Event eventTime1,const Event EventTime2);
+	bool isLatterYearSmaller(Event eventTime1, Event EventTime2);
+	bool isLatterMonthSmaller(Event eventTime1, Event EventTime2);
+	bool isLatterDaySmaller(Event eventTime1, Event EventTime2);
+	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
+	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
 
 };
 
