@@ -10,21 +10,20 @@
 #include "Parser.h"
 #include "EventStorage.h"
 #include "Event.h"
-
-using std::string;
-using std::vector;
+#include "Display.h"
 
 
 class Logic {
 private:
 	Parser* parserPtr;
 	EventStorage eventStore;
-
+	Display display;
 
 public:
-	//constructor
+	//constructor, destructor
 	Logic(void);
-	
+	~Logic();
+
 
 	//getters
 	Parser::commandType getCommand();

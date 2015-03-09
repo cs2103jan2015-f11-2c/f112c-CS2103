@@ -1,10 +1,13 @@
-
 #include "Logic.h"
 
 
-	//CONSTRUCTOR
+	//CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
 	parserPtr = NULL;
+}
+
+Logic::~Logic() {
+	deleteParserPtr();
 }
 
 
@@ -20,6 +23,7 @@ Event Logic::getEvent() {
 EventStorage Logic::getEventStorage() {
 	return eventStore;
 }
+
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
