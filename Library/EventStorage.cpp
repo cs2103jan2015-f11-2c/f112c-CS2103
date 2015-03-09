@@ -160,31 +160,7 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 
 	return returnToLogicVector; 
 }
-/*
-Event EventStorage::userInputIndexToEvent(int userIndex)
-{
-	return searchResults[userIndex-1];
-}
 
-void EventStorage::deleteEvent(int userIndex){
-	
-	Event eventToBeDeleted;
-	int indexOfEventID;
-	
-	eventToBeDeleted = userInputIndexToEvent(userIndex);
-
-	//saving in archive for Undo
-	archiveObject.setCommandType("delete");
-	archiveObject.setArchiveEvent(eventToBeDeleted);
-	archiveContent.push_back(archiveObject);
-
-	//find event in currentContent and delete
-	indexOfEventID = searchCurrentContentWithEventID(eventToBeDeleted.getID());
-	currentContent.erase(currentContent.begin() + indexOfEventID);
-
-	writeToCurrentFile();
-}
-*/
 /*
 //search all vector and all component of events save into events of vector results
 vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearch){
@@ -226,20 +202,7 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	return searchResults;
 }
 */
-//search base on event ID
-/*
-int EventStorage::searchCurrentContentWithEventID(int eventID){
-	bool isFound=false;
-	
-	for(int i=0;i<currentContent.size();i++){
-		if(currentContent[i].getID() == eventID){
-			isFound = true;
-			return i;
-		}
-	}
-	return -1;
-}
-*/
+
 vector<Event> EventStorage::showAllNormalEvent(){
 	vector<Event> sortResults;
 	sortResults = sortEventVectorByDate(currentContent);
@@ -372,4 +335,52 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 		}
 	}
 	return showDayResults;
+}
+
+//delete method
+void EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector){
+	
+	Event eventToBeDeleted;
+	int indexOfEventID;
+	
+	eventToBeDeleted = userInputIndexToEvent(userIndex, userDisplayedVector);
+
+	//saving in archive for Undo
+	archiveObject.setCommandType("delete");
+	archiveObject.setArchiveEvent(eventToBeDeleted);
+	archiveContent.push_back(archiveObject);
+
+	//find event in currentContent and delete
+	if(eventToBeDeleted.getIsFloating()){								//floating case
+		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentFloatingContent);
+		if(indexOfEventID >= 0){
+			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
+		}
+	}
+	else if(!eventToBeDeleted.getIsFloating()){							//Normal case
+		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentContent);
+		if(indexOfEventID >= 0){
+			currentContent.erase(currentContent.begin() + indexOfEventID);
+		}
+	}
+	else
+		cout << "ERROR MSG" << std::endl;
+
+	writeToCurrentFile();
+}
+
+Event EventStorage::userInputIndexToEvent(int userIndex, vector<Event> userDisplayedVector)
+{
+	return userDisplayedVector[userIndex-1];
+}
+
+//search base on event ID and returns index in vector
+int EventStorage::searchWithEventID(int eventID, vector<Event> eventVectorToSearch){
+	
+	for(int i=0;i<eventVectorToSearch.size();i++){
+		if(eventVectorToSearch[i].getID() == eventID){
+			return i;
+		}
+	}
+	return -1; //notFound
 }

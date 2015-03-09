@@ -11,7 +11,7 @@
 #include <sstream>
 #include "Event.h"
 #include "EventArchive.h"
-//#include parser.h
+
 
 class EventStorage{
 private:
@@ -33,18 +33,15 @@ public:
 	void writeToCurrentFile();
 	void readToCurrentContent();
 	vector<Event> addEvent(Event newEvent);
-	void deleteEvent(int userIndex); 
-	void EditEvent(int ID, Event newEvent);
-	vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
-	int searchCurrentContentWithEventID(int eventID);
-	void searchEventname();
+
+	//delete mths
+	void deleteEvent(int userIndex, vector<Event> userDisplayedVector);
+	int searchWithEventID(int eventID, vector<Event> eventVectorToSearch);
+	Event userInputIndexToEvent(int userIndex, vector<Event> userDisplayedVector);
+
 	string tmToString(Event convertEvent);
 	string boolToString(bool isFloatingBool);
 
-	Event userInputIndexToEvent(int userIndex);
-
-	//void createFloatingEvent();
-	//void createEvent();
 	vector<Event> showAllNormalEvent();
 	vector<Event> showAllFloatingEvent();
 	vector<Event> sortEventVectorByDate(vector<Event> eventVectorToSort);
@@ -55,7 +52,10 @@ public:
 	bool isLatterDaySmaller(Event eventTime1, Event EventTime2);
 	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
-
+	
+	//void EditEvent(int ID, Event newEvent);
+	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
+	
 };
 
 
