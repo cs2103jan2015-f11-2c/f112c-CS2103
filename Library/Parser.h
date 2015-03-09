@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include "Event.h"
+//#include "InputStringSplit.h"
+//#include "ParserProcessor.h"
 
 class Parser
 {
@@ -34,6 +36,8 @@ public:
 
 private:
 	commandType typeOfCommand;
+	//InputStringSplit splitter;
+	//ParserProcessor processor;
 	std::string command;
 	std::string details;
 	std::string original;

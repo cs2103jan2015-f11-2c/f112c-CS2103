@@ -68,8 +68,10 @@
     <ClCompile Include="EventArchive.cpp" />
     <ClCompile Include="EventStorage.cpp" />
     <ClCompile Include="GuideInfor.cpp" />
+    <ClCompile Include="InputStringSplit.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Conversion.h" />
@@ -78,8 +80,10 @@
     <ClInclude Include="EventArchive.h" />
     <ClInclude Include="EventStorage.h" />
     <ClInclude Include="GuideInfor.h" />
+    <ClInclude Include="InputStringSplit.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="ParserProcessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

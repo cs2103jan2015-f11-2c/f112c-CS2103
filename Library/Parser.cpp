@@ -1,12 +1,5 @@
-
 #include "Parser.h"
-/*
-<<<<<<< HEAD
-=======
 
-	//CONSTRUCTOR, DESTRUCTOR
->>>>>>> origin/master
-*/
 Parser::Parser(std::string input)
 {
 	original = input;
@@ -49,8 +42,13 @@ void Parser::tokenizeOriginalString(){
 	std::string::size_type strCutIndex = original.find_first_of(" ");
 	command = original.substr(0,strCutIndex);
 	details = original.substr(strCutIndex+1);
+	//command = splitter.extractFirstWord(original);
+	//details = splitter.extractDetails(original);
 
+	//std::vector<std::string> fragmentedWords;
 	if(command == "add"){
+		//fragmentedWords = splitter.fragmentAddString(details);
+		//tempEventStore = processor.processAddEvent(fragmentedWords);
 		this->identifyAddCommand();
 	}
 	else if(command == "delete"){
