@@ -64,31 +64,29 @@ vector<Event> Logic::executeUserInput(string input) {
 
 //executes exact user command after parsing
 vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent) {
-	vector<Event> resultEvent;
-	
 	switch (command) {
 	case Parser::ADDFLOAT:
-		resultEvent = eventStore.addEvent(userEvent);
+		display.setFloatingEvents(eventStore.addEvent(userEvent));
 		break;
 
 	case Parser::ADDFULLDAY:
-		resultEvent = eventStore.addEvent(userEvent);
+		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 	
 	case Parser::ADD:
-		resultEvent = eventStore.addEvent(userEvent);
+		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDSTART:
-		resultEvent = eventStore.addEvent(userEvent);
+		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDMULFULLDAYS:
-		resultEvent = eventStore.addEvent(userEvent);
+		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::ADDMULDAYS:
-		resultEvent = eventStore.addEvent(userEvent);
+		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 
 	case Parser::DELETE_:
@@ -107,7 +105,7 @@ vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent
 		break;
 
 	case Parser::SHOWUSER:
-		return eventStore.searchAllComponentsOfEvent(userEvent.getName());
+		//return eventStore.searchAllComponentsOfEvent(userEvent.getName());
 		break;
 
 	case Parser::ERROR_:
@@ -116,8 +114,6 @@ vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent
 	default:
 		break;
 	}
-
-	return resultEvent;
 }
 
 void Logic::deleteParserPtr() {
