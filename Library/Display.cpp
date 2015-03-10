@@ -8,6 +8,7 @@ Display::Display() {
 	mainDisplayStrings.clear();
 	floatingDisplayStrings.clear();
 	feedbackDisplayStrings.clear();
+	
 }
 
 
