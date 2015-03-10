@@ -338,10 +338,11 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 }
 
 //delete method
-void EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector){
+bool EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector){
 	
 	Event eventToBeDeleted;
 	int indexOfEventID;
+	bool isDeleted = false;
 	
 	eventToBeDeleted = userInputIndexToEvent(userIndex, userDisplayedVector);
 
@@ -356,16 +357,19 @@ void EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector)
 		if(indexOfEventID >= 0){
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
 		}
+		isDeleted = true;
 	}
 	else if(!eventToBeDeleted.getIsFloating()){							//Normal case
 		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentContent);
 		if(indexOfEventID >= 0){
 			currentContent.erase(currentContent.begin() + indexOfEventID);
 		}
+		isDeleted = true;
 	}
-	else
+	else{
 		cout << "ERROR MSG" << std::endl;
-
+		isDeleted = false;
+	}
 	writeToCurrentFile();
 }
 

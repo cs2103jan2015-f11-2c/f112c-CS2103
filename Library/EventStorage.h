@@ -35,7 +35,7 @@ public:
 	vector<Event> addEvent(Event newEvent);
 
 	//delete mths
-	void deleteEvent(int userIndex, vector<Event> userDisplayedVector);
+	bool deleteEvent(int userIndex, vector<Event> userDisplayedVector);
 	int searchWithEventID(int eventID, vector<Event> eventVectorToSearch);
 	Event userInputIndexToEvent(int userIndex, vector<Event> userDisplayedVector);
 
