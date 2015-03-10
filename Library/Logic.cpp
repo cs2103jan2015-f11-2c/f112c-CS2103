@@ -82,9 +82,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_: {
-<<<<<<< HEAD
 		string eventName = parserPtr->getNameOfEvent(); 
-=======
+
 		string eventName = parserPtr->getNameOfEvent();
 
 		if (isNumber(eventName)) {
@@ -96,7 +95,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			eventStore.deleteEvent(INVALID_NUMBER, eventName);
 		}
 
->>>>>>> origin/master
 		break;
 						  }
 	case Parser::EDIT:
