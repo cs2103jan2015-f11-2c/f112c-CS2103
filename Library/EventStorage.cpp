@@ -412,14 +412,15 @@ vector<Event> EventStorage::editEvent(int eventID, string eventName, Event edite
 	else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
-			eventToBeEdited = currentContent[indexOfEventID];
+			eventToBeEdited = currentFloatingContent[indexOfEventID];
 			if(editedEvent.getName() != ""){
-			eventToBeEdited.setName(editedEvent.getName());		
+				eventToBeEdited.setName(editedEvent.getName());		
 			}
-		currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
+			returnToLogicVector = currentFloatingContent;
 	}
 	
 	writeToCurrentFile();
 
-	//return showDay vector
+	return returnToLogicVector;
+	}
 }
