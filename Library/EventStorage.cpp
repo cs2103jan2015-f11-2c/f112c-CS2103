@@ -1,9 +1,14 @@
 #include "EventStorage.h"
 
-	//CONSTRUCTOR, DESTRUCTOR
-	//read all from text file first to have past memory
+//These are messages to give the user feedback on what the program is doing.
+const string EventStorage::ADDED_FLOATING_EVENT = "Congratulation!! You have added a Floating Event to MapleSyrup :)";
+const string EventStorage::ADDED_NORMAL_EVENT = "Well Done!! You have added an Event to MapleSyrup :)";
 
+	
 const std::string EventStorage::currentFile = "mytext.txt";
+
+//CONSTRUCTOR, DESTRUCTOR
+//read all from text file first to have past memory
 
 EventStorage::EventStorage(void)
 {
@@ -147,12 +152,12 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 	vector<Event> returnToLogicVector;
 
 	if(newEvent.getIsFloating()){
-		newEvent.setFeedback("Your event has been added to float"); 
+		newEvent.setFeedback(ADDED_FLOATING_EVENT); 
 		currentFloatingContent.push_back(newEvent);
 		returnToLogicVector = currentFloatingContent;
 	}
 	else{
-		newEvent.setFeedback("Your event has been added to normal"); 
+		newEvent.setFeedback(ADDED_NORMAL_EVENT); 
 		currentContent.push_back(newEvent);
 		returnToLogicVector = showDay(newEvent.getStartDate().tm_mday,newEvent.getStartDate().tm_mon,newEvent.getStartDate().tm_year);
 	}

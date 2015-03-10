@@ -15,6 +15,12 @@
 
 class EventStorage{
 private:
+
+	//These are messages to give the user feedback on what the program is doing.
+	static const string ADDED_FLOATING_EVENT;
+	static const string ADDED_NORMAL_EVENT;
+
+	//These are vectors that store information
 	vector<Event> currentContent;
 	vector<Event> currentFloatingContent;
 	vector<EventArchive> archiveContent;
@@ -22,7 +28,6 @@ private:
 	vector<Event> redoVector;
 	EventArchive archiveObject; 
 	static const std::string currentFile;
-
 
 public:
 	//Constructor, Destructor
