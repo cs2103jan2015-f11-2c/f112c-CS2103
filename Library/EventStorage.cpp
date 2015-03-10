@@ -62,8 +62,7 @@ void EventStorage::readToCurrentContent(){
 			//split tags
 			//tempEvent->setTags();
 			currentContent.push_back(*tempEvent);
-		}
-		else if(textLine == "1"){				//floatingEvent
+		} else if(textLine == "1"){				//floatingEvent
 			//getinfo from textfile
 			getline(readFile, name);
 			getline(readFile, startDateYear);
@@ -131,8 +130,7 @@ void EventStorage::writeToCurrentFile(){
 string EventStorage::boolToString(bool isFloatingBool){
 	if(isFloatingBool){
 		return "1";
-	}
-	else{
+	} else{
 		return "0";
 	}
 }
@@ -156,8 +154,7 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 		newEvent.setFeedback(ADDED_FLOATING_EVENT); 
 		currentFloatingContent.push_back(newEvent);
 		returnToLogicVector = currentFloatingContent;
-	}
-	else{
+	} else{
 		newEvent.setFeedback(ADDED_NORMAL_EVENT); 
 		currentContent.push_back(newEvent);
 		returnToLogicVector = showDay(newEvent.getStartDate().tm_mday,newEvent.getStartDate().tm_mon,newEvent.getStartDate().tm_year);
@@ -181,8 +178,7 @@ vector<Event> EventStorage::sortEventVectorByDate(vector<Event> eventVectorToSor
 	Event tempEvent;
 	if(eventVectorToSort.size()<=1){
 		return eventVectorToSort;
-	}
-	else{
+	} else{
 		for(int i=0;i<(eventVectorToSort.size()-1);i++){
 			for(int j=i+1;j<eventVectorToSort.size();j++){
 				if(isLatterTimeSmaller(eventVectorToSort[i],eventVectorToSort[j])){
@@ -202,20 +198,15 @@ bool EventStorage::isLatterTimeSmaller(Event eventTime1,Event eventTime2) //retu
 
 	if(eventTime1.getStartDate().tm_year != eventTime2.getStartDate().tm_year){
 		return isLatterYearSmaller(eventTime1,eventTime2);
-	}
-	else if(eventTime1.getStartDate().tm_mon != eventTime2.getStartDate().tm_mon){
+	} else if(eventTime1.getStartDate().tm_mon != eventTime2.getStartDate().tm_mon){
 		return isLatterMonthSmaller(eventTime1,eventTime2);
-	}
-	else if(eventTime1.getStartDate().tm_mday != eventTime2.getStartDate().tm_mday){
+	} else if(eventTime1.getStartDate().tm_mday != eventTime2.getStartDate().tm_mday){
 		return isLatterDaySmaller(eventTime1,eventTime2);
-	}
-	else if(eventTime1.getStartDate().tm_hour != eventTime2.getStartDate().tm_hour){
+	} else if(eventTime1.getStartDate().tm_hour != eventTime2.getStartDate().tm_hour){
 		return isLatterHourSmaller(eventTime1,eventTime2);
-	}
-	else if(eventTime1.getStartDate().tm_min != eventTime2.getStartDate().tm_min){
+	} else if(eventTime1.getStartDate().tm_min != eventTime2.getStartDate().tm_min){
 		return isLatterMinSmaller(eventTime1,eventTime2);
-	}
-	else		//Start time is equal
+	} else		//Start time is equal
 		return isEarlier;
 }
 bool EventStorage::isLatterHourSmaller(Event eventTime1, Event eventTime2) //returns true is eT2 is earlier
@@ -318,8 +309,7 @@ bool EventStorage::deleteEvent(int eventID, string eventName){
 		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
 			// pass to logic eventIdVector.size();
 			return isDeleted;
-		}
-		else{
+		} else{
 			eventID = eventIdVector[0];
 		}
 	}
@@ -328,8 +318,7 @@ bool EventStorage::deleteEvent(int eventID, string eventName){
 	if(indexOfEventID >= 0){ 
 		currentContent.erase(currentContent.begin() + indexOfEventID);
 		isDeleted = true;
-	}
-	else{ //Floating Case
+	} else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
