@@ -293,12 +293,13 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 }
 
 //delete method
-bool EventStorage::deleteEvent(int eventID, string eventName){
+vector<Event> EventStorage::deleteEvent(int eventID, string eventName){
 	
 	vector<int> eventIdVector, floatingEventIdVector;
+	vector<Event> returnToLogicVector;
 	Search search;
 	int indexOfEventID = INVALID; 
-	bool isDeleted = false;
+	Event eventToBeDeleted;
 
 	if(eventID == INVALID) //event is not a user display Index)
 	{
@@ -308,32 +309,35 @@ bool EventStorage::deleteEvent(int eventID, string eventName){
 		
 		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
 			// pass to logic eventIdVector.size();
-			return isDeleted;
-		} else{
+		}
+		else{
 			eventID = eventIdVector[0];
 		}
 	}
 	//Normal Case
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
 	if(indexOfEventID >= 0){ 
+		eventToBeDeleted = currentContent[indexOfEventID];
 		currentContent.erase(currentContent.begin() + indexOfEventID);
-		isDeleted = true;
-	} else{ //Floating Case
+		returnToLogicVector = showDay(eventToBeDeleted.getStartDate().tm_mday,eventToBeDeleted.getStartDate().tm_mon,eventToBeDeleted.getStartDate().tm_year);
+	}
+	else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
+			eventToBeDeleted = currentFloatingContent[indexOfEventID];
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
-			isDeleted = true;
+			returnToLogicVector = currentFloatingContent;
 		}
 	}
 	
 	writeToCurrentFile();
-	return isDeleted;
+	return returnToLogicVector;
+
 	//saving in archive for Undo
 	//archiveObject.setCommandType("delete");
 	//archiveObject.setArchiveEvent(eventToBeDeleted);
 	//archiveContent.push_back(archiveObject);
 }
-
 /*
 //search all vector and all component of events save into events of vector results
 vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearch){

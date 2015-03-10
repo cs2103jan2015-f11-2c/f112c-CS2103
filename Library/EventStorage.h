@@ -43,7 +43,7 @@ public:
 	vector<Event> addEvent(Event newEvent);
 
 	//delete mths
-	bool deleteEvent(int eventID, string eventName);
+	vector<Event> deleteEvent(int eventID, string eventName);
 
 	string tmToString(Event convertEvent);
 	string boolToString(bool isFloatingBool);
