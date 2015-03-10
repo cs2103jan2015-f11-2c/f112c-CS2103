@@ -58,6 +58,10 @@ bool Logic::executeUserInput(string input) {
 
 //executes exact user command after parsing
 void Logic::executeCommand(Parser::commandType command, Event userEvent) {
+	string eventName = parserPtr->getNameOfEvent();
+	int index, id;
+	vector<Event> tempEvents;
+
 	switch (command) {
 	case Parser::ADDFLOAT:
 		display.setFloatingEvents(eventStore.addEvent(userEvent));
@@ -84,9 +88,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_: {
-		string eventName = parserPtr->getNameOfEvent();
-		int index, id;
-
 		if (isNumber(eventName)) {
 			index = std::stoi(eventName);
 			id = display.getID(index);
@@ -94,7 +95,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			id = INVALID_NUMBER;
 		}
 
-		vector<Event> tempEvents = eventStore.deleteEvent(id, eventName);
+		tempEvents = eventStore.deleteEvent(id, eventName);
 
 		bool isFloat = tempEvents[0].getIsFloating();
 
@@ -108,8 +109,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 						  }
 
 	case Parser::EDIT: {
-		string eventName = parserPtr->getNameOfEvent();
-		int index, id;
 		Event tempEvent = parserPtr->getEvent();
 
 		if (isNumber(eventName)) {
@@ -119,8 +118,15 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			id = INVALID_NUMBER;
 		}
 
-		//vector<Event> tempEvents = eventStore.
+		tempEvents = eventStore.editEvent(id, eventName, tempEvent);
 
+		bool isFloat = tempEvents[0].getIsFloating();
+
+		if (isFloat) {
+			display.setFloatingEvents(tempEvents);
+		} else {
+			display.setNormalEvents(tempEvents);
+		}
 
 		break;
 					   }
