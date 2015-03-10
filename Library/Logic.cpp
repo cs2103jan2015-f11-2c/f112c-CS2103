@@ -1,5 +1,7 @@
 #include "Logic.h"
 
+const int Logic::INVALID_NUMBER = -1;
+
 
 	//CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
@@ -88,6 +90,10 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		if (isNumber(eventName)) {
 			int index = std::stoi(eventName);
 			int id = display.getID(index);
+
+			eventStore.deleteEvent(id, eventName);
+		} else {
+			eventStore.deleteEvent(INVALID_NUMBER, eventName);
 		}
 
 >>>>>>> origin/master

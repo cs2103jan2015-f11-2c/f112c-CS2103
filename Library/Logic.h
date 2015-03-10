@@ -20,6 +20,8 @@ private:
 	Display display;
 
 public:
+	static const int INVALID_NUMBER;
+	
 	//constructor, destructor
 	Logic(void);
 	~Logic();
