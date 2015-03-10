@@ -30,6 +30,10 @@ public:
 	Event getEvent();
 	EventStorage getEventStorage();
 
+	vector<string> getFloatingStrings();
+	vector<string> getMainStrings();
+	vector<string> getFeedbackStrings();
+
 
 	//executors
 	bool executeUserInput(string input);

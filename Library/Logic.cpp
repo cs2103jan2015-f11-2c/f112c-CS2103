@@ -24,6 +24,18 @@ EventStorage Logic::getEventStorage() {
 	return eventStore;
 }
 
+vector<string> Logic::getFloatingStrings() {
+	return display.getFloatingDisplayStrings();
+}
+
+vector<string> Logic::getMainStrings() {
+	return display.getMainDisplayStrings();
+}
+
+vector<string> Logic::getFeedbackStrings() {
+	return display.getFeedbackDisplayStrings();
+}
+
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
