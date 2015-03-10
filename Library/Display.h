@@ -10,12 +10,15 @@
 
 #include "Event.h"
 
-struct MAIN_EVENT {
-	string eventString;
-	bool isNew;
-};
 
 class Display {
+public:
+	struct MAIN_EVENT {
+		string eventString;
+		bool isNew;
+	};
+
+
 private:
 	vector<Event> normalEvents;
 	vector<Event> floatingEvents;
