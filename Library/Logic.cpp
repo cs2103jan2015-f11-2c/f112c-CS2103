@@ -119,7 +119,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			id = INVALID_NUMBER;
 		}
 
-		vector<Event> tempEvents = eventStore.deleteEvent(id, eventName);
+		//vector<Event> tempEvents = eventStore.
 
 
 		break;

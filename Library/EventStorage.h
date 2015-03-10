@@ -59,7 +59,7 @@ public:
 	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
 	
-	//void EditEvent(int ID, Event newEvent);
+	vector<Event> editEvent(int eventID, string eventName, Event editedEvent);
 	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
 	
 };

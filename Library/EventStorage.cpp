@@ -378,6 +378,7 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	}
 	return searchResults;
 }
+*/
 
 vector<Event> EventStorage::editEvent(int eventID, string eventName, Event editedEvent){
 	
@@ -422,4 +423,3 @@ vector<Event> EventStorage::editEvent(int eventID, string eventName, Event edite
 
 	//return showDay vector
 }
-*/
