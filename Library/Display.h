@@ -23,9 +23,12 @@ private:
 	vector<Event> normalEvents;
 	vector<Event> floatingEvents;
 	vector<Event> feedbackEvents;
+	
 	vector<MAIN_EVENT> mainDisplayStrings;
 	vector<string> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
+
+	int totalNumEvents;
 
 
 public:
@@ -33,6 +36,7 @@ public:
 	Display();
 	//~Display();
 	
+
 	//getters
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
@@ -40,6 +44,9 @@ public:
 	vector<MAIN_EVENT> getMainDisplayStrings();
 	vector<string> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
+
+	int getTotalNumEvents();
+
 
 	//setters
 	void setNormalEvents(vector<Event> events);

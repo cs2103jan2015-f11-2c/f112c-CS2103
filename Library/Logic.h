@@ -31,7 +31,7 @@ public:
 	EventStorage getEventStorage();
 
 	vector<string> getFloatingStrings();
-	vector<MAIN_EVENT> getMainStrings();
+	vector<Display::MAIN_EVENT> getMainStrings();
 	vector<string> getFeedbackStrings();
 
 
@@ -40,6 +40,9 @@ public:
 	void executeCommand(Parser::commandType command, Event userEvent);
 	void deleteParserPtr();
 
+
+	//others
+	bool isNumber(string s);
 };
 
 #endif

@@ -28,7 +28,7 @@ vector<string> Logic::getFloatingStrings() {
 	return display.getFloatingDisplayStrings();
 }
 
-vector<MAIN_EVENT> Logic::getMainStrings() {
+vector<Display::MAIN_EVENT> Logic::getMainStrings() {
 	return display.getMainDisplayStrings();
 }
 
@@ -80,11 +80,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_: {
-		int ID;
-
 		string eventName = parserPtr->getNameOfEvent();
-		vector<Event> floatingEvents = display.getFloatingEvents();
-
 						  
 		break;
 						  }
@@ -116,4 +112,16 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 void Logic::deleteParserPtr() {
 	delete parserPtr;
 	parserPtr = NULL;
+}
+
+
+	//OTHERS
+bool Logic::isNumber(string s) {
+	for (int i = 0 ; i < s.size() ; i++) {
+		if (!isdigit(s[i])) {
+			return false;
+		}
+	}
+
+	return true;
 }

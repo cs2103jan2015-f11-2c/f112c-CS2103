@@ -25,7 +25,7 @@ vector<Event> Display::getFeedbackEvents() {
 	return feedbackEvents;
 }
 
-vector<MAIN_EVENT> Display::getMainDisplayStrings() {
+vector<Display::MAIN_EVENT> Display::getMainDisplayStrings() {
 	return mainDisplayStrings;
 }
 
@@ -35,6 +35,10 @@ vector<string> Display::getFloatingDisplayStrings() {
 
 vector<string> Display::getFeedbackDisplayStrings() {
 	return feedbackDisplayStrings;
+}
+
+int Display::getTotalNumEvents() {
+	return floatingEvents.size() + normalEvents.size();
 }
 
 
