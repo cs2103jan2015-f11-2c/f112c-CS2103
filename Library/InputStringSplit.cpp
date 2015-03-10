@@ -11,7 +11,7 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 
 std::string InputStringSplit::extractDetails(std::string input){
 	std::string::size_type strCutIndex;
-	strCutIndex = input.find_first_of(" ");
+	strCutIndex = input.find_first_of(" ;");
 	return input.substr(strCutIndex+1);
 }
 
@@ -78,11 +78,9 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 	
 	strCutIndex = input.find_first_of(";");
 	while(strCutIndex != std::string::npos){
-		tempString = input.substr(0,strCutIndex);
-		strCutIndex = tempString.find_last_not_of(" ");
-		fragmentedWords.push_back(tempString.substr(0,strCutIndex)+";");
+		fragmentedWords.push_back(input.substr(0,strCutIndex)+";");
 		strCutIndex = input.find_first_not_of(" -.;",strCutIndex);
-		input = input.substr(0,strCutIndex);
+		input = input.substr(strCutIndex);
 		strCutIndex = input.find_first_of(";");
 	}
 	

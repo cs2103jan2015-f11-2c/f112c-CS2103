@@ -29,6 +29,7 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	bool startTimeFound = false;
 	bool endTimeFound = false;
 	bool afterTwelve = false;
+	bool nameFound = false;
 	
 	int tempi = 0;
 	unsigned int i;
@@ -37,6 +38,7 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 		if(fragmentedWords[i].find(";") != std::string::npos){
 			tempEventStore.setName(fragmentedWords[i].substr(0,fragmentedWords[i].find_last_of(";")));
 			tempi++;
+			nameFound = true;
 		}
 	}
 
@@ -138,6 +140,9 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 		matchFound = false;
 	}
 
+	if(!nameFound){
+		tempEventStore.setName("");
+	}
 	if(!startDayFound){
 		tempEventStore.setStartDate(day,month,year);
 	}
