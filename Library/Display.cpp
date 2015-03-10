@@ -77,6 +77,10 @@ void Display::floatingEventsToString() {
 	}
 }
 
+void Display::setFeedbackStrings(string newFeedback) {
+	feedbackDisplayStrings.push_back(newFeedback);
+}
+
 void Display::deleteEvent(int id) {
 	vector<Event> temp = floatingEvents;
 	

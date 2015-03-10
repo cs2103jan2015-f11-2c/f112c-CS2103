@@ -56,7 +56,7 @@ public:
 
 	void normalEventsToString();
 	void floatingEventsToString();
-	void feedbackEventsToString();
+	void setFeedbackStrings(string newFeedback);
 
 	void deleteEvent(int id);
 };
