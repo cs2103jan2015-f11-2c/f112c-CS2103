@@ -108,6 +108,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			display.setNormalEvents(tempEvents);
 		}
 
+		display.setFeedbackStrings(userEvent.getName() + DELETED_MESSAGE);
+
 		break;
 						  }
 
@@ -130,6 +132,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		} else {
 			display.setNormalEvents(tempEvents);
 		}
+
+		display.setFeedbackStrings(userEvent.getName() + EDITED_MESSAGE);
 
 		break;
 					   }
