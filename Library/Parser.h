@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 #include "Event.h"
-//#include "InputStringSplit.h"
-//#include "ParserProcessor.h"
+#include "InputStringSplit.h"
+#include "ParserProcessor.h"
 
 class Parser
 {
@@ -35,9 +35,9 @@ public:
 	};
 
 private:
-	commandType typeOfCommand;
-	//InputStringSplit splitter;
-	//ParserProcessor processor;
+	Parser::commandType typeOfCommand;
+	InputStringSplit splitter;
+	ParserProcessor processor;
 	std::string command;
 	std::string details;
 	std::string original;
@@ -47,7 +47,7 @@ private:
 
 public:
 	//getters
-	commandType getCommandType();
+	Parser::commandType getCommandType();
 	std::string getCommand();
 	std::string getDetails();
 	std::string getOriginal();
@@ -58,17 +58,6 @@ public:
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
 	void retrieveCategories();	//retrieve all categories created from storage txt file 
 
-	//add
-	void identifyAddCommand();	//identify which add command to use and arrange the added information into an Event format
-	int mthToInt(std::string);  //converts month from string to int
-	void timeToInt(int&, int&, std::string);	//converts time from string to integers
-	bool extractEventName();	//extract name of event from details string
-	bool extractEventDate();	//extract date of event from details string
-	bool extractEventTime();	//extract time of event from details string
-
-	//delete
-	void setDeleteCommand();	//set index and cType for delete
-	
 	//edit
 	void setEditCommand();	//set index and cType for edit and calls identifyDetailToEdit
 	void identifyDetailToEdit();	//identify what detail is being edited and insert information to edit into Event format
@@ -76,6 +65,5 @@ public:
 	//show
 	void identifyShowCommand();	//determine what show cType it is based on system categories or user categories. Perform check for user categories if it exists
 };		
+
 #endif
-
-

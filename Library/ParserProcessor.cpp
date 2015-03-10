@@ -15,13 +15,9 @@ ParserProcessor::ParserProcessor(){
 	keywordMonths[11] = "dec";
 	keywordTime[0] = "am";
 	keywordTime[1] = "pm";
-	keywordDetails[0] = "name";
-	keywordDetails[1] = "date";
-	keywordDetails[2] = "time";
-	keywordDetails[3] = "description";
 }
 
-Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords){
+Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	Conversion convertor;
 	Event tempEventStore;
 	std::string strMonth;
@@ -33,13 +29,17 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 	bool startTimeFound = false;
 	bool endTimeFound = false;
 	bool afterTwelve = false;
-
-	tempEventStore.setName(fragmentedWords[0]);
 	
-	unsigned int i = 1;
-	int j = 0;
-	int tempi = 0;
-	for(i = 1; i < fragmentedWords.size(); i++){
+	unsigned int i;
+	int j;
+	int tempi;
+	for(i = 0; i < fragmentedWords.size(); i++){
+		//finding name
+		if(fragmentedWords[i].find(" ") != std::string::npos){
+			tempEventStore.setName(fragmentedWords[i]);
+			i++;
+		}
+		
 		//finding date
 		for (j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
 			if(fragmentedWords[i].find(keywordMonths[j]) != std::string::npos){
@@ -155,7 +155,18 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 	return tempEventStore;
 }
 
-Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords){
+int ParserProcessor::extractEventIndex(std::string input){
+	int index;
+	try {
+		index = std::stoi(input);
+	} catch (std::invalid_argument& e){
+		index = 0;
+	}
+	return index;
+}
+
+Event ParserProcessor::extractEventName(std::vector<std::string> fragmentedWords){
 	Event tempEventStore;
+	tempEventStore.setName(fragmentedWords[0]);
 	return tempEventStore;
 }
