@@ -72,6 +72,7 @@
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserProcessor.cpp" />
+    <ClCompile Include="Search.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Conversion.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="ParserProcessor.h" />
+    <ClInclude Include="Search.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

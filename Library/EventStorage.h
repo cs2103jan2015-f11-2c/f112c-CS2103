@@ -11,7 +11,7 @@
 #include <sstream>
 #include "Event.h"
 #include "EventArchive.h"
-
+#include "Search.h"
 
 class EventStorage{
 private:
@@ -19,6 +19,9 @@ private:
 	//These are messages to give the user feedback on what the program is doing.
 	static const string ADDED_FLOATING_EVENT;
 	static const string ADDED_NORMAL_EVENT;
+
+	//These are results to improve readability
+	static const int EventStorage::INVALID;
 
 	//These are vectors that store information
 	vector<Event> currentContent;
@@ -40,9 +43,7 @@ public:
 	vector<Event> addEvent(Event newEvent);
 
 	//delete mths
-	bool deleteEvent(int userIndex, vector<Event> userDisplayedVector);
-	int searchWithEventID(int eventID, vector<Event> eventVectorToSearch);
-	Event userInputIndexToEvent(int userIndex, vector<Event> userDisplayedVector);
+	bool deleteEvent(int eventID, string eventName);
 
 	string tmToString(Event convertEvent);
 	string boolToString(bool isFloatingBool);

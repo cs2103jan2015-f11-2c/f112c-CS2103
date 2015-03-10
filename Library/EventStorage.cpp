@@ -4,6 +4,7 @@
 const string EventStorage::ADDED_FLOATING_EVENT = "Congratulation!! You have added a Floating Event to MapleSyrup :)";
 const string EventStorage::ADDED_NORMAL_EVENT = "Well Done!! You have added an Event to MapleSyrup :)";
 
+const int EventStorage::INVALID = -1 ;
 	
 const std::string EventStorage::currentFile = "mytext.txt";
 
@@ -166,48 +167,6 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 	return returnToLogicVector; 
 }
 
-/*
-//search all vector and all component of events save into events of vector results
-vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearch){
-	bool isFound=false;
-	vector<Event> searchResults;
-
-	for(int i=0;i<currentContent.size();i++){
-		if(currentContent[i].getDescription().find(informationToSearch) != std::string::npos)
-			isFound = true;
-		if(currentContent[i].getName().find(informationToSearch) != std::string::npos)
-			isFound = true;
-		//search for tags not yet included			
-		if(currentContent[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getStartDate().tm_min == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(currentContent[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
-			isFound = true;
-
-	if(isFound){
-		searchResults.push_back(currentContent[i]);
-	}
-	isFound=false;
-	}
-	return searchResults;
-}
-*/
-
 vector<Event> EventStorage::showAllNormalEvent(){
 	vector<Event> sortResults;
 	sortResults = sortEventVectorByDate(currentContent);
@@ -343,56 +302,87 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 }
 
 //delete method
-bool EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector){
+bool EventStorage::deleteEvent(int eventID, string eventName){
 	
-	Event eventToBeDeleted;
-	int indexOfEventID;
+	vector<int> eventIdVector, floatingEventIdVector;
+	Search search;
+	int indexOfEventID = INVALID; 
 	bool isDeleted = false;
-	
-	eventToBeDeleted = userInputIndexToEvent(userIndex, userDisplayedVector);
 
-	//saving in archive for Undo
-	archiveObject.setCommandType("delete");
-	archiveObject.setArchiveEvent(eventToBeDeleted);
-	archiveContent.push_back(archiveObject);
-
-	//find event in currentContent and delete
-	if(eventToBeDeleted.getIsFloating()){								//floating case
-		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentFloatingContent);
+	if(eventID == INVALID) //event is not a user display Index)
+	{
+		eventIdVector = search.searchForIdWithEventName(eventName, currentContent);
+		floatingEventIdVector = search.searchForIdWithEventName(eventName, currentFloatingContent);
+		eventIdVector.insert( eventIdVector.end(), floatingEventIdVector.begin(), floatingEventIdVector.end() );
+		
+		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
+			// pass to logic eventIdVector.size();
+			return isDeleted;
+		}
+		else{
+			eventID = eventIdVector[0];
+		}
+	}
+	//Normal Case
+	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
+	if(indexOfEventID >= 0){ 
+		currentContent.erase(currentContent.begin() + indexOfEventID);
+		isDeleted = true;
+	}
+	else{ //Floating Case
+		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
+			isDeleted = true;
 		}
-		isDeleted = true;
-		return isDeleted;
 	}
-	else if(!eventToBeDeleted.getIsFloating()){							//Normal case
-		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentContent);
-		if(indexOfEventID >= 0){
-			currentContent.erase(currentContent.begin() + indexOfEventID);
-		}
-		isDeleted = true;
-		return isDeleted;
-	}
-	else{
-		cout << "ERROR MSG" << std::endl;
-		isDeleted = false;
-		return isDeleted;
-	}
-	writeToCurrentFile();
-}
-
-Event EventStorage::userInputIndexToEvent(int userIndex, vector<Event> userDisplayedVector)
-{
-	return userDisplayedVector[userIndex-1];
-}
-
-//search base on event ID and returns index in vector
-int EventStorage::searchWithEventID(int eventID, vector<Event> eventVectorToSearch){
 	
-	for(int i=0;i<eventVectorToSearch.size();i++){
-		if(eventVectorToSearch[i].getID() == eventID){
-			return i;
-		}
-	}
-	return -1; //notFound
+	writeToCurrentFile();
+	return isDeleted;
+	//saving in archive for Undo
+	//archiveObject.setCommandType("delete");
+	//archiveObject.setArchiveEvent(eventToBeDeleted);
+	//archiveContent.push_back(archiveObject);
 }
+
+/*
+//search all vector and all component of events save into events of vector results
+vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearch){
+	bool isFound=false;
+	vector<Event> searchResults;
+
+	for(int i=0;i<currentContent.size();i++){
+		if(currentContent[i].getDescription().find(informationToSearch) != std::string::npos)
+			isFound = true;
+		if(currentContent[i].getName().find(informationToSearch) != std::string::npos)
+			isFound = true;
+		//search for tags not yet included			
+		if(currentContent[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getStartDate().tm_min == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
+			isFound = true;
+		if(currentContent[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
+			isFound = true;
+
+	if(isFound){
+		searchResults.push_back(currentContent[i]);
+	}
+	isFound=false;
+	}
+	return searchResults;
+}
+*/
