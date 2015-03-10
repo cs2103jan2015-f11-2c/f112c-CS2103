@@ -575,7 +575,9 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 			 bool isExecuted = lGPtr->executeUserInput(input);
 			 if(!isExecuted){
-				feedbackBox->Text += "Error: PLease re-try last action.";
+				//std::string tempErrorString = lGPtr->getErrorString();
+				//String^ errorString = convertToSys(tempErrorString);
+				//display->Text = errorString;
 			 } else {
 				vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
 				vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
@@ -604,6 +606,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 
 				//main
+				display->Text = "";
 				for (int i=0; i< displayToMain.size(); i++){
 					String^ temp = convertToSys(displayToMain[i].eventString);
 
