@@ -541,19 +541,61 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			DateTime current = DateTime::Now;
 			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
 
-			//display->Text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
-			/*
-			display->Text = "999.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
-			display->Text += "1.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
-			display->Text += "\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
-			display->Text += "\t\t\t\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
-			*/
+			
 
 
 			//initialize
 			showDisplayed = false;
 			helpDisplayed = false;
 }
+
+//Display feedback to feedbackBox
+public: void displayToFeedbackBox( vector<std::string> displayToFeedback){
+			feedbackBox->Text = "";
+			for (int i=0; i< displayToFeedback.size(); i++){
+					String^ temp = convertToSys(displayToFeedback[i]);
+					feedbackBox->Text += temp + "\n" ;
+				}
+		}
+
+//Display to main display
+public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
+			display->Text = "";
+			for (int i=0; i< displayToMain.size(); i++){
+				String^ temp = convertToSys(displayToMain[i].eventString);
+
+				if(displayToMain[i].isNew){
+						display->SelectionColor = Color::Green;
+						display->SelectedText = temp + "\n" ;
+					} else{
+						if(isOdd(i)){
+							display->SelectionColor = Color::LightSteelBlue;
+							display->SelectedText = temp + "\n" ;
+						} else {
+							display->SelectionColor = Color::LightSlateGray;
+							display->SelectedText = temp + "\n" ;
+							}
+					}
+				}
+
+		}
+
+
+//Display to floating display
+public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
+			floatingTasksDisplay->Text = "";
+				for (int i=0; i< displayToFloating.size(); i++){
+					String^ temp = convertToSys(displayToFloating[i]);
+					if(isOdd(i)){
+						floatingTasksDisplay->SelectionColor = Color::Blue;
+						floatingTasksDisplay->SelectedText = temp + "\n";
+					} else {
+						floatingTasksDisplay->SelectionColor = Color::Red;
+						floatingTasksDisplay->SelectedText = temp + "\n";
+					  }
+				}
+		}
+
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode != Keys::Enter){
@@ -582,48 +624,11 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
 				vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
 				vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
-						
-				//feedback
-				feedbackBox->Text = "";
-				for (int i=0; i< displayToFeedback.size(); i++){
-					String^ temp = convertToSys(displayToFeedback[i]);
-					feedbackBox->Text += temp + "\n" ;
-				}
 
-					 
-				//floating
-				floatingTasksDisplay->Text = "";
-				for (int i=0; i< displayToFloating.size(); i++){
-					String^ temp = convertToSys(displayToFloating[i]);
-					if(isOdd(i)){
-						floatingTasksDisplay->SelectionColor = Color::Blue;
-						floatingTasksDisplay->SelectedText = temp + "\n";
-					} else {
-						floatingTasksDisplay->SelectionColor = Color::Red;
-						floatingTasksDisplay->SelectedText = temp + "\n";
-					  }
-				}
-
-
-				//main
-				display->Text = "";
-				for (int i=0; i< displayToMain.size(); i++){
-					String^ temp = convertToSys(displayToMain[i].eventString);
-
-					if(displayToMain[i].isNew){
-						display->SelectionColor = Color::Green;
-						display->SelectedText = temp + "\n" ;
-					} else{
-						if(isOdd(i)){
-							display->SelectionColor = Color::LightSteelBlue;
-							display->SelectedText = temp + "\n" ;
-						} else {
-							display->SelectionColor = Color::LightSlateGray;
-							display->SelectedText = temp + "\n" ;
-							}
-					}
-				}
-					 
+			displayToFeedbackBox (displayToFeedback);
+			displayToFloatingDisplay (displayToFloating);
+			displayToMainDisplay (displayToMain);
+		 
 			}
 
 		 }
