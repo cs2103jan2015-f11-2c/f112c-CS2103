@@ -11,8 +11,14 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 
 std::string InputStringSplit::extractDetails(std::string input){
 	std::string::size_type strCutIndex;
-	strCutIndex = input.find_first_of(" ;");
-	return input.substr(strCutIndex+1);
+	strCutIndex = input.find_first_of(" ");
+	return input.substr(input.find_first_not_of(" ;",strCutIndex));
+}
+
+std::string InputStringSplit::removeEventName(std::string input){
+	std::string::size_type strCutIndex;
+	strCutIndex = input.find_first_of(";");
+	return input.substr(input.find_first_not_of(" ;",strCutIndex));
 }
 
 std::string InputStringSplit::extractEventName(std::string input){
@@ -49,27 +55,6 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	return fragmentedWords;
 }
 
-/* NOT NEEDED
-std::vector<std::string> InputStringSplit::fragmentDeleteString(std::string input){
-	std::string::size_type strCutIndex;
-	std::vector<std::string> fragmentedWords;
-	bool endOfString = false;
-
-	while(!endOfString){
-		strCutIndex = input.find_first_of(" -.");
-		fragmentedWords.push_back(input.substr(0,strCutIndex));
-		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
-		if(strCutIndex == std::string::npos){
-			endOfString = true;
-		}
-		else {
-			input = input.substr(strCutIndex);
-		}
-	}
-
-	return fragmentedWords;
-}
-*/
 std::vector<std::string> InputStringSplit::fragmentEditString(std::string input){
 	std::string::size_type strCutIndex;
 	std::vector<std::string> fragmentedWords;
