@@ -404,16 +404,40 @@ vector<Event> EventStorage::editEvent(int eventID, string eventName, Event edite
 	//Normal Case
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
 	if(indexOfEventID >= 0){ 
-		eventToBeEdited = currentContent[indexOfEventID];
 		if(editedEvent.getName() != ""){
-			eventToBeEdited.setName(editedEvent.getName());
+			(currentContent[indexOfEventID]).setName(editedEvent.getName());
 		}
+		if(editedEvent.getStartDate().tm_mday != 100){
+			(currentContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,2015);
+		}
+		if(editedEvent.getEndDate().tm_mday != 100){
+			(currentContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,2015);
+		}
+		if(editedEvent.getStartDate().tm_hour != 100){
+			(currentContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
+		}
+		if(editedEvent.getEndDate().tm_min != 100){
+			(currentContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
+		}
+		returnToLogicVector = currentContent;
 	}
 	else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
 			if(editedEvent.getName() != ""){
 				(currentFloatingContent[indexOfEventID]).setName(editedEvent.getName());		
+			}
+			if(editedEvent.getStartDate().tm_mday != 100){
+				(currentFloatingContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,2015);
+			}
+			if(editedEvent.getEndDate().tm_mday != 100){
+				(currentFloatingContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,2015);
+			}
+			if(editedEvent.getStartDate().tm_hour != 100){
+				(currentFloatingContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
+			}
+			if(editedEvent.getEndDate().tm_min != 100){
+				(currentFloatingContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
 			}
 			returnToLogicVector = currentFloatingContent;
 	}

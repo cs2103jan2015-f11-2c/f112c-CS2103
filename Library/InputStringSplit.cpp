@@ -15,16 +15,30 @@ std::string InputStringSplit::extractDetails(std::string input){
 	return input.substr(input.find_first_not_of(" ;",strCutIndex));
 }
 
-std::string InputStringSplit::removeEventName(std::string input){
-	std::string::size_type strCutIndex;
-	strCutIndex = input.find_first_of(";");
-	return input.substr(input.find_first_not_of(" ;",strCutIndex));
-}
-
 std::string InputStringSplit::extractEventName(std::string input){
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(";");
 	return input.substr(0,strCutIndex);
+}
+
+std::string InputStringSplit::removeEditEventName(std::string input, std::string eventName){
+	std::string::size_type strCutIndex;
+	strCutIndex = input.find(eventName);
+	return input.substr(input.find_first_not_of(" ;",strCutIndex+eventName.size()));
+}
+
+std::string InputStringSplit::extractEditEventName(std::string input){
+	std::string::size_type strCutIndex;
+	strCutIndex = input.find_first_of(" ");
+	std::string tempString = input.substr(0,strCutIndex);
+	
+	try {
+		int index = std::stoi(tempString);
+	} catch (std::invalid_argument& e){
+		strCutIndex = input.find_first_of(";");
+		tempString = input.substr(0,strCutIndex);
+	}
+	return tempString;
 }
 
 std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
@@ -35,8 +49,7 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 
 	strCutIndex = input.find_first_of(";");		// ; indicates end of event name
 	tempString = input.substr(0,strCutIndex);
-	tempString = tempString + ";";
-	fragmentedWords.push_back(tempString);	// remove any unwanted spaces at the back of event name
+	fragmentedWords.push_back(tempString + ";");	// remove any unwanted spaces at the back of event name
 	strCutIndex = input.find_first_not_of(" -.;",strCutIndex); // remove unwanted spaces after ;
 	if(strCutIndex == std::string::npos){
 		endOfString = true;
