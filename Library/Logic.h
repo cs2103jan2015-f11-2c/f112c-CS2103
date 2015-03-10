@@ -31,7 +31,7 @@ public:
 	EventStorage getEventStorage();
 
 	vector<string> getFloatingStrings();
-	vector<string> getMainStrings();
+	vector<MAIN_EVENT> getMainStrings();
 	vector<string> getFeedbackStrings();
 
 

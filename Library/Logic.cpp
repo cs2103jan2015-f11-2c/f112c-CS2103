@@ -28,7 +28,7 @@ vector<string> Logic::getFloatingStrings() {
 	return display.getFloatingDisplayStrings();
 }
 
-vector<string> Logic::getMainStrings() {
+vector<MAIN_EVENT> Logic::getMainStrings() {
 	return display.getMainDisplayStrings();
 }
 
