@@ -20,8 +20,6 @@ public:
 	ParserProcessor();
 
 	Event processEvent(std::vector<std::string>);
-	int extractEventIndex(std::string);
-	Event extractEventName(std::vector<std::string>);
 };
 
 #endif

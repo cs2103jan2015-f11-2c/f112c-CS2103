@@ -30,16 +30,18 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	bool endTimeFound = false;
 	bool afterTwelve = false;
 	
+	int tempi = 0;
 	unsigned int i;
-	int j;
-	int tempi;
+	//finding all the names of event
 	for(i = 0; i < fragmentedWords.size(); i++){
-		//finding name
 		if(fragmentedWords[i].find(" ") != std::string::npos){
 			tempEventStore.setName(fragmentedWords[i]);
-			i++;
+			tempi++;
 		}
-		
+	}
+
+	int j;
+	for(i = tempi; i < fragmentedWords.size(); i++){
 		//finding date
 		for (j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
 			if(fragmentedWords[i].find(keywordMonths[j]) != std::string::npos){
@@ -138,7 +140,11 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 
 	if(!startDayFound){
 		tempEventStore.setStartDate(day,month,year);
-	}	
+	}
+	if(startDayFound && !startTimeFound){
+		tempEventStore.setStartTime(0,0);
+		tempEventStore.setEndTime(23,59);
+	}
 	if(!startTimeFound){
 		tempEventStore.setStartTime(hour,minute);
 	} 
@@ -151,16 +157,9 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	if(!endTimeFound){
 		tempEventStore.setEndTime(hour+1,minute);
 	}
+	if(endDayFound && !endTimeFound){
+		tempEventStore.setEndTime(23,59);
+	}
 
 	return tempEventStore;
-}
-
-int ParserProcessor::extractEventName(std::string input){
-	
-	try {
-		index = std::stoi(input);
-	} catch (std::invalid_argument& e){
-		index = 0;
-	}
-	return index;
 }

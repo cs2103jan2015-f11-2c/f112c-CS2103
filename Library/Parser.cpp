@@ -80,36 +80,6 @@ void Parser::retrieveCategories(){
 	return;
 }
 
-void Parser::identifyDetailToEdit(){
-/* INCOMPLETE
-	std::string detailToEdit;
-	detailToEdit = details.substr(0,details.find_first_of(" "));
-	details = details.substr(details.find_first_of(" ")+1);
-
-	if(detailToEdit == "name"){
-		eventInfo.name = details;
-	}
-	else if(detailToEdit == "date"){
-		eventInfo.date = details;
-	}
-	else if(detailToEdit == "time"){
-		// INCOMPLETE starttime endtime
-		eventInfo.time = details;
-	}
-	else if(detailToEdit == "tag"){
-		eventInfo.tags.push_back(details);
-	}
-	else if(detailToEdit == "description"){
-		eventInfo.description = details;
-	}
-	else {
-		typeOfCommand = ERROR;
-	}
-*/
-	return;
-}
-
-
 	//SHOW
 //Possible show commands:
 // -show Day

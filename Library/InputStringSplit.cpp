@@ -15,14 +15,23 @@ std::string InputStringSplit::extractDetails(std::string input){
 	return input.substr(strCutIndex+1);
 }
 
+std::string InputStringSplit::extractEventName(std::string input){
+	std::string::size_type strCutIndex;
+	strCutIndex = input.find_first_of(";");
+	return input.substr(0,strCutIndex);
+}
+
 std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	std::string::size_type strCutIndex;
 	std::vector<std::string> fragmentedWords;
+	std::string tempString;
 	bool endOfString = false;
 
-	strCutIndex = input.find_first_of("@");
-	fragmentedWords.push_back(input.substr(0,strCutIndex));
-	strCutIndex = input.find_first_not_of(" -.@",strCutIndex);
+	strCutIndex = input.find_first_of(";");		// ; indicates end of event name
+	tempString = input.substr(0,strCutIndex);	
+	strCutIndex = tempString.find_last_not_of(" ;"); 
+	fragmentedWords.push_back(tempString.substr(0,strCutIndex)); // remove any unwanted spaces at the back of event name
+	strCutIndex = input.find_first_not_of(" -.;",strCutIndex); // remove unwanted spaces after ;
 	if(strCutIndex == std::string::npos){
 		endOfString = true;
 	}
@@ -40,6 +49,7 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	return fragmentedWords;
 }
 
+/* NOT NEEDED
 std::vector<std::string> InputStringSplit::fragmentDeleteString(std::string input){
 	std::string::size_type strCutIndex;
 	std::vector<std::string> fragmentedWords;
@@ -59,24 +69,25 @@ std::vector<std::string> InputStringSplit::fragmentDeleteString(std::string inpu
 
 	return fragmentedWords;
 }
-
+*/
 std::vector<std::string> InputStringSplit::fragmentEditString(std::string input){
 	std::string::size_type strCutIndex;
 	std::vector<std::string> fragmentedWords;
+	std::string tempString;
 	bool endOfString = false;
 	
-	strCutIndex = input.find_first_of(" ");
-	fragmentedWords.push_back("USED");
-	strCutIndex = input.find_first_not_of(" -.",strCutIndex);
-	input = input.substr(strCutIndex); 
-	if(strCutIndex == std::string::npos){
-		endOfString = true;
+	strCutIndex = input.find_first_of(";");
+	while(strCutIndex != std::string::npos){
+		tempString = input.substr(0,strCutIndex);
+		strCutIndex = tempString.find_last_not_of(" ");
+		fragmentedWords.push_back(tempString.substr(0,strCutIndex));
+		strCutIndex = input.find_first_not_of(" -.;",strCutIndex);
+		input = input.substr(0,strCutIndex);
+		strCutIndex = input.find_first_of(";");
 	}
 	
-	strCutIndex = input.find_first_of("@");
-	if(strCutIndex != std::string::npos){
-		fragmentedWords.push_back(input.substr(0,strCutIndex));
-		strCutIndex = input.find_first_not_of(" -.@",strCutIndex);
+	if(input.find_first_not_of(" -.") == std::string::npos){
+		endOfString = true;
 	}
 
 	while(!endOfString){
