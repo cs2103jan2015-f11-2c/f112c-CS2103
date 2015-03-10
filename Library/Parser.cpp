@@ -44,7 +44,7 @@ void Parser::tokenizeOriginalString(){
 	std::vector<std::string> fragmentedWords;
 	if(command == "add"){
 		fragmentedWords = splitter.fragmentAddString(details);
-		tempEventStore = processor.processAddEvent(fragmentedWords);
+		tempEventStore = processor.processEvent(fragmentedWords);
 		if(tempEventStore.getIsFloating() == true){
 			typeOfCommand = Parser::ADDFLOAT;
 		} else {
@@ -59,7 +59,7 @@ void Parser::tokenizeOriginalString(){
 		nameOfEvent = splitter.extractEventName(details);
 		details = splitter.removeEventName(details);
 		fragmentedWords = splitter.fragmentEditString(details);
-		tempEventStore = processor.processEditEvent(fragmentedWords);
+		tempEventStore = processor.processEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
 	}
 	else if(command == "show"){

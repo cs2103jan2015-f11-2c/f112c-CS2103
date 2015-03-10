@@ -19,8 +19,7 @@ private:
 public:
 	ParserProcessor();
 
-	Event processAddEvent(std::vector<std::string>);
-	Event processEditEvent(std::vector<std::string>);
+	Event processEvent(std::vector<std::string>);
 };
 
 #endif
