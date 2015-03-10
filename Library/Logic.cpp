@@ -88,9 +88,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			int index = std::stoi(eventName);
 			int id = display.getID(index);
 
-			eventStore.deleteEvent(id, eventName);
+			display.setFloatingEvents(eventStore.deleteEvent(id, eventName));
 		} else {
-			eventStore.deleteEvent(INVALID_NUMBER, eventName);
+			display.setFloatingEvents(eventStore.deleteEvent(INVALID_NUMBER, eventName));
 		}
 
 		break;
