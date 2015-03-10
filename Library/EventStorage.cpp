@@ -363,6 +363,7 @@ bool EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector)
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
 		}
 		isDeleted = true;
+		return isDeleted;
 	}
 	else if(!eventToBeDeleted.getIsFloating()){							//Normal case
 		indexOfEventID = searchWithEventID(eventToBeDeleted.getID(), currentContent);
@@ -370,10 +371,12 @@ bool EventStorage::deleteEvent(int userIndex, vector<Event> userDisplayedVector)
 			currentContent.erase(currentContent.begin() + indexOfEventID);
 		}
 		isDeleted = true;
+		return isDeleted;
 	}
 	else{
 		cout << "ERROR MSG" << std::endl;
 		isDeleted = false;
+		return isDeleted;
 	}
 	writeToCurrentFile();
 }
