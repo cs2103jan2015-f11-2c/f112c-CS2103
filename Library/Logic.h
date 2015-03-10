@@ -21,7 +21,8 @@ private:
 
 public:
 	static const int INVALID_NUMBER;
-	
+	static const string ADDED_MESSAGE;
+
 	//constructor, destructor
 	Logic(void);
 	~Logic();

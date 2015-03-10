@@ -1,7 +1,7 @@
 #include "Logic.h"
 
 const int Logic::INVALID_NUMBER = -1;
-
+const string Logic::ADDED_MESSAGE = " added";
 
 	//CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
@@ -64,9 +64,11 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	vector<Event> tempEvents;
 
 	switch (command) {
-	case Parser::ADDFLOAT:
+	case Parser::ADDFLOAT: {
 		display.setFloatingEvents(eventStore.addEvent(userEvent));
+		display.setFeedbackStrings(userEvent.getName() + ADDED_MESSAGE);
 		break;
+						   }
 
 	case Parser::ADDFULLDAY:
 		//resultEvent = eventStore.addEvent(userEvent);
