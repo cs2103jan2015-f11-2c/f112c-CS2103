@@ -578,7 +578,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				feedbackBox->Text += "Error: PLease re-try last action.";
 			 } else {
 				vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
-				vector<MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
+				vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
 				vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 						
 				//feedback
