@@ -32,8 +32,8 @@ Event Parser::getEvent(){
 	return tempEventStore;
 }
 
-int Parser::getIndex(){
-	return index;
+std::string Parser::getNameOfEvent(){
+	return nameOfEvent;
 }
 
 //MAIN METHODS
@@ -45,22 +45,18 @@ void Parser::tokenizeOriginalString(){
 	if(command == "add"){
 		fragmentedWords = splitter.fragmentAddString(details);
 		tempEventStore = processor.processEvent(fragmentedWords);
-		typeOfCommand = Parser::ADD;
+		if(tempEventStore.getIsFloating() == true){
+			typeOfCommand = Parser::ADDFLOAT;
+		} else {
+			typeOfCommand = Parser::ADD;
+		}
 	}
 	else if(command == "delete"){
-		fragmentedWords = splitter.fragmentDeleteString(details);
-		if(fragmentedWords.size() == 1){
-			index = processor.extractEventIndex(fragmentedWords[0]);
-			if (index == 0){
-				tempEventStore.setName(fragmentedWords[0]);
-			}
-		} else {
-			tempEventStore.setName(details);
-		}
+		nameOfEvent = splitter.extractEventName(details);
 		typeOfCommand = Parser::DELETE_;
 	}
 	else if(command == "edit"){
-		index = processor.extractEventIndex(splitter.extractFirstWord(details));
+		nameOfEvent = splitter.extractEventName(details);
 		fragmentedWords = splitter.fragmentEditString(details);
 		tempEventStore = processor.processEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;

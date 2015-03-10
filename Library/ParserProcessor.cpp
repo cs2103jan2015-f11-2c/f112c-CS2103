@@ -155,18 +155,12 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	return tempEventStore;
 }
 
-int ParserProcessor::extractEventIndex(std::string input){
-	int index;
+int ParserProcessor::extractEventName(std::string input){
+	
 	try {
 		index = std::stoi(input);
 	} catch (std::invalid_argument& e){
 		index = 0;
 	}
 	return index;
-}
-
-Event ParserProcessor::extractEventName(std::vector<std::string> fragmentedWords){
-	Event tempEventStore;
-	tempEventStore.setName(fragmentedWords[0]);
-	return tempEventStore;
 }

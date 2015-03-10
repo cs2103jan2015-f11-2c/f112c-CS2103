@@ -42,7 +42,7 @@ private:
 	std::string details;
 	std::string original;
 	Event tempEventStore;
-	int index;
+	std::string nameOfEvent;
 	std::vector<std::string> categories;
 
 public:
@@ -52,15 +52,11 @@ public:
 	std::string getDetails();
 	std::string getOriginal();
 	Event getEvent();
-	int getIndex();
+	std::string getNameOfEvent();
 
 	//main methods
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
 	void retrieveCategories();	//retrieve all categories created from storage txt file 
-
-	//edit
-	void setEditCommand();	//set index and cType for edit and calls identifyDetailToEdit
-	void identifyDetailToEdit();	//identify what detail is being edited and insert information to edit into Event format
 
 	//show
 	void identifyShowCommand();	//determine what show cType it is based on system categories or user categories. Perform check for user categories if it exists
