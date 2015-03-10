@@ -80,6 +80,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_: {
+		int ID;
 		int userIndex = parserPtr->getIndex();
 		vector<Event> floatingEvents = display.getFloatingEvents();
 
