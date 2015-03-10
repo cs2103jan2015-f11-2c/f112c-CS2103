@@ -547,7 +547,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			display->Text += "\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 			display->Text += "\t\t\t\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
-			vector<std::string> test1 = lGPtr->getMainStrings();
+			//vector<std::string> test1 = lGPtr->getMainStrings();
 
 			//initialize
 			showDisplayed = false;
