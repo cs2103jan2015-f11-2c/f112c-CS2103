@@ -29,7 +29,8 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 
 	strCutIndex = input.find_first_of(";");		// ; indicates end of event name
 	tempString = input.substr(0,strCutIndex);
-	fragmentedWords.push_back(tempString+";"); // remove any unwanted spaces at the back of event name
+	tempString = tempString + ";";
+	fragmentedWords.push_back(tempString);	// remove any unwanted spaces at the back of event name
 	strCutIndex = input.find_first_not_of(" -.;",strCutIndex); // remove unwanted spaces after ;
 	if(strCutIndex == std::string::npos){
 		endOfString = true;

@@ -35,7 +35,7 @@ Event ParserProcessor::processEvent(std::vector<std::string> fragmentedWords){
 	//finding all the names of event
 	for(i = 0; i < fragmentedWords.size(); i++){
 		if(fragmentedWords[i].find(";") != std::string::npos){
-			tempEventStore.setName(fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(";")));
+			tempEventStore.setName(fragmentedWords[i].substr(0,fragmentedWords[i].find_last_of(";")));
 			tempi++;
 		}
 	}

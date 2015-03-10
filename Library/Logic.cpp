@@ -80,11 +80,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_: {
-		string eventName = parserPtr->getNameOfEvent();
-						  
+		string eventName = parserPtr->getNameOfEvent(); 
 		break;
 						  }
-		
 	case Parser::EDIT:
 		break;
 
