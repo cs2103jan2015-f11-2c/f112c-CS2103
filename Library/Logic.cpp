@@ -63,7 +63,7 @@ bool Logic::executeUserInput(string input) {
 }
 
 //executes exact user command after parsing
-vector<Event> Logic::executeCommand(Parser::commandType command, Event userEvent) {
+void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	switch (command) {
 	case Parser::ADDFLOAT:
 		display.setFloatingEvents(eventStore.addEvent(userEvent));

@@ -33,7 +33,7 @@ public:
 
 	//executors
 	bool executeUserInput(string input);
-	vector<Event> executeCommand(Parser::commandType command, Event userEvent);
+	void executeCommand(Parser::commandType command, Event userEvent);
 	void deleteParserPtr();
 
 };
