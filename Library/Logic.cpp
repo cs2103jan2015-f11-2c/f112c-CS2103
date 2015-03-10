@@ -33,7 +33,7 @@ bool Logic::executeUserInput(string input) {
 	Parser::commandType command = getCommand();
 	Event userEvent = getEvent();
 
-	vector<Event> resultEvent = executeCommand(command, userEvent);
+	executeCommand(command, userEvent);
 
 	deleteParserPtr();
 
