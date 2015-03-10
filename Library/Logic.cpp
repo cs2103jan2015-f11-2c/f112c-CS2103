@@ -50,28 +50,6 @@ bool Logic::executeUserInput(string input) {
 	deleteParserPtr();
 
 	return true;
-	/*
-	Event e;
-
-	vector<string> svec;
-	svec.push_back("#school");
-
-	e.setName("exam");
-	e.setFeedback("event added");
-	e.setStartDate(6, 2, 2015);
-	e.setStartTime(11, 0);
-	e.setEndDate(6, 2, 2015);
-	e.setEndTime(12, 0);
-	e.setIsFloating(false);
-	e.setDescription("foo");
-	e.setTags(svec);
-
-
-	vector<Event> v;
-	v.push_back(e);
-	
-	return v;
-	*/
 }
 
 //executes exact user command after parsing
@@ -102,6 +80,16 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::DELETE_:
+		int userIndex = parserPtr->getIndex();
+		vector<Event> floatingEvents = display.getFloatingEvents();
+
+		if (userIndex <= floatingEvents.size()) {
+			eventStore.deleteEvent(userIndex, floatingEvents);
+		}
+
+		//else {
+		//}
+
 		break;
 
 	case Parser::EDIT:
