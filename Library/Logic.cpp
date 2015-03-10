@@ -2,6 +2,9 @@
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::ADDED_MESSAGE = " added";
+const string EDITED_MESSAGE = " edited";
+const string DELETED_MESSAGE = " deleted";
+
 
 	//CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
