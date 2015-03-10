@@ -57,3 +57,16 @@ void Display::floatingEventsToString() {
 		floatingDisplayStrings.push_back(floatingEvents[i].getName());
 	}
 }
+
+void Display::deleteEvent(int id) {
+	vector<Event> temp = floatingEvents;
+	
+	for (int i = 0; i < temp.size(); i++) {
+		if (temp[i].getID() == id) {
+			temp.erase(temp.begin() + i);
+		}
+		return;
+	}
+
+	return;
+}

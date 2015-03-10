@@ -42,6 +42,8 @@ public:
 	void normalEventsToString();
 	void floatingEventsToString();
 	void feedbackEventsToString();
+
+	void deleteEvent(int id);
 };
 
 #endif
