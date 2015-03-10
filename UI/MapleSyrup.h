@@ -587,7 +587,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				feedbackBox->Text = "";
 				for (int i=0; i< displayToFeedback.size(); i++){
 					String^ temp = convertToSys(displayToFeedback[i]);
-					feedbackBox->Text += temp;
+					feedbackBox->Text += temp + "\n" ;
 				}
 
 					 
@@ -612,14 +612,14 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 					if(displayToMain[i].isNew){
 						display->SelectionColor = Color::Green;
-						display->SelectedText = temp;
+						display->SelectedText = temp + "\n" ;
 					} else{
 						if(isOdd(i)){
 							display->SelectionColor = Color::LightSteelBlue;
-							display->SelectedText = temp;
+							display->SelectedText = temp + "\n" ;
 						} else {
 							display->SelectionColor = Color::LightSlateGray;
-							display->SelectedText = temp;
+							display->SelectedText = temp + "\n" ;
 							}
 					}
 				}
