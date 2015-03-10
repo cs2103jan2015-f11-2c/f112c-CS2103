@@ -35,7 +35,7 @@ public:
 	vector<string> getFloatingStrings();
 	vector<Display::MAIN_EVENT> getMainStrings();
 	vector<string> getFeedbackStrings();
-
+	string getErrorString();
 
 	//executors
 	bool executeUserInput(string input);

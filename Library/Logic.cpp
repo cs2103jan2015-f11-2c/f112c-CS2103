@@ -38,6 +38,8 @@ vector<string> Logic::getFeedbackStrings() {
 	return display.getFeedbackDisplayStrings();
 }
 
+string Logic::getErrorString() {
+}
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
@@ -83,20 +85,45 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 
 	case Parser::DELETE_: {
 		string eventName = parserPtr->getNameOfEvent();
+		int index, id;
 
 		if (isNumber(eventName)) {
-			int index = std::stoi(eventName);
-			int id = display.getID(index);
-
-			display.setFloatingEvents(eventStore.deleteEvent(id, eventName));
+			index = std::stoi(eventName);
+			id = display.getID(index);
 		} else {
-			display.setFloatingEvents(eventStore.deleteEvent(INVALID_NUMBER, eventName));
+			id = INVALID_NUMBER;
+		}
+
+		vector<Event> tempEvents = eventStore.deleteEvent(id, eventName);
+
+		bool isFloat = tempEvents[0].getIsFloating();
+
+		if (isFloat) {
+			display.setFloatingEvents(tempEvents);
+		} else {
+			display.setNormalEvents(tempEvents);
 		}
 
 		break;
 						  }
-	case Parser::EDIT:
+
+	case Parser::EDIT: {
+		string eventName = parserPtr->getNameOfEvent();
+		int index, id;
+		Event tempEvent = parserPtr->getEvent();
+
+		if (isNumber(eventName)) {
+			index = std::stoi(eventName);
+			id = display.getID(index);
+		} else {
+			id = INVALID_NUMBER;
+		}
+
+		vector<Event> tempEvents = eventStore.deleteEvent(id, eventName);
+
+
 		break;
+					   }
 
 	case Parser::SHOWDAY:
 		break;
