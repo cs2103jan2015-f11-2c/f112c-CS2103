@@ -82,16 +82,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	case Parser::DELETE_: {
 		int ID;
 
-		int userIndex = parserPtr->getIndex();
+		string eventName = parserPtr->getNameOfEvent();
 		vector<Event> floatingEvents = display.getFloatingEvents();
 
-		if (userIndex <= floatingEvents.size()) {
-			eventStore.deleteEvent(userIndex, floatingEvents);
-			//display.deleteEvent(ID);
-		}
-
-		//else {
-		//}
 						  
 		break;
 						  }
