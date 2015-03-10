@@ -378,4 +378,48 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	}
 	return searchResults;
 }
+
+vector<Event> EventStorage::editEvent(int eventID, string eventName, Event editedEvent){
+	
+	vector<int> eventIdVector, floatingEventIdVector;
+	Search search;
+	int indexOfEventID = INVALID; 
+	Event eventToBeEdited;
+	vector<Event> returnToLogicVector;
+	
+	if(eventID == INVALID) //event is not a user display Index)
+	{
+		eventIdVector = search.searchForIdWithEventName(eventName, currentContent);
+		floatingEventIdVector = search.searchForIdWithEventName(eventName, currentFloatingContent);
+		eventIdVector.insert( eventIdVector.end(), floatingEventIdVector.begin(), floatingEventIdVector.end() );
+		
+		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
+			// pass to logic eventIdVector.size();
+		}
+		else{
+			eventID = eventIdVector[0];  //set eventID to change
+		}
+	}
+	//Normal Case
+	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
+	if(indexOfEventID >= 0){ 
+		eventToBeEdited = currentContent[indexOfEventID];
+		if(editedEvent.getName() != ""){
+			eventToBeEdited.setName(editedEvent.getName());
+		}
+	}
+	else{ //Floating Case
+		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
+		if(indexOfEventID >= 0){
+			eventToBeEdited = currentContent[indexOfEventID];
+			if(editedEvent.getName() != ""){
+			eventToBeEdited.setName(editedEvent.getName());		
+			}
+		currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
+	}
+	
+	writeToCurrentFile();
+
+	//return showDay vector
+}
 */
