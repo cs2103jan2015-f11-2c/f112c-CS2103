@@ -70,6 +70,8 @@ void Display::setFeedbackEvents(vector<Event> events) {
 }
 
 void Display::floatingEventsToString() {
+	floatingDisplayStrings.clear();
+
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		floatingDisplayStrings.push_back(floatingEvents[i].getName());
 	}
