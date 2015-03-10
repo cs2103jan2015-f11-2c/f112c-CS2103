@@ -81,7 +81,12 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 
 	case Parser::DELETE_: {
 		string eventName = parserPtr->getNameOfEvent();
-						  
+
+		if (isNumber(eventName)) {
+			int index = std::stoi(eventName);
+			int id = display.getID(index);
+		}
+
 		break;
 						  }
 		

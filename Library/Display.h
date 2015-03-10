@@ -46,6 +46,7 @@ public:
 	vector<string> getFeedbackDisplayStrings();
 
 	int getTotalNumEvents();
+	int getID(int index);
 
 
 	//setters
