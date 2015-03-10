@@ -79,7 +79,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		//resultEvent = eventStore.addEvent(userEvent);
 		break;
 
-	case Parser::DELETE_:
+	case Parser::DELETE_:{
 		int userIndex = parserPtr->getIndex();
 		vector<Event> floatingEvents = display.getFloatingEvents();
 
@@ -91,7 +91,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		//}
 
 		break;
-
+						 }
 	case Parser::EDIT:
 		break;
 

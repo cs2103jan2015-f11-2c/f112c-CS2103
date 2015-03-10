@@ -547,13 +547,15 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			display->Text += "\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 			display->Text += "\t\t\t\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 
+			vector<std::string> test1 = lGPtr->getMainStrings();
+
 			//initialize
 			showDisplayed = false;
 			helpDisplayed = false;
 }
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::Enter){
+			/* if (e->KeyCode == Keys::Enter){
 				 String^ temp = commandBox->Text;
 				 commandBox->Text = "";
 				 if (temp == "exit"){
@@ -570,9 +572,48 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 suggestBar->Visible = false;
 				 suggestBar->Items->Clear();
 
-				 lGPtr->executeUserInput(input);
+				 bool isExecuted = lGPtr->executeUserInput(input);
+				 if(!isExecuted){
+					 feedbackBox->Text += "Error: PLease re-try last action.";
+				 } else {
+					 vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
+					 vector<std::string> displayToMain = lGPtr->getMainStrings();
+					 vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 
-			}
+					 //feedback
+					 for (int i=0; i< displayToFeedback.size(); i++){
+						 String^ temp = convertToSys(displayToFeedback[i]);
+						 feedbackBox->Text += temp;
+					 }
+
+					 //floating
+					 for (int i=0; i< displayToFloating.size(); i++){
+						 String^ temp = convertToSys(displayToFloating[i]);
+						 if(isOdd(i)){
+						 floatingTasksDisplay->SelectionColor = Color::Blue;
+						 floatingTasksDisplay->SelectedText = temp;
+						 } else {
+							floatingTasksDisplay->SelectionColor = Color::Red;
+							floatingTasksDisplay->SelectedText = temp;
+						 }
+					 }
+
+					 //main
+					 for (int i=0; i< displayToMain.size(); i++){
+						 String^ temp = convertToSys(displayToMain[i]);
+						 if(isOdd(i)){
+						 floatingTasksDisplay->SelectionColor = Color::Blue;
+						 floatingTasksDisplay->SelectedText = temp;
+						 } else {
+							floatingTasksDisplay->SelectionColor = Color::Red;
+							floatingTasksDisplay->SelectedText = temp;
+						 }
+					 }
+					 
+
+				 }
+
+			}*/
 		 }
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
