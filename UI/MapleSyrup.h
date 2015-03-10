@@ -542,12 +542,13 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
 
 			//display->Text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+			/*
 			display->Text = "999.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 			display->Text += "1.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 			display->Text += "\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
 			display->Text += "\t\t\t\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+			*/
 
-			//vector<std::string> test1 = lGPtr->getMainStrings();
 
 			//initialize
 			showDisplayed = false;
@@ -555,7 +556,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 }
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			/* if (e->KeyCode == Keys::Enter){
+			 if (e->KeyCode == Keys::Enter){
 				 String^ temp = commandBox->Text;
 				 commandBox->Text = "";
 				 if (temp == "exit"){
@@ -580,40 +581,43 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 					 vector<std::string> displayToMain = lGPtr->getMainStrings();
 					 vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 
+					 feedbackBox->Text = "";
 					 //feedback
 					 for (int i=0; i< displayToFeedback.size(); i++){
 						 String^ temp = convertToSys(displayToFeedback[i]);
 						 feedbackBox->Text += temp;
 					 }
 
+					 floatingTasksDisplay->Text = "";
 					 //floating
 					 for (int i=0; i< displayToFloating.size(); i++){
 						 String^ temp = convertToSys(displayToFloating[i]);
 						 if(isOdd(i)){
 						 floatingTasksDisplay->SelectionColor = Color::Blue;
-						 floatingTasksDisplay->SelectedText = temp;
+						 floatingTasksDisplay->SelectedText = temp + "\n";
 						 } else {
 							floatingTasksDisplay->SelectionColor = Color::Red;
-							floatingTasksDisplay->SelectedText = temp;
+							floatingTasksDisplay->SelectedText = temp + "\n";
 						 }
 					 }
+
 
 					 //main
 					 for (int i=0; i< displayToMain.size(); i++){
 						 String^ temp = convertToSys(displayToMain[i]);
 						 if(isOdd(i)){
-						 floatingTasksDisplay->SelectionColor = Color::Blue;
-						 floatingTasksDisplay->SelectedText = temp;
+						 display->SelectionColor = Color::Blue;
+						 display->SelectedText = temp;
 						 } else {
-							floatingTasksDisplay->SelectionColor = Color::Red;
-							floatingTasksDisplay->SelectedText = temp;
+							display->SelectionColor = Color::Red;
+							display->SelectedText = temp;
 						 }
 					 }
 					 
 
 				 }
 
-			}*/
+			}
 		 }
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
