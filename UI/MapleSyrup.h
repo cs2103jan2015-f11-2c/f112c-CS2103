@@ -25,7 +25,19 @@ namespace UI {
 		GuideInfor* gIPtr;
 
 		Logic* lGPtr;
-	private: System::Windows::Forms::Button^  displayButton;
+	private: System::Windows::Forms::Button^  showButton;
+	private: System::Windows::Forms::Button^  helpButton;
+	private: System::Windows::Forms::Button^  introductionDisplay;
+	private: System::Windows::Forms::Button^  commandsDisplay;
+	private: System::Windows::Forms::Button^  undoButton;
+	private: System::Windows::Forms::Button^  redoButton;
+
+
+
+
+
+
+
 
 		Conversion* cVPtr;
 
@@ -69,7 +81,7 @@ namespace UI {
 
 
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
-	private: System::Windows::Forms::Button^  helpButton;
+
 
 
 	private: System::Windows::Forms::PictureBox^  comdIcon;
@@ -90,13 +102,13 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  pictureBox8;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::PictureBox^  searchIcon;
-	private: System::Windows::Forms::Button^  undoButton;
+
 	private: System::Windows::Forms::TextBox^  commandBox;
 	private: System::Windows::Forms::Timer^  timer1;
 	private: System::Windows::Forms::ListBox^  suggestBar;
 
 	private: System::Windows::Forms::FontDialog^  fontDialog1;
-	private: System::Windows::Forms::Button^  Redo;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -128,7 +140,6 @@ namespace UI {
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->dateDisplay = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
-			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->dayDisplay = (gcnew System::Windows::Forms::Button());
@@ -141,9 +152,12 @@ namespace UI {
 			this->pictureBox8 = (gcnew System::Windows::Forms::PictureBox());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
+			this->showButton = (gcnew System::Windows::Forms::Button());
+			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
-			this->Redo = (gcnew System::Windows::Forms::Button());
-			this->displayButton = (gcnew System::Windows::Forms::Button());
+			this->redoButton = (gcnew System::Windows::Forms::Button());
+			this->introductionDisplay = (gcnew System::Windows::Forms::Button());
+			this->commandsDisplay = (gcnew System::Windows::Forms::Button());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
@@ -252,14 +266,6 @@ namespace UI {
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->TabStop = false;
 			// 
-			// helpButton
-			// 
-			resources->ApplyResources(this->helpButton, L"helpButton");
-			this->helpButton->Name = L"helpButton";
-			this->toolTip1->SetToolTip(this->helpButton, resources->GetString(L"helpButton.ToolTip"));
-			this->helpButton->UseVisualStyleBackColor = true;
-			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
-			// 
 			// comdIcon
 			// 
 			resources->ApplyResources(this->comdIcon, L"comdIcon");
@@ -283,8 +289,6 @@ namespace UI {
 			this->dayDisplay->Name = L"dayDisplay";
 			this->toolTip1->SetToolTip(this->dayDisplay, resources->GetString(L"dayDisplay.ToolTip"));
 			this->dayDisplay->UseVisualStyleBackColor = false;
-			this->dayDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::dayDisplay_Click);
-			this->dayDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::dayDisplay_MouseLeave);
 			// 
 			// weekDisplay
 			// 
@@ -295,8 +299,6 @@ namespace UI {
 			this->weekDisplay->Name = L"weekDisplay";
 			this->toolTip1->SetToolTip(this->weekDisplay, resources->GetString(L"weekDisplay.ToolTip"));
 			this->weekDisplay->UseVisualStyleBackColor = false;
-			this->weekDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::weekDisplay_Click);
-			this->weekDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::weekDisplay_MouseLeave);
 			// 
 			// monthDisplay
 			// 
@@ -307,7 +309,6 @@ namespace UI {
 			this->monthDisplay->Name = L"monthDisplay";
 			this->toolTip1->SetToolTip(this->monthDisplay, resources->GetString(L"monthDisplay.ToolTip"));
 			this->monthDisplay->UseVisualStyleBackColor = false;
-			this->monthDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::monthDisplay_MouseLeave);
 			// 
 			// allDisplay
 			// 
@@ -318,7 +319,6 @@ namespace UI {
 			this->allDisplay->Name = L"allDisplay";
 			this->toolTip1->SetToolTip(this->allDisplay, resources->GetString(L"allDisplay.ToolTip"));
 			this->allDisplay->UseVisualStyleBackColor = false;
-			this->allDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::allDisplay_MouseLeave);
 			// 
 			// archiveDisplay
 			// 
@@ -329,7 +329,6 @@ namespace UI {
 			this->archiveDisplay->Name = L"archiveDisplay";
 			this->toolTip1->SetToolTip(this->archiveDisplay, resources->GetString(L"archiveDisplay.ToolTip"));
 			this->archiveDisplay->UseVisualStyleBackColor = false;
-			this->archiveDisplay->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::archiveDisplay_MouseLeave);
 			// 
 			// pictureBox1
 			// 
@@ -369,33 +368,65 @@ namespace UI {
 			this->searchIcon->TabStop = false;
 			this->toolTip1->SetToolTip(this->searchIcon, resources->GetString(L"searchIcon.ToolTip"));
 			// 
+			// showButton
+			// 
+			this->showButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->showButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->showButton, L"showButton");
+			this->showButton->ForeColor = System::Drawing::Color::Black;
+			this->showButton->Name = L"showButton";
+			this->toolTip1->SetToolTip(this->showButton, resources->GetString(L"showButton.ToolTip"));
+			this->showButton->UseVisualStyleBackColor = false;
+			this->showButton->Click += gcnew System::EventHandler(this, &MapleSyrup::showButton_Click);
+			// 
+			// helpButton
+			// 
+			this->helpButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->helpButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->helpButton, L"helpButton");
+			this->helpButton->ForeColor = System::Drawing::Color::Black;
+			this->helpButton->Name = L"helpButton";
+			this->toolTip1->SetToolTip(this->helpButton, resources->GetString(L"helpButton.ToolTip"));
+			this->helpButton->UseVisualStyleBackColor = false;
+			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
+			// 
 			// undoButton
 			// 
-			this->undoButton->BackColor = System::Drawing::Color::White;
+			this->undoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->undoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->undoButton, L"undoButton");
+			this->undoButton->ForeColor = System::Drawing::Color::DimGray;
 			this->undoButton->Name = L"undoButton";
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
 			this->undoButton->UseVisualStyleBackColor = false;
 			// 
-			// Redo
+			// redoButton
 			// 
-			this->Redo->BackColor = System::Drawing::Color::White;
-			resources->ApplyResources(this->Redo, L"Redo");
-			this->Redo->Name = L"Redo";
-			this->toolTip1->SetToolTip(this->Redo, resources->GetString(L"Redo.ToolTip"));
-			this->Redo->UseVisualStyleBackColor = false;
+			this->redoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->redoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->redoButton, L"redoButton");
+			this->redoButton->ForeColor = System::Drawing::Color::DimGray;
+			this->redoButton->Name = L"redoButton";
+			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
+			this->redoButton->UseVisualStyleBackColor = false;
 			// 
-			// displayButton
+			// introductionDisplay
 			// 
-			this->displayButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->displayButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			resources->ApplyResources(this->displayButton, L"displayButton");
-			this->displayButton->ForeColor = System::Drawing::Color::DimGray;
-			this->displayButton->Name = L"displayButton";
-			this->toolTip1->SetToolTip(this->displayButton, resources->GetString(L"displayButton.ToolTip"));
-			this->displayButton->UseVisualStyleBackColor = false;
-			this->displayButton->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::displayButton_KeyDown);
-			this->displayButton->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::displayButton_MouseClick);
+			this->introductionDisplay->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->introductionDisplay->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->introductionDisplay, L"introductionDisplay");
+			this->introductionDisplay->ForeColor = System::Drawing::Color::DimGray;
+			this->introductionDisplay->Name = L"introductionDisplay";
+			this->introductionDisplay->UseVisualStyleBackColor = false;
+			// 
+			// commandsDisplay
+			// 
+			this->commandsDisplay->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->commandsDisplay->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->commandsDisplay, L"commandsDisplay");
+			this->commandsDisplay->ForeColor = System::Drawing::Color::DimGray;
+			this->commandsDisplay->Name = L"commandsDisplay";
+			this->commandsDisplay->UseVisualStyleBackColor = false;
 			// 
 			// suggestBar
 			// 
@@ -412,14 +443,17 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->Controls->Add(this->displayButton);
-			this->Controls->Add(this->Redo);
-			this->Controls->Add(this->suggestBar);
+			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
+			this->Controls->Add(this->commandsDisplay);
+			this->Controls->Add(this->introductionDisplay);
+			this->Controls->Add(this->helpButton);
+			this->Controls->Add(this->showButton);
+			this->Controls->Add(this->dayDisplay);
+			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->searchIcon);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->comdIcon);
-			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->dateDisplay);
 			this->Controls->Add(this->richTextBox1);
@@ -431,7 +465,6 @@ namespace UI {
 			this->Controls->Add(this->monthDisplay);
 			this->Controls->Add(this->allDisplay);
 			this->Controls->Add(this->archiveDisplay);
-			this->Controls->Add(this->dayDisplay);
 			this->Controls->Add(this->floatingTasksDisplay);
 			this->Controls->Add(this->pictureBox8);
 			this->Controls->Add(this->floatingIcon);
@@ -501,14 +534,22 @@ public: void displayInMainDisplay (vector<Event> toDisplay){
 
 //UI system functions
 
-private: bool optionsDisplayed;
+private: bool showDisplayed;
+private: bool helpDisplayed;
 
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
 			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
 
+			//display->Text = "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW";
+			display->Text = "999.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+			display->Text += "1.\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+			display->Text += "\t10:30am-12:30pm\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+			display->Text += "\t\t\t\tWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW\n";
+
 			//initialize
-			optionsDisplayed = false;
+			showDisplayed = false;
+			helpDisplayed = false;
 }
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -522,9 +563,6 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 				 if (temp == "help"){
 					 display->Text = "";
-					 System::Object^ sender;
-					 EventArgs^ e;
-					 helpButton_Click(sender,e);
 					 return;
 				 }
 				 
@@ -532,9 +570,8 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 suggestBar->Visible = false;
 				 suggestBar->Items->Clear();
 
-				 vector<Event> displayEvent = lGPtr->executeUserInput(input);
+				 lGPtr->executeUserInput(input);
 
-				 displayInMainDisplay (displayEvent);	 
 			}
 		 }
 
@@ -550,7 +587,7 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 if (e->KeyCode == Keys::F3){
 				 System::Object^  sender;
 				 System::Windows::Forms::MouseEventArgs^  a;
-				 displayButton_MouseClick(sender, a);
+				 //
 			 }
 		 }
 
@@ -672,72 +709,10 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 
 		 }
 
-public: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,11,FontStyle::Bold);
-			std::string helpIntro = gIPtr->getHelpIntro();
-			display->SelectedText = convertToSys(helpIntro);
-
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,10,FontStyle::Underline);
-			display->SelectionColor = Color::Blue;
-			std::string helpAdd1 = gIPtr->getCommandAdd() + ": \n";
-			display->SelectedText = convertToSys(helpAdd1);
-
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
-			display->SelectionColor = Color::Blue;
-			std::string helpAdd2 = gIPtr->getHelpAdd();
-			display->SelectedText = convertToSys(helpAdd2);
-
-			display->SelectedText = "\n";
-
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,10,FontStyle::Underline);
-			display->SelectionColor = Color::Black;
-			std::string helpDel1 = gIPtr->getCommandDelete() + ": \n";
-			display->SelectedText = convertToSys(helpDel1);
-
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
-			display->SelectionColor = Color::Black;
-			std::string helpDel2 = gIPtr->getHelpDelete();
-			display->SelectedText = convertToSys(helpDel2);
-
-		
-		 }
-
-//View Options
-private: System::Void dayDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-
-private: System::Void pictureBox4_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void weekDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void monthDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void pictureBox6_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void pictureBox5_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void allDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void pictureBox7_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-
-		 }
-private: System::Void archiveDisplay_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
 
 
-		 }
-private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-
-public: void displayOptions (){
+// To display column show
+public: void displayShow (){
 		dayDisplay->Visible = true;
 		weekDisplay->Visible = true;
 		monthDisplay->Visible = true;
@@ -745,7 +720,8 @@ public: void displayOptions (){
 		archiveDisplay->Visible = true;
 		}
 
-public: void unDisplayOptions (){
+// To un-display column show
+public: void unDisplayShow (){
 		dayDisplay->Visible = false;
 		weekDisplay->Visible = false;
 		monthDisplay->Visible = false;
@@ -753,22 +729,44 @@ public: void unDisplayOptions (){
 		archiveDisplay->Visible = false;
 		}
 
-private: System::Void displayButton_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			 if (optionsDisplayed == false){
-				 displayOptions();
-				 optionsDisplayed = true;
+// To display the Show column when clicked
+private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if (showDisplayed == false){
+				 displayShow();
+				 showDisplayed = true;
 			 } else {
-				 unDisplayOptions();
-				 optionsDisplayed = false;
+				 unDisplayShow();
+				 showDisplayed = false;
 			 }
 		 }
-private: System::Void displayButton_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::Enter){
-				 System::Object^  sender;
-				 System::Windows::Forms::MouseEventArgs^  a;
-				 displayButton_MouseClick(sender, a);
-			}
-		 }
 
+// To display column show
+public: void displayHelp (){
+		introductionDisplay->Visible = true;
+		commandsDisplay->Visible = true;
+		undoButton->Visible = true;
+		redoButton->Visible = true;
+		}
+
+// To un-display column show
+public: void unDisplayHelp (){
+		introductionDisplay->Visible = false;
+		commandsDisplay->Visible = false;
+		undoButton->Visible = false;
+		redoButton->Visible = false;
+		}
+
+
+// To display the Help column when clicked
+private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if (helpDisplayed == false){
+				 displayHelp();
+				 helpDisplayed = true;
+			 } else {
+				 unDisplayHelp();
+				 helpDisplayed = false;
+			 }
+
+		 }
 };
 }
