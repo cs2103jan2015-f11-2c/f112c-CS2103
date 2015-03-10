@@ -556,68 +556,73 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 }
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::Enter){
-				 String^ temp = commandBox->Text;
-				 commandBox->Text = "";
-				 if (temp == "exit"){
-					 Application::Exit();
-					 return;
-				 }
+			 if (e->KeyCode != Keys::Enter){
+				return;
+			 }
 
-				 if (temp == "help"){
-					 display->Text = "";
-					 return;
-				 }
+			 String^ temp = commandBox->Text;
+			 commandBox->Text = "";
+			 /*
+			 if (temp == "exit"){
+				Application::Exit();
+				return;
+			 }
+			 */
 				 
-				 std::string input = convertTostd(temp);
-				 suggestBar->Visible = false;
-				 suggestBar->Items->Clear();
+			 std::string input = convertTostd(temp);
+			 suggestBar->Visible = false;
+			 suggestBar->Items->Clear();
 
-				 bool isExecuted = lGPtr->executeUserInput(input);
-				 if(!isExecuted){
-					 feedbackBox->Text += "Error: PLease re-try last action.";
-				 } else {
-					 vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
-					 vector<std::string> displayToMain = lGPtr->getMainStrings();
-					 vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+			 bool isExecuted = lGPtr->executeUserInput(input);
+			 if(!isExecuted){
+				feedbackBox->Text += "Error: PLease re-try last action.";
+			 } else {
+				vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
+				vector<MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
+				vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+						
+				//feedback
+				feedbackBox->Text = "";
+				for (int i=0; i< displayToFeedback.size(); i++){
+					String^ temp = convertToSys(displayToFeedback[i]);
+					feedbackBox->Text += temp;
+				}
 
-					 feedbackBox->Text = "";
-					 //feedback
-					 for (int i=0; i< displayToFeedback.size(); i++){
-						 String^ temp = convertToSys(displayToFeedback[i]);
-						 feedbackBox->Text += temp;
-					 }
-
-					 floatingTasksDisplay->Text = "";
-					 //floating
-					 for (int i=0; i< displayToFloating.size(); i++){
-						 String^ temp = convertToSys(displayToFloating[i]);
-						 if(isOdd(i)){
-						 floatingTasksDisplay->SelectionColor = Color::Blue;
-						 floatingTasksDisplay->SelectedText = temp + "\n";
-						 } else {
-							floatingTasksDisplay->SelectionColor = Color::Red;
-							floatingTasksDisplay->SelectedText = temp + "\n";
-						 }
-					 }
-
-
-					 //main
-					 for (int i=0; i< displayToMain.size(); i++){
-						 String^ temp = convertToSys(displayToMain[i]);
-						 if(isOdd(i)){
-						 display->SelectionColor = Color::Blue;
-						 display->SelectedText = temp;
-						 } else {
-							display->SelectionColor = Color::Red;
-							display->SelectedText = temp;
-						 }
-					 }
 					 
+				//floating
+				floatingTasksDisplay->Text = "";
+				for (int i=0; i< displayToFloating.size(); i++){
+					String^ temp = convertToSys(displayToFloating[i]);
+					if(isOdd(i)){
+						floatingTasksDisplay->SelectionColor = Color::Blue;
+						floatingTasksDisplay->SelectedText = temp + "\n";
+					} else {
+						floatingTasksDisplay->SelectionColor = Color::Red;
+						floatingTasksDisplay->SelectedText = temp + "\n";
+					  }
+				}
 
-				 }
 
+				//main
+				for (int i=0; i< displayToMain.size(); i++){
+					String^ temp = convertToSys(displayToMain[i].eventString);
+
+					if(displayToMain[i].isNew){
+						display->SelectionColor = Color::Green;
+						display->SelectedText = temp;
+					} else{
+						if(isOdd(i)){
+							display->SelectionColor = Color::LightSteelBlue;
+							display->SelectedText = temp;
+						} else {
+							display->SelectionColor = Color::LightSlateGray;
+							display->SelectedText = temp;
+							}
+					}
+				}
+					 
 			}
+
 		 }
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
