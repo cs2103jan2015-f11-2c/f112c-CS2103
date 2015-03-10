@@ -39,6 +39,7 @@ vector<string> Logic::getFeedbackStrings() {
 }
 
 string Logic::getErrorString() {
+	return "";
 }
 
 	//EXECUTORS
