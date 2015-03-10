@@ -27,7 +27,7 @@ EventStorage Logic::getEventStorage() {
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
-vector<Event> Logic::executeUserInput(string input) {
+bool Logic::executeUserInput(string input) {
 	parserPtr = new Parser(input);
 	
 	Parser::commandType command = getCommand();
@@ -37,7 +37,7 @@ vector<Event> Logic::executeUserInput(string input) {
 
 	deleteParserPtr();
 
-	return resultEvent;
+	return true;
 	/*
 	Event e;
 
