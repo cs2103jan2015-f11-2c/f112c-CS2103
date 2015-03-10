@@ -18,7 +18,7 @@ std::string InputStringSplit::extractDetails(std::string input){
 std::string InputStringSplit::extractEventName(std::string input){
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(";");
-	return input.substr(0,strCutIndex+1);
+	return input.substr(0,strCutIndex);
 }
 
 std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
