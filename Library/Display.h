@@ -10,13 +10,17 @@
 
 #include "Event.h"
 
+struct MAIN_EVENT {
+	string eventString;
+	bool isNew;
+};
 
 class Display {
 private:
 	vector<Event> normalEvents;
 	vector<Event> floatingEvents;
 	vector<Event> feedbackEvents;
-	vector<string> mainDisplayStrings;
+	vector<MAIN_EVENT> mainDisplayStrings;
 	vector<string> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 
@@ -30,7 +34,7 @@ public:
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
 	vector<Event> getFeedbackEvents();
-	vector<string> getMainDisplayStrings();
+	vector<MAIN_EVENT> getMainDisplayStrings();
 	vector<string> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 

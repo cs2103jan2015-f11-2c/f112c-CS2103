@@ -25,7 +25,7 @@ vector<Event> Display::getFeedbackEvents() {
 	return feedbackEvents;
 }
 
-vector<string> Display::getMainDisplayStrings() {
+vector<MAIN_EVENT> Display::getMainDisplayStrings() {
 	return mainDisplayStrings;
 }
 
