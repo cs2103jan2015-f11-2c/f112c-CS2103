@@ -569,7 +569,7 @@ public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 						display->SelectedText = temp + "\n" ;
 					} else{
 						if(isOdd(i)){
-							display->SelectionColor = Color::LightSteelBlue;
+							display->SelectionColor = Color::Blue;
 							display->SelectedText = temp + "\n" ;
 						} else {
 							display->SelectionColor = Color::LightSlateGray;
@@ -590,7 +590,7 @@ public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
 						floatingTasksDisplay->SelectionColor = Color::Blue;
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					} else {
-						floatingTasksDisplay->SelectionColor = Color::Red;
+						floatingTasksDisplay->SelectionColor = Color::LightSlateGray;
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					  }
 				}
