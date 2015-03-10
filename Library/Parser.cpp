@@ -57,6 +57,7 @@ void Parser::tokenizeOriginalString(){
 	}
 	else if(command == "edit"){
 		nameOfEvent = splitter.extractEventName(details);
+		details = splitter.extractDetails(details);
 		fragmentedWords = splitter.fragmentEditString(details);
 		tempEventStore = processor.processEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;

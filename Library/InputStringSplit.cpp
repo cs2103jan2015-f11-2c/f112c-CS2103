@@ -77,13 +77,16 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 	bool endOfString = false;
 	
 	strCutIndex = input.find_first_of(";");
-	while(strCutIndex != std::string::npos){
+	if(strCutIndex != std::string::npos){
 		fragmentedWords.push_back(input.substr(0,strCutIndex)+";");
 		strCutIndex = input.find_first_not_of(" -.;",strCutIndex);
-		input = input.substr(strCutIndex);
-		strCutIndex = input.find_first_of(";");
+		if(strCutIndex == std::string::npos){
+			endOfString = true;
+		} else {
+			input = input.substr(strCutIndex);
+		}
 	}
-	
+
 	if(input.find_first_not_of(" -.") == std::string::npos){
 		endOfString = true;
 	}
