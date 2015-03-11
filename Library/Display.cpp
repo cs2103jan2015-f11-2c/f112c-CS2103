@@ -83,9 +83,16 @@ void Display::setFeedbackEvents(vector<Event> events) {
 
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
-
+	char buffer[33];
 	for (int i = 0; i < floatingEvents.size(); i++) {
-		floatingDisplayStrings.push_back(floatingEvents[i].getName());
+		itoa(i+1,buffer,10);
+		std::string indexing = buffer;
+		if(i+1 < 10){
+			indexing = indexing + ".   ";
+		} else {
+			indexing = indexing + ". ";
+		}
+		floatingDisplayStrings.push_back(indexing + floatingEvents[i].getName());
 	}
 }
 
