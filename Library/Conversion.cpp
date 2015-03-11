@@ -113,58 +113,58 @@ Event Conversion::stringToEvent(std::string){
 
 int Conversion::monthToInt (std::string month){
 	if(month == "jan"){
-		return 1;
+		return 0;
 	} else if(month == "feb"){
-		return 2;
+		return 1;
 	} else if(month == "mar"){
-		return 3;
+		return 2;
 	} else if(month == "apr"){
-		return 4;
+		return 3;
 	} else if(month == "may"){
-		return 5;
+		return 4;
 	} else if(month == "jun"){
-		return 6;
+		return 5;
 	} else if(month == "jul"){
-		return 7;
+		return 6;
 	} else if(month == "aug"){
-		return 8;
+		return 7;
 	} else if(month == "sep"){
-		return 9;
+		return 8;
 	} else if(month == "oct"){
-		return 10;
+		return 9;
 	} else if(month == "nov"){
-		return 11;
+		return 10;
 	} else if(month == "dec"){
-		return 12;
+		return 11;
 	} else {
 		return -1;
 	}
 }
 
 std::string Conversion::intToMonth (int monthInNum){
-	if(monthInNum == 1){
+	if(monthInNum == 0){
 		return "jan";
-	} else if(monthInNum  == 2){
+	} else if(monthInNum  == 1){
 		return "feb";
-	} else if(monthInNum  == 3){
+	} else if(monthInNum  == 2){
 		return "mar";
-	} else if(monthInNum  == 4){
+	} else if(monthInNum  == 3){
 		return "apr";
-	} else if(monthInNum  == 5){
+	} else if(monthInNum  == 4){
 		return "may";
-	} else if(monthInNum  == 6){
+	} else if(monthInNum  == 5){
 		return "jun";
-	} else if(monthInNum  == 7){
+	} else if(monthInNum  == 6){
 		return "jul";
-	} else if(monthInNum  == 8){
+	} else if(monthInNum  == 7){
 		return "aug";
-	} else if(monthInNum  == 9){
+	} else if(monthInNum  == 8){
 		return "sep";
-	} else if(monthInNum  == 10){
+	} else if(monthInNum  == 9){
 		return "oct";
-	} else if(monthInNum  == 11){
+	} else if(monthInNum  == 10){
 		return "nov";
-	} else if(monthInNum  == 12){
+	} else if(monthInNum  == 11){
 		return "dec";
 	} else {
 		return "Invalid month";

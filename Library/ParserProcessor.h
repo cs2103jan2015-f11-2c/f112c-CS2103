@@ -12,6 +12,7 @@ class ParserProcessor {
 private:
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
+	static const std::string LOCKUP_USED_INFORMATION;
 
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];
