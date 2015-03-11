@@ -47,7 +47,7 @@ public:
 
 	int getTotalNumEvents();
 	int getID(int index);
-
+	std::string getEventName(int index);
 
 	//setters
 	void setNormalEvents(vector<Event> events);

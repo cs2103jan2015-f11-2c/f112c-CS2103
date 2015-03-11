@@ -54,6 +54,18 @@ int Display::getID(int index) {
 	}
 }
 
+std::string Display::getEventName(int index) {
+	if (index > getTotalNumEvents()) {
+		return "";
+	} else {
+		if (index <= floatingEvents.size()) {
+			return floatingEvents[index-1].getName();
+		} else {
+			int normalIndex = index - floatingEvents.size();
+			return normalEvents[normalIndex - 1].getName();
+		}
+	}
+}
 
 //setters
 void Display::setNormalEvents(vector<Event> events) {

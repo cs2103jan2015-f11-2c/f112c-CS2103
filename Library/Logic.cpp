@@ -97,6 +97,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		if (isNumber(eventName)) {
 			index = std::stoi(eventName);
 			id = display.getID(index);
+			eventName = display.getEventName(index);
 		} else {
 			id = INVALID_NUMBER;
 		}
@@ -122,6 +123,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		if (isNumber(eventName)) {
 			index = std::stoi(eventName);
 			id = display.getID(index);
+			eventName = display.getEventName(index);
 		} else {
 			id = INVALID_NUMBER;
 		}
