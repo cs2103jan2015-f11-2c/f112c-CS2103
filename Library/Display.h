@@ -8,7 +8,10 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include <sstream>
 #include "Event.h"
+
+using std::ostringstream;
 
 
 class Display {
@@ -32,6 +35,10 @@ private:
 
 
 public:
+	static const string ADDED_MESSAGE;
+	static const string EDITED_MESSAGE;
+	static const string DELETED_MESSAGE;
+	
 	//constructor, destructor
 	Display();
 	//~Display();
@@ -47,7 +54,7 @@ public:
 
 	int getTotalNumEvents();
 	int getID(int index);
-	std::string getEventName(int index);
+
 
 	//setters
 	void setNormalEvents(vector<Event> events);
@@ -58,7 +65,8 @@ public:
 	void floatingEventsToString();
 	void setFeedbackStrings(string newFeedback);
 
-	void deleteEvent(int id);
+	//void setNewestEvent(int id);
+	//void deleteEvent(int id);
 };
 
 #endif

@@ -1,9 +1,7 @@
 #include "Logic.h"
 
+
 const int Logic::INVALID_NUMBER = -1;
-const string Logic::ADDED_MESSAGE = " added";
-const string Logic::EDITED_MESSAGE = " edited";
-const string Logic::DELETED_MESSAGE = " deleted";
 
 
 	//CONSTRUCTOR, DESTRUCTOR
@@ -69,50 +67,40 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	switch (command) {
 	case Parser::ADDFLOAT: {
 		display.setFloatingEvents(eventStore.addEvent(userEvent));
-		display.setFeedbackStrings(userEvent.getName() + ADDED_MESSAGE);
+		display.setFeedbackStrings(userEvent.getName() + Display::ADDED_MESSAGE);
 		break;
 						   }
 
 	case Parser::ADDFULLDAY:
-		//resultEvent = eventStore.addEvent(userEvent);
+
 		break;
 	
 	case Parser::ADD:
-		//resultEvent = eventStore.addEvent(userEvent);
+
 		break;
 
 	case Parser::ADDSTART:
-		//resultEvent = eventStore.addEvent(userEvent);
+	
 		break;
 
 	case Parser::ADDMULFULLDAYS:
-		//resultEvent = eventStore.addEvent(userEvent);
+	
 		break;
 
 	case Parser::ADDMULDAYS:
-		//resultEvent = eventStore.addEvent(userEvent);
+		
 		break;
 
 	case Parser::DELETE_: {
-		if (isNumber(eventName)) {
-			index = std::stoi(eventName);
-			id = display.getID(index);
-			eventName = display.getEventName(index);
-		} else {
-			id = INVALID_NUMBER;
-		}
+		id = convertNameToID(eventName);
 
 		tempEvents = eventStore.deleteEvent(id, eventName);
 
 		bool isFloat = tempEvents[0].getIsFloating();
 
-		if (isFloat) {
-			display.setFloatingEvents(tempEvents);
-		} else {
-			display.setNormalEvents(tempEvents);
-		}
-
-		display.setFeedbackStrings(eventName + DELETED_MESSAGE);
+		setDisplay(isFloat, tempEvents);
+		
+		display.setFeedbackStrings(eventName + Display::DELETED_MESSAGE);
 
 		break;
 						  }
@@ -120,25 +108,15 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 	case Parser::EDIT: {
 		Event tempEvent = parserPtr->getEvent();
 
-		if (isNumber(eventName)) {
-			index = std::stoi(eventName);
-			id = display.getID(index);
-			eventName = display.getEventName(index);
-		} else {
-			id = INVALID_NUMBER;
-		}
+		id = convertNameToID(eventName);
 
 		tempEvents = eventStore.editEvent(id, eventName, tempEvent);
 
 		bool isFloat = tempEvents[0].getIsFloating();
 
-		if (isFloat) {
-			display.setFloatingEvents(tempEvents);
-		} else {
-			display.setNormalEvents(tempEvents);
-		}
+		setDisplay(isFloat, tempEvents);
 
-		display.setFeedbackStrings(userEvent.getName() + EDITED_MESSAGE);
+		display.setFeedbackStrings(userEvent.getName() + Display::EDITED_MESSAGE);
 
 		break;
 					   }
@@ -153,7 +131,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 
 	case Parser::SHOWUSER:
-		//return eventStore.searchAllComponentsOfEvent(userEvent.getName());
+
 		break;
 
 	case Parser::ERROR_:
@@ -179,4 +157,21 @@ bool Logic::isNumber(string s) {
 	}
 
 	return true;
+}
+
+int Logic::convertNameToID(string name) {
+	if (isNumber(name)) {
+			int index = std::stoi(name);
+			return display.getID(index);
+		} else {
+			return INVALID_NUMBER;
+		}
+}
+
+void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet) {
+	if (isFloat) {
+		display.setFloatingEvents(eventsToSet);
+		} else {
+			display.setNormalEvents(eventsToSet);
+		}
 }

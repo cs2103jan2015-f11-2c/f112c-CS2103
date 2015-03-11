@@ -1,5 +1,10 @@
 #include "Display.h"
 
+
+const string Display::ADDED_MESSAGE = " added";
+const string Display::EDITED_MESSAGE = " edited";
+const string Display::DELETED_MESSAGE = " deleted";
+
 //constructor
 Display::Display() {
 	normalEvents.clear();
@@ -54,18 +59,6 @@ int Display::getID(int index) {
 	}
 }
 
-std::string Display::getEventName(int index) {
-	if (index > getTotalNumEvents()) {
-		return "";
-	} else {
-		if (index <= floatingEvents.size()) {
-			return floatingEvents[index-1].getName();
-		} else {
-			int normalIndex = index - floatingEvents.size();
-			return normalEvents[normalIndex - 1].getName();
-		}
-	}
-}
 
 //setters
 void Display::setNormalEvents(vector<Event> events) {
@@ -81,18 +74,19 @@ void Display::setFeedbackEvents(vector<Event> events) {
 	feedbackEvents = events;
 }
 
+void Display::normalEventsToString() {
+}
+
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
-	char buffer[33];
+
 	for (int i = 0; i < floatingEvents.size(); i++) {
-		itoa(i+1,buffer,10);
-		std::string indexing = buffer;
-		if(i+1 < 10){
-			indexing = indexing + ".   ";
-		} else {
-			indexing = indexing + ". ";
-		}
-		floatingDisplayStrings.push_back(indexing + floatingEvents[i].getName());
+		ostringstream out;
+		out << (i+1) << floatingEvents[i].getName();
+		
+		floatingDisplayStrings.push_back(out.str());
+
+		out.clear();
 	}
 }
 
@@ -100,6 +94,21 @@ void Display::setFeedbackStrings(string newFeedback) {
 	feedbackDisplayStrings.push_back(newFeedback);
 }
 
+/*
+void Display::setNewestEvent(int id) {
+	int index;
+
+	for (int i = 0 ; i < normalEvents.size() ; i++) {
+		if (normalEvents[i].getID() == id) {
+			index = i;
+		}
+		break;
+	}
+
+}
+*/
+
+/*
 void Display::deleteEvent(int id) {
 	vector<Event> temp = floatingEvents;
 	
@@ -112,3 +121,4 @@ void Display::deleteEvent(int id) {
 
 	return;
 }
+*/

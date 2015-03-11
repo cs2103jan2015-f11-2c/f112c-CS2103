@@ -4,9 +4,6 @@
 #define LOGIC_H
 
 
-#include <iostream>
-#include <string>
-#include <vector>
 #include "Parser.h"
 #include "EventStorage.h"
 #include "Event.h"
@@ -21,9 +18,7 @@ private:
 
 public:
 	static const int INVALID_NUMBER;
-	static const string ADDED_MESSAGE;
-	static const string EDITED_MESSAGE;
-	static const string DELETED_MESSAGE;
+
 
 
 	//constructor, destructor
@@ -49,6 +44,8 @@ public:
 
 	//others
 	bool isNumber(string s);
+	int convertNameToID(string name);
+	void setDisplay(bool isFloat, vector<Event> eventsToSet);
 };
 
 #endif
