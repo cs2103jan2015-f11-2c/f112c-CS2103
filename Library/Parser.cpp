@@ -50,19 +50,16 @@ void Parser::tokenizeOriginalString(){
 		} else {
 			typeOfCommand = Parser::ADD;
 		}
-	}
-	else if(command == "delete"){
+	} else if(command == "delete"){
 		nameOfEvent = splitter.extractEventName(details);
 		typeOfCommand = Parser::DELETE_;
-	}
-	else if(command == "edit"){
+	} else if(command == "edit"){
 		nameOfEvent = splitter.extractEditEventName(details);
 		details = splitter.removeEditEventName(details,nameOfEvent);
 		fragmentedWords = splitter.fragmentEditString(details);
 		tempEventStore = processor.processEditEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
-	}
-	else if(command == "show"){
+	} else if(command == "show"){
 		this->identifyShowCommand();
 	}
 
@@ -88,14 +85,11 @@ void Parser::retrieveCategories(){
 void Parser::identifyShowCommand(){
 	if(details == "day"){  //system categories
 		typeOfCommand = SHOWDAY;
-	}
-	else if(details == "month"){
+	} else if(details == "month"){
 		typeOfCommand = SHOWMTH;
-	}
-	else if(details == "year"){
+	} else if(details == "year"){
 		typeOfCommand = SHOWYR;
-	}
-	else {  //check if category exists for user categories
+	} else {  //check if category exists for user categories
 		/*bool userCategoryFound = false;
 		for(int i = 0; i < categories.size() && !userCategoryFound; i++){
 			if(details == categories[i]){

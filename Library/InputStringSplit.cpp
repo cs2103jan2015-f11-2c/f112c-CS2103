@@ -95,8 +95,7 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
 		if(strCutIndex == std::string::npos){
 			endOfString = true;
-		}
-		else {
+		} else {
 			input = input.substr(strCutIndex);
 		}
 	}

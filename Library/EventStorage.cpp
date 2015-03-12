@@ -309,8 +309,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, string eventName){
 		
 		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
 			// pass to logic eventIdVector.size();
-		}
-		else{
+		} else{
 			eventID = eventIdVector[0];
 		}
 	}
@@ -320,8 +319,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, string eventName){
 		eventToBeDeleted = currentContent[indexOfEventID];
 		currentContent.erase(currentContent.begin() + indexOfEventID);
 		returnToLogicVector = showDay(eventToBeDeleted.getStartDate().tm_mday,eventToBeDeleted.getStartDate().tm_mon,eventToBeDeleted.getStartDate().tm_year);
-	}
-	else{ //Floating Case
+	} else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
 			eventToBeDeleted = currentFloatingContent[indexOfEventID];
@@ -396,8 +394,7 @@ vector<Event> EventStorage::editEvent(int eventID, string eventName, Event edite
 		
 		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
 			// pass to logic eventIdVector.size();
-		}
-		else{
+		} else{
 			eventID = eventIdVector[0];
 		}
 	}
@@ -420,8 +417,7 @@ vector<Event> EventStorage::editEvent(int eventID, string eventName, Event edite
 			(currentContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
 		}
 		returnToLogicVector = currentContent;
-	}
-	else{ //Floating Case
+	} else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID >= 0){
 			if(editedEvent.getName() != ""){

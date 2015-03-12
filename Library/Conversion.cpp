@@ -17,9 +17,7 @@ Conversion::~Conversion(void)
 std::string Conversion::boolToString(bool isFloatingBool){
 	if (isFloatingBool){
 		return "1";
-	}
-
-	else{
+	} else{
 		return "0";
 		}
 }
@@ -27,8 +25,7 @@ std::string Conversion::boolToString(bool isFloatingBool){
 bool Conversion::stringToBool (std::string checkBool){
 	if (checkBool == "1"){
 		return true;
-	}
-	else{
+	} else{
 		return false;
 	    }
 }
@@ -228,8 +225,7 @@ std::string Conversion::intToTime (int timeInInt){
 	
 	if(afterTwelve){
 		oss << hours << "." << minutes << "pm";
-	}
-	else {
+	} else {
 		oss << hours << "." << minutes << "am";
 	}
 	

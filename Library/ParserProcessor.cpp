@@ -111,8 +111,7 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 				if(!startTimeFound){
 					tempEventStore.setStartTime(hour,minute);
 					startTimeFound = true;
-				} 
-				else {
+				} else {
 					tempEventStore.setEndTime(hour,minute);
 					endTimeFound = true;
 				}
@@ -132,8 +131,7 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 				if(!startTimeFound){
 					startTimeFound = true;
 					tempEventStore.setStartTime(hour,minute);
-				} 
-				else {
+				} else {
 					endTimeFound = true;
 					tempEventStore.setEndTime(hour,minute);
 				}
@@ -275,8 +273,7 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 				if(!startTimeFound){
 					tempEventStore.setStartTime(hour,minute);
 					startTimeFound = true;
-				} 
-				else {
+				} else {
 					tempEventStore.setEndTime(hour,minute);
 					endTimeFound = true;
 				}
@@ -296,8 +293,7 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 				if(!startTimeFound){
 					startTimeFound = true;
 					tempEventStore.setStartTime(hour,minute);
-				} 
-				else {
+				} else {
 					endTimeFound = true;
 					tempEventStore.setEndTime(hour,minute);
 				}
