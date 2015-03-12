@@ -3,9 +3,9 @@
 
 #include <msclr\marshal_cppstd.h>
 
-#include "GuideInfor.h"
 #include "Logic.h"
 #include "Conversion.h"
+#include "CommandSuggestion.h"
 
 namespace UI {
 
@@ -22,9 +22,12 @@ namespace UI {
 	public ref class MapleSyrup : public System::Windows::Forms::Form
 	{
 	private:
-		GuideInfor* gIPtr;
+		CommandSuggestion* cSPtr; 
 
 		Logic* lGPtr;
+		
+		Conversion* cVPtr;
+
 	private: System::Windows::Forms::Button^  showButton;
 	private: System::Windows::Forms::Button^  helpButton;
 	private: System::Windows::Forms::Button^  introductionDisplay;
@@ -34,16 +37,6 @@ namespace UI {
 	private: System::Windows::Forms::MonthCalendar^  calenderTop;
 	private: System::Windows::Forms::Button^  backButton;
 	private: System::Windows::Forms::Button^  nextButton;
-
-
-
-
-
-
-
-
-
-		Conversion* cVPtr;
 
 	public:
 		MapleSyrup(void)
@@ -55,7 +48,7 @@ namespace UI {
 			//TODO: Add the constructor code here
 
 			//Initialization
-			gIPtr = new GuideInfor;
+			cSPtr = new CommandSuggestion;
 
 			lGPtr = new Logic;
 
@@ -233,6 +226,7 @@ namespace UI {
 			this->display->ShowSelectionMargin = true;
 			this->display->TabStop = false;
 			this->toolTip1->SetToolTip(this->display, resources->GetString(L"display.ToolTip"));
+			this->display->Click += gcnew System::EventHandler(this, &MapleSyrup::display_Click);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -530,21 +524,36 @@ namespace UI {
 
 		}
 
-// Programmer Code
+//**************************************************************************************************************************************************//
+//*******************************************************Programmer functions***********************************************************************//
+//**************************************************************************************************************************************************//
+
+
 #pragma endregion
 
+//Attributes to to monitor the various displays
+private: bool showDisplayed;
+private: bool helpDisplayed;
+private: bool topCalenderDisplayed;
+
+
+//Pre-condition : None
+//Convert a System::String^ type to std::string type
 public: std::string convertTostd(String^ sysStr){
 			std::string newString = msclr::interop::marshal_as<std::string>(sysStr);
 			return newString;
 		}
 
+//Pre-condition : None
+//Convert a std::string type to System::String^ type
 public: String^ convertToSys(std::string stdStr){
 			String^ newString = gcnew String(stdStr.c_str());
 			Console::WriteLine(newString);
 			return newString;
 		}
 
-
+//Pre-condition : None
+//Check whether a integer input is odd
 public: bool isOdd (int num){
 	if (num%2 == 0){
 		return false;
@@ -553,45 +562,31 @@ public: bool isOdd (int num){
 	}
 }
 
-public: void displayInMainDisplay (vector<Event> toDisplay){
-	display->Text = "";
-	for (int i=0;i<toDisplay.size();i++){
-		int index = i+1;
-		String^ indexInString = index.ToString();
-		String^ toMainDisplay = indexInString + "." + convertToSys(cVPtr->eventToString(toDisplay[i]));
-		if ( isOdd(index) ){
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
-			display->SelectionColor = Color::Blue;
-			display->SelectedText = toMainDisplay;
-		} else {
-			display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,8,FontStyle::Regular);
-			display->SelectionColor = Color::Red;
-			display->SelectedText = toMainDisplay;
+//Pre-condition : None
+//All user opened displays will be make invisible
+private: void initializeAndUndisplayAll(){
+			showDisplayed = false;
+			helpDisplayed = false;
+			topCalenderDisplayed = false;
+
+			unDisplayShow();
+			unDisplayHelp();
 		}
-
-	}
-
-	return;
-}
-
-//UI system functions
-
-private: bool showDisplayed;
-private: bool helpDisplayed;
-private: bool topCalenderDisplayed;
 
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
 			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
 
-			//initialize
-			showDisplayed = false;
-			helpDisplayed = false;
-			topCalenderDisplayed = false;
+			initializeAndUndisplayAll();
+			
+			//Have a welcome message
+
+			//Invoke a show() to logic so as to display floating tasks and today's tasks
 }
 
+//Pre-condition : vector displayToFeedback to be correctly updated
 //Display feedback to feedbackBox
-public: void displayToFeedbackBox( vector<std::string> displayToFeedback){
+public: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 			feedbackBox->Text = "";
 			for (int i=0; i< displayToFeedback.size(); i++){
 					String^ temp = convertToSys(displayToFeedback[i]);
@@ -599,7 +594,8 @@ public: void displayToFeedbackBox( vector<std::string> displayToFeedback){
 				}
 		}
 
-//Display to main display
+//Pre-condition : vector displayToMain to be correctly updated
+//Display information to main display
 public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 			display->Text = "";
 			for (int i=0; i< displayToMain.size(); i++){
@@ -618,11 +614,10 @@ public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 							}
 					}
 				}
-
 		}
 
-
-//Display to floating display
+//Pre-condition : vector displayToFloating to be correctly updated
+//Display list of flating tasks to floating display
 public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
 			floatingTasksDisplay->Text = "";
 				for (int i=0; i< displayToFloating.size(); i++){
@@ -637,6 +632,33 @@ public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
 				}
 		}
 
+//Pre-condition : None
+//Exetract the first 4 letters of an input. It is also being converted to all lowercase
+public: std::string extractFirstFourLetters(std::string input){
+			std::string tempOutput = input.substr(0,4);
+			std::string output = cVPtr->toLowerCase(tempOutput);
+			return output;
+		}
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Get the error messege in Logic.h and display it.
+public: void displayErrorString(){
+			std::string tempErrorString = lGPtr->getErrorString();
+			String^ errorString = convertToSys(tempErrorString);
+			display->Text = errorString;
+		}
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Get the display vectors from Logic.h and display it on the various displays
+public: void displayToAllDisplays(){
+			vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
+			vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
+			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+
+			displayToFeedbackBox (displayToFeedback);
+			displayToFloatingDisplay (displayToFloating);
+			displayToMainDisplay (displayToMain);
+		}
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode != Keys::Enter){
@@ -646,33 +668,33 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 String^ temp = commandBox->Text;
 			 commandBox->Text = "";
 			 
-			 if (temp == "exit"){
+			 //CommandBox is empty, do nothing
+			 if (temp == ""){
+				 return;
+			 }
+			 
+			 std::string input = convertTostd(temp);
+
+			 //If the first 4 letters is "exit", terminate he program immediately
+			 std::string output = extractFirstFourLetters(input);
+			 if (output == "exit"){
 				Application::Exit();
 				return;
 			 }
 				 
-			 std::string input = convertTostd(temp);
-			 suggestBar->Visible = false;
-			 suggestBar->Items->Clear();
+			 unDisplaySuggestion();
 
 			 bool isExecuted = lGPtr->executeUserInput(input);
-			 if(!isExecuted){
-				//std::string tempErrorString = lGPtr->getErrorString();
-				//String^ errorString = convertToSys(tempErrorString);
-				//display->Text = errorString;
+			 if(isExecuted){
+				 displayToAllDisplays();
 			 } else {
-				vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
-				vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
-				vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
-
-			displayToFeedbackBox (displayToFeedback);
-			displayToFloatingDisplay (displayToFloating);
-			displayToMainDisplay (displayToMain);
-		 
-			}
+				 displayErrorString();
+			 }
 
 		 }
 
+//Pre-condition : None 
+//Execute shortcuts for UI
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::F1){
 				 commandBox->Select();
@@ -681,135 +703,75 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 if (e->KeyCode == Keys::F2){
 				 searchBox->Select();
 			 }
-
-			 if (e->KeyCode == Keys::F3){
-				 System::Object^  sender;
-				 System::Windows::Forms::MouseEventArgs^  a;
-				 //
-			 }
 		 }
+
+//Pre-condition : None 
+//Display the information in vector suggestion onto suggestBar
+public: void displaySuggestion(std::vector<std::string> suggestion){
+			suggestBar->Visible = true;
+			suggestBar->Items->Clear();
+
+			for (int i=0; i< suggestion.size();i++){
+					std::string temp = suggestion[i];
+					String^ toAdd = convertToSys(temp);
+					
+					suggestBar->Items->Add(toAdd);
+				}
+		}
+
+//Pre-condition : None 
+//Clear information in suggestBar and make it invisible
+public: void unDisplaySuggestion(){
+			suggestBar->Visible = false;
+			suggestBar->Items->Clear();
+		}
 
 //This function is triggered whenever there is a textchange in the commandBox
 //Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 std::string temp = convertTostd(commandBox->Text);
 			 std::string tempCommand = cVPtr->toLowerCase(temp);
-		 
-			 
-			 //Add
-			 if (tempCommand == gIPtr->getCommandAdd() ){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
 
-				for (int i=0; i<gIPtr->getSuggestionAddArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionAdd(i);
-					String^ toAdd = convertToSys(temp);
-					
-					suggestBar->Items->Add(toAdd);
-				}
+			 CommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
+
+			 switch(tempCommandType){
+			 case CommandSuggestion::ADD_:{
+				 std::vector<std::string> suggestionAdd = cSPtr->getSuggestionAdd();
+				 displaySuggestion(suggestionAdd);
+				 break;
+										  }
+			 case CommandSuggestion::DELETE_:{
+				 std::vector<std::string> suggestionDelete = cSPtr->getSuggestionDelete();
+				 displaySuggestion(suggestionDelete);
+				 break;
+										  }
+			 case CommandSuggestion::EDIT_:{
+				 std::vector<std::string> suggestionEdit = cSPtr->getSuggestionEdit();
+				 displaySuggestion(suggestionEdit);
+				 break;
+										  }
+			 case CommandSuggestion::SEARCH_:{
+				 std::vector<std::string> suggestionSearch = cSPtr->getSuggestionSearch();
+				 displaySuggestion(suggestionSearch);
+				 break;
+										  }
+			 case CommandSuggestion::SHOW_:{
+				 std::vector<std::string> suggestionShow = cSPtr->getSuggestionShow();
+				 displaySuggestion(suggestionShow);
+				 break;
+										  }
+			 case CommandSuggestion::UNDISPLAY_:{
+				 unDisplaySuggestion();
+				 break;
+										  }
+			 case CommandSuggestion::INVALID_:{
+				 break;
+										  }
 			 }
-
-			 //For undisplaying purpose 
-			 if (commandBox->Text == "ad"){
-				 suggestBar->Visible = false;
-			 }
-
-			 if (tempCommand == gIPtr->getCommandDelete()){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
-
-				for (int i=0; i<gIPtr->getSuggestionDeleteArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionDelete(i);
-					String^ toAdd = convertToSys(temp);
-					
-					suggestBar->Items->Add(toAdd);
-				}
-			 }
-
-			 //Delete
-			 if (tempCommand == gIPtr->getCommandDelete()){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
-
-				for (int i=0; i<gIPtr->getSuggestionDeleteArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionDelete(i);
-					String^ toAdd = convertToSys(temp);
-
-					suggestBar->Items->Add(toAdd);
-				}
-			 }
-
-			 //For undisplaying purpose 
-			 if (commandBox->Text == "delet"){
-				 suggestBar->Visible = false;
-			 }
-
-			 //Edit
-			 if (tempCommand == gIPtr->getCommandEdit()){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
-
-				for (int i=0; i<gIPtr->getSuggestionEditArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionEdit(i);
-					String^ toAdd = convertToSys(temp);
-
-					suggestBar->Items->Add(toAdd);
-				}
-			 }
-
-			 //For undisplaying purpose 
-			 if (commandBox->Text == "edi"){
-				 suggestBar->Visible = false;
-			 }
-
-			 //Search
-			 if (tempCommand == gIPtr->getCommandSearch()){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
-
-				for (int i=0; i<gIPtr->getSuggestionSearchArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionSearch(i);
-					String^ toAdd = convertToSys(temp);
-
-					suggestBar->Items->Add(toAdd);
-				}
-			 }
-
-			 //For undisplaying purpose 
-			 if (commandBox->Text == "searc"){
-				 suggestBar->Visible = false;
-			 }
-
-			 //Show
-			 if (tempCommand == gIPtr->getCommandShow()){
-				suggestBar->Visible = true;
-				suggestBar->Items->Clear();
-
-				for (int i=0; i<gIPtr->getSuggestionShowArrarySize();i++){
-					std::string temp = gIPtr->getSuggestionShow(i);
-					String^ toAdd = convertToSys(temp);
-
-					suggestBar->Items->Add(toAdd);
-				}
-			 }
-
-			 //Special case for Show ( 3 lines)
-			 if (tempCommand == "sho"){
-				 suggestBar->Visible = false;
-			 }
-
-			 //Close bar
-			 if (commandBox->Text ==""){
-				suggestBar->Visible = false;
-				suggestBar->Items->Clear();
-			 }
-			 
-			 
 		 }
 
-
-
-// To display column show
+//Pre-condition : None 
+//To display the components of column show
 public: void displayShow (){
 		dayDisplay->Visible = true;
 		weekDisplay->Visible = true;
@@ -826,7 +788,8 @@ public: void displayShow (){
 		showButton->BringToFront();
 		}
 
-// To un-display column show
+//Pre-condition : None 
+//To un-display the components of column show
 public: void unDisplayShow (){
 		dayDisplay->Visible = false;
 		weekDisplay->Visible = false;
@@ -846,7 +809,6 @@ private: System::Void showButton_MouseEnter(System::Object^  sender, System::Eve
 			 if (showDisplayed == false){
 				 displayShow();
 			 }
-
 		 }
 
 
@@ -863,7 +825,8 @@ private: System::Void showButton_Click(System::Object^  sender, System::EventArg
 			 }
 		 }
 
-// To display column Help
+//Pre-condition : None 
+// To display the components of column Help
 public: void displayHelp (){
 		introductionDisplay->Visible = true;
 		commandsDisplay->Visible = true;
@@ -878,7 +841,8 @@ public: void displayHelp (){
 		helpButton->BringToFront();
 		}
 
-// To un-display column Help
+//Pre-condition : None 
+// To display the components of column Help
 public: void unDisplayHelp (){
 		introductionDisplay->Visible = false;
 		commandsDisplay->Visible = false;
@@ -887,7 +851,7 @@ public: void unDisplayHelp (){
 		helpDisplayed = false;
 		}
 
-// To display the Help column when mouse enter
+// To display Help column when mouse enter
 private: System::Void helpButton_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
 			 if(showDisplayed == true){
 				 unDisplayShow();
@@ -912,9 +876,7 @@ private: System::Void helpButton_Click(System::Object^  sender, System::EventArg
 
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			 unDisplayShow();
-
-			 unDisplayHelp();
+			initializeAndUndisplayAll(); 
 		 }
 
 
@@ -961,6 +923,8 @@ private: System::Void commandsDisplay_Click(System::Object^  sender, System::Eve
 private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 };
 }

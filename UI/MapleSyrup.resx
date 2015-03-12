@@ -177,10 +177,10 @@
     <value>26</value>
   </data>
   <data name="feedbackBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 567</value>
+    <value>281, 567</value>
   </data>
   <data name="feedbackBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>662, 90</value>
+    <value>652, 90</value>
   </data>
   <data name="feedbackBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -370,7 +370,7 @@
 </value>
   </data>
   <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>-6, 41</value>
+    <value>-7, 41</value>
   </data>
   <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>938, 10</value>
@@ -3830,7 +3830,7 @@
     <value>4</value>
   </data>
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>108, 23</value>
+    <value>108, 17</value>
   </metadata>
   <data name="suggestBar.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
@@ -3860,7 +3860,7 @@
     <value>18</value>
   </data>
   <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>203, 25</value>
+    <value>204, 17</value>
   </metadata>
   <data name="calenderTop.Location" type="System.Drawing.Point, System.Drawing">
     <value>378, 3</value>

@@ -62,6 +62,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandSuggestion.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -75,6 +76,7 @@
     <ClCompile Include="Search.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandSuggestion.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="Display.h" />
     <ClInclude Include="Event.h" />
