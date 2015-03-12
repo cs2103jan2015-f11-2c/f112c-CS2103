@@ -584,9 +584,6 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			DateTime current = DateTime::Now;
 			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
 
-			
-
-
 			//initialize
 			showDisplayed = false;
 			helpDisplayed = false;
@@ -648,12 +645,11 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 			 String^ temp = commandBox->Text;
 			 commandBox->Text = "";
-			 /*
+			 
 			 if (temp == "exit"){
 				Application::Exit();
 				return;
 			 }
-			 */
 				 
 			 std::string input = convertTostd(temp);
 			 suggestBar->Visible = false;

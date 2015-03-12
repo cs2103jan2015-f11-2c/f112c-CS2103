@@ -82,7 +82,7 @@ void Display::floatingEventsToString() {
 
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
-		out << (i+1) << floatingEvents[i].getName();
+		out << (i+1) << "." << " " << floatingEvents[i].getName();
 		
 		floatingDisplayStrings.push_back(out.str());
 
