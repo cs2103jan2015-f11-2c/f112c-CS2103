@@ -378,6 +378,7 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->showButton, resources->GetString(L"showButton.ToolTip"));
 			this->showButton->UseVisualStyleBackColor = false;
 			this->showButton->Click += gcnew System::EventHandler(this, &MapleSyrup::showButton_Click);
+			this->showButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::showButton_MouseEnter);
 			// 
 			// helpButton
 			// 
@@ -389,6 +390,7 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->helpButton, resources->GetString(L"helpButton.ToolTip"));
 			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
+			this->helpButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::helpButton_MouseEnter);
 			// 
 			// undoButton
 			// 
@@ -476,6 +478,7 @@ namespace UI {
 			this->ShowIcon = false;
 			this->Load += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyDown);
+			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::MapleSyrup_MouseClick);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->EndInit();
@@ -776,6 +779,7 @@ public: void displayShow (){
 		monthDisplay->Visible = true;
 		allDisplay->Visible = true;
 		archiveDisplay->Visible = true;
+		showDisplayed = true;
 		}
 
 // To un-display column show
@@ -785,46 +789,86 @@ public: void unDisplayShow (){
 		monthDisplay->Visible = false;
 		allDisplay->Visible = false;
 		archiveDisplay->Visible = false;
+		showDisplayed = false;
 		}
 
-// To display the Show column when clicked
-private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
+
+// To display the Show column when mouse enter
+private: System::Void showButton_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+			 if (helpDisplayed == true){
+				 unDisplayHelp();			 
+			 }
+
 			 if (showDisplayed == false){
 				 displayShow();
-				 showDisplayed = true;
+			 }
+
+		 }
+
+
+// To display & undisplay the Show column when clicked
+private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if (helpDisplayed == true){
+				 unDisplayHelp();			 
+			 }
+
+			 if (showDisplayed == false){
+				 displayShow();
 			 } else {
-				 unDisplayShow();
-				 showDisplayed = false;
+				 unDisplayShow();		 
 			 }
 		 }
 
-// To display column show
+// To display column Help
 public: void displayHelp (){
 		introductionDisplay->Visible = true;
 		commandsDisplay->Visible = true;
 		undoButton->Visible = true;
 		redoButton->Visible = true;
+		helpDisplayed = true;
 		}
 
-// To un-display column show
+// To un-display column Help
 public: void unDisplayHelp (){
 		introductionDisplay->Visible = false;
 		commandsDisplay->Visible = false;
 		undoButton->Visible = false;
 		redoButton->Visible = false;
+		helpDisplayed = false;
 		}
 
-
-// To display the Help column when clicked
-private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
+// To display the Help column when mouse enter
+private: System::Void helpButton_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+			 if(showDisplayed == true){
+				 unDisplayShow();
+			 }
 			 if (helpDisplayed == false){
 				 displayHelp();
-				 helpDisplayed = true;
-			 } else {
-				 unDisplayHelp();
-				 helpDisplayed = false;
 			 }
 
 		 }
+
+// To display & undisplay the Help column when mouse click
+private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if(showDisplayed == true){
+				 unDisplayShow();
+			 }
+			 if (helpDisplayed == false){
+				 displayHelp();
+			 } else{
+				 unDisplayHelp();
+			 }
+		 }
+
+
+private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			 unDisplayShow();
+
+			 unDisplayHelp();
+		 }
+
+
+
+
 };
 }
