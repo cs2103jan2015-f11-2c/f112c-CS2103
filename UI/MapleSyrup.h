@@ -31,6 +31,10 @@ namespace UI {
 	private: System::Windows::Forms::Button^  commandsDisplay;
 	private: System::Windows::Forms::Button^  undoButton;
 	private: System::Windows::Forms::Button^  redoButton;
+	private: System::Windows::Forms::MonthCalendar^  calenderTop;
+	private: System::Windows::Forms::Button^  backButton;
+	private: System::Windows::Forms::Button^  nextButton;
+
 
 
 
@@ -85,7 +89,8 @@ namespace UI {
 
 
 	private: System::Windows::Forms::PictureBox^  comdIcon;
-	private: System::Windows::Forms::PictureBox^  pictureBox3;
+	private: System::Windows::Forms::PictureBox^  calenderIcon;
+
 
 
 	private: System::Windows::Forms::Button^  dayDisplay;
@@ -141,7 +146,7 @@ namespace UI {
 			this->dateDisplay = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
-			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
+			this->calenderIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->dayDisplay = (gcnew System::Windows::Forms::Button());
 			this->weekDisplay = (gcnew System::Windows::Forms::Button());
 			this->monthDisplay = (gcnew System::Windows::Forms::Button());
@@ -152,18 +157,21 @@ namespace UI {
 			this->pictureBox8 = (gcnew System::Windows::Forms::PictureBox());
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
-			this->showButton = (gcnew System::Windows::Forms::Button());
-			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
 			this->redoButton = (gcnew System::Windows::Forms::Button());
+			this->showButton = (gcnew System::Windows::Forms::Button());
+			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->introductionDisplay = (gcnew System::Windows::Forms::Button());
 			this->commandsDisplay = (gcnew System::Windows::Forms::Button());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
+			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
+			this->backButton = (gcnew System::Windows::Forms::Button());
+			this->nextButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->BeginInit();
@@ -273,12 +281,14 @@ namespace UI {
 			this->comdIcon->TabStop = false;
 			this->toolTip1->SetToolTip(this->comdIcon, resources->GetString(L"comdIcon.ToolTip"));
 			// 
-			// pictureBox3
+			// calenderIcon
 			// 
-			resources->ApplyResources(this->pictureBox3, L"pictureBox3");
-			this->pictureBox3->Name = L"pictureBox3";
-			this->pictureBox3->TabStop = false;
-			this->toolTip1->SetToolTip(this->pictureBox3, resources->GetString(L"pictureBox3.ToolTip"));
+			resources->ApplyResources(this->calenderIcon, L"calenderIcon");
+			this->calenderIcon->Name = L"calenderIcon";
+			this->calenderIcon->TabStop = false;
+			this->toolTip1->SetToolTip(this->calenderIcon, resources->GetString(L"calenderIcon.ToolTip"));
+			this->calenderIcon->Click += gcnew System::EventHandler(this, &MapleSyrup::calenderIcon_Click);
+			this->calenderIcon->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::calenderIcon_MouseEnter);
 			// 
 			// dayDisplay
 			// 
@@ -289,6 +299,7 @@ namespace UI {
 			this->dayDisplay->Name = L"dayDisplay";
 			this->toolTip1->SetToolTip(this->dayDisplay, resources->GetString(L"dayDisplay.ToolTip"));
 			this->dayDisplay->UseVisualStyleBackColor = false;
+			this->dayDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::dayDisplay_Click);
 			// 
 			// weekDisplay
 			// 
@@ -299,6 +310,7 @@ namespace UI {
 			this->weekDisplay->Name = L"weekDisplay";
 			this->toolTip1->SetToolTip(this->weekDisplay, resources->GetString(L"weekDisplay.ToolTip"));
 			this->weekDisplay->UseVisualStyleBackColor = false;
+			this->weekDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::weekDisplay_Click);
 			// 
 			// monthDisplay
 			// 
@@ -309,6 +321,7 @@ namespace UI {
 			this->monthDisplay->Name = L"monthDisplay";
 			this->toolTip1->SetToolTip(this->monthDisplay, resources->GetString(L"monthDisplay.ToolTip"));
 			this->monthDisplay->UseVisualStyleBackColor = false;
+			this->monthDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::monthDisplay_Click);
 			// 
 			// allDisplay
 			// 
@@ -319,6 +332,7 @@ namespace UI {
 			this->allDisplay->Name = L"allDisplay";
 			this->toolTip1->SetToolTip(this->allDisplay, resources->GetString(L"allDisplay.ToolTip"));
 			this->allDisplay->UseVisualStyleBackColor = false;
+			this->allDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::allDisplay_Click);
 			// 
 			// archiveDisplay
 			// 
@@ -329,6 +343,7 @@ namespace UI {
 			this->archiveDisplay->Name = L"archiveDisplay";
 			this->toolTip1->SetToolTip(this->archiveDisplay, resources->GetString(L"archiveDisplay.ToolTip"));
 			this->archiveDisplay->UseVisualStyleBackColor = false;
+			this->archiveDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::archiveDisplay_Click);
 			// 
 			// pictureBox1
 			// 
@@ -368,6 +383,28 @@ namespace UI {
 			this->searchIcon->TabStop = false;
 			this->toolTip1->SetToolTip(this->searchIcon, resources->GetString(L"searchIcon.ToolTip"));
 			// 
+			// undoButton
+			// 
+			this->undoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->undoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->undoButton, L"undoButton");
+			this->undoButton->ForeColor = System::Drawing::Color::DimGray;
+			this->undoButton->Name = L"undoButton";
+			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
+			this->undoButton->UseVisualStyleBackColor = false;
+			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
+			// 
+			// redoButton
+			// 
+			this->redoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->redoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->redoButton, L"redoButton");
+			this->redoButton->ForeColor = System::Drawing::Color::DimGray;
+			this->redoButton->Name = L"redoButton";
+			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
+			this->redoButton->UseVisualStyleBackColor = false;
+			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
+			// 
 			// showButton
 			// 
 			this->showButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -375,7 +412,6 @@ namespace UI {
 			resources->ApplyResources(this->showButton, L"showButton");
 			this->showButton->ForeColor = System::Drawing::Color::Black;
 			this->showButton->Name = L"showButton";
-			this->toolTip1->SetToolTip(this->showButton, resources->GetString(L"showButton.ToolTip"));
 			this->showButton->UseVisualStyleBackColor = false;
 			this->showButton->Click += gcnew System::EventHandler(this, &MapleSyrup::showButton_Click);
 			this->showButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::showButton_MouseEnter);
@@ -387,30 +423,9 @@ namespace UI {
 			resources->ApplyResources(this->helpButton, L"helpButton");
 			this->helpButton->ForeColor = System::Drawing::Color::Black;
 			this->helpButton->Name = L"helpButton";
-			this->toolTip1->SetToolTip(this->helpButton, resources->GetString(L"helpButton.ToolTip"));
 			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
 			this->helpButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::helpButton_MouseEnter);
-			// 
-			// undoButton
-			// 
-			this->undoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->undoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			resources->ApplyResources(this->undoButton, L"undoButton");
-			this->undoButton->ForeColor = System::Drawing::Color::DimGray;
-			this->undoButton->Name = L"undoButton";
-			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
-			this->undoButton->UseVisualStyleBackColor = false;
-			// 
-			// redoButton
-			// 
-			this->redoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->redoButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			resources->ApplyResources(this->redoButton, L"redoButton");
-			this->redoButton->ForeColor = System::Drawing::Color::DimGray;
-			this->redoButton->Name = L"redoButton";
-			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
-			this->redoButton->UseVisualStyleBackColor = false;
 			// 
 			// introductionDisplay
 			// 
@@ -420,6 +435,7 @@ namespace UI {
 			this->introductionDisplay->ForeColor = System::Drawing::Color::DimGray;
 			this->introductionDisplay->Name = L"introductionDisplay";
 			this->introductionDisplay->UseVisualStyleBackColor = false;
+			this->introductionDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::introductionDisplay_Click);
 			// 
 			// commandsDisplay
 			// 
@@ -429,6 +445,7 @@ namespace UI {
 			this->commandsDisplay->ForeColor = System::Drawing::Color::DimGray;
 			this->commandsDisplay->Name = L"commandsDisplay";
 			this->commandsDisplay->UseVisualStyleBackColor = false;
+			this->commandsDisplay->Click += gcnew System::EventHandler(this, &MapleSyrup::commandsDisplay_Click);
 			// 
 			// suggestBar
 			// 
@@ -438,6 +455,25 @@ namespace UI {
 			this->suggestBar->Name = L"suggestBar";
 			this->suggestBar->TabStop = false;
 			// 
+			// calenderTop
+			// 
+			resources->ApplyResources(this->calenderTop, L"calenderTop");
+			this->calenderTop->Name = L"calenderTop";
+			this->calenderTop->ScrollChange = 1;
+			this->calenderTop->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_MouseLeave);
+			// 
+			// backButton
+			// 
+			resources->ApplyResources(this->backButton, L"backButton");
+			this->backButton->Name = L"backButton";
+			this->backButton->UseVisualStyleBackColor = true;
+			// 
+			// nextButton
+			// 
+			resources->ApplyResources(this->nextButton, L"nextButton");
+			this->nextButton->Name = L"nextButton";
+			this->nextButton->UseVisualStyleBackColor = true;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -445,6 +481,8 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->nextButton);
+			this->Controls->Add(this->backButton);
 			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->commandsDisplay);
@@ -452,17 +490,6 @@ namespace UI {
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->showButton);
 			this->Controls->Add(this->dayDisplay);
-			this->Controls->Add(this->suggestBar);
-			this->Controls->Add(this->searchIcon);
-			this->Controls->Add(this->pictureBox3);
-			this->Controls->Add(this->comdIcon);
-			this->Controls->Add(this->pictureBox2);
-			this->Controls->Add(this->dateDisplay);
-			this->Controls->Add(this->richTextBox1);
-			this->Controls->Add(this->searchBox);
-			this->Controls->Add(this->feedbackBox);
-			this->Controls->Add(this->commandBox);
-			this->Controls->Add(this->display);
 			this->Controls->Add(this->weekDisplay);
 			this->Controls->Add(this->monthDisplay);
 			this->Controls->Add(this->allDisplay);
@@ -471,6 +498,18 @@ namespace UI {
 			this->Controls->Add(this->pictureBox8);
 			this->Controls->Add(this->floatingIcon);
 			this->Controls->Add(this->pictureBox1);
+			this->Controls->Add(this->pictureBox2);
+			this->Controls->Add(this->suggestBar);
+			this->Controls->Add(this->searchIcon);
+			this->Controls->Add(this->calenderIcon);
+			this->Controls->Add(this->comdIcon);
+			this->Controls->Add(this->dateDisplay);
+			this->Controls->Add(this->richTextBox1);
+			this->Controls->Add(this->searchBox);
+			this->Controls->Add(this->feedbackBox);
+			this->Controls->Add(this->commandBox);
+			this->Controls->Add(this->display);
+			this->Controls->Add(this->calenderTop);
 			this->ForeColor = System::Drawing::Color::Black;
 			this->HelpButton = true;
 			this->KeyPreview = true;
@@ -481,7 +520,7 @@ namespace UI {
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::MapleSyrup_MouseClick);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->EndInit();
@@ -539,10 +578,11 @@ public: void displayInMainDisplay (vector<Event> toDisplay){
 
 private: bool showDisplayed;
 private: bool helpDisplayed;
+private: bool topCalenderDisplayed;
 
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
-			dateDisplay->Text = current.ToString(" dd  MMM  yyyy ,  dddd");
+			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
 
 			
 
@@ -550,6 +590,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			//initialize
 			showDisplayed = false;
 			helpDisplayed = false;
+			topCalenderDisplayed = false;
 }
 
 //Display feedback to feedbackBox
@@ -780,6 +821,13 @@ public: void displayShow (){
 		allDisplay->Visible = true;
 		archiveDisplay->Visible = true;
 		showDisplayed = true;
+
+		dayDisplay->BringToFront();
+		weekDisplay->BringToFront();
+		monthDisplay->BringToFront();
+		allDisplay->BringToFront();
+		archiveDisplay->BringToFront();
+		showButton->BringToFront();
 		}
 
 // To un-display column show
@@ -826,6 +874,12 @@ public: void displayHelp (){
 		undoButton->Visible = true;
 		redoButton->Visible = true;
 		helpDisplayed = true;
+
+		introductionDisplay->BringToFront();
+		commandsDisplay->BringToFront();
+		undoButton->BringToFront();
+		redoButton->BringToFront();
+		helpButton->BringToFront();
 		}
 
 // To un-display column Help
@@ -869,6 +923,48 @@ private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Win
 
 
 
+// Display Calender
+private: System::Void calenderTop_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+			if(topCalenderDisplayed == true){
+				 calenderTop->Visible = false;
+				 topCalenderDisplayed = false;
+			 }
+			 
+		 }
 
+private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) {
+			 
+			 if(topCalenderDisplayed == true){
+				 calenderTop->Visible = false;
+				 topCalenderDisplayed = false;
+			 } else{
+				 calenderTop->Visible = true;
+				 calenderTop->BringToFront();
+				 topCalenderDisplayed = true;
+			 }
+			 
+		 }
+
+private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::EventArgs^  e) {			 
+		 }
+
+private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void monthDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void allDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void introductionDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void commandsDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
 };
 }
