@@ -16,6 +16,8 @@ namespace UI {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
+	using namespace System::Diagnostics;
+
 	/// <summary>
 	/// Summary for MapleSyrup
 	/// </summary>
@@ -575,10 +577,13 @@ private: void initializeAndUndisplayAll(){
 
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
+			
+			//For now this will display date. However, it will be the label to display what is being displayed on the main display
 			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
+			
 
 			initializeAndUndisplayAll();
-			
+
 			//Have a welcome message
 
 			//Invoke a show() to logic so as to display floating tasks and today's tasks
@@ -917,6 +922,9 @@ private: System::Void allDisplay_Click(System::Object^  sender, System::EventArg
 private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void introductionDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			SetCurrentDirectoryA("D:\\NUS\\CS2103\\Team\\V0.0");
+			Process::Start("[f11-2c][V0.0].pdf");
+
 		 }
 private: System::Void commandsDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
