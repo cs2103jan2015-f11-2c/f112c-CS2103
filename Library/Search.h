@@ -16,7 +16,7 @@ public:
 
 	//Methods
 	int searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSearch);
-	vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch);
+	vector<Event> searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch);
 
 //	vector<int> searchForIdWithEventName(string eventName, vector<Event> eventVectorToSearch);
 
