@@ -98,7 +98,7 @@ void EventStorage::readToCurrentContent(){
 void EventStorage::writeToCurrentFile(){
 	std::ofstream writeFile(currentFile);
 	
-	for(int i=0;i<currentContent.size();i++){
+	for(auto i=0;i<currentContent.size();i++){
 		writeFile 
 			<< boolToString(currentContent[i].getIsFloating()) << std::endl 
 			<< currentContent[i].getName() << std::endl 
@@ -110,7 +110,7 @@ void EventStorage::writeToCurrentFile(){
 		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
 		//	writeFile << " " << *iter << std::endl;
 	}	
-	for(int i=0;i<currentFloatingContent.size();i++){
+	for(auto i=0;i<currentFloatingContent.size();i++){
 		writeFile 
 			<< boolToString(currentFloatingContent[i].getIsFloating()) << std::endl 
 			<< currentFloatingContent[i].getName() << std::endl 
@@ -179,8 +179,8 @@ vector<Event> EventStorage::sortEventVectorByDate(vector<Event> eventVectorToSor
 	if(eventVectorToSort.size()<=1){
 		return eventVectorToSort;
 	} else{
-		for(int i=0;i<(eventVectorToSort.size()-1);i++){
-			for(int j=i+1;j<eventVectorToSort.size();j++){
+		for(auto i=0;i<(eventVectorToSort.size()-1);i++){
+			for(auto j=i+1;j<eventVectorToSort.size();j++){
 				if(isLatterTimeSmaller(eventVectorToSort[i],eventVectorToSort[j])){
 					tempEvent = eventVectorToSort[j];
 					eventVectorToSort[j] = eventVectorToSort[i];
@@ -282,7 +282,7 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 
 	sortResults = sortEventVectorByDate(currentContent);
 
-	for(int i=0;i<sortResults.size();i++){
+	for(auto i=0;i<sortResults.size();i++){
 		if((sortResults[i].getStartDate().tm_year == yearToShow) && (sortResults[i].getStartDate().tm_mon == monthToShow) && (sortResults[i].getStartDate().tm_mday == dayToShow)){
 			isFound = true;
 			showDayResults.push_back(sortResults[i]);
@@ -293,35 +293,35 @@ vector<Event> EventStorage::showDay(int dayToShow, int monthToShow, int yearToSh
 }
 
 //delete method
-vector<Event> EventStorage::deleteEvent(int eventID, string eventName){
+vector<Event> EventStorage::checkMultipleResults(string eventName){
 	
-	vector<int> eventIdVector, floatingEventIdVector;
-	vector<Event> returnToLogicVector;
+	vector<Event> eventVector, floatingEventVector;
 	Search search;
-	int indexOfEventID = INVALID; 
-	Event eventToBeDeleted;
 
-	if(eventID == INVALID) //event is not a user display Index)
-	{
-		eventIdVector = search.searchForIdWithEventName(eventName, currentContent);
-		floatingEventIdVector = search.searchForIdWithEventName(eventName, currentFloatingContent);
-		eventIdVector.insert( eventIdVector.end(), floatingEventIdVector.begin(), floatingEventIdVector.end() );
-		
-		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
-			// pass to logic eventIdVector.size();
-		} else{
-			eventID = eventIdVector[0];
-		}
+	eventVector = search.searchForEventWithEventName(eventName, currentContent);
+	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
+	eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
+
+	return eventVector;
+}
+vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
+	
+	int indexOfEventID = INVALID; 
+	Search search;
+	vector<Event> returnToLogicVector;
+
+	if(eventID == INVALID){ //event is not a user display Index
+		eventID = eventToBeDeleted.getID(); //set relevant eventID 
 	}
 	//Normal Case
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
-	if(indexOfEventID >= 0){ 
+	if(indexOfEventID > INVALID){ 
 		eventToBeDeleted = currentContent[indexOfEventID];
 		currentContent.erase(currentContent.begin() + indexOfEventID);
 		returnToLogicVector = showDay(eventToBeDeleted.getStartDate().tm_mday,eventToBeDeleted.getStartDate().tm_mon,eventToBeDeleted.getStartDate().tm_year);
-	} else{ //Floating Case
+	}else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
-		if(indexOfEventID >= 0){
+		if(indexOfEventID > INVALID){
 			eventToBeDeleted = currentFloatingContent[indexOfEventID];
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
 			returnToLogicVector = currentFloatingContent;
@@ -335,6 +335,74 @@ vector<Event> EventStorage::deleteEvent(int eventID, string eventName){
 	//archiveObject.setCommandType("delete");
 	//archiveObject.setArchiveEvent(eventToBeDeleted);
 	//archiveContent.push_back(archiveObject);
+}
+
+vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event editedEvent){
+	
+	Search search;
+	int indexOfEventID = INVALID; 
+	vector<Event> returnToLogicVector;
+	
+	if(eventID == INVALID){ //event is not a user display Index)		
+		eventID = eventToBeEdited.getID();  //set relevant eventID
+	}
+	//Normal Case
+	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent); //how to change to floating?
+	if(indexOfEventID > INVALID){ 
+		if(editedEvent.getName() != ""){
+			(currentContent[indexOfEventID]).setName(editedEvent.getName());
+		}
+		if(editedEvent.getStartDate().tm_mday != 100){ //change magic number
+			(currentContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
+		}
+		if(editedEvent.getEndDate().tm_mday != 100){
+			(currentContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,editedEvent.getStartDate().tm_year);
+		}
+		if(editedEvent.getStartDate().tm_hour != 100){
+			(currentContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
+		}
+		if(editedEvent.getEndDate().tm_min != 100){
+			(currentContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
+		}
+		if(editedEvent.getDescription() != ""){
+			(currentContent[indexOfEventID]).setDescription(editedEvent.getDescription());
+		}
+		returnToLogicVector = showDay(eventToBeEdited.getStartDate().tm_mday,eventToBeEdited.getStartDate().tm_mon,eventToBeEdited.getStartDate().tm_year);
+	}
+	else{ //Floating Case
+		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
+		if(indexOfEventID > INVALID){
+			if(editedEvent.getName() != ""){
+				(currentFloatingContent[indexOfEventID]).setName(editedEvent.getName());		
+			}			
+			if(editedEvent.getEndDate().tm_mday != 100){
+				(currentFloatingContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,editedEvent.getStartDate().tm_year);
+			}
+			if(editedEvent.getStartDate().tm_hour != 100){
+				(currentFloatingContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
+				(currentFloatingContent[indexOfEventID]).setIsFloating(false);			//set time only?
+			}
+			if(editedEvent.getEndDate().tm_min != 100){
+				(currentFloatingContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
+			}
+			if(editedEvent.getDescription() != ""){
+				(currentFloatingContent[indexOfEventID]).setDescription(editedEvent.getDescription());
+			}
+			if(editedEvent.getStartDate().tm_mday != 100){
+				(currentFloatingContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
+				(currentFloatingContent[indexOfEventID]).setIsFloating(false);
+				returnToLogicVector = addEvent(currentFloatingContent[indexOfEventID]);  //add to currentcontent
+				currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID); //delete from currentfloatingcontent
+			} else{
+				returnToLogicVector = currentFloatingContent;
+			}
+		}
+	}
+	
+	writeToCurrentFile();
+	return returnToLogicVector;
+
+	//store in event archive
 }
 /*
 //search all vector and all component of events save into events of vector results
@@ -377,69 +445,3 @@ vector<Event> EventStorage::searchAllComponentsOfEvent(string informationToSearc
 	return searchResults;
 }
 */
-
-vector<Event> EventStorage::editEvent(int eventID, string eventName, Event editedEvent){
-	
-	vector<int> eventIdVector, floatingEventIdVector;
-	Search search;
-	int indexOfEventID = INVALID; 
-	Event eventToBeEdited;
-	vector<Event> returnToLogicVector;
-	
-	if(eventID == INVALID) //event is not a user display Index)
-	{
-		eventIdVector = search.searchForIdWithEventName(eventName, currentContent);
-		floatingEventIdVector = search.searchForIdWithEventName(eventName, currentFloatingContent);
-		eventIdVector.insert( eventIdVector.end(), floatingEventIdVector.begin(), floatingEventIdVector.end() );
-		
-		if(eventIdVector.size() > 1 ){ 						//check isClash more than 2 events in vector
-			// pass to logic eventIdVector.size();
-		} else{
-			eventID = eventIdVector[0];
-		}
-	}
-	//Normal Case
-	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
-	if(indexOfEventID >= 0){ 
-		if(editedEvent.getName() != ""){
-			(currentContent[indexOfEventID]).setName(editedEvent.getName());
-		}
-		if(editedEvent.getStartDate().tm_mday != 100){
-			(currentContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,2015);
-		}
-		if(editedEvent.getEndDate().tm_mday != 100){
-			(currentContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,2015);
-		}
-		if(editedEvent.getStartDate().tm_hour != 100){
-			(currentContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
-		}
-		if(editedEvent.getEndDate().tm_min != 100){
-			(currentContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
-		}
-		returnToLogicVector = currentContent;
-	} else{ //Floating Case
-		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
-		if(indexOfEventID >= 0){
-			if(editedEvent.getName() != ""){
-				(currentFloatingContent[indexOfEventID]).setName(editedEvent.getName());		
-			}
-			if(editedEvent.getStartDate().tm_mday != 100){
-				(currentFloatingContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,2015);
-			}
-			if(editedEvent.getEndDate().tm_mday != 100){
-				(currentFloatingContent[indexOfEventID]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,2015);
-			}
-			if(editedEvent.getStartDate().tm_hour != 100){
-				(currentFloatingContent[indexOfEventID]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
-			}
-			if(editedEvent.getEndDate().tm_min != 100){
-				(currentFloatingContent[indexOfEventID]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
-			}
-			returnToLogicVector = currentFloatingContent;
-	}
-	
-	writeToCurrentFile();
-
-	return returnToLogicVector;
-	}
-}

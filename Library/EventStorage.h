@@ -42,8 +42,14 @@ public:
 	void readToCurrentContent();
 	vector<Event> addEvent(Event newEvent);
 
+	//Delete and Edit support mtds
+	vector<Event> checkMultipleResults(string eventName);
+
 	//delete mths
-	vector<Event> deleteEvent(int eventID, string eventName);
+	vector<Event> deleteEvent(int eventID, Event eventToBeDeleted);
+
+	//edit mths
+	vector<Event> editEvent(int eventID, Event eventToBeEdited, Event editedEvent);
 
 	string tmToString(Event convertEvent);
 	string boolToString(bool isFloatingBool);
@@ -59,7 +65,6 @@ public:
 	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
 	
-	vector<Event> editEvent(int eventID, string eventName, Event editedEvent);
 	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
 	
 };
