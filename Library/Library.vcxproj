@@ -67,6 +67,7 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventArchive.cpp" />
+    <ClCompile Include="EventOrganiser.cpp" />
     <ClCompile Include="EventStorage.cpp" />
     <ClCompile Include="GuideInfor.cpp" />
     <ClCompile Include="InputStringSplit.cpp" />
@@ -81,6 +82,7 @@
     <ClInclude Include="Display.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventArchive.h" />
+    <ClInclude Include="EventOrganiser.h" />
     <ClInclude Include="EventStorage.h" />
     <ClInclude Include="GuideInfor.h" />
     <ClInclude Include="InputStringSplit.h" />

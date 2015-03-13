@@ -30,6 +30,17 @@ bool Conversion::stringToBool (std::string checkBool){
 	    }
 }
 
+string Conversion::tmToString(Event convertEvent){
+	std::ostringstream oss;
+
+	oss << convertEvent.getStartDate().tm_year << std::endl << convertEvent.getStartDate().tm_mon << std::endl << convertEvent.getStartDate().tm_mday
+		<< std::endl << convertEvent.getStartDate().tm_hour << std::endl << convertEvent.getStartDate().tm_min << std::endl;
+	
+	oss << convertEvent.getEndDate().tm_year << std::endl << convertEvent.getEndDate().tm_mon << std::endl << convertEvent.getEndDate().tm_mday
+		<< std::endl << convertEvent.getEndDate().tm_hour << std::endl << convertEvent.getEndDate().tm_min;
+
+	return oss.str();
+}
 
 
 std::string Conversion::eventToString(Event eventToDisplay){

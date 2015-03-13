@@ -51,6 +51,9 @@
     <ClCompile Include="CommandSuggestion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventOrganiser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Event.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandSuggestion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventOrganiser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,8 @@
 #include "Event.h"
 #include "EventArchive.h"
 #include "Search.h"
+#include "EventOrganiser.h"
+#include "Conversion.h"
 
 class EventStorage{
 private:
@@ -20,17 +22,21 @@ private:
 	static const string ADDED_FLOATING_EVENT;
 	static const string ADDED_NORMAL_EVENT;
 
-	//These are results to improve readability
+	//These are variables to improve readability
 	static const int EventStorage::INVALID;
 
 	//These are vectors that store information
 	vector<Event> currentContent;
 	vector<Event> currentFloatingContent;
+	static const std::string currentFile;
+	EventOrganiser eventOrganiser;
+	Search search;
+	Conversion conversion;
+
 	vector<EventArchive> archiveContent;
+	EventArchive archiveObject; 
 	vector<Event> undoVector;
 	vector<Event> redoVector;
-	EventArchive archiveObject; 
-	static const std::string currentFile;
 
 public:
 	//Constructor, Destructor
@@ -40,33 +46,24 @@ public:
 	//Methods
 	void writeToCurrentFile();
 	void readToCurrentContent();
+
+	//Add Methods
 	vector<Event> addEvent(Event newEvent);
 
-	//Delete and Edit support mtds
+	//Support Methods
 	vector<Event> checkMultipleResults(string eventName);
 
-	//delete mths
+	//Delete Methods
 	vector<Event> deleteEvent(int eventID, Event eventToBeDeleted);
 
-	//edit mths
+	//Edit Methods
 	vector<Event> editEvent(int eventID, Event eventToBeEdited, Event editedEvent);
+		
+	//getters for testing 
+	vector<Event> getAllNormalEvents();
+	vector<Event> getAllFloatingEvents();
 
-	string tmToString(Event convertEvent);
-	string boolToString(bool isFloatingBool);
-
-	vector<Event> showAllNormalEvent();
-	vector<Event> showAllFloatingEvent();
-	vector<Event> sortEventVectorByDate(vector<Event> eventVectorToSort);
-	vector<Event> showDay(int dayToShow, int monthToShow, int yearToShow);
-	bool isLatterTimeSmaller(const Event eventTime1,const Event EventTime2);
-	bool isLatterYearSmaller(Event eventTime1, Event EventTime2);
-	bool isLatterMonthSmaller(Event eventTime1, Event EventTime2);
-	bool isLatterDaySmaller(Event eventTime1, Event EventTime2);
-	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
-	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
-	
 	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
-	
 };
 
 
