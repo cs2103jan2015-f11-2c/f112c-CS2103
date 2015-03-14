@@ -39,7 +39,7 @@ public:
 
 	std::string toLowerCase(std::string);
 
-	string tmToString(Event convertEvent);
+	std::string tmToString(Event convertEvent);
 
 
 };
