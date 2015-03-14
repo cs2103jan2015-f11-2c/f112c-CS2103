@@ -526,18 +526,45 @@ namespace UI {
 
 		}
 
-//**************************************************************************************************************************************************//
-//*******************************************************Programmer functions***********************************************************************//
-//**************************************************************************************************************************************************//
-
-
 #pragma endregion
 
-//Attributes to to monitor the various displays
-private: bool showDisplayed;
-private: bool helpDisplayed;
-private: bool topCalenderDisplayed;
+//Pre-condition : None
+//To display the UI
+//Invoked by MapleSyrup.cpp
+private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
+			DateTime current = DateTime::Now;
+			
+			//For now this will display date. However, it will be the label to display what is being displayed on the main display
+			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
+			
 
+			initializeAndUndisplayAll();
+
+			//Have a welcome message
+
+			//Invoke a show() to logic so as to display floating tasks and today's tasks
+}
+
+//Pre-condition : None 
+//Execute shortcuts for UI
+private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::F1){
+				 commandBox->Select();
+			 }
+
+			 if (e->KeyCode == Keys::F2){
+				 searchBox->Select();
+			 }
+		 }
+
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions to change between std::String and System::String^ 
+* This is to essential for communication between various classes and this UI
+* ===================================================================================================================================================================
+*/
 
 //Pre-condition : None
 //Convert a System::String^ type to std::string type
@@ -554,6 +581,42 @@ public: String^ convertToSys(std::string stdStr){
 			return newString;
 		}
 
+//===================================================================================================================================================================
+
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions to display information received from Logic.h to the various displays on UI; 
+* namely main display, floating tasks display and feedback box.
+* ===================================================================================================================================================================
+*/
+
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Get the display vectors from Logic.h when invoked by function executeUserInput(). 
+//It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
+//Upon successful display to these displays, it will return true to caller. 
+public: bool displayToAllDisplays(){
+			vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
+			vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
+			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+
+			bool checkAllDisplayed;
+
+			bool displayFeedback = displayToFeedbackBox (displayToFeedback);
+			bool displayFloating = displayToFloatingDisplay (displayToFloating);
+			bool displayMain = displayToMainDisplay (displayToMain);
+
+			if (!displayFeedback || !displayFloating || !displayMain){
+				checkAllDisplayed = false;
+			} else {
+				checkAllDisplayed = true;
+			}
+
+			return checkAllDisplayed;
+		}
+
 //Pre-condition : None
 //Check whether a integer input is odd
 public: bool isOdd (int num){
@@ -564,44 +627,29 @@ public: bool isOdd (int num){
 	}
 }
 
-//Pre-condition : None
-//All user opened displays will be make invisible
-private: void initializeAndUndisplayAll(){
-			showDisplayed = false;
-			helpDisplayed = false;
-			topCalenderDisplayed = false;
-
-			unDisplayShow();
-			unDisplayHelp();
-		}
-
-private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
-			DateTime current = DateTime::Now;
-			
-			//For now this will display date. However, it will be the label to display what is being displayed on the main display
-			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
-			
-
-			initializeAndUndisplayAll();
-
-			//Have a welcome message
-
-			//Invoke a show() to logic so as to display floating tasks and today's tasks
-}
 
 //Pre-condition : vector displayToFeedback to be correctly updated
 //Display feedback to feedbackBox
-public: void displayToFeedbackBox(vector<std::string> displayToFeedback){
+public: bool displayToFeedbackBox(vector<std::string> displayToFeedback){
+			bool feedbackDisplayed;
 			feedbackBox->Text = "";
 			for (int i=0; i< displayToFeedback.size(); i++){
 					String^ temp = convertToSys(displayToFeedback[i]);
 					feedbackBox->Text += temp + "\n" ;
 				}
+
+			feedbackDisplayed = true;
+
+			// if got error, set feedbackDisplayed = false;
+			//
+
+			return feedbackDisplayed;
 		}
 
 //Pre-condition : vector displayToMain to be correctly updated
 //Display information to main display
-public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
+public: bool displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
+			bool mainDisplayed;
 			display->Text = "";
 			for (int i=0; i< displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
@@ -619,11 +667,19 @@ public: void displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 							}
 					}
 				}
+
+			mainDisplayed = true;
+
+			// if got error, set mainDisplayed = false;
+			//
+			return mainDisplayed;
+
 		}
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of flating tasks to floating display
-public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
+public: bool displayToFloatingDisplay( vector<std::string> displayToFloating){
+			bool floatingDisplayed;
 			floatingTasksDisplay->Text = "";
 				for (int i=0; i< displayToFloating.size(); i++){
 					String^ temp = convertToSys(displayToFloating[i]);
@@ -635,10 +691,29 @@ public: void displayToFloatingDisplay( vector<std::string> displayToFloating){
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					  }
 				}
+
+			floatingDisplayed = true;
+
+			// if got error, set floatingDisplayed = false;
+			//
+			return floatingDisplayed;
 		}
 
+//===================================================================================================================================================================
+
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link UI to Logic.h
+* Commands / invokes are passed from UI to Logic.h 
+* Information are received from Logic.h through it's getters 
+* ===================================================================================================================================================================
+*/
+
+
 //Pre-condition : None
-//Exetract the first 4 letters of an input. It is also being converted to all lowercase
+//Extract the first 4 letters of an input. It is also being converted to all lowercase
 public: std::string extractFirstFourLetters(std::string input){
 			std::string tempOutput = input.substr(0,4);
 			std::string output = cVPtr->toLowerCase(tempOutput);
@@ -646,23 +721,61 @@ public: std::string extractFirstFourLetters(std::string input){
 		}
 
 //Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
-//Get the error messege in Logic.h and display it.
-public: void displayErrorString(){
+//Get the error string from Logic.h when invoked by function executeUserInput(). 
+//It proceed on to display this error string onto the main display of the UI.
+//Upon successful display, it will return true to caller. 
+public: bool displayErrorString(){
+			bool isErrorStringShown;
+
 			std::string tempErrorString = lGPtr->getErrorString();
 			String^ errorString = convertToSys(tempErrorString);
 			display->Text = errorString;
+
+			//if there is error, isErrorStringShown = false;
+
+			isErrorStringShown = true;
+
+			return isErrorStringShown;
 		}
 
-//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
-//Get the display vectors from Logic.h and display it on the various displays
-public: void displayToAllDisplays(){
-			vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
-			vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
-			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+//Pre-condition : Ensure command from user is passed into this function
+//Check if the command specify termination or the command is empty
+//This is coupled with the respective actions
+public: void checkTerminationConditions(String^ tempCommand){
+			if (tempCommand == ""){
+				 return;
+			 }
 
-			displayToFeedbackBox (displayToFeedback);
-			displayToFloatingDisplay (displayToFloating);
-			displayToMainDisplay (displayToMain);
+			std::string stdStringTempCommand = convertTostd(tempCommand);
+			if (extractFirstFourLetters(stdStringTempCommand) == "exit"){
+				Application::Exit();
+				return;
+			}
+		}
+
+
+public: void resetCommandBar(){
+			commandBox->Text = "";
+		}
+
+//Pre-condition : Ensure command from user is passed into this function
+//This function centralises all the calls from the various parts/event handlers from the UI to Logic.h for execution
+//Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
+//It proceed on to call functions to display the relevant information to the various displays on the UI 
+public: void executeUserInput(std::string input){
+  			 bool isExecuted = lGPtr->executeUserInput(input);
+			 
+			 bool isAllDisplayed;
+			 bool isErrorStringDisplayed;
+			 if(isExecuted){
+				 isAllDisplayed = displayToAllDisplays();
+			 } else {
+				 isErrorStringDisplayed = displayErrorString();
+			 }
+
+			 // if (isAllDisplayed && isErrorStringDisplayed), Error
+			 //Else carry on
+
 		}
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -671,44 +784,27 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 }
 
 			 String^ temp = commandBox->Text;
-			 commandBox->Text = "";
+			 resetCommandBar();
 			 
-			 //CommandBox is empty, do nothing
-			 if (temp == ""){
-				 return;
-			 }
-			 
-			 std::string input = convertTostd(temp);
+			 checkTerminationConditions(temp);
 
-			 //If the first 4 letters is "exit", terminate he program immediately
-			 std::string output = extractFirstFourLetters(input);
-			 if (output == "exit"){
-				Application::Exit();
-				return;
-			 }
-				 
 			 unDisplaySuggestion();
 
-			 bool isExecuted = lGPtr->executeUserInput(input);
-			 if(isExecuted){
-				 displayToAllDisplays();
-			 } else {
-				 displayErrorString();
-			 }
+			 std::string input = convertTostd(temp);
+
+			 executeUserInput(input);
 
 		 }
 
-//Pre-condition : None 
-//Execute shortcuts for UI
-private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::F1){
-				 commandBox->Select();
-			 }
 
-			 if (e->KeyCode == Keys::F2){
-				 searchBox->Select();
-			 }
-		 }
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link commandBar to CommandSuggestion.h to display the various suggestions 
+* ===================================================================================================================================================================
+*/
 
 //Pre-condition : None 
 //Display the information in vector suggestion onto suggestBar
@@ -774,6 +870,33 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 										  }
 			 }
 		 }
+
+
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions and attributes that control the various displays
+* ===================================================================================================================================================================
+*/
+
+//Attributes to to monitor the various displays
+private: bool showDisplayed;
+private: bool helpDisplayed;
+private: bool topCalenderDisplayed;
+
+
+//Pre-condition : None
+//All user opened displays will be make invisible
+private: void initializeAndUndisplayAll(){
+			showDisplayed = false;
+			helpDisplayed = false;
+			topCalenderDisplayed = false;
+
+			unDisplayShow();
+			unDisplayHelp();
+		}
 
 //Pre-condition : None 
 //To display the components of column show
@@ -907,6 +1030,12 @@ private: System::Void calenderIcon_Click(System::Object^  sender, System::EventA
 			 }
 			 
 		 }
+
+
+//===================================================================================================================================================================
+
+
+
 
 private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::EventArgs^  e) {			 
 		 }
