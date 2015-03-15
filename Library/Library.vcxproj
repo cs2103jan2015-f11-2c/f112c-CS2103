@@ -70,6 +70,7 @@
     <ClCompile Include="EventOrganiser.cpp" />
     <ClCompile Include="EventStorage.cpp" />
     <ClCompile Include="GuideInfor.cpp" />
+    <ClCompile Include="ICommand.cpp" />
     <ClCompile Include="InputStringSplit.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="EventOrganiser.h" />
     <ClInclude Include="EventStorage.h" />
     <ClInclude Include="GuideInfor.h" />
+    <ClInclude Include="ICommand.h" />
     <ClInclude Include="InputStringSplit.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
