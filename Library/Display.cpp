@@ -63,6 +63,7 @@ int Display::getID(int index) {
 //setters
 void Display::setNormalEvents(vector<Event> events) {
 	normalEvents = events;
+	normalEventsToString();
 }
 
 void Display::setFloatingEvents(vector<Event> events) {
