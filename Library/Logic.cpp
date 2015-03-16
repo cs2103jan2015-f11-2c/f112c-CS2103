@@ -39,8 +39,9 @@ vector<string> Logic::getFeedbackStrings() {
 	return display.getFeedbackDisplayStrings();
 }
 
-string Logic::getErrorString() {
-	return "";
+vector<string> Logic::getErrorString() {
+	vector<string> v;
+	return v;
 }
 
 	//EXECUTORS

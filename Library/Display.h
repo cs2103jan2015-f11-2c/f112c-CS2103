@@ -30,6 +30,7 @@ private:
 	vector<MAIN_EVENT> mainDisplayStrings;
 	vector<string> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
+	vector<string> errorStrings;
 
 	int newID;
 	int totalNumEvents;
@@ -52,6 +53,7 @@ public:
 	vector<MAIN_EVENT> getMainDisplayStrings();
 	vector<string> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
+	vector<string> getErrorStrings();
 
 	int getTotalNumEvents();
 	int getIDFromIndex(int index);
@@ -68,7 +70,6 @@ public:
 	void setFeedbackStrings(string newFeedback);
 
 	//void setNewestEvent(int id);
-	//void deleteEvent(int id);
 };
 
 #endif

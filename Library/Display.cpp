@@ -42,6 +42,10 @@ vector<string> Display::getFeedbackDisplayStrings() {
 	return feedbackDisplayStrings;
 }
 
+vector<string> Display::getErrorStrings() {
+	return errorStrings;
+}
+
 int Display::getTotalNumEvents() {
 	return floatingEvents.size() + normalEvents.size();
 }
@@ -111,20 +115,5 @@ void Display::setNewestEvent(int id) {
 		break;
 	}
 
-}
-*/
-
-/*
-void Display::deleteEvent(int id) {
-	vector<Event> temp = floatingEvents;
-	
-	for (int i = 0; i < temp.size(); i++) {
-		if (temp[i].getID() == id) {
-			temp.erase(temp.begin() + i);
-		}
-		return;
-	}
-
-	return;
 }
 */
