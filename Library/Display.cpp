@@ -4,6 +4,7 @@
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
+const string Display::EVENT_NOT_FOUND_MESSAGE = " not found";
 
 //constructor
 Display::Display() {

@@ -40,7 +40,8 @@ public:
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
-	
+	static const string EVENT_NOT_FOUND_MESSAGE;
+
 	//constructor, destructor
 	Display();
 	//~Display();

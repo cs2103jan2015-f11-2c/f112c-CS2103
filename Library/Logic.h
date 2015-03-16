@@ -20,7 +20,6 @@ public:
 	static const int INVALID_NUMBER;
 
 
-
 	//constructor, destructor
 	Logic(void);
 	~Logic();
@@ -38,7 +37,7 @@ public:
 
 	//executors
 	bool executeUserInput(string input);
-	void executeCommand(Parser::commandType command, Event userEvent);
+	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 	void deleteParserPtr();
 
 

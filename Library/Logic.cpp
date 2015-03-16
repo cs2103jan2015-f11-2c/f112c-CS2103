@@ -51,16 +51,17 @@ bool Logic::executeUserInput(string input) {
 	
 	Parser::commandType command = getCommand();
 	Event userEvent = getEvent();
+	bool isDone = true;
 
-	executeCommand(command, userEvent);
+	executeCommand(command, userEvent, isDone);
 
 	deleteParserPtr();
 
-	return true;
+	return isDone;
 }
 
 //executes exact user command after parsing
-void Logic::executeCommand(Parser::commandType command, Event userEvent) {
+void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& isDone) {
 	string eventName = parserPtr->getNameOfEvent(), feedback;
 	int index, id;
 	vector<Event> tempEvents;
@@ -94,7 +95,12 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 			int numEvents = tempEvents.size();
 
 			switch (numEvents) {
-			case 0:
+			case 0: {
+				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
+				display.setFeedbackStrings(feedback);
+				break;
+					}
+
 			case 1:
 			default:
 			}
