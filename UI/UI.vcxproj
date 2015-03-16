@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Library\Event.cpp" />
     <ClCompile Include="MapleSyrup.cpp" />
   </ItemGroup>
   <ItemGroup>
