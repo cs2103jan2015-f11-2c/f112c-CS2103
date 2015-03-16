@@ -72,12 +72,14 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 						   }
 
 	case Parser::ADDFULLDAY:
-
+		
 		break;
 	
-	case Parser::ADD:
-
+	case Parser::ADD: {
+		display.setNormalEvents(eventStore.addEvent(userEvent));
+		display.setFeedbackStrings(userEvent.getName() + Display::ADDED_MESSAGE);
 		break;
+					  }
 
 	case Parser::ADDSTART:
 	
