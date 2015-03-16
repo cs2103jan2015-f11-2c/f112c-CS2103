@@ -46,7 +46,7 @@ int Display::getTotalNumEvents() {
 	return floatingEvents.size() + normalEvents.size();
 }
 
-int Display::getID(int index) {
+int Display::getIDFromIndex(int index) {
 	if (index > getTotalNumEvents()) {
 		return -1;
 	} else {
@@ -59,9 +59,14 @@ int Display::getID(int index) {
 	}
 }
 
+int Display::getNewID() {
+	return newID;
+}
+
 
 //setters
-void Display::setNormalEvents(vector<Event> events) {
+void Display::setNormalEvents(vector<Event> events, int id) {
+	newID = id;
 	normalEvents = events;
 	normalEventsToString();
 }

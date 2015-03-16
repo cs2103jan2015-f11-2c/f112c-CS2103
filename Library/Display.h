@@ -31,6 +31,7 @@ private:
 	vector<string> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 
+	int newID;
 	int totalNumEvents;
 
 
@@ -53,11 +54,12 @@ public:
 	vector<string> getFeedbackDisplayStrings();
 
 	int getTotalNumEvents();
-	int getID(int index);
+	int getIDFromIndex(int index);
+	int getNewID();
 
 
 	//setters
-	void setNormalEvents(vector<Event> events);
+	void setNormalEvents(vector<Event> events, int id);
 	void setFloatingEvents(vector<Event> events);
 	void setFeedbackEvents(vector<Event> events);
 

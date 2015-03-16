@@ -60,14 +60,17 @@ bool Logic::executeUserInput(string input) {
 
 //executes exact user command after parsing
 void Logic::executeCommand(Parser::commandType command, Event userEvent) {
-	string eventName = parserPtr->getNameOfEvent();
+	string eventName = parserPtr->getNameOfEvent(), feedback;
 	int index, id;
 	vector<Event> tempEvents;
 
 	switch (command) {
 	case Parser::ADDFLOAT: {
-		display.setFloatingEvents(eventStore.addEvent(userEvent));
-		display.setFeedbackStrings(userEvent.getName() + Display::ADDED_MESSAGE);
+		tempEvents = eventStore.addEvent(userEvent);
+		display.setFloatingEvents(tempEvents);
+
+		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		display.setFeedbackStrings(feedback);
 		break;
 						   }
 
@@ -76,8 +79,12 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		break;
 	
 	case Parser::ADD: {
-		display.setNormalEvents(eventStore.addEvent(userEvent));
-		display.setFeedbackStrings(userEvent.getName() + Display::ADDED_MESSAGE);
+		int newID = userEvent.getID();
+		tempEvents = eventStore.addEvent(userEvent);
+		display.setNormalEvents(eventStore.addEvent(userEvent), newID);
+
+		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		display.setFeedbackStrings(feedback);
 		break;
 					  }
 
@@ -178,7 +185,7 @@ bool Logic::isNumber(string s) {
 int Logic::convertNameToID(string name) {
 	if (isNumber(name)) {
 			int index = std::stoi(name);
-			return display.getID(index);
+			return display.getIDFromIndex(index);
 		} else {
 			return INVALID_NUMBER;
 		}
