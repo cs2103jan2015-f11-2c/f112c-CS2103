@@ -89,6 +89,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::DELETE_: {
 		id = convertNameToID(eventName);
 
+		Event uselessEvent;
+
 		if (id == INVALID_NUMBER) {
 			tempEvents = eventStore.checkMultipleResults(eventName);
 
@@ -101,16 +103,28 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 				break;
 					}
 
-			case 1:
+			case 1: {
+				uselessEvent = tempEvents[0];
+				id = uselessEvent.getID();
+
+				tempEvents = eventStore.deleteEvent(id, uselessEvent);
+
+				bool isFloat = tempEvents[0].getIsFloating();
+				setDisplay(isFloat, tempEvents);
+		
+				feedback = eventName + Display::DELETED_MESSAGE;
+				display.setFeedbackStrings(feedback);
+
+				break;
+					}
+
 			default:
 			}
 
 		} else {
-			Event uselessEvent;
 			tempEvents = eventStore.deleteEvent(id, uselessEvent);
 			
 			bool isFloat = tempEvents[0].getIsFloating();
-
 			setDisplay(isFloat, tempEvents);
 		
 			display.setFeedbackStrings(eventName + Display::DELETED_MESSAGE);
