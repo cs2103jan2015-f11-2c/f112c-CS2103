@@ -106,9 +106,6 @@ void EventStorage::writeToCurrentFile(){
 			<< currentContent[i].getDescription() << std::endl
 			<< currentContent[i].getFeedback() << std::endl
 			<< currentContent[i].getID() << std::endl;
-		
-		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
-		//	writeFile << " " << *iter << std::endl;
 	}	
 	for(auto i=0;i<currentFloatingContent.size();i++){
 		writeFile 
@@ -117,10 +114,7 @@ void EventStorage::writeToCurrentFile(){
 			<< '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << '\n' << std::endl
 			<< currentFloatingContent[i].getDescription() << std::endl
 			<< currentFloatingContent[i].getFeedback() << std::endl
-			<< currentFloatingContent[i].getID() << std::endl;
-		
-		//for(auto iter = (currentContent[i].getTags()).begin(); iter != (currentContent[i].getTags()).end(); iter++)
-		//	writeFile << " " << *iter << std::endl;
+			<< currentFloatingContent[i].getID() << std::endl;	
 	}
 	writeFile.close();
 }
