@@ -73,10 +73,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		display.setFeedbackStrings(feedback);
 		break;
 						   }
-
-	case Parser::ADDFULLDAY:
-		
-		break;
 	
 	case Parser::ADD: {
 		int newID = userEvent.getID();
@@ -87,18 +83,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent) {
 		display.setFeedbackStrings(feedback);
 		break;
 					  }
-
-	case Parser::ADDSTART:
-	
-		break;
-
-	case Parser::ADDMULFULLDAYS:
-	
-		break;
-
-	case Parser::ADDMULDAYS:
-		
-		break;
 
 	case Parser::DELETE_: {
 		id = convertNameToID(eventName);
