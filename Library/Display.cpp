@@ -35,7 +35,7 @@ vector<Display::MAIN_EVENT> Display::getMainDisplayStrings() {
 	return mainDisplayStrings;
 }
 
-vector<string> Display::getFloatingDisplayStrings() {
+vector<Display::FLOATING_EVENT> Display::getFloatingDisplayStrings() {
 	return floatingDisplayStrings;
 }
 
@@ -85,8 +85,95 @@ void Display::setFeedbackEvents(vector<Event> events) {
 	feedbackEvents = events;
 }
 
-void Display::normalEventsToString() {
+
+bool Display::setIsNew(int vectorIndex){
+	bool isNew;
+	if ( newID == normalEvents[vectorIndex].getID()){
+		isNew = true;
+	} else {
+		isNew = false;
+	}
+
+	return isNew;
 }
+
+
+void Display:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex){
+	
+	//If there is a clash, this variable will become true
+	bool setNewItemClash = false;
+
+	for (int i=0; i < normalEvents.size(); i++){
+		int checkEventStartTime = getStartTime (normalEvents[i]);
+		int checkEventEndTime = getEndTime (normalEvents[i]);
+
+		//Case 1
+		if (checkEventStartTime <= newEventStartTime && newEventStartTime <= checkEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+
+		//Case 2
+		if (checkEventStartTime <= newEventEndTime && newEventEndTime <= checkEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+
+		if (setNewItemClash){
+			mainDisplayStrings[newEventIndex].isClash = true;
+		}
+	}
+}
+
+int Display:: getStartTime(Event toGet){
+	return toGet.getStartDate().tm_hour*100 + toGet.getStartDate().tm_min;
+}
+
+int Display:: getEndTime(Event toGet){
+	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
+}
+
+void Display::normalEventsToString() {
+	mainDisplayStrings.clear();
+
+	int newEventStartTime = 0;
+	int newEventEndTime = 0;
+
+	int newEventIndex = -1;
+
+	for (int i=0; i < normalEvents.size(); i++){
+		ostringstream out;
+
+		out << (i+1) << "." << " " << normalEvents[i].getName();
+
+		//Constructing MAIN_EVENT items and initializing
+		MAIN_EVENT toBePushed;
+		toBePushed.eventString = out.str();
+
+		toBePushed.isNew = setIsNew(i);
+
+		if (toBePushed.isNew == true){
+			newEventStartTime = getStartTime(normalEvents[i]);
+			newEventEndTime = getEndTime(normalEvents[i]);
+			newEventIndex = i;
+		}
+
+		//Set isClash is false first
+		toBePushed.isClash = false;
+
+		mainDisplayStrings.push_back(toBePushed);
+
+		out.clear();
+	}
+
+	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
+}
+
+
 
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
@@ -95,10 +182,15 @@ void Display::floatingEventsToString() {
 		ostringstream out;
 		out << (i+1) << "." << " " << floatingEvents[i].getName();
 		
-		floatingDisplayStrings.push_back(out.str());
+		FLOATING_EVENT temp;
+		temp.eventString = out.str();
+		temp.isNew = false;
+		floatingDisplayStrings.push_back(temp);
 
 		out.clear();
 	}
+
+	floatingDisplayStrings.back().isNew = true;
 }
 
 void Display::setFeedbackStrings(string newFeedback) {

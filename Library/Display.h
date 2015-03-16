@@ -19,6 +19,12 @@ public:
 	struct MAIN_EVENT {
 		string eventString;
 		bool isNew;
+		bool isClash;
+	};
+
+	struct FLOATING_EVENT {
+		string eventString;
+		bool isNew;
 	};
 
 
@@ -28,12 +34,16 @@ private:
 	vector<Event> feedbackEvents;
 	
 	vector<MAIN_EVENT> mainDisplayStrings;
-	vector<string> floatingDisplayStrings;
+	vector<FLOATING_EVENT> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 	vector<string> errorStrings;
 
 	int newID;
 	int totalNumEvents;
+
+	// This is required as events' numberings in main display will carry on from here
+	// For now, main display events' numbering will start from 1
+	int totalFloatingEvents;
 
 
 public:
@@ -52,7 +62,7 @@ public:
 	vector<Event> getFloatingEvents();
 	vector<Event> getFeedbackEvents();
 	vector<MAIN_EVENT> getMainDisplayStrings();
-	vector<string> getFloatingDisplayStrings();
+	vector<FLOATING_EVENT> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
 
@@ -69,6 +79,13 @@ public:
 	void normalEventsToString();
 	void floatingEventsToString();
 	void setFeedbackStrings(string newFeedback);
+
+	bool setIsNew(int);
+	void setIsClash(int,int,int);
+
+	int getStartTime(Event);
+	int getEndTime(Event);
+
 
 	//void setNewestEvent(int id);
 };

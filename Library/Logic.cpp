@@ -27,7 +27,7 @@ EventStorage Logic::getEventStorage() {
 	return eventStore;
 }
 
-vector<string> Logic::getFloatingStrings() {
+vector<Display::FLOATING_EVENT> Logic::getFloatingStrings() {
 	return display.getFloatingDisplayStrings();
 }
 
@@ -40,8 +40,7 @@ vector<string> Logic::getFeedbackStrings() {
 }
 
 vector<string> Logic::getErrorString() {
-	vector<string> v;
-	return v;
+	return display.getErrorStrings();
 }
 
 	//EXECUTORS
@@ -119,6 +118,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 					}
 
 			default:
+				break;
 			}
 
 		} else {
@@ -200,6 +200,5 @@ void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet) {
 	if (isFloat) {
 		display.setFloatingEvents(eventsToSet);
 		} else {
-			display.setNormalEvents(eventsToSet);
 		}
 }

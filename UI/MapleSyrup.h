@@ -598,7 +598,7 @@ public: String^ convertToSys(std::string stdStr){
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
 //Upon successful display to these displays, it will return true to caller. 
 private: bool displayToAllDisplays(){
-			vector<std::string> displayToFloating = lGPtr->getFloatingStrings();
+			vector<Display::FLOATING_EVENT> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 
@@ -652,7 +652,14 @@ private: bool displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 			for (int i=0; i< displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
 
-				if(displayToMain[i].isNew){
+				if(displayToMain[i].isNew && displayToMain[i].isClash){
+					display->SelectionColor = Color::Red;
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
+					display->SelectedText = temp + "\n" ;
+				} else if ( displayToMain[i].isClash ){
+					display->SelectionColor = Color::Red;
+					display->SelectedText = temp + "\n" ;
+				} else if(displayToMain[i].isNew){
 						display->SelectionColor = Color::Green;
 						display->SelectedText = temp + "\n" ;
 					} else{
@@ -673,13 +680,17 @@ private: bool displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 		}
 
 //Pre-condition : vector displayToFloating to be correctly updated
-//Display list of flating tasks to floating display
-private: bool displayToFloatingDisplay( vector<std::string> displayToFloating){
+//Display list of floating tasks to floating display
+private: bool displayToFloatingDisplay( vector<Display::FLOATING_EVENT> displayToFloating){
 			bool floatingDisplayed = true;
 			floatingTasksDisplay->Text = "";
+
 				for (int i=0; i< displayToFloating.size(); i++){
-					String^ temp = convertToSys(displayToFloating[i]);
-					if(isOdd(i)){
+					String^ temp = convertToSys(displayToFloating[i].eventString);
+					if (displayToFloating[i].isNew){
+						floatingTasksDisplay->SelectionColor = Color::Green;
+						floatingTasksDisplay->SelectedText = temp + "\n";
+					} else if(isOdd(i)){
 						floatingTasksDisplay->SelectionColor = Color::Blue;
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					} else {
@@ -721,12 +732,15 @@ public: std::string extractFirstFourLetters(std::string input){
 private: bool displayErrorString(){
 			bool isErrorStringShown;
 
-			std::string tempErrorString = lGPtr->getErrorString();
-			String^ errorString = convertToSys(tempErrorString);
-			display->Text = errorString;
+			vector<std::string> tempErrorString = lGPtr->getErrorString();
+
+			for (int i=0; i < tempErrorString.size(); i++){
+			String^ errorString = convertToSys(tempErrorString[i]);
+			display->Text += errorString;
+			}
 
 			//if there is error, isErrorStringShown = false;
-
+			
 			isErrorStringShown = true;
 
 			return isErrorStringShown;
