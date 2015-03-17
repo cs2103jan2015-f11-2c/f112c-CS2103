@@ -91,17 +91,21 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 		Event uselessEvent;
 
 		if (id == INVALID_NUMBER) {
+			//if desired event is not in display vectors, check if it is in eventStore
 			tempEvents = eventStore.checkMultipleResults(eventName);
 
-			int numEvents = tempEvents.size();
+			int numResults = tempEvents.size();
 
-			switch (numEvents) {
+			switch (numResults) {
+			//if eventStore returns no events, means the event user wants to delete does not exist
 			case 0: {
 				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
 				display.setFeedbackStrings(feedback);
 				break;
 					}
 
+
+			//if eventStore returns 1 event, delete that event
 			case 1: {
 				uselessEvent = tempEvents[0];
 				id = uselessEvent.getID();
@@ -117,34 +121,76 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 				break;
 					}
 
+
+			//if eventStore returns >1 event, ????
 			default:
 				break;
 			}
 
-		} else {
+		} else { //if desired event found in display vectors, call eventStore to delete it immediately
 			tempEvents = eventStore.deleteEvent(id, uselessEvent);
 			
 			bool isFloat = tempEvents[0].getIsFloating();
 			setDisplay(isFloat, tempEvents);
-		
-			display.setFeedbackStrings(eventName + Display::DELETED_MESSAGE);
+			
+			feedback = eventName + Display::DELETED_MESSAGE;
+			display.setFeedbackStrings(feedback);
 		}
 		
 		break;
 						  }
 
 	case Parser::EDIT: {
-		Event tempEvent = parserPtr->getEvent();
-
+		Event editedEvent = parserPtr->getEvent();
 		id = convertNameToID(eventName);
 
-		tempEvents = eventStore.editEvent(id, eventName, tempEvent);
+		//if desired event is not in display vectors, check if it is in eventStore
+		if (id == INVALID_NUMBER) {
+			tempEvents = eventStore.checkMultipleResults(eventName);
 
-		bool isFloat = tempEvents[0].getIsFloating();
+			int numResults = tempEvents.size();
 
-		setDisplay(isFloat, tempEvents);
+			switch (numResults) {
+			//if eventStore returns no events, means the event user wants to edit does not exist
+			case 0: {
+				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
+				display.setFeedbackStrings(feedback);
+				break;
+					}
 
-		display.setFeedbackStrings(userEvent.getName() + Display::EDITED_MESSAGE);
+
+			//if eventStore returns 1 event, edit that event
+			case 1: {
+				Event eventToEdit = tempEvents[0];
+				id = eventToEdit.getID();
+
+				tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
+
+				bool isFloat = tempEvents[0].getIsFloating();
+				setDisplay(isFloat, tempEvents);
+		
+				feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
+				display.setFeedbackStrings(feedback);
+
+				break;
+					}
+
+
+			//if eventStore returns >1 event, ????
+			default:
+				break;
+			}
+
+		} else { //if desired event found in display vectors, call eventStore to edit it immediately
+			Event eventToEdit = display.getEventFromID(id);
+			tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
+			
+			bool isFloat = tempEvents[0].getIsFloating();
+			setDisplay(isFloat, tempEvents);
+		
+			feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
+			display.setFeedbackStrings(feedback);
+		}
 
 		break;
 					   }

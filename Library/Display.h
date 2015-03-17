@@ -64,8 +64,10 @@ public:
 
 	int getTotalNumEvents();
 	int getTotalFloatingEvents();
+	int getTotalNormalEvents();
 	int getIDFromIndex(int index);
 	int getNewID();
+	Event getEventFromID(int id);
 
 
 	//setters

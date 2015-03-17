@@ -56,6 +56,10 @@ int Display::getTotalFloatingEvents() {
 	return floatingEvents.size();
 }
 
+int Display::getTotalNormalEvents() {
+	return normalEvents.size();
+}
+
 int Display::getIDFromIndex(int index) {
 	if (index > getTotalNumEvents()) {
 		return -1;
@@ -71,6 +75,20 @@ int Display::getIDFromIndex(int index) {
 
 int Display::getNewID() {
 	return newID;
+}
+
+Event Display::getEventFromID(int id) {
+	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
+		if (floatingEvents[i].getID() == id) {
+			return floatingEvents[i];
+		}
+	}
+
+	for (int i = 0 ; i < getTotalNormalEvents(); i++) {
+		if (normalEvents[i].getID() == id) {
+			return normalEvents[i];
+		}
+	}
 }
 
 
