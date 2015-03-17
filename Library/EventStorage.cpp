@@ -207,7 +207,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 		if(editedEvent.getDescription() != ""){
 			(currentContent[indexOfEventID]).setDescription(editedEvent.getDescription());
 		}
-		returnToLogicVector = eventOrganiser.showDay(eventToBeEdited.getStartDate().tm_mday,eventToBeEdited.getStartDate().tm_mon,eventToBeEdited.getStartDate().tm_year, currentContent);
+		returnToLogicVector = eventOrganiser.showDay(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year, currentContent);
 	}
 	else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
