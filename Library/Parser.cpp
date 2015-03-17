@@ -60,7 +60,7 @@ void Parser::tokenizeOriginalString(){
 		tempEventStore = processor.processEditEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
 	} else if(command == "show"){
-		fragmentedWords = splitter.fragmentShowString(details); 
+		//fragmentedWords = splitter.fragmentShowString(details); 
 	}
 
 	return;
