@@ -69,6 +69,10 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::ADDFLOAT: {
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setFloatingEvents(tempEvents);
+		
+		int newID = display.getNewID();
+		tempEvents = display.getNormalEvents();
+		display.setNormalEvents(tempEvents, newID);
 
 		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
 		display.setFeedbackStrings(feedback);
