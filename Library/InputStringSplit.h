@@ -20,7 +20,7 @@ public:
 	std::string extractEditEventName(std::string);
 	std::vector<std::string> fragmentAddString(std::string);
 	std::vector<std::string> fragmentEditString(std::string);
-	//std::vector<std::string> fragmentShowString(std::string);
+	std::vector<std::string> fragmentShowString(std::string);
 };
 
 #endif

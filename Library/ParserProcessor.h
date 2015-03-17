@@ -22,6 +22,10 @@ public:
 
 	Event processAddEvent(std::vector<std::string>);
 	Event processEditEvent(std::vector<std::string>);
+	Event processShowEvent(std::vector<std::string>);
+
+	int determineLastDayOfMth(int month, int year);
+	bool isLeapYear(int year);
 };
 
 #endif

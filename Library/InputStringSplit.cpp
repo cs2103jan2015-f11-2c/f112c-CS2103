@@ -101,3 +101,22 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 	}
 	return fragmentedWords;
 }	
+
+std::vector<std::string> InputStringSplit::fragmentShowString(std::string input){
+	std::string::size_type strCutIndex;
+	std::vector<std::string> fragmentedWords;
+	bool endOfString = false;
+	
+	while(!endOfString){
+		strCutIndex = input.find_first_of(" -.");
+		fragmentedWords.push_back(input.substr(0,strCutIndex));
+		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
+		if(strCutIndex == std::string::npos){
+			endOfString = true;
+		} else {
+			input = input.substr(strCutIndex);
+		}
+	}
+
+	return fragmentedWords;
+}

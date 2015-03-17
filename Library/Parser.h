@@ -20,18 +20,10 @@ public:
 
 	enum commandType {
 		ADDFLOAT, 
-		ADDFULLDAY, 
 		ADD, 
-		ADDSTART, 
-		ADDMULFULLDAYS, 
-		ADDMULDAYS, 
 		DELETE_, 
 		EDIT, 
-		SHOWDAY, 
-		SHOWMTH, 
-		SHOWYR, 
-		SHOWUSER, 
-		ERROR_
+		SHOW
 	};
 
 private:
