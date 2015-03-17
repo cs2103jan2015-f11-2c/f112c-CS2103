@@ -42,6 +42,7 @@ private:
 
 
 public:
+	static const string NO_EVENTS_MESSAGE;
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
@@ -75,6 +76,7 @@ public:
 	void normalEventsToString();
 	void floatingEventsToString();
 	void setFeedbackStrings(string newFeedback);
+	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
 	bool setIsNew(int);
 	void setIsClash(int,int,int);

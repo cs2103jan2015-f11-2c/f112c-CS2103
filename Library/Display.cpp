@@ -1,6 +1,7 @@
 #include "Display.h"
 
 
+const string Display::NO_EVENTS_MESSAGE = "nothing here";
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
@@ -144,6 +145,11 @@ int Display:: getEndTime(Event toGet){
 void Display::normalEventsToString() {
 	mainDisplayStrings.clear();
 
+	if (normalEvents.empty()) {
+		setNoEventsMessage(mainDisplayStrings);
+		return;
+	}
+	
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
 
@@ -182,6 +188,11 @@ void Display::normalEventsToString() {
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
 
+	if (normalEvents.empty()) {
+		setNoEventsMessage(floatingDisplayStrings);
+		return;
+	}
+
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
 		out << (i + 1) << "." << " " << floatingEvents[i].getName();
@@ -200,6 +211,18 @@ void Display::floatingEventsToString() {
 void Display::setFeedbackStrings(string newFeedback) {
 	feedbackDisplayStrings.push_back(newFeedback);
 }
+
+void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
+	EVENT_STRING noEvent;
+	noEvent.eventString = NO_EVENTS_MESSAGE;
+	
+	displayVec.push_back(noEvent);
+}
+
+
+
+
+
 
 /*
 void Display::setNewestEvent(int id) {
