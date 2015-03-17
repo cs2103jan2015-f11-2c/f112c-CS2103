@@ -151,7 +151,7 @@ void Display::normalEventsToString() {
 		out << (i+1) << "." << " " << normalEvents[i].getName();
 
 		//Constructing MAIN_EVENT items and initializing
-		MAIN_EVENT toBePushed;
+		EVENT_STRING toBePushed;
 		toBePushed.eventString = out.str();
 
 		toBePushed.isNew = setIsNew(i);
@@ -182,7 +182,7 @@ void Display::floatingEventsToString() {
 		ostringstream out;
 		out << (i+1) << "." << " " << floatingEvents[i].getName();
 		
-		FLOATING_EVENT temp;
+		EVENT_STRING temp;
 		temp.eventString = out.str();
 		temp.isNew = false;
 		floatingDisplayStrings.push_back(temp);
