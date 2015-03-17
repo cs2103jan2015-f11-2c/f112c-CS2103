@@ -145,10 +145,12 @@ int Display:: getEndTime(Event toGet){
 void Display::normalEventsToString() {
 	mainDisplayStrings.clear();
 
+	/*
 	if (normalEvents.empty()) {
 		setNoEventsMessage(mainDisplayStrings);
 		return;
 	}
+	*/
 	
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
@@ -188,10 +190,12 @@ void Display::normalEventsToString() {
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
 
-	if (normalEvents.empty()) {
+	/*
+	if (floatingEvents.empty()) {
 		setNoEventsMessage(floatingDisplayStrings);
 		return;
 	}
+	*/
 
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
