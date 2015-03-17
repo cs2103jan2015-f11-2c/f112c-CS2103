@@ -63,6 +63,8 @@ void Parser::tokenizeOriginalString(){
 		fragmentedWords = splitter.fragmentShowString(details);
 		tempEventStore = processor.processShowEvent(fragmentedWords);
 		typeOfCommand = Parser::SHOW;
+	} else if(command == "search"){
+		typeOfCommand = Parser::SEARCH;
 	}
 
 	return;

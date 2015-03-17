@@ -24,6 +24,7 @@ public:
 		DELETE_, 
 		EDIT,
 		ERROR_,
+		SEARCH,
 		SHOW
 	};
 

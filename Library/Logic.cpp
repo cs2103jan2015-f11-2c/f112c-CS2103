@@ -202,6 +202,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::SHOW:
 		break;
 
+	case Parser::SEARCH:
+		break;
+
 	case Parser::ERROR_:
 		break;
 
