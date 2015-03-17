@@ -22,7 +22,8 @@ public:
 		ADDFLOAT, 
 		ADD, 
 		DELETE_, 
-		EDIT, 
+		EDIT,
+		ERROR_,
 		SHOW
 	};
 

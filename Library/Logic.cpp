@@ -199,17 +199,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 		break;
 					   }
 
-	case Parser::SHOWDAY:
-		break;
-
-	case Parser::SHOWMTH:
-		break;
-
-	case Parser::SHOWYR:
-		break;
-
-	case Parser::SHOWUSER:
-
+	case Parser::SHOW:
 		break;
 
 	case Parser::ERROR_:
