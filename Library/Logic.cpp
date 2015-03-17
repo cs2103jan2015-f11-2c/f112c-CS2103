@@ -78,7 +78,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::ADD: {
 		int newID = userEvent.getID();
 		tempEvents = eventStore.addEvent(userEvent);
-		display.setNormalEvents(eventStore.addEvent(userEvent), newID);
+		display.setNormalEvents(tempEvents, newID);
 
 		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
 		display.setFeedbackStrings(feedback);
