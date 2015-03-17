@@ -598,8 +598,8 @@ public: String^ convertToSys(std::string stdStr){
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
 //Upon successful display to these displays, it will return true to caller. 
 private: bool displayToAllDisplays(){
-			vector<Display::FLOATING_EVENT> displayToFloating = lGPtr->getFloatingStrings();
-			vector<Display::MAIN_EVENT> displayToMain = lGPtr->getMainStrings();
+			 vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
+			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 
 			bool checkAllDisplayed;
@@ -646,7 +646,7 @@ private: bool displayToFeedbackBox(vector<std::string> displayToFeedback){
 
 //Pre-condition : vector displayToMain to be correctly updated
 //Display information to main display
-private: bool displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
+private: bool displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain){
 			bool mainDisplayed = true;
 			display->Text = "";
 			for (int i=0; i< displayToMain.size(); i++){
@@ -681,7 +681,7 @@ private: bool displayToMainDisplay( vector<Display::MAIN_EVENT> displayToMain){
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
-private: bool displayToFloatingDisplay( vector<Display::FLOATING_EVENT> displayToFloating){
+private: bool displayToFloatingDisplay( vector<Display::EVENT_STRING> displayToFloating){
 			bool floatingDisplayed = true;
 			floatingTasksDisplay->Text = "";
 
