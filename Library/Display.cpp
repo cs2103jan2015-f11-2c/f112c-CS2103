@@ -31,11 +31,11 @@ vector<Event> Display::getFeedbackEvents() {
 	return feedbackEvents;
 }
 
-vector<Display::MAIN_EVENT> Display::getMainDisplayStrings() {
+vector<Display::EVENT_STRING> Display::getMainDisplayStrings() {
 	return mainDisplayStrings;
 }
 
-vector<Display::FLOATING_EVENT> Display::getFloatingDisplayStrings() {
+vector<Display::EVENT_STRING> Display::getFloatingDisplayStrings() {
 	return floatingDisplayStrings;
 }
 

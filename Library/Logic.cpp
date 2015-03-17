@@ -27,11 +27,11 @@ EventStorage Logic::getEventStorage() {
 	return eventStore;
 }
 
-vector<Display::FLOATING_EVENT> Logic::getFloatingStrings() {
+vector<Display::EVENT_STRING> Logic::getFloatingStrings() {
 	return display.getFloatingDisplayStrings();
 }
 
-vector<Display::MAIN_EVENT> Logic::getMainStrings() {
+vector<Display::EVENT_STRING> Logic::getMainStrings() {
 	return display.getMainDisplayStrings();
 }
 

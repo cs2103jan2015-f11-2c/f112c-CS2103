@@ -16,15 +16,10 @@ using std::ostringstream;
 
 class Display {
 public:
-	struct MAIN_EVENT {
+	struct EVENT_STRING {
 		string eventString;
 		bool isNew;
 		bool isClash;
-	};
-
-	struct FLOATING_EVENT {
-		string eventString;
-		bool isNew;
 	};
 
 
@@ -33,8 +28,8 @@ private:
 	vector<Event> floatingEvents;
 	vector<Event> feedbackEvents;
 	
-	vector<MAIN_EVENT> mainDisplayStrings;
-	vector<FLOATING_EVENT> floatingDisplayStrings;
+	vector<EVENT_STRING> mainDisplayStrings;
+	vector<EVENT_STRING> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 	vector<string> errorStrings;
 
@@ -61,8 +56,8 @@ public:
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
 	vector<Event> getFeedbackEvents();
-	vector<MAIN_EVENT> getMainDisplayStrings();
-	vector<FLOATING_EVENT> getFloatingDisplayStrings();
+	vector<EVENT_STRING> getMainDisplayStrings();
+	vector<EVENT_STRING> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
 

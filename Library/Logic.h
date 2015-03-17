@@ -30,8 +30,8 @@ public:
 	Event getEvent();
 	EventStorage getEventStorage();
 
-	vector<Display::FLOATING_EVENT> getFloatingStrings();
-	vector<Display::MAIN_EVENT> getMainStrings();
+	vector<Display::EVENT_STRING> getFloatingStrings();
+	vector<Display::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 
