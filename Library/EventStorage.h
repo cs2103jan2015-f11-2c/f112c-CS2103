@@ -55,9 +55,12 @@ public:
 	//Edit Methods
 	vector<Event> editEvent(int eventID, Event eventToBeEdited, Event editedEvent);
 		
-	//getters for testing 
+	//getters
 	vector<Event> getAllNormalEvents();
 	vector<Event> getAllFloatingEvents();
+	vector<Event> getshowDay(int day, int month, int year, vector<Event> currentContent);
+	vector<Event> getshowMonth(int month, int year, vector<Event> currentContent);
+	vector<Event> getshowWeek(int day, int month, int year, vector<Event> currentContent);
 
 	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
 };

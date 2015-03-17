@@ -20,7 +20,6 @@ vector<Event> EventOrganiser::showAllFloatingEvent(vector<Event> currentFloating
 
 vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearToShow, vector<Event> currentContent){
 	
-	bool isFound=false;
 	vector<Event> showDayResults;
 	vector<Event> sortResults;
 
@@ -28,12 +27,42 @@ vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearTo
 
 	for(auto i=0;i<sortResults.size();i++){
 		if((sortResults[i].getStartDate().tm_year == yearToShow) && (sortResults[i].getStartDate().tm_mon == monthToShow) && (sortResults[i].getStartDate().tm_mday == dayToShow)){
-			isFound = true;
 			showDayResults.push_back(sortResults[i]);
-			isFound = false;
 		}
 	}
 	return showDayResults;
+}
+
+vector<Event> EventOrganiser::showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter){
+
+	vector<Event> showMonthResults;
+	vector<Event> sortResults;
+
+	sortResults = sortEventVectorByDate(eventsToFilter);
+
+	for(auto i=0;i<sortResults.size();i++){
+		if((sortResults[i].getStartDate().tm_year == yearToShow) && (sortResults[i].getStartDate().tm_mon == monthToShow)){
+			showMonthResults.push_back(sortResults[i]);
+		}
+	}
+	return showMonthResults;
+}
+
+vector<Event> EventOrganiser::showWeek(int dayToShow, int monthToShow, int yearToShow, vector<Event> eventsToFilter){ 
+
+	vector<Event> showWeekResults;
+	vector<Event> sortResults;
+
+	sortResults = sortEventVectorByDate(eventsToFilter);
+	
+	for(auto j=0;j<7;j++){
+		for(auto i=0;i<sortResults.size();i++){
+			if((sortResults[i].getStartDate().tm_year == yearToShow) && (sortResults[i].getStartDate().tm_mon == monthToShow) && ((sortResults[i].getStartDate().tm_mday) == (dayToShow + j))){
+				showWeekResults.push_back(sortResults[i]);
+			}
+		}
+	}
+	return showWeekResults;
 }
 
 vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventVectorToSort){

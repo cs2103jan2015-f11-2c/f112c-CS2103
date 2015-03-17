@@ -245,10 +245,19 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	//store in event archive
 }
 
-//getters for testing
+//getters
 vector<Event> EventStorage::getAllNormalEvents(){
 	return eventOrganiser.showAllNormalEvent(currentContent);
 }
 vector<Event> EventStorage::getAllFloatingEvents(){
 	return eventOrganiser.showAllFloatingEvent(currentFloatingContent);
+}
+vector<Event> EventStorage::getshowDay(int day, int month, int year, vector<Event> currentContent){
+	return eventOrganiser.showDay(day,month,year,currentContent);
+}
+vector<Event> EventStorage::getshowWeek(int day, int month, int year, vector<Event> currentContent){
+	return eventOrganiser.showWeek(day, month, year, currentContent);
+}
+vector<Event> EventStorage::getshowMonth(int month, int year, vector<Event> currentContent){
+	return eventOrganiser.showMonth(month, year, currentContent);
 }
