@@ -51,6 +51,10 @@ int Display::getTotalNumEvents() {
 	return floatingEvents.size() + normalEvents.size();
 }
 
+int Display::getTotalFloatingEvents() {
+	return floatingEvents.size();
+}
+
 int Display::getIDFromIndex(int index) {
 	if (index > getTotalNumEvents()) {
 		return -1;
@@ -148,7 +152,7 @@ void Display::normalEventsToString() {
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
-		out << (i+1) << "." << " " << normalEvents[i].getName();
+		out << (i + 1 + getTotalFloatingEvents()) << "." << " " << normalEvents[i].getName();
 
 		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;
@@ -180,7 +184,7 @@ void Display::floatingEventsToString() {
 
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
-		out << (i+1) << "." << " " << floatingEvents[i].getName();
+		out << (i + 1) << "." << " " << floatingEvents[i].getName();
 		
 		EVENT_STRING temp;
 		temp.eventString = out.str();

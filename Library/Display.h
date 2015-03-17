@@ -62,6 +62,7 @@ public:
 	vector<string> getErrorStrings();
 
 	int getTotalNumEvents();
+	int getTotalFloatingEvents();
 	int getIDFromIndex(int index);
 	int getNewID();
 
