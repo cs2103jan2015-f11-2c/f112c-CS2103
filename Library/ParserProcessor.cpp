@@ -103,10 +103,15 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 			} 
 			if(tempInt >= 100){
 				minute = tempInt%100;
+				hour = tempInt/100;
 				if(afterTwelve){
-					hour = tempInt/100 + 12;
+					if (hour < 12){
+						hour = hour + 12;
+					}
 				} else {
-					hour = tempInt/100;
+					if (hour == 12){
+						hour = 0;
+					}
 				}
 				if(!startTimeFound){
 					tempEventStore.setStartTime(hour,minute);
@@ -126,8 +131,14 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 					minute = 0;
 				} 
 				if(afterTwelve){
-					hour = hour + 12;
-				} 
+					if(hour < 12){
+						hour = hour + 12;
+					}
+				} else {
+					if(hour == 12){
+						hour = 0;
+					}
+				}
 				if(!startTimeFound){
 					startTimeFound = true;
 					tempEventStore.setStartTime(hour,minute);
@@ -265,10 +276,15 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 			} 
 			if(tempInt >= 100){
 				minute = tempInt%100;
+				hour = tempInt/100;
 				if(afterTwelve){
-					hour = tempInt/100 + 12;
+					if (hour < 12){
+						hour = hour + 12;
+					}
 				} else {
-					hour = tempInt/100;
+					if (hour == 12){
+						hour = 0;
+					}
 				}
 				if(!startTimeFound){
 					tempEventStore.setStartTime(hour,minute);
@@ -288,7 +304,13 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 					minute = 0;
 				} 
 				if(afterTwelve){
-					hour = hour + 12;
+					if(hour < 12){
+						hour = hour + 12;
+					}
+				} else {
+					if(hour == 12){
+						hour = 0;
+					}
 				} 
 				if(!startTimeFound){
 					startTimeFound = true;

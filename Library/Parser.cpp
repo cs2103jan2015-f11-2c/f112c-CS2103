@@ -60,7 +60,7 @@ void Parser::tokenizeOriginalString(){
 		tempEventStore = processor.processEditEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
 	} else if(command == "show"){
-		this->identifyShowCommand();
+		fragmentedWords = splitter.fragmentShowString(details); 
 	}
 
 	return;
@@ -75,34 +75,5 @@ void Parser::retrieveCategories(){
 	}
 	readCategories.close();
 
-	return;
-}
-
-	//SHOW
-//Possible show commands:
-// -show Day
-// -show School
-void Parser::identifyShowCommand(){
-	if(details == "day"){  //system categories
-		typeOfCommand = SHOWDAY;
-	} else if(details == "month"){
-		typeOfCommand = SHOWMTH;
-	} else if(details == "year"){
-		typeOfCommand = SHOWYR;
-	} else {  //check if category exists for user categories
-		/*bool userCategoryFound = false;
-		for(int i = 0; i < categories.size() && !userCategoryFound; i++){
-			if(details == categories[i]){
-				userCategoryFound = true;
-			}
-		}
-		if(userCategoryFound){
-		*/	typeOfCommand = SHOWUSER;
-			tempEventStore.setName(details);
-		} /*
-		else {
-			typeOfCommand = ERROR_;
-		}*/
-	
 	return;
 }
