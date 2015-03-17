@@ -58,11 +58,11 @@ public:
 	//getters
 	vector<Event> getAllNormalEvents();
 	vector<Event> getAllFloatingEvents();
-	vector<Event> getshowDay(int day, int month, int year, vector<Event> currentContent);
-	vector<Event> getshowMonth(int month, int year, vector<Event> currentContent);
-	vector<Event> getshowWeek(int day, int month, int year, vector<Event> currentContent);
+	vector<Event> getShowDay(int day, int month, int year, vector<Event> currentContent);
+	vector<Event> getShowMonth(int month, int year, vector<Event> currentContent);
+	vector<Event> getShowWeek(int day, int month, int year, vector<Event> currentContent);
 
-	//vector<Event> searchAllComponentsOfEvent(string informationToSearch); //search currentcontent
+	vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);
 };
 
 

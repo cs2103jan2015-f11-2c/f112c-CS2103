@@ -252,12 +252,16 @@ vector<Event> EventStorage::getAllNormalEvents(){
 vector<Event> EventStorage::getAllFloatingEvents(){
 	return eventOrganiser.showAllFloatingEvent(currentFloatingContent);
 }
-vector<Event> EventStorage::getshowDay(int day, int month, int year, vector<Event> currentContent){
+vector<Event> EventStorage::getShowDay(int day, int month, int year, vector<Event> currentContent){
 	return eventOrganiser.showDay(day,month,year,currentContent);
 }
-vector<Event> EventStorage::getshowWeek(int day, int month, int year, vector<Event> currentContent){
+vector<Event> EventStorage::getShowWeek(int day, int month, int year, vector<Event> currentContent){
 	return eventOrganiser.showWeek(day, month, year, currentContent);
 }
-vector<Event> EventStorage::getshowMonth(int month, int year, vector<Event> currentContent){
+vector<Event> EventStorage::getShowMonth(int month, int year, vector<Event> currentContent){
 	return eventOrganiser.showMonth(month, year, currentContent);
+}
+
+vector<Event> EventStorage::searchAllComponents(string infoToSearch, vector<Event> contentToSearch){
+	return search.searchAllComponentsOfEvent(infoToSearch,contentToSearch);
 }
