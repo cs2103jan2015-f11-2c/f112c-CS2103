@@ -83,6 +83,7 @@ void Display::setNormalEvents(vector<Event> events, int id) {
 
 void Display::setFloatingEvents(vector<Event> events) {
 	floatingEvents = events;
+	totalFloatingEvents = events.size();
 	floatingEventsToString();
 }
 
@@ -113,7 +114,7 @@ void Display:: setIsClash(int newEventStartTime, int newEventEndTime, int newEve
 		int checkEventEndTime = getEndTime (normalEvents[i]);
 
 		//Case 1
-		if (checkEventStartTime <= newEventStartTime && newEventStartTime <= checkEventEndTime){
+		if (checkEventStartTime < newEventStartTime && newEventStartTime < checkEventEndTime){
 			if (normalEvents[i].getID() != newID){
 				mainDisplayStrings[i].isClash = true;
 				setNewItemClash = true;
@@ -121,7 +122,15 @@ void Display:: setIsClash(int newEventStartTime, int newEventEndTime, int newEve
 		}
 
 		//Case 2
-		if (checkEventStartTime <= newEventEndTime && newEventEndTime <= checkEventEndTime){
+		if (checkEventStartTime < newEventEndTime && newEventEndTime < checkEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+
+		//Case 3 exactly same timeslot
+		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime){
 			if (normalEvents[i].getID() != newID){
 				mainDisplayStrings[i].isClash = true;
 				setNewItemClash = true;
@@ -142,6 +151,42 @@ int Display:: getEndTime(Event toGet){
 	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
 }
 
+std::string Display::intToTime (int timeInInt){
+	int hours;
+	int minutes;
+	bool afterTwelve = false;
+	std::ostringstream oss;
+	hours = timeInInt/100;
+	minutes = timeInInt%100;
+
+	if(hours > 12){
+		hours = hours - 12;
+		afterTwelve = true;
+	}
+	
+	if(afterTwelve){
+		oss << hours;
+
+		if (minutes >0){
+		oss << ":";
+		oss << minutes;
+		}
+			
+		oss << "pm";
+	} else {
+		oss << hours;
+
+		if (minutes >0){
+		oss << ":";
+		oss << minutes;
+		}
+		
+		oss << "am";
+	}
+	
+	return oss.str();
+}
+
 void Display::normalEventsToString() {
 	mainDisplayStrings.clear();
 
@@ -160,7 +205,38 @@ void Display::normalEventsToString() {
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
-		out << (i + 1 + getTotalFloatingEvents()) << "." << " " << normalEvents[i].getName();
+		out << (i + 1 + getTotalFloatingEvents()) << "." ;
+		out << "\t" ;
+		out << "[" ;
+		int startTime = getStartTime(normalEvents[i]);
+		out << intToTime(startTime);
+		out << "-" ;
+		int endTime = getEndTime(normalEvents[i]);
+		out << intToTime(endTime);
+		out << "]" ;
+		out << "\t\t";
+		out << normalEvents[i].getName();
+		
+		if (normalEvents[i].getDescription() != ""){
+			out << "   ";
+			out << "(";
+			out << normalEvents[i].getDescription();
+			out << ")";
+		}
+
+		if (normalEvents[i].getTags().size() != 0){
+			out << "\n";
+			out << "\t\t\t\t";
+			
+			vector<string> tagVector = normalEvents[i].getTags();
+			for (int i=0; i<tagVector.size(); i++){
+				out << tagVector[i];
+				out << " "; 
+			}
+			
+		}
+
+		out << "\n";
 
 		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;

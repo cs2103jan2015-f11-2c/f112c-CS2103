@@ -598,7 +598,7 @@ public: String^ convertToSys(std::string stdStr){
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
 //Upon successful display to these displays, it will return true to caller. 
 private: bool displayToAllDisplays(){
-			 vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
+			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 
@@ -801,7 +801,6 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 std::string input = convertTostd(temp);
 
 			 executeUserInput(input);
-
 		 }
 
 

@@ -84,6 +84,8 @@ public:
 	int getStartTime(Event);
 	int getEndTime(Event);
 
+	string intToTime (int);
+
 
 	//void setNewestEvent(int id);
 };
