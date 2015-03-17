@@ -18,10 +18,6 @@
 class EventStorage{
 private:
 
-	//These are messages to give the user feedback on what the program is doing.
-	static const string ADDED_FLOATING_EVENT;
-	static const string ADDED_NORMAL_EVENT;
-
 	//These are variables to improve readability
 	static const int EventStorage::INVALID;
 

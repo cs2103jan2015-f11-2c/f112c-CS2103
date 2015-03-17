@@ -1,8 +1,6 @@
 #include "EventStorage.h"
 
 //These are messages to give the user feedback on what the program is doing.
-const string EventStorage::ADDED_FLOATING_EVENT = "Congratulation!! You have added a Floating Event to MapleSyrup :)";
-const string EventStorage::ADDED_NORMAL_EVENT = "Well Done!! You have added an Event to MapleSyrup :)";
 
 const int EventStorage::INVALID = -1 ;
 	
@@ -124,11 +122,9 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 	vector<Event> returnToLogicVector;
 
 	if(newEvent.getIsFloating()){
-		newEvent.setFeedback(ADDED_FLOATING_EVENT); 
 		currentFloatingContent.push_back(newEvent);
 		returnToLogicVector = currentFloatingContent;
 	} else{
-		newEvent.setFeedback(ADDED_NORMAL_EVENT); 
 		currentContent.push_back(newEvent);
 		returnToLogicVector = eventOrganiser.showDay(newEvent.getStartDate().tm_mday,newEvent.getStartDate().tm_mon,newEvent.getStartDate().tm_year, currentContent);
 	}
