@@ -84,7 +84,7 @@ public:
 	void setIsClash(int,int,int);
 
 	int getStartTime(Event);
-	int getEndTime(Event);
+	int getEndTime(Event); 
 
 	string intToTime (int);
 

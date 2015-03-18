@@ -176,6 +176,9 @@
   <data name="&gt;&gt;commandBox.ZOrder" xml:space="preserve">
     <value>26</value>
   </data>
+  <data name="feedbackBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
   <data name="feedbackBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>281, 567</value>
   </data>
@@ -297,6 +300,9 @@
   <data name="&gt;&gt;floatingTasksDisplay.ZOrder" xml:space="preserve">
     <value>13</value>
   </data>
+  <data name="richTextBox1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9.75pt</value>
+  </data>
   <data name="richTextBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 529</value>
   </data>
@@ -324,34 +330,37 @@
   <data name="&gt;&gt;richTextBox1.ZOrder" xml:space="preserve">
     <value>23</value>
   </data>
-  <data name="dateDisplay.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="mainDisplayLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
-  <data name="dateDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 13</value>
+  <data name="mainDisplayLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 13</value>
   </data>
-  <data name="dateDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 19</value>
+  <data name="mainDisplayLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>258, 19</value>
   </data>
-  <data name="dateDisplay.TabIndex" type="System.Int32, mscorlib">
+  <data name="mainDisplayLabel.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
   </data>
-  <data name="dateDisplay.Text" xml:space="preserve">
-    <value>Date display</value>
+  <data name="mainDisplayLabel.Text" xml:space="preserve">
+    <value>Main Display Label</value>
   </data>
-  <data name="dateDisplay.ToolTip" xml:space="preserve">
+  <data name="mainDisplayLabel.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="mainDisplayLabel.ToolTip" xml:space="preserve">
     <value>Date</value>
   </data>
-  <data name="&gt;&gt;dateDisplay.Name" xml:space="preserve">
-    <value>dateDisplay</value>
+  <data name="&gt;&gt;mainDisplayLabel.Name" xml:space="preserve">
+    <value>mainDisplayLabel</value>
   </data>
-  <data name="&gt;&gt;dateDisplay.Type" xml:space="preserve">
+  <data name="&gt;&gt;mainDisplayLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;dateDisplay.Parent" xml:space="preserve">
+  <data name="&gt;&gt;mainDisplayLabel.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;dateDisplay.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;mainDisplayLabel.ZOrder" xml:space="preserve">
     <value>22</value>
   </data>
   <data name="pictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

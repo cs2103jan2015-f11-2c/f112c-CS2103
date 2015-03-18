@@ -75,7 +75,8 @@ namespace UI {
 	private: System::Windows::Forms::RichTextBox^  display;
 	private: System::Windows::Forms::RichTextBox^  floatingTasksDisplay;
 	private: System::Windows::Forms::RichTextBox^  richTextBox1;
-	private: System::Windows::Forms::TextBox^  dateDisplay;
+	private: System::Windows::Forms::TextBox^  mainDisplayLabel;
+
 
 
 
@@ -138,7 +139,7 @@ namespace UI {
 			this->display = (gcnew System::Windows::Forms::RichTextBox());
 			this->floatingTasksDisplay = (gcnew System::Windows::Forms::RichTextBox());
 			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
-			this->dateDisplay = (gcnew System::Windows::Forms::TextBox());
+			this->mainDisplayLabel = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->calenderIcon = (gcnew System::Windows::Forms::PictureBox());
@@ -252,17 +253,17 @@ namespace UI {
 			this->richTextBox1->TabStop = false;
 			this->toolTip1->SetToolTip(this->richTextBox1, resources->GetString(L"richTextBox1.ToolTip"));
 			// 
-			// dateDisplay
+			// mainDisplayLabel
 			// 
-			this->dateDisplay->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->dateDisplay->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->dateDisplay->Cursor = System::Windows::Forms::Cursors::SizeAll;
-			resources->ApplyResources(this->dateDisplay, L"dateDisplay");
-			this->dateDisplay->ForeColor = System::Drawing::Color::Black;
-			this->dateDisplay->Name = L"dateDisplay";
-			this->dateDisplay->ReadOnly = true;
-			this->dateDisplay->TabStop = false;
-			this->toolTip1->SetToolTip(this->dateDisplay, resources->GetString(L"dateDisplay.ToolTip"));
+			this->mainDisplayLabel->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->mainDisplayLabel->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->mainDisplayLabel->Cursor = System::Windows::Forms::Cursors::SizeAll;
+			resources->ApplyResources(this->mainDisplayLabel, L"mainDisplayLabel");
+			this->mainDisplayLabel->ForeColor = System::Drawing::Color::Black;
+			this->mainDisplayLabel->Name = L"mainDisplayLabel";
+			this->mainDisplayLabel->ReadOnly = true;
+			this->mainDisplayLabel->TabStop = false;
+			this->toolTip1->SetToolTip(this->mainDisplayLabel, resources->GetString(L"mainDisplayLabel.ToolTip"));
 			// 
 			// pictureBox2
 			// 
@@ -499,7 +500,7 @@ namespace UI {
 			this->Controls->Add(this->searchIcon);
 			this->Controls->Add(this->calenderIcon);
 			this->Controls->Add(this->comdIcon);
-			this->Controls->Add(this->dateDisplay);
+			this->Controls->Add(this->mainDisplayLabel);
 			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->searchBox);
 			this->Controls->Add(this->feedbackBox);
@@ -534,10 +535,6 @@ namespace UI {
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			DateTime current = DateTime::Now;
 			
-			//For now this will display date. However, it will be the label to display what is being displayed on the main display
-			dateDisplay->Text = current.ToString("dd  MMM  yyyy, dddd");
-			
-
 			initializeAndUndisplayAll();
 
 			//Have a welcome message
@@ -678,6 +675,15 @@ private: bool displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 			return mainDisplayed;
 
 		}
+
+//Pre-condition : vector displayToMain to be correctly updated
+//Display the label of what is being displayed on the main display onto mainDisplayLabel
+private: void displayToMainDisplayLabel (std::string displayToMainLabel){
+			 String^ mainLabelDisplay = convertToSys (displayToMainLabel);
+			 mainDisplayLabel->Text = mainLabelDisplay; 
+		}
+
+
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
@@ -1070,5 +1076,6 @@ private: System::Void redoButton_Click(System::Object^  sender, System::EventArg
 		 }
 private: System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
+
 };
 }
