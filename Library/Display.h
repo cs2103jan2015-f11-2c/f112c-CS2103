@@ -72,7 +72,7 @@ public:
 
 	//setters
 	void setNormalEvents(vector<Event> events, int id);
-	void setFloatingEvents(vector<Event> events);
+	void setFloatingEvents(vector<Event> events, int id);
 	void setFeedbackEvents(vector<Event> events);
 
 	void normalEventsToString();

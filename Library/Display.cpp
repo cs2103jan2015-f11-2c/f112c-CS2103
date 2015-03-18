@@ -99,7 +99,8 @@ void Display::setNormalEvents(vector<Event> events, int id) {
 	normalEventsToString();
 }
 
-void Display::setFloatingEvents(vector<Event> events) {
+void Display::setFloatingEvents(vector<Event> events, int id) {
+	newID = id;
 	floatingEvents = events;
 	totalFloatingEvents = events.size();
 	floatingEventsToString();
@@ -284,12 +285,12 @@ void Display::normalEventsToString() {
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
 
-	/*
+	
 	if (floatingEvents.empty()) {
 		setNoEventsMessage(floatingDisplayStrings);
 		return;
 	}
-	*/
+	
 
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
@@ -297,13 +298,17 @@ void Display::floatingEventsToString() {
 		
 		EVENT_STRING temp;
 		temp.eventString = out.str();
-		temp.isNew = false;
+
+		if ( floatingEvents[i].getID() == newID){
+			temp.isNew = true;
+		} else{
+			temp.isNew = false;
+		}
+
 		floatingDisplayStrings.push_back(temp);
 
 		out.clear();
 	}
-
-	floatingDisplayStrings.back().isNew = true;
 }
 
 void Display::setFeedbackStrings(string newFeedback) {
