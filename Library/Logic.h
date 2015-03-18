@@ -48,7 +48,7 @@ public:
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 
-	//executors
+	//executorss
 	bool executeUserInput(string input);
 	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 	void deleteParserPtr();
