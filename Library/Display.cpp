@@ -6,6 +6,7 @@ const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
 const string Display::EVENT_NOT_FOUND_MESSAGE = " not found";
+const string Display::NEW_DAY_MESSAGE = "newday";
 
 //constructor
 Display::Display() {
@@ -224,35 +225,54 @@ void Display::normalEventsToString() {
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
-		out << (i + 1 + getTotalFloatingEvents()) << "." ;
-		out << "\t" ;
-		out << "[" ;
-		int startTime = getStartTime(normalEvents[i]);
-		out << intToTime(startTime);
-		out << "-" ;
-		int endTime = getEndTime(normalEvents[i]);
-		out << intToTime(endTime);
-		out << "]" ;
-		out << "\t";
-		out << normalEvents[i].getName();
-		
-		if (normalEvents[i].getDescription() != ""){
+		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
+			out << "-----";
+			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
-			out << "(";
-			out << normalEvents[i].getDescription();
-			out << ")";
-		}
 
-		if (normalEvents[i].getTags().size() != 0){
-			out << "\n";
-			out << "\t\t\t\t";
-			
-			vector<string> tagVector = normalEvents[i].getTags();
-			for (int i=0; i<tagVector.size(); i++){
-				out << tagVector[i];
-				out << " "; 
+			Conversion convert;
+			int monthInt = normalEvents[i].getStartDate().tm_mon;
+			out << convert.intToMonth(monthInt);
+
+			out << " ";
+			out << normalEvents[i].getStartDate().tm_year;
+
+			out << ", ";
+
+			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
+			out << convert.intToDayOfWeek(dayOfWeekInt);
+
+			out << "-----";
+		} else {
+			out << (i + 1 + getTotalFloatingEvents()) << "." ;
+			out << "\t" ;
+			out << "[" ;
+			int startTime = getStartTime(normalEvents[i]);
+			out << intToTime(startTime);
+			out << "-" ;
+			int endTime = getEndTime(normalEvents[i]);
+			out << intToTime(endTime);
+			out << "]" ;
+			out << "\t";
+			out << normalEvents[i].getName();
+		
+			if (normalEvents[i].getDescription() != ""){
+				out << " ";
+				out << "(";
+				out << normalEvents[i].getDescription();
+				out << ")";
 			}
+
+			if (normalEvents[i].getTags().size() != 0){
+				out << "\n";
+				out << "\t\t\t\t";
 			
+				vector<string> tagVector = normalEvents[i].getTags();
+				for (int i=0; i<tagVector.size(); i++){
+					out << tagVector[i];
+					out << " "; 
+				}	
+			}
 		}
 
 		//Constructing MAIN_EVENT items and initializing
@@ -274,6 +294,7 @@ void Display::normalEventsToString() {
 
 		out.clear();
 	}
+	
 
 	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
 }

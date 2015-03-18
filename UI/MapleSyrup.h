@@ -598,6 +598,8 @@ private: bool displayToAllDisplays(){
 			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+			//std::string displayToMainLabel = lGPtr->get
+
 
 			bool checkAllDisplayed;
 
@@ -646,6 +648,7 @@ private: bool displayToFeedbackBox(vector<std::string> displayToFeedback){
 private: bool displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain){
 			bool mainDisplayed = true;
 			display->Text = "";
+
 			for (int i=0; i< displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
 
@@ -687,7 +690,7 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
-private: bool displayToFloatingDisplay( vector<Display::EVENT_STRING> displayToFloating){
+private: bool displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFloating){
 			bool floatingDisplayed = true;
 			floatingTasksDisplay->Text = "";
 

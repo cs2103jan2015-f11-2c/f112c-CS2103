@@ -10,6 +10,7 @@
 
 #include <sstream>
 #include "Event.h"
+#include "Conversion.h"
 
 using std::ostringstream;
 
@@ -48,6 +49,7 @@ public:
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
 	static const string EVENT_NOT_FOUND_MESSAGE;
+	static const string NEW_DAY_MESSAGE;
 
 	//constructor, destructor
 	Display();
