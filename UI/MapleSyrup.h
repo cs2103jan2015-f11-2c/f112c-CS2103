@@ -179,11 +179,12 @@ namespace UI {
 			this->commandBox->AcceptsReturn = true;
 			this->commandBox->AcceptsTab = true;
 			this->commandBox->AllowDrop = true;
-			this->commandBox->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(9) {resources->GetString(L"commandBox.AutoCompleteCustomSource"), 
+			this->commandBox->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(10) {resources->GetString(L"commandBox.AutoCompleteCustomSource"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource1"), resources->GetString(L"commandBox.AutoCompleteCustomSource2"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource3"), resources->GetString(L"commandBox.AutoCompleteCustomSource4"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource5"), resources->GetString(L"commandBox.AutoCompleteCustomSource6"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource7"), resources->GetString(L"commandBox.AutoCompleteCustomSource8")});
+				resources->GetString(L"commandBox.AutoCompleteCustomSource7"), resources->GetString(L"commandBox.AutoCompleteCustomSource8"), 
+				resources->GetString(L"commandBox.AutoCompleteCustomSource9")});
 			this->commandBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->commandBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->commandBox->BackColor = System::Drawing::Color::White;
