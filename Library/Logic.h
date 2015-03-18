@@ -12,6 +12,7 @@
 
 using std::ifstream;
 using std::ofstream;
+using std::cerr;
 
 class Logic {
 private:
@@ -30,6 +31,9 @@ public:
 	static const string SHOW_STRING;
 	static const string SEARCH_STRING;
 	static const string ERROR_STRING;
+
+	//for exceptions
+	static const string EXCEPTION_WRONG_ISFLOATING;
 
 	static const int INVALID_NUMBER;
 

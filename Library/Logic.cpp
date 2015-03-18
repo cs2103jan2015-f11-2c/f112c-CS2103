@@ -1,6 +1,6 @@
 #include "Logic.h"
 
-
+//for logging
 const string Logic::LOG_FILE_NAME = "logicLog.txt";
 const string Logic::ADDFLOAT_STRING = "executing addfloat command";
 const string Logic::ADD_STRING = "executing add command";
@@ -9,6 +9,9 @@ const string Logic::EDIT_STRING = "executing edit command";
 const string Logic::SHOW_STRING = "executing show command";
 const string Logic::SEARCH_STRING = "executing search command";
 const string Logic::ERROR_STRING = "executing error command";
+
+//for exceptions
+const string Logic::EXCEPTION_WRONG_ISFLOATING = "isFloating set wrong";
 
 const int Logic::INVALID_NUMBER = -1;
 
@@ -61,6 +64,14 @@ vector<string> Logic::getErrorString() {
 bool Logic::executeUserInput(string input) {
 	parserPtr = new Parser(input);
 	
+	/*try {
+			//if(userEvent.getIsFloating()) {
+				throw EXCEPTION_WRONG_ISFLOATING;
+			//}
+		} catch (string exception) {
+				cout << exception;
+			}*/
+
 	Parser::commandType command = getCommand();
 	Event userEvent = getEvent();
 	bool isDone = true;
@@ -82,6 +93,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	
 	switch (command) {
 	case Parser::ADDFLOAT: {
+		
+		
 		int newID = userEvent.getID();
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setFloatingEvents(tempEvents, newID);
