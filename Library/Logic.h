@@ -18,6 +18,7 @@ private:
 	Parser* parserPtr;
 	EventStorage eventStore;
 	Display display;
+	vector<string> logStrings;
 
 public:
 	//for logging

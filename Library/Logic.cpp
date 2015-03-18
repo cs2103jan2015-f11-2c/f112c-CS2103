@@ -74,9 +74,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	int index, id;
 	vector<Event> tempEvents;
 
+	log(commandToString(command));
+	
 	switch (command) {
-		log(commandToString(command));
-
 	case Parser::ADDFLOAT: {
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setFloatingEvents(tempEvents);
@@ -289,10 +289,13 @@ string Logic::commandToString(Parser::commandType command) {
 }
 
 void Logic::log(string logString) {
-	ofstream outFile;
+	ofstream outFile(LOG_FILE_NAME);
+	
+	logStrings.push_back(logString);
+	for (int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
 
-	outFile.open(LOG_FILE_NAME);
-	outFile << logString << endl;
 	outFile.close();
 
 	return;
