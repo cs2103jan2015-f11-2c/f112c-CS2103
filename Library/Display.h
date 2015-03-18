@@ -78,7 +78,7 @@ public:
 	void setNormalEvents(vector<Event> events, int id);
 	void setFloatingEvents(vector<Event> events, int id);
 	void setFeedbackEvents(vector<Event> events);
-	void setMainDisplayLabel (string label);
+	void setMainDisplayLabel (vector<tm> label);
 
 	void normalEventsToString();
 	void floatingEventsToString();

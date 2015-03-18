@@ -342,9 +342,32 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 }
 
 
-void Display::setMainDisplayLabel (string label){
-	mainDisplayLabel = label;
+void Display::setMainDisplayLabel (vector<tm> label){
+	//label.size() must be = 2
+
+	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
+		//1 day only
+		Conversion convert;
+		string dayOfMonth = convert.intToString(label[0].tm_mday);
+
+		string month = convert.intToMonth(label[0].tm_mon);
+
+		string dayOfWeek = convert.intToDayOfWeek(label[0].tm_wday);
+
+		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
+	} else {
+		//More than 1 day
+		Conversion convert;
+		string startDayOfMonth = convert.intToString(label[0].tm_mday);
+		string startMonth = convert.intToMonth(label[0].tm_mon);
+
+		string endDayOfMonth = convert.intToString(label[1].tm_mday);
+		string endMonth = convert.intToMonth(label[1].tm_mon);
+
+		mainDisplayLabel = startDayOfMonth + " " + startMonth + " - " + endDayOfMonth + endMonth;
+	}
 }
+
 
 string Display::getMainDisplayLabel(){
 	return mainDisplayLabel;
