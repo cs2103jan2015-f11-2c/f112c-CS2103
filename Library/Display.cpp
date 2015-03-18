@@ -233,11 +233,11 @@ void Display::normalEventsToString() {
 		int endTime = getEndTime(normalEvents[i]);
 		out << intToTime(endTime);
 		out << "]" ;
-		out << "\t\t";
+		out << "\t";
 		out << normalEvents[i].getName();
 		
 		if (normalEvents[i].getDescription() != ""){
-			out << "   ";
+			out << " ";
 			out << "(";
 			out << normalEvents[i].getDescription();
 			out << ")";
@@ -254,8 +254,6 @@ void Display::normalEventsToString() {
 			}
 			
 		}
-
-		out << "\n";
 
 		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;
@@ -323,7 +321,13 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 }
 
 
+void Display::setMainDisplayLabel (string label){
+	mainDisplayLabel = label;
+}
 
+string Display::getMainDisplayLabel(){
+	return mainDisplayLabel;
+}
 
 
 

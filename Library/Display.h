@@ -32,6 +32,7 @@ private:
 	vector<EVENT_STRING> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 	vector<string> errorStrings;
+	string mainDisplayLabel;
 
 	int newID;
 	int totalNumEvents;
@@ -61,6 +62,7 @@ public:
 	vector<EVENT_STRING> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
+	string getMainDisplayLabel();
 
 	int getTotalNumEvents();
 	int getTotalFloatingEvents();
@@ -74,6 +76,7 @@ public:
 	void setNormalEvents(vector<Event> events, int id);
 	void setFloatingEvents(vector<Event> events, int id);
 	void setFeedbackEvents(vector<Event> events);
+	void setMainDisplayLabel (string label);
 
 	void normalEventsToString();
 	void floatingEventsToString();
