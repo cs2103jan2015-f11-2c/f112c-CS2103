@@ -16,6 +16,10 @@ const int Logic::INVALID_NUMBER = -1;
 	//CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
 	parserPtr = NULL;
+
+	ofstream outFile(LOG_FILE_NAME);
+	outFile.clear();
+	outFile.close();
 }
 
 Logic::~Logic() {
@@ -78,10 +82,10 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	
 	switch (command) {
 	case Parser::ADDFLOAT: {
+		int newID = userEvent.getID();
 		tempEvents = eventStore.addEvent(userEvent);
-		display.setFloatingEvents(tempEvents);
+		display.setFloatingEvents(tempEvents, newID);
 		
-		int newID = display.getNewID();
 		tempEvents = display.getNormalEvents();
 		display.setNormalEvents(tempEvents, newID);
 
