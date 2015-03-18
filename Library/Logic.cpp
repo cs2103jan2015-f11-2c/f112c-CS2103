@@ -132,7 +132,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 				tempEvents = eventStore.deleteEvent(id, uselessEvent);
 
 				bool isFloat = tempEvents[0].getIsFloating();
-				setDisplay(isFloat, tempEvents);
+				setDisplay(isFloat, tempEvents, INVALID_NUMBER);
 		
 				feedback = eventName + Display::DELETED_MESSAGE;
 				display.setFeedbackStrings(feedback);
@@ -150,7 +150,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			tempEvents = eventStore.deleteEvent(id, uselessEvent);
 			
 			bool isFloat = tempEvents[0].getIsFloating();
-			setDisplay(isFloat, tempEvents);
+			setDisplay(isFloat, tempEvents, INVALID_NUMBER);
 			
 			feedback = eventName + Display::DELETED_MESSAGE;
 			display.setFeedbackStrings(feedback);
@@ -186,7 +186,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 				tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
 
 				bool isFloat = tempEvents[0].getIsFloating();
-				setDisplay(isFloat, tempEvents);
+				setDisplay(isFloat, tempEvents, id);
 		
 				feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
 				display.setFeedbackStrings(feedback);
@@ -205,7 +205,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
 			
 			bool isFloat = tempEvents[0].getIsFloating();
-			setDisplay(isFloat, tempEvents);
+			setDisplay(isFloat, tempEvents, id);
 		
 			feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
 			display.setFeedbackStrings(feedback);
@@ -254,11 +254,10 @@ int Logic::convertNameToID(string name) {
 		}
 }
 
-void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet) {
+void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet, int id) {
 	if (isFloat) {
-		display.setFloatingEvents(eventsToSet);
+		display.setFloatingEvents(eventsToSet, id);
 		} else {
-			int id = display.getNewID();
 			display.setNormalEvents(eventsToSet, id);
 		}
 }

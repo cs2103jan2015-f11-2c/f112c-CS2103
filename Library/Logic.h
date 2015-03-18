@@ -58,7 +58,7 @@ public:
 	//others
 	bool isNumber(string s);
 	int convertNameToID(string name);
-	void setDisplay(bool isFloat, vector<Event> eventsToSet);
+	void setDisplay(bool isFloat, vector<Event> eventsToSet, int id);
 	string commandToString(Parser::commandType command);
 
 	//log
