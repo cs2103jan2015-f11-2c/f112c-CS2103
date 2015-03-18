@@ -243,5 +243,11 @@ void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet) {
 	if (isFloat) {
 		display.setFloatingEvents(eventsToSet);
 		} else {
+			int id = display.getNewID();
+			display.setNormalEvents(eventsToSet, id);
 		}
+}
+
+void Logic::log(string logString) {
+	return;
 }

@@ -45,6 +45,10 @@ public:
 	bool isNumber(string s);
 	int convertNameToID(string name);
 	void setDisplay(bool isFloat, vector<Event> eventsToSet);
+
+
+	//log
+	void log(string logString);
 };
 
 #endif
