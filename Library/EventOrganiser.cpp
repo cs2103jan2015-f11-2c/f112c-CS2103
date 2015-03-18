@@ -1,5 +1,6 @@
 #include "EventOrganiser.h"
 
+const int totalMonthsInAYear = 12;
 
 EventOrganiser::EventOrganiser(void)
 {
@@ -170,4 +171,60 @@ bool EventOrganiser::isLatterMinSmaller(Event eventTime1, Event eventTime2) //re
 		isMinBigger = true;
 
 	return isMinBigger;
+}
+
+vector<struct tm> eventDateToVector(Event showEventDates){
+	
+	struct tm tempStartDate = showEventDates.getStartDate();
+	int startday = tempStartDate.tm_mday;
+	int startmonth = tempStartDate.tm_mon;
+	int startyear = tempStartDate.tm_year;
+	
+	struct tm tempEndDate = showEventDates.getEndDate();
+	int endday = tempStartDate.tm_mday;
+	int endmonth = tempStartDate.tm_mon;
+	int endyear = tempStartDate.tm_year;
+
+	vector<struct tm> datesToShow;
+	struct tm tempTM;
+	Conversion convertor;
+
+	int i, j, k;
+	for(k = startyear; k <= endyear; k++){
+		tempTM.tm_year = k;
+		if(k == endyear){
+			for(j = startmonth; j <= endmonth; j++){
+				tempTM.tm_mon = j;
+				if(j < endmonth){
+					for(i = startday; i <= convertor.determineLastDayOfMth(j,k); i++){
+						tempTM.tm_mday = i;
+						datesToShow.push_back(tempTM);
+					}
+					//reset startday count to start of month
+					startday = 1;
+				} else if(j == endmonth){
+					for(i = startday; i <= endday; i++){
+						tempTM.tm_mday = i;
+						datesToShow.push_back(tempTM);
+					}
+				} //else {
+				//	throw
+				//}
+			}
+		} else if(k < endyear){
+			for(j = startmonth; j <= totalMonthsInAYear; j++){
+				tempTM.tm_mon = j;
+				for(i = startday; i <= convertor.determineLastDayOfMth(j,k); i++){
+					tempTM.tm_mday = i;
+					datesToShow.push_back(tempTM);
+				}
+				//reset startday count to start of month
+				startday = 1;
+			}
+			//reset startmonth to start of year
+			startmonth = 0;
+		}
+	}
+
+	return datesToShow;
 }

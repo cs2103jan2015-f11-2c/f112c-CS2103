@@ -297,7 +297,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 		systemShowWeek = true;
 	} else if(firstWord == "month"){
 		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(determineLastDayOfMth(month,year),month,year);
+		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		systemShowMonth = true;
 	}
 
@@ -401,14 +401,14 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 			if(userShowMonth){
 				if(month == now->tm_mon){
 					tempEventStore.setStartDate(now->tm_mday,month,year);
-					tempEventStore.setEndDate(determineLastDayOfMth(month,year),month,year);
+					tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 				} else {
 					tempEventStore.setStartDate(1,month,year);
-					tempEventStore.setEndDate(determineLastDayOfMth(month,year),month,year);
+					tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 				}
 			}
 			if(userShowRangeOfMonths){
-				tempEventStore.setEndDate(determineLastDayOfMth(month,year),month,year);
+				tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 			}
 
 		}
@@ -421,24 +421,4 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	eventMktimeCorrector();
 
 	return tempEventStore;
-}
-
-
-int ParserProcessor::determineLastDayOfMth(int month, int year){
-	if (month == 0 || month == 2 || month == 4 || month == 6 || month == 7 || month == 9 || month == 11){
-		return 31;
-	} else if (month == 3 || month == 5 || month == 8 || month == 10){
-		return 30;
-	} else if (isLeapYear(year)){
-		return 29;
-	} else {
-		return 28;
-	}
-}
-
-bool ParserProcessor::isLeapYear(int year){
-	if (year % 4 != 0) return false;
-	if (year % 400 == 0) return true;
-	if (year % 100 == 0) return false;
-	return true;
 }

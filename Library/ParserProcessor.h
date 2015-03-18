@@ -58,9 +58,6 @@ public:
 	void eventMktimeCorrector();
 
 	Event processShowEvent(std::vector<std::string>);
-
-	int determineLastDayOfMth(int month, int year);
-	bool isLeapYear(int year);
 };
 
 #endif

@@ -41,7 +41,8 @@ public:
 
 	std::string tmToString(Event convertEvent);
 
-
+	int determineLastDayOfMth(int month, int year);
+	bool isLeapYear(int year);
 };
 
 #endif

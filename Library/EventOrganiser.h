@@ -4,10 +4,12 @@
 #define EVENTORGANISER_H
 
 #include "Event.h"
+#include "Conversion.h"
 
 class EventOrganiser{
 private:
 	//vector<Event> organisedEventToReturn;
+	static const int totalMonthsInAYear;
 
 public:
 	EventOrganiser(void);
@@ -27,6 +29,7 @@ public:
 	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
 
+	vector<struct tm> eventDateToVector(Event showEventDates);
 };
 
 #endif
