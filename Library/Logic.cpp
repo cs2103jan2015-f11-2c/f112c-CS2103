@@ -1,6 +1,15 @@
 #include "Logic.h"
 
 
+const string Logic::LOG_FILE_NAME = "logicLog.txt";
+const string Logic::ADDFLOAT_STRING = "executing addfloat command";
+const string Logic::ADD_STRING = "executing add command";
+const string Logic::DELETE_STRING = "executing delete command";
+const string Logic::EDIT_STRING = "executing edit command";
+const string Logic::SHOW_STRING = "executing show command";
+const string Logic::SEARCH_STRING = "executing search command";
+const string Logic::ERROR_STRING = "executing error command";
+
 const int Logic::INVALID_NUMBER = -1;
 
 
@@ -66,6 +75,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	vector<Event> tempEvents;
 
 	switch (command) {
+		log(commandToString(command));
+
 	case Parser::ADDFLOAT: {
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setFloatingEvents(tempEvents);
@@ -248,6 +259,41 @@ void Logic::setDisplay(bool isFloat, vector<Event> eventsToSet) {
 		}
 }
 
+string Logic::commandToString(Parser::commandType command) {
+	switch (command) {
+
+	case Parser::ADDFLOAT:
+		return ADDFLOAT_STRING;
+	
+	case Parser::ADD:
+		return ADD_STRING;
+
+	case Parser::DELETE_: 
+		return DELETE_STRING;
+
+	case Parser::EDIT:
+		return EDIT_STRING;
+
+	case Parser::SHOW:
+		return SHOW_STRING;
+
+	case Parser::SEARCH:
+		return SEARCH_STRING;
+
+	case Parser::ERROR_:
+		return ERROR_STRING;
+
+	default:
+		break;
+	}
+}
+
 void Logic::log(string logString) {
+	ofstream outFile;
+
+	outFile.open(LOG_FILE_NAME);
+	outFile << logString << endl;
+	outFile.close();
+
 	return;
 }
