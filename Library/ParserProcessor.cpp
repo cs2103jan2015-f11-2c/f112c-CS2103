@@ -15,60 +15,86 @@ ParserProcessor::ParserProcessor(){
 	keywordMonths[9] = "oct";
 	keywordMonths[10] = "nov";
 	keywordMonths[11] = "dec";
+	
 	keywordTime[0] = "am";
 	keywordTime[1] = "pm";
+
+	matchFound = false;
+	startDayFound = false;
+	endDayFound = false;
+	startTimeFound = false;
+	endTimeFound = false;
+	afterTwelve = false;
+	nameFound = false;
+
+	oneMatchFound = false;
+	twoMatchFound = false;
+	systemShowDay = false;
+	systemShowWeek = false;
+	systemShowMonth = false;
+	userShowDay = false;
+	userShowRangeOfDays = false;
+	userShowMonth = false;
+	userShowRangeOfMonths = false;
+
+	time_t t = time(0);
+	now = localtime(&t);
 }
 
-Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords){
-	Conversion convertor;
-	Event tempEventStore;
-	std::string strMonth;
-	int tempInt;
-	int day = 0, month = 0, year = 0, hour = 0, minute = 0;
-	bool matchFound = false;
-	bool startDayFound = false;
-	bool endDayFound = false;
-	bool startTimeFound = false;
-	bool endTimeFound = false;
-	bool afterTwelve = false;
-	bool nameFound = false;
-	
-	int tempi = 0;
-	unsigned int i;
-	//finding all the names of event
-	for(i = 0; i < fragmentedWords.size() && !nameFound; i++){
-		if(fragmentedWords[i].find(";") != std::string::npos){
-			tempEventStore.setName(fragmentedWords[i].substr(0,fragmentedWords[i].find_last_of(";")));
-			tempi++;
-			nameFound = true;
+Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_){
+	fragmentedWords = fragmentedWords_;
+
+	for(unsigned int i = 0; i < fragmentedWords.size(); i++){
+		if(!nameFound){
+			matchFound = identifyEventName(i);
 		}
+		matchFound = identifyDate(i);
+		matchFound = identifyTime(i);
+		matchFound = false;
 	}
 
-	int j;
-	for(i = tempi; i < fragmentedWords.size(); i++){
-		//finding date
-		for (j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
-			if(fragmentedWords[i].find(keywordMonths[j]) != std::string::npos){
-				matchFound = true;
-				tempi = i;
-				strMonth = keywordMonths[j];
-			}
-		}
-		
-		if(matchFound){
+	addEventCorrector();
+	eventMktimeCorrector();
+
+	return tempEventStore;
+}
+
+bool ParserProcessor::identifyEventName(int index){
+	if(fragmentedWords[index].find(";") != std::string::npos){
+		tempEventStore.setName(fragmentedWords[index].substr(0,fragmentedWords[index].find_last_of(";")));
+		nameFound = true;
+		matchFound = true;
+	}
+	return matchFound;
+}
+
+bool ParserProcessor::identifyDate(int index){
+	Conversion convertor;
+	int tempIndex = 0, tempInt = 0;
+	int day = 0, month = 0, year = 0;
+	std::string strMonth;
+	
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
+		if(fragmentedWords[index].find(keywordMonths[j]) != std::string::npos){
+			tempIndex = index;
+			strMonth = keywordMonths[j];
+			matchFound = true;
+			
 			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
+				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
-				tempi--;
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
+				tempIndex--;
+				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} 
+			
 			day = tempInt;
 			month = convertor.monthToInt(strMonth);
-			year = 2015-1900;
+			year = now->tm_year;
+			
 			if(!startDayFound){
 				startDayFound = true;
 				tempEventStore.setStartDate(day,month,year);
@@ -77,30 +103,33 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 				tempEventStore.setEndDate(day,month,year);
 			}
 		}
-		matchFound = false;
+	}
+	return matchFound;
+}
 
-		//finding time
-		for (j = 0; j < NUMBER_OF_KEYWORDS_TIME && !matchFound; j++){
-			if(fragmentedWords[i].find(keywordTime[j]) != std::string::npos){
-				matchFound = true;
-				tempi = i;
-				if(keywordTime[j] == "pm"){
-					afterTwelve = true;
-				}
+bool ParserProcessor::identifyTime(int index){
+	int tempIndex = 0, tempInt = 0;
+	int hour = 0, minute = 0;
+	
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_TIME && !matchFound; j++){
+		if(fragmentedWords[index].find(keywordTime[j]) != std::string::npos){
+			tempIndex = index;
+			if(keywordTime[j] == "pm"){
+				afterTwelve = true;
 			}
-		}
-
-		if(matchFound){
+			matchFound = true;
+	
 			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
+				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
-				tempi--;
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
+				tempIndex--;
+				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} 
+			
 			if(tempInt >= 100){
 				minute = tempInt%100;
 				hour = tempInt/100;
@@ -121,10 +150,10 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 					endTimeFound = true;
 				}
 			} else if(tempInt < 100){
-				tempi--;
+				tempIndex--;
 				try {
-					hour = std::stoi(fragmentedWords[tempi]);
-					fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
+					hour = std::stoi(fragmentedWords[tempIndex]);
+					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					minute = tempInt;
 				} catch (const std::invalid_argument& e){
 					hour = tempInt;
@@ -148,8 +177,13 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 				}
 			}
 		}
-		matchFound = false;
 	}
+	return matchFound;
+}
+
+void ParserProcessor::addEventCorrector(){
+	int day = 0, month = 0, year = 0;
+	int hour = 0, minute = 0;
 
 	if(!startDayFound && !startTimeFound){
 		tempEventStore.setIsFloating(true);
@@ -159,8 +193,6 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 		tempEventStore.setEndTime(23,59);
 	}
 	if(!startDayFound && startTimeFound){
-		time_t t = time(0);
-		struct tm* now = localtime(&t);
 		day = now->tm_mday;
 		month = now->tm_mon;
 		year = now->tm_year;
@@ -168,15 +200,19 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 		tempEventStore.setEndDate(day,month,year);
 	}
 	if(!endDayFound){
-		tempEventStore.setEndDate(day,month,year);
+		struct tm tempTime = tempEventStore.getStartDate();
+		tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
 	}
-	if(!endTimeFound){
-		tempEventStore.setEndTime(hour+1,minute);
+	if(startTimeFound && !endTimeFound){
+		struct tm tempTime = tempEventStore.getStartDate();
+		tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
 	}
 	if(endDayFound && !endTimeFound){
 		tempEventStore.setEndTime(23,59);
 	}
+}
 
+void ParserProcessor::eventMktimeCorrector(){
 	struct tm* temptmPtr;
 	temptmPtr = &tempEventStore.getStartDate();
 	mktime(temptmPtr);
@@ -186,165 +222,45 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords)
 	mktime(temptmPtr);
 	tempEventStore.setEndDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
 	tempEventStore.setEndTime(temptmPtr->tm_hour,temptmPtr->tm_min);
+}
+
+Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords_){
+	fragmentedWords = fragmentedWords_;
+	
+	fragmentedWords.insert(fragmentedWords.begin(),LOCKUP_USED_INFORMATION);
+
+	for(unsigned int i = 0; i < fragmentedWords.size(); i++){
+		if(!nameFound){
+			matchFound = identifyEventName(i);
+		}
+		matchFound = identifyDate(i);
+		matchFound = identifyTime(i);
+		matchFound = false;
+	}
+
+	editEventCorrector();
 
 	return tempEventStore;
 }
 
-Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords){
-	Conversion convertor;
-	Event tempEventStore;
-	std::string strMonth;
-	int tempInt;
-	int day = 0, month = 0, year = 0, hour = 0, minute = 0;
-	bool matchFound = false;
-	bool startDayFound = false;
-	bool endDayFound = false;
-	bool startTimeFound = false;
-	bool endTimeFound = false;
-	bool afterTwelve = false;
-	bool nameFound = false;
-	
-	fragmentedWords.insert(fragmentedWords.begin(),LOCKUP_USED_INFORMATION);
+void ParserProcessor::editEventCorrector(){
+	int day = 0, month = 0, year = 0;
+	int hour = 0, minute = 0;
 
-	int tempi = 0;
-	unsigned int i;
-	//finding all the names of event
-	for(i = 0; i < fragmentedWords.size() && !nameFound; i++){
-		if(fragmentedWords[i].find(";") != std::string::npos){
-			tempEventStore.setName(fragmentedWords[i].substr(0,fragmentedWords[i].find_last_of(";")));
-			tempi++;
-			nameFound = true;
-		}
-	}
-
-	int j;
-	for(i = tempi; i < fragmentedWords.size(); i++){
-		//finding date
-		for (j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
-			if(fragmentedWords[i].find(keywordMonths[j]) != std::string::npos){
-				matchFound = true;
-				tempi = i;
-				strMonth = keywordMonths[j];
-			}
-		}
-		
-		if(matchFound){
-			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
-			} catch (const std::invalid_argument& e){
-				tempi--;
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
-			} 
-			day = tempInt;
-			month = convertor.monthToInt(strMonth);
-			year = 2015-1900;
-			if(!startDayFound){
-				startDayFound = true;
-				tempEventStore.setStartDate(day,month,year);
-			} else {
-				endDayFound = true;
-				tempEventStore.setEndDate(day,month,year);
-			}
-		}
-		matchFound = false;
-
-		//finding time
-		for (j = 0; j < NUMBER_OF_KEYWORDS_TIME && !matchFound; j++){
-			if(fragmentedWords[i].find(keywordTime[j]) != std::string::npos){
-				matchFound = true;
-				tempi = i;
-				if(keywordTime[j] == "pm"){
-					afterTwelve = true;
-				}
-			}
-		}
-
-		if(matchFound){
-			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
-			} catch (const std::invalid_argument& e){
-				tempi--;
-				auto tempStoi = std::stoi(fragmentedWords[tempi]);
-				fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
-			} 
-			if(tempInt >= 100){
-				minute = tempInt%100;
-				hour = tempInt/100;
-				if(afterTwelve){
-					if (hour < 12){
-						hour = hour + 12;
-					}
-				} else {
-					if (hour == 12){
-						hour = 0;
-					}
-				}
-				if(!startTimeFound){
-					tempEventStore.setStartTime(hour,minute);
-					startTimeFound = true;
-				} else {
-					tempEventStore.setEndTime(hour,minute);
-					endTimeFound = true;
-				}
-			} else if(tempInt < 100){
-				tempi--;
-				try {
-					hour = std::stoi(fragmentedWords[tempi]);
-					fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
-					minute = tempInt;
-				} catch (const std::invalid_argument& e){
-					hour = tempInt;
-					minute = 0;
-				} 
-				if(afterTwelve){
-					if(hour < 12){
-						hour = hour + 12;
-					}
-				} else {
-					if(hour == 12){
-						hour = 0;
-					}
-				} 
-				if(!startTimeFound){
-					startTimeFound = true;
-					tempEventStore.setStartTime(hour,minute);
-				} else {
-					endTimeFound = true;
-					tempEventStore.setEndTime(hour,minute);
-				}
-			}
-		}
-		matchFound = false;
-	}
-	if(!startDayFound && !startTimeFound){
-		tempEventStore.setIsFloating(true);
-	}
 	if(startDayFound && !endDayFound){
-		tempEventStore.setEndDate(day,month,year);
+		struct tm tempTime = tempEventStore.getStartDate();
+		tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
 	}
 	if(startTimeFound && !endTimeFound){
-		tempEventStore.setEndTime(hour+1,minute);
+		struct tm tempTime = tempEventStore.getStartDate();
+		tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
 	}
+
+	eventMktimeCorrector();
+
 	if(!nameFound){
 		tempEventStore.setName("");
 	}
-	struct tm* temptmPtr;
-	temptmPtr = &tempEventStore.getStartDate();
-	mktime(temptmPtr);
-	tempEventStore.setStartDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
-	tempEventStore.setStartTime(temptmPtr->tm_hour,temptmPtr->tm_min);
-	temptmPtr = &tempEventStore.getEndDate();
-	mktime(temptmPtr);
-	tempEventStore.setEndDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
-	tempEventStore.setEndTime(temptmPtr->tm_hour,temptmPtr->tm_min);
-
 	if(!startDayFound){
 		tempEventStore.setStartDate(100,100,100);
 		tempEventStore.setEndDate(100,100,100);
@@ -353,38 +269,16 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 		tempEventStore.setStartTime(100,100);
 		tempEventStore.setEndTime(100,100);
 	}
-	
-	if(endDayFound && !endTimeFound){
-		tempEventStore.setEndTime(100,100);
-	}
-
-	return tempEventStore;
 }
 
-Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords){
+Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords_){
+	fragmentedWords = fragmentedWords_;
 	Conversion convertor;
-	Event tempEventStore;
 	std::string strMonth;
 	int tempInt = 0;
 	int day = 0, month = 0, year = 0, weekday = 0;
-	
-	//to check if Show is a range of days
-	bool oneMatchFound = false;
-	bool twoMatchFound = false;
-	
-	//to identify what type of Show 
-	bool matchFound = false;
-	bool systemShowDay = false;
-	bool systemShowWeek = false;
-	bool systemShowMonth = false;
-	bool userShowDay = false;
-	bool userShowRangeOfDays = false;
-	bool userShowMonth = false;
-	bool userShowRangeOfMonths = false;
 
 	//check for system based Show (e.g. Today, Week, Month)
-	time_t t = time(0);
-	struct tm* now = localtime(&t);
 	int daysToEndWeek = 0;
 	day = now->tm_mday;
 	month = now->tm_mon;
@@ -487,6 +381,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 					tempEventStore.setEndDate(day,month,year);
 				}
 			} else {
+				time_t t = time(0);
 				struct tm* dateWithinWeek = localtime(&t);
 				dateWithinWeek->tm_mday = day;
 				dateWithinWeek->tm_mon = month;
@@ -523,15 +418,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	//correcting dates 
 	tempEventStore.setStartTime(0,0);
 	tempEventStore.setEndTime(0,0);
-	struct tm* temptmPtr;
-	temptmPtr = &tempEventStore.getStartDate();
-	mktime(temptmPtr);
-	tempEventStore.setStartDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
-	tempEventStore.setStartTime(temptmPtr->tm_hour,temptmPtr->tm_min);
-	temptmPtr = &tempEventStore.getEndDate();
-	mktime(temptmPtr);
-	tempEventStore.setEndDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
-	tempEventStore.setEndTime(temptmPtr->tm_hour,temptmPtr->tm_min);
+	eventMktimeCorrector();
 
 	return tempEventStore;
 }
