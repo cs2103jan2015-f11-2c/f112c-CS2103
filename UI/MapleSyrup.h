@@ -536,14 +536,23 @@ namespace UI {
 //To display the UI
 //Invoked by MapleSyrup.cpp
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
-			DateTime current = DateTime::Now;
-			
 			initializeAndUndisplayAll();
+
+			loadData();
 
 			//Have a welcome message
 
 			//Invoke a show() to logic so as to display floating tasks and today's tasks
 }
+
+private: void loadData(){
+			 DateTime current = DateTime::Now;
+			 String^ time = current.ToString(" dd  MMM  yyyy ,  dddd");
+			 displayToMainDisplayLabel(convertTostd(time));
+
+			 std::string loadCommand = "show today";
+			 executeUserInput(loadCommand);
+		 }
 
 //Pre-condition : None 
 //Execute shortcuts for UI
@@ -601,11 +610,12 @@ private:void displayToAllDisplays(){
 			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
-			//std::string displayToMainLabel = lGPtr->get
+			std::string displayToMainLabel = lGPtr->getMainDisplayLabel();
 
 			displayToFeedbackBox (displayToFeedback);
 			displayToFloatingDisplay (displayToFloating);
 			displayToMainDisplay (displayToMain);
+			displayToMainDisplayLabel(displayToMainLabel);
 		}
 
 //Pre-condition : None

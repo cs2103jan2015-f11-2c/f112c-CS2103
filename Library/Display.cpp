@@ -1,12 +1,8 @@
 #include "Display.h"
 
 
-<<<<<<< HEAD
-const string Display::NO_EVENTS_MESSAGE = "Currently no task";
-=======
 const int Display::GARBAGE_INT = -12345;
-const string Display::NO_EVENTS_MESSAGE = "nothing here";
->>>>>>> origin/master
+const string Display::NO_EVENTS_MESSAGE = "Currently no task";
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
@@ -224,11 +220,14 @@ void Display::normalEventsToString() {
 	int newEventEndTime = 0;
 	int newEventIndex = -1;
 	//This for loop requires refactoring
+
+	int indexForNormalEvents = getTotalFloatingEvents();
+
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-			out << "-----";
+			out << "---------------";
 			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
 
@@ -243,10 +242,11 @@ void Display::normalEventsToString() {
 
 			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
 			out << convert.intToDayOfWeek(dayOfWeekInt);
+			out << normalEvents[i].getID();
 
-			out << "-----";
+			out << "---------------";
 		} else {
-			out << (i + 1 + getTotalFloatingEvents()) << "." ;
+			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
 			out << "[" ;
 			int startTime = getStartTime(normalEvents[i]);
@@ -275,6 +275,8 @@ void Display::normalEventsToString() {
 					out << " "; 
 				}	
 			}
+
+			out << normalEvents[i].getID();
 		}
 
 		//Constructing MAIN_EVENT items and initializing
@@ -355,7 +357,6 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 
 
 void Display::setMainDisplayLabel (vector<tm> label){
-	
 	assert(label.size()==2);
 
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
