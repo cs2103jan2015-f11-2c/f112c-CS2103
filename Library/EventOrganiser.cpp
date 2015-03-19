@@ -259,6 +259,25 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			isPushed = false;  //reset bool
 		}
 	}
-	
+	returnVector = sortMarker(returnVector);
 	return returnVector;
+}
+
+vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
+	vector<Event> returnVector;
+	vector<Event> tempVector;
+
+	for(int i=0;i<showResult.size();i++){
+		if(showResult[i].getName() != "-MSmsgjyw-"){
+			tempVector.push_back(showResult[i]);
+		} else if(showResult[i].getName() == "-MSmsgjyw-"){
+			returnVector.push_back(showResult[i]);
+			for(int j=0;j<tempVector.size();j++){
+				returnVector.push_back(tempVector[j]);
+			}
+			tempVector.clear();
+		}
+	}
+
+	return returnVector;	
 }
