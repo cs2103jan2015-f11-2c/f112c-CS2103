@@ -717,6 +717,7 @@ private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFl
 public: std::string extractFirstFourLetters(std::string input){
 			std::string tempOutput = input.substr(0,4);
 			std::string output = cVPtr->toLowerCase(tempOutput);
+			
 			return output;
 		}
 
@@ -729,25 +730,9 @@ private: void displayErrorString(){
 
 			for (int i=0; i < tempErrorString.size(); i++){
 			String^ errorString = convertToSys(tempErrorString[i]);
-			display->Text += errorString;
+			display->Text += errorString + "\n";
 			}
 		}
-
-//Pre-condition : Ensure command from user is passed into this function
-//Check if the command specify termination or the command is empty
-//This is coupled with the respective actions
-public: void checkTerminationConditions(String^ tempCommand){
-			if (tempCommand == ""){
-				 return;
-			 }
-
-			std::string stdStringTempCommand = convertTostd(tempCommand);
-			if (extractFirstFourLetters(stdStringTempCommand) == "exit"){
-				Application::Exit();
-				return;
-			}
-		}
-
 
 public: void resetCommandBar(){
 			commandBox->Text = "";
@@ -774,10 +759,18 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 			 String^ temp = commandBox->Text;
 			 resetCommandBar();
-			 
-			 checkTerminationConditions(temp);
-
 			 unDisplaySuggestion();
+
+			 std::string firstfourletters = extractFirstFourLetters(convertTostd (temp));
+
+			if (firstfourletters == "exit"){
+				Application::Exit();
+				return;
+			}
+			
+			if (temp == ""){
+				 return;
+			 }
 
 			 std::string input = convertTostd(temp);
 
