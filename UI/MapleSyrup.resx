@@ -234,7 +234,7 @@
     <value>24</value>
   </data>
   <data name="display.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Arial, 9.75pt</value>
+    <value>Arial, 12pt</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="display.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">

@@ -236,12 +236,12 @@ void Display::normalEventsToString() {
 		ostringstream out;
 
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-			out << "---------------";
+			out << "[ ";
 			out << normalEvents[i].getStartDate().tm_mday;
-			out << " ";
 
 			Conversion convert;
 			int monthInt = normalEvents[i].getStartDate().tm_mon;
+			out << " ";
 			out << convert.intToMonth(monthInt);
 
 			out << " ";
@@ -251,9 +251,9 @@ void Display::normalEventsToString() {
 
 			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
 			out << convert.intToDayOfWeek(dayOfWeekInt);
-			out << normalEvents[i].getID();
 
-			out << "---------------";
+			out << " ]===================================";
+			out << "\n";
 		} else {
 			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
@@ -264,7 +264,7 @@ void Display::normalEventsToString() {
 			int endTime = getEndTime(normalEvents[i]);
 			out << intToTime(endTime);
 			out << "]" ;
-			out << "\t";
+			out << "\t\t";
 			out << normalEvents[i].getName();
 		
 			if (normalEvents[i].getDescription() != ""){
