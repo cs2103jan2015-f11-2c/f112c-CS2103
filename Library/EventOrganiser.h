@@ -18,8 +18,8 @@ public:
 	vector<Event> showAllNormalEvent(vector<Event> currentContent);
 	vector<Event> showAllFloatingEvent(vector<Event> currentFloatingContent);
 	vector<Event> showDay(int dayToShow, int monthToShow, int yearToShow, vector<Event> currentContent);
-	vector<Event> showWeek(int dayToShow, int monthToShow, int yearToShow, vector<Event> eventsToFilter);
-	vector<Event> showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter);
+	//vector<Event> showWeek(int dayToShow, int monthToShow, int yearToShow, vector<Event> eventsToFilter);
+	//vector<Event> showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter);
 
 	vector<Event> sortEventVectorByDate(vector<Event> eventVectorToSort);
 	bool isLatterTimeSmaller(const Event eventTime1,const Event EventTime2);
@@ -30,6 +30,8 @@ public:
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
 
 	vector<struct tm> eventDateToVector(Event showEventDates);
+	vector<Event> showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter);
+
 };
 
 #endif

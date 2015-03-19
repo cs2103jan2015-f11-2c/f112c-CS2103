@@ -63,6 +63,8 @@ public:
 	vector<Event> getShowWeek(int day, int month, int year, vector<Event> currentContent);
 
 	vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);
+	vector<Event> showDates(Event eventWithStartEndTimes);
+
 };
 
 

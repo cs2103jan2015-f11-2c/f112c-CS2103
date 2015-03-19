@@ -33,7 +33,7 @@ vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearTo
 	}
 	return showDayResults;
 }
-
+/*
 vector<Event> EventOrganiser::showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter){
 
 	vector<Event> showMonthResults;
@@ -65,7 +65,7 @@ vector<Event> EventOrganiser::showWeek(int dayToShow, int monthToShow, int yearT
 	}
 	return showWeekResults;
 }
-
+*/
 vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventVectorToSort){
 
 	Event tempEvent;
@@ -181,9 +181,9 @@ vector<struct tm> eventDateToVector(Event showEventDates){
 	int startyear = tempStartDate.tm_year;
 	
 	struct tm tempEndDate = showEventDates.getEndDate();
-	int endday = tempStartDate.tm_mday;
-	int endmonth = tempStartDate.tm_mon;
-	int endyear = tempStartDate.tm_year;
+	int endday = tempEndDate.tm_mday;
+	int endmonth = tempEndDate.tm_mon;
+	int endyear = tempEndDate.tm_year;
 
 	vector<struct tm> datesToShow;
 	struct tm tempTM;
@@ -227,4 +227,37 @@ vector<struct tm> eventDateToVector(Event showEventDates){
 	}
 
 	return datesToShow;
+}
+
+vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter){
+
+	vector<Event> returnVector;
+	vector<struct tm> wantedEventDates;
+	vector<struct tm> exisitngEventDates;
+	bool isPushed = false;
+	Event marker;
+	marker.setName("-MSmsgjyw-");
+	vector<Event> sortResults;
+
+	sortResults = sortEventVectorByDate(eventsToFilter);
+	eventsToFilter = sortResults;
+
+	wantedEventDates = eventDateToVector(eventWithStartEndTimes);
+	for(int i=0;i<wantedEventDates.size();i++){
+		for(int j=0; j<eventsToFilter.size();j++){
+			exisitngEventDates = eventDateToVector(eventsToFilter[j]);
+			for(int k=0; k<exisitngEventDates.size();k++){
+				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) && (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
+					returnVector.push_back(eventsToFilter[j]);
+					isPushed = true;
+				}
+			}
+		}
+		if(isPushed){
+			returnVector.push_back(marker);
+			isPushed = false;  //reset bool
+		}
+	}
+	
+	return returnVector;
 }

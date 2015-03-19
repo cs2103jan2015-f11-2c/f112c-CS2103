@@ -245,6 +245,11 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	//store in event archive
 }
 
+vector<Event> EventStorage::showDates(Event eventWithStartEndTimes){
+	return eventOrganiser.showDateRange(eventWithStartEndTimes,currentContent);
+}
+
+
 //getters
 vector<Event> EventStorage::getAllNormalEvents(){
 	return eventOrganiser.showAllNormalEvent(currentContent);
@@ -255,13 +260,6 @@ vector<Event> EventStorage::getAllFloatingEvents(){
 vector<Event> EventStorage::getShowDay(int day, int month, int year, vector<Event> currentContent){
 	return eventOrganiser.showDay(day,month,year,currentContent);
 }
-vector<Event> EventStorage::getShowWeek(int day, int month, int year, vector<Event> currentContent){
-	return eventOrganiser.showWeek(day, month, year, currentContent);
-}
-vector<Event> EventStorage::getShowMonth(int month, int year, vector<Event> currentContent){
-	return eventOrganiser.showMonth(month, year, currentContent);
-}
-
 vector<Event> EventStorage::searchAllComponents(string infoToSearch, vector<Event> contentToSearch){
 	return search.searchAllComponentsOfEvent(infoToSearch,contentToSearch);
 }
