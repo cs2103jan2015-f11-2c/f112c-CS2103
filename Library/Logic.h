@@ -53,6 +53,7 @@ public:
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 
+
 	//executorss
 	bool executeUserInput(string input);
 	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);

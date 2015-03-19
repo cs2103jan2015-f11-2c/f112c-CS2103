@@ -8,6 +8,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include <assert.h>
 #include <sstream>
 #include "Event.h"
 #include "Conversion.h"

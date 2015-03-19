@@ -1,12 +1,12 @@
 #include "Display.h"
 
 
-const string Display::NO_EVENTS_MESSAGE = "nothing here";
+const string Display::NO_EVENTS_MESSAGE = "Currently no task";
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
 const string Display::EVENT_NOT_FOUND_MESSAGE = " not found";
-const string Display::NEW_DAY_MESSAGE = "newday";
+const string Display::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 
 //constructor
 Display::Display() {
@@ -210,18 +210,15 @@ std::string Display::intToTime (int timeInInt){
 void Display::normalEventsToString() {
 	mainDisplayStrings.clear();
 
-	/*
 	if (normalEvents.empty()) {
 		setNoEventsMessage(mainDisplayStrings);
 		return;
 	}
-	*/
 	
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
-
 	int newEventIndex = -1;
-
+	//This for loop requires refactoring
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
@@ -285,6 +282,8 @@ void Display::normalEventsToString() {
 			newEventStartTime = getStartTime(normalEvents[i]);
 			newEventEndTime = getEndTime(normalEvents[i]);
 			newEventIndex = i;
+
+			//Add in exception
 		}
 
 		//Set isClash is false first
@@ -295,8 +294,9 @@ void Display::normalEventsToString() {
 		out.clear();
 	}
 	
-
 	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
+
+	assert(mainDisplayStrings.size()>=1);
 }
 
 
@@ -304,7 +304,6 @@ void Display::normalEventsToString() {
 void Display::floatingEventsToString() {
 	floatingDisplayStrings.clear();
 
-	
 	if (floatingEvents.empty()) {
 		setNoEventsMessage(floatingDisplayStrings);
 		return;
@@ -318,7 +317,7 @@ void Display::floatingEventsToString() {
 		EVENT_STRING temp;
 		temp.eventString = out.str();
 
-		if ( floatingEvents[i].getID() == newID){
+		if (floatingEvents[i].getID() == newID){
 			temp.isNew = true;
 		} else{
 			temp.isNew = false;
@@ -328,6 +327,10 @@ void Display::floatingEventsToString() {
 
 		out.clear();
 	}
+
+	//Add in assertion to check only 1 or 0 new
+
+	assert(floatingDisplayStrings.size()>=1);
 }
 
 void Display::setFeedbackStrings(string newFeedback) {
@@ -337,13 +340,18 @@ void Display::setFeedbackStrings(string newFeedback) {
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	EVENT_STRING noEvent;
 	noEvent.eventString = NO_EVENTS_MESSAGE;
+	noEvent.isClash= false;
+	noEvent.isNew = false;
 	
 	displayVec.push_back(noEvent);
+
+	assert(displayVec.size()==1);
 }
 
 
 void Display::setMainDisplayLabel (vector<tm> label){
-	//label.size() must be = 2
+	
+	assert(label.size()==2);
 
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
 		//1 day only
