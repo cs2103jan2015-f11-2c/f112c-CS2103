@@ -11,7 +11,7 @@ const string Logic::SEARCH_STRING = "executing search command";
 const string Logic::ERROR_STRING = "executing error command";
 
 //for exceptions
-const string Logic::EXCEPTION_WRONG_ISFLOATING = "isFloating set wrong";
+const string Logic::EXCEPTION_WRONG_ISFLOATING = "exception: isFloating set wrong";
 
 const int Logic::INVALID_NUMBER = -1;
 
@@ -63,14 +63,6 @@ vector<string> Logic::getErrorString() {
 //called by UI with original user input string, returns vector of Events after input fully executed
 bool Logic::executeUserInput(string input) {
 	parserPtr = new Parser(input);
-	
-	/*try {
-			//if(userEvent.getIsFloating()) {
-				throw EXCEPTION_WRONG_ISFLOATING;
-			//}
-		} catch (string exception) {
-				cout << exception;
-			}*/
 
 	Parser::commandType command = getCommand();
 	Event userEvent = getEvent();
@@ -93,7 +85,13 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	
 	switch (command) {
 	case Parser::ADDFLOAT: {
-		
+		try {
+			if (!userEvent.getIsFloating()) {
+				throw EXCEPTION_WRONG_ISFLOATING;
+			}
+		} catch (string exception) {
+				log(exception);
+			}
 		
 		int newID = userEvent.getID();
 		tempEvents = eventStore.addEvent(userEvent);
@@ -108,6 +106,14 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 						   }
 	
 	case Parser::ADD: {
+		try {
+			if (userEvent.getIsFloating()) {
+				throw EXCEPTION_WRONG_ISFLOATING;
+			}
+		} catch (string exception) {
+				log(exception);
+			}
+
 		int newID = userEvent.getID();
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setNormalEvents(tempEvents, newID);
