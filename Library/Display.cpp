@@ -1,6 +1,7 @@
 #include "Display.h"
 
 
+const int Display::GARBAGE_INT = -12345;
 const string Display::NO_EVENTS_MESSAGE = "nothing here";
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
