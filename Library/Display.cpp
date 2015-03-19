@@ -109,7 +109,16 @@ void Display::setFloatingEvents(vector<Event> events, int id) {
 }
 
 void Display::setFeedbackEvents(vector<Event> events) {
-	feedbackEvents = events;
+	//Maximum only 3
+	feedbackEvents.clear();
+
+	for (int i=0; i<3 || i< events.size();i++){
+		feedbackEvents.push_back(events[events.size()-i]);
+	}
+
+	std::reverse(feedbackEvents.begin(),feedbackEvents.end());
+
+	assert(feedbackEvents.size()<=3);
 }
 
 
@@ -342,6 +351,12 @@ void Display::floatingEventsToString() {
 
 void Display::setFeedbackStrings(string newFeedback) {
 	feedbackDisplayStrings.push_back(newFeedback);
+	
+	while (feedbackDisplayStrings.size()>3){
+		feedbackDisplayStrings.erase(feedbackDisplayStrings.begin());
+	}
+
+	assert (feedbackDisplayStrings.size()<=3);
 }
 
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {

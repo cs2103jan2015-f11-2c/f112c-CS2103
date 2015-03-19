@@ -10,6 +10,7 @@
 
 #include <assert.h>
 #include <sstream>
+#include <algorithm>
 #include "Event.h"
 #include "Conversion.h"
 
