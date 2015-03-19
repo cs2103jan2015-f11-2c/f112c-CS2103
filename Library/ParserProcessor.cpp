@@ -2,6 +2,16 @@
 
 const std::string ParserProcessor::LOCKUP_USED_INFORMATION = "USED";
 
+const std::string ParserProcessor::PROCESS_ADD_EVENT = "processAddEvent";
+const std::string ParserProcessor::PROCESS_EDIT_EVENT = "processEditEvent";
+const std::string ParserProcessor::IDENTIFY_EVENT_NAME = "identifyEventName";
+const std::string ParserProcessor::IDENTIFY_DATE = "identifyDate";
+const std::string ParserProcessor::IDENTIFY_TIME = "identifyTime";
+const std::string ParserProcessor::ADD_EVENT_CORRECTOR = "addEventCorrector";
+const std::string ParserProcessor::EDIT_EVENT_CORRECTOR = "editEventCorrector";
+const std::string ParserProcessor::EVENT_MK_TIME_CORRECTOR = "eventMkTimeCorrector";
+const std::string ParserProcessor::PROCESS_SHOW_EVENT = "processShowEvent";
+
 ParserProcessor::ParserProcessor(){
 	keywordMonths[0] = "jan";
 	keywordMonths[1] = "feb";
@@ -42,33 +52,55 @@ ParserProcessor::ParserProcessor(){
 }
 
 Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_){
-	fragmentedWords = fragmentedWords_;
+	logger.logParserEnterFunc(PROCESS_ADD_EVENT);
 
-	for(unsigned int i = 0; i < fragmentedWords.size(); i++){
+	fragmentedWords = fragmentedWords_;
+	
+	try {
+		unsigned int i = 0;
+		identifyEventName(i);
 		if(!nameFound){
-			matchFound = identifyEventName(i);
+			logger.logParserError(ParserExceptions::ERROR_NO_NAME);
+			throw ParserExceptions(ParserExceptions::ERROR_NO_NAME);
 		}
-		matchFound = identifyDate(i);
-		matchFound = identifyTime(i);
-		matchFound = false;
+
+		for(i = 1; i < fragmentedWords.size(); i++){
+			matchFound = identifyDate(i);
+			matchFound = identifyTime(i);
+			matchFound = false;
+		}
+
+		for(i = 0; i < fragmentedWords.size(); i++){
+			try {
+				auto tempInt = std::stoi(fragmentedWords[i]);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			} catch (std::invalid_argument& e){
+			}
+		}
+	} catch(ParserExceptions& e){
+		throw e;
 	}
 
 	addEventCorrector();
 	eventMktimeCorrector();
-
+			
 	return tempEventStore;
 }
 
 bool ParserProcessor::identifyEventName(int index){
+	logger.logParserEnterFunc(IDENTIFY_EVENT_NAME);
+
 	if(fragmentedWords[index].find(";") != std::string::npos){
 		tempEventStore.setName(fragmentedWords[index].substr(0,fragmentedWords[index].find_last_of(";")));
 		nameFound = true;
-		matchFound = true;
 	}
-	return matchFound;
+	return nameFound;
 }
 
 bool ParserProcessor::identifyDate(int index){
+	logger.logParserEnterFunc(IDENTIFY_DATE);
+
 	Conversion convertor;
 	int tempIndex = 0, tempInt = 0;
 	int day = 0, month = 0, year = 0;
@@ -86,9 +118,14 @@ bool ParserProcessor::identifyDate(int index){
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
 				tempIndex--;
-				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
+				try {
+					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+					tempInt = tempStoi;
+				} catch (std::invalid_argument& e){
+					logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
+					throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
+				}
 			} 
 			
 			day = tempInt;
@@ -98,9 +135,12 @@ bool ParserProcessor::identifyDate(int index){
 			if(!startDayFound){
 				startDayFound = true;
 				tempEventStore.setStartDate(day,month,year);
-			} else {
+			} else if(!endDayFound){
 				endDayFound = true;
 				tempEventStore.setEndDate(day,month,year);
+			} else {
+				logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+				throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 			}
 		}
 	}
@@ -108,6 +148,8 @@ bool ParserProcessor::identifyDate(int index){
 }
 
 bool ParserProcessor::identifyTime(int index){
+	logger.logParserEnterFunc(IDENTIFY_TIME);
+
 	int tempIndex = 0, tempInt = 0;
 	int hour = 0, minute = 0;
 	
@@ -125,9 +167,14 @@ bool ParserProcessor::identifyTime(int index){
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
 				tempIndex--;
-				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
+				try {
+					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+					tempInt = tempStoi;
+				} catch (std::invalid_argument& e){
+					logger.logParserError(ParserExceptions::ERROR_MISSING_HOUR_MIN);
+					throw ParserExceptions(ParserExceptions::ERROR_MISSING_HOUR_MIN);
+				}
 			} 
 			
 			if(tempInt >= 100){
@@ -145,9 +192,12 @@ bool ParserProcessor::identifyTime(int index){
 				if(!startTimeFound){
 					tempEventStore.setStartTime(hour,minute);
 					startTimeFound = true;
-				} else {
+				} else if(!endTimeFound){
 					tempEventStore.setEndTime(hour,minute);
 					endTimeFound = true;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 				}
 			} else if(tempInt < 100){
 				tempIndex--;
@@ -171,9 +221,12 @@ bool ParserProcessor::identifyTime(int index){
 				if(!startTimeFound){
 					startTimeFound = true;
 					tempEventStore.setStartTime(hour,minute);
-				} else {
+				} else if(!endTimeFound){
 					endTimeFound = true;
 					tempEventStore.setEndTime(hour,minute);
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 				}
 			}
 		}
@@ -182,6 +235,8 @@ bool ParserProcessor::identifyTime(int index){
 }
 
 void ParserProcessor::addEventCorrector(){
+	logger.logParserEnterFunc(ADD_EVENT_CORRECTOR);
+
 	int day = 0, month = 0, year = 0;
 	int hour = 0, minute = 0;
 
@@ -213,6 +268,8 @@ void ParserProcessor::addEventCorrector(){
 }
 
 void ParserProcessor::eventMktimeCorrector(){
+	logger.logParserEnterFunc(EVENT_MK_TIME_CORRECTOR);
+
 	struct tm* temptmPtr;
 	temptmPtr = &tempEventStore.getStartDate();
 	mktime(temptmPtr);
@@ -225,17 +282,33 @@ void ParserProcessor::eventMktimeCorrector(){
 }
 
 Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords_){
+	logger.logParserEnterFunc(PROCESS_EDIT_EVENT);
+
 	fragmentedWords = fragmentedWords_;
 	
 	fragmentedWords.insert(fragmentedWords.begin(),LOCKUP_USED_INFORMATION);
 
-	for(unsigned int i = 0; i < fragmentedWords.size(); i++){
-		if(!nameFound){
-			matchFound = identifyEventName(i);
+	try {
+		unsigned int i;
+		for(i = 0; i < fragmentedWords.size(); i++){
+			if(!nameFound){
+				matchFound = identifyEventName(i);
+			}
+			matchFound = identifyDate(i);
+			matchFound = identifyTime(i);
+			matchFound = false;
 		}
-		matchFound = identifyDate(i);
-		matchFound = identifyTime(i);
-		matchFound = false;
+
+		for(i = 0; i < fragmentedWords.size(); i++){
+			try {
+				auto tempInt = std::stoi(fragmentedWords[i]);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			} catch (std::invalid_argument& e){
+			}
+		}
+	} catch (ParserExceptions& e){
+		throw e;
 	}
 
 	editEventCorrector();
@@ -244,6 +317,8 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 }
 
 void ParserProcessor::editEventCorrector(){
+	logger.logParserEnterFunc(EDIT_EVENT_CORRECTOR);
+
 	int day = 0, month = 0, year = 0;
 	int hour = 0, minute = 0;
 
@@ -272,6 +347,8 @@ void ParserProcessor::editEventCorrector(){
 }
 
 Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords_){
+	logger.logParserEnterFunc(PROCESS_SHOW_EVENT);
+
 	fragmentedWords = fragmentedWords_;
 	Conversion convertor;
 	std::string strMonth;
@@ -302,7 +379,8 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
-	int i = 0, tempi = 0, j = 0;
+	unsigned int i = 0, tempi = 0; 
+	int j = 0;
 	if(systemShowDay || systemShowWeek || systemShowMonth){
 		tempi++;
 	}
@@ -314,8 +392,11 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 				matchFound = true;
 				if(!oneMatchFound){
 					oneMatchFound = true;
-				} else {
+				} else if(!twoMatchFound){
 					twoMatchFound = true;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 				}
 				tempi = i;
 				strMonth = keywordMonths[j];
@@ -340,7 +421,8 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 				//whether systemShowDay or systemShowWeek is true
 				tempi--;
 				if(tempi >= 0){
-					if (isdigit((fragmentedWords[tempi])[0])){
+					try {
+					//if (isdigit((fragmentedWords[tempi])[0])){
 						auto tempStoi = std::stoi(fragmentedWords[tempi]);
 						fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
 						tempInt = tempStoi;
@@ -350,7 +432,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 							userShowRangeOfDays = true;
 							userShowDay = false;
 						}
-					} else {
+					} catch(std::invalid_argument& e){
 						if (!twoMatchFound){
 							userShowMonth = true;
 						} else {
@@ -413,6 +495,15 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 
 		}
 		matchFound = false;
+	}
+
+	for(i = 0; i < fragmentedWords.size(); i++){
+		try {
+			auto tempInt = std::stoi(fragmentedWords[i]);
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+		} catch (std::invalid_argument& e){
+		}
 	}
 
 	//correcting dates 

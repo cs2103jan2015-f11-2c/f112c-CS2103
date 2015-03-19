@@ -7,9 +7,23 @@
 #include <vector>
 #include "Event.h"
 #include "Conversion.h"
+#include "ParserExceptions.h"
+#include "ParserLog.h"
 
 class ParserProcessor {
 private:
+	ParserLog logger;
+
+	static const std::string PROCESS_ADD_EVENT;
+	static const std::string PROCESS_EDIT_EVENT;
+	static const std::string IDENTIFY_EVENT_NAME;
+	static const std::string IDENTIFY_DATE;
+	static const std::string IDENTIFY_TIME;
+	static const std::string ADD_EVENT_CORRECTOR;
+	static const std::string EDIT_EVENT_CORRECTOR;
+	static const std::string EVENT_MK_TIME_CORRECTOR;
+	static const std::string PROCESS_SHOW_EVENT;
+
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
 	static const std::string LOCKUP_USED_INFORMATION;
