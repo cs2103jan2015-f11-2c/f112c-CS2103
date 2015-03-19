@@ -208,3 +208,67 @@ Entered extractDetails
 Entered fragmentShowString
 Entered processShowEvent
 Entered eventMkTimeCorrector
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Encountered error. Error code: PS001
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Encountered error. Error code: PS001
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Encountered error. Error code: PS001
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Encountered error. Error code: PS008
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Encountered error. Error code: PS008
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Encountered error. Error code: PS001

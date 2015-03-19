@@ -10,6 +10,7 @@ class EventOrganiser{
 private:
 	//vector<Event> organisedEventToReturn;
 	static const int TOTAL_MONTHS_IN_A_YEAR;
+	static const int UNIQUE_ID;
 	static const string MARKER_CODE;
 
 public:

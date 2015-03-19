@@ -1,7 +1,9 @@
 #include "EventOrganiser.h"
 
 const int EventOrganiser::TOTAL_MONTHS_IN_A_YEAR = 12;
+const int EventOrganiser::UNIQUE_ID = -123;
 const string EventOrganiser::MARKER_CODE = "-MSmsgjyw-";
+
 
 EventOrganiser::EventOrganiser(void)
 {
@@ -236,9 +238,11 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	vector<struct tm> wantedEventDates;
 	vector<struct tm> exisitngEventDates;
 	bool isPushed = false;
+	vector<Event> sortResults;
+
 	Event marker;
 	marker.setName(MARKER_CODE);
-	vector<Event> sortResults;
+	marker.setID(UNIQUE_ID);
 
 	sortResults = sortEventVectorByDate(eventsToFilter);
 	eventsToFilter = sortResults;
