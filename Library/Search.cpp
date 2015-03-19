@@ -14,6 +14,7 @@ int Search::searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSe
 	
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getID() == eventID){
+			assert(i >= 0);
 			return i;
 		}
 	}

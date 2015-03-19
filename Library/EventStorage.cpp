@@ -119,12 +119,15 @@ void EventStorage::writeToCurrentFile(){
 
 //add method
 vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with all events on that day
+	logger.logStoragePosition("addEvent");
 	vector<Event> returnToLogicVector;
 
 	if(newEvent.getIsFloating()){
+		logger.logStorageStringData("addFloat",newEvent.getName());
 		currentFloatingContent.push_back(newEvent);
 		returnToLogicVector = currentFloatingContent;
 	} else{
+		logger.logStorageStringData("addNormal",newEvent.getName());
 		currentContent.push_back(newEvent);
 		returnToLogicVector = showDates(newEvent);
 	}
@@ -135,6 +138,7 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 
 //delete method
 vector<Event> EventStorage::checkMultipleResults(string eventName){
+	logger.logStoragePosition("checkMultipleResults");
 	
 	vector<Event> eventVector, floatingEventVector;
 	Search search;
@@ -146,6 +150,7 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	return eventVector;
 }
 vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
+	logger.logStoragePosition("deleteEvent");
 	
 	int indexOfEventID = INVALID; 
 	vector<Event> returnToLogicVector;
@@ -153,15 +158,18 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	if(eventID == INVALID){ //event is not a user display Index
 		eventID = eventToBeDeleted.getID(); //set relevant eventID 
 	}
+	assert(eventID != INVALID);
 	//Normal Case
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
 	if(indexOfEventID > INVALID){ 
 		eventToBeDeleted = currentContent[indexOfEventID];
+		logger.logStorageStringData("deleteNormal",eventToBeDeleted.getName());
 		currentContent.erase(currentContent.begin() + indexOfEventID);
 		returnToLogicVector = showDates(eventToBeDeleted);	
-	}else{ //Floating Case
+	} else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID > INVALID){
+			logger.logStorageStringData("deleteFloat",eventToBeDeleted.getName());
 			eventToBeDeleted = currentFloatingContent[indexOfEventID];
 			currentFloatingContent.erase(currentFloatingContent.begin() + indexOfEventID);
 			returnToLogicVector = eventOrganiser.showAllFloatingEvent(currentFloatingContent);
@@ -179,6 +187,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 
 //edit method
 vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event editedEvent){
+	logger.logStoragePosition("editEvent");
 	
 	int indexOfEventID = INVALID; 
 	vector<Event> returnToLogicVector;
@@ -186,9 +195,11 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	if(eventID == INVALID){ //event is not a user display Index)		
 		eventID = eventToBeEdited.getID();  //set relevant eventID
 	}
+	assert(eventID != INVALID);
 	//Normal Case
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent); //how to change to floating?
 	if(indexOfEventID > INVALID){ 
+		logger.logStorageStringData("editNormal",eventToBeEdited.getName());
 		if(editedEvent.getName() != ""){
 			(currentContent[indexOfEventID]).setName(editedEvent.getName());
 		}
@@ -210,6 +221,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 		returnToLogicVector = showDates(editedEvent);
 	}
 	else{ //Floating Case
+		logger.logStorageStringData("editFloating",eventToBeEdited.getName());
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID > INVALID){
 			if(editedEvent.getName() != ""){
@@ -246,6 +258,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 }
 
 vector<Event> EventStorage::showDates(Event eventWithStartEndTimes){
+	logger.logStoragePosition("showDates");
 	return eventOrganiser.showDateRange(eventWithStartEndTimes,currentContent);
 }
 
@@ -256,9 +269,6 @@ vector<Event> EventStorage::getAllNormalEvents(){
 }
 vector<Event> EventStorage::getAllFloatingEvents(){
 	return eventOrganiser.showAllFloatingEvent(currentFloatingContent);
-}
-vector<Event> EventStorage::getShowDay(int day, int month, int year, vector<Event> currentContent){
-	return eventOrganiser.showDay(day,month,year,currentContent);
 }
 vector<Event> EventStorage::searchAllComponents(string infoToSearch, vector<Event> contentToSearch){
 	return search.searchAllComponentsOfEvent(infoToSearch,contentToSearch);

@@ -1,0 +1,4 @@
+Entered showDates
+Entered addEvent
+Data: logtest at location: addNormal
+Entered showDates

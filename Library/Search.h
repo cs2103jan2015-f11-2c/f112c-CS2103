@@ -4,6 +4,7 @@
 #define SEARCH_H
 
 #include "Event.h"
+#include <assert.h>
 
 class Search{
 private:

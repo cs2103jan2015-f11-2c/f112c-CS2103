@@ -21,7 +21,7 @@ vector<Event> EventOrganiser::showAllNormalEvent(vector<Event> currentContent){
 vector<Event> EventOrganiser::showAllFloatingEvent(vector<Event> currentFloatingContent){
 	return currentFloatingContent;
 }
-
+/*
 vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearToShow, vector<Event> currentContent){
 	
 	vector<Event> showDayResults;
@@ -36,7 +36,7 @@ vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearTo
 	}
 	return showDayResults;
 }
-/*
+
 vector<Event> EventOrganiser::showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter){
 
 	vector<Event> showMonthResults;

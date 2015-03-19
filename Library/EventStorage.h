@@ -14,6 +14,8 @@
 #include "Search.h"
 #include "EventOrganiser.h"
 #include "Conversion.h"
+#include "EventLog.h"
+#include <assert.h>
 
 class EventStorage{
 private:
@@ -28,6 +30,7 @@ private:
 	EventOrganiser eventOrganiser;
 	Search search;
 	Conversion conversion;
+	EventLog logger;
 
 	vector<EventArchive> archiveContent;
 	EventArchive archiveObject; 
