@@ -1,9 +1,11 @@
 #include "Parser.h"
 
+const std::string Parser::TOKENISE_ORIGINAL_STRING = "tokeniseOriginalString";
+
 Parser::Parser(std::string input)
 {
 	original = input;
-	this->retrieveCategories();
+	//this->retrieveCategories();
 	this->tokenizeOriginalString();
 }
 
@@ -38,39 +40,45 @@ std::string Parser::getNameOfEvent(){
 
 //MAIN METHODS
 void Parser::tokenizeOriginalString(){
-	command = splitter.extractFirstWord(original);
-	details = splitter.extractDetails(original);
+	logger.logParserEnterFunc(TOKENISE_ORIGINAL_STRING);
 
-	std::vector<std::string> fragmentedWords;
-	if(command == "add"){
-		fragmentedWords = splitter.fragmentAddString(details);
-		tempEventStore = processor.processAddEvent(fragmentedWords);
-		if(tempEventStore.getIsFloating() == true){
-			typeOfCommand = Parser::ADDFLOAT;
-		} else {
-			typeOfCommand = Parser::ADD;
+	try {
+		command = splitter.extractFirstWord(original);
+		details = splitter.extractDetails(original);
+	
+		std::vector<std::string> fragmentedWords;
+		if(command == "add"){
+			fragmentedWords = splitter.fragmentAddString(details);
+			tempEventStore = processor.processAddEvent(fragmentedWords);
+			if(tempEventStore.getIsFloating() == true){
+				typeOfCommand = Parser::ADDFLOAT;
+			} else {
+				typeOfCommand = Parser::ADD;
+			}
+		} else if(command == "delete"){
+			nameOfEvent = splitter.extractDelEventName(details);
+			typeOfCommand = Parser::DELETE_;
+		} else if(command == "edit"){
+			nameOfEvent = splitter.extractEditEventName(details);
+			details = splitter.removeEditEventName(details,nameOfEvent);
+			fragmentedWords = splitter.fragmentEditString(details);
+			tempEventStore = processor.processEditEvent(fragmentedWords);
+			typeOfCommand = Parser::EDIT;
+		} else if(command == "show"){
+			fragmentedWords = splitter.fragmentShowString(details);
+			tempEventStore = processor.processShowEvent(fragmentedWords);
+			typeOfCommand = Parser::SHOW;
+		} else if(command == "search"){
+			typeOfCommand = Parser::SEARCH;
 		}
-	} else if(command == "delete"){
-		nameOfEvent = splitter.extractEventName(details);
-		typeOfCommand = Parser::DELETE_;
-	} else if(command == "edit"){
-		nameOfEvent = splitter.extractEditEventName(details);
-		details = splitter.removeEditEventName(details,nameOfEvent);
-		fragmentedWords = splitter.fragmentEditString(details);
-		tempEventStore = processor.processEditEvent(fragmentedWords);
-		typeOfCommand = Parser::EDIT;
-	} else if(command == "show"){
-		fragmentedWords = splitter.fragmentShowString(details);
-		tempEventStore = processor.processShowEvent(fragmentedWords);
-		typeOfCommand = Parser::SHOW;
-	} else if(command == "search"){
-		typeOfCommand = Parser::SEARCH;
+	} catch (ParserExceptions& e){
+		tempEventStore.setFeedback(e.getfeedback());
+		typeOfCommand = Parser::ERROR_;
 	}
-
 	return;
 }
 
-void Parser::retrieveCategories(){
+/*void Parser::retrieveCategories(){
 	std::string category;
 	std::ifstream readCategories;
 	readCategories.open("categories.txt");
@@ -80,4 +88,4 @@ void Parser::retrieveCategories(){
 	readCategories.close();
 
 	return;
-}
+}*/

@@ -52,6 +52,7 @@ public:
 	vector<Display::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
+	string getMainDisplayLabel();
 
 
 	//executorss

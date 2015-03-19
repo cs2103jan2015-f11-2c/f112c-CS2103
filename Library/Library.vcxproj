@@ -73,6 +73,8 @@
     <ClCompile Include="InputStringSplit.cpp" />
     <ClCompile Include="Logic.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserExceptions.cpp" />
+    <ClCompile Include="ParserLog.cpp" />
     <ClCompile Include="ParserProcessor.cpp" />
     <ClCompile Include="Search.cpp" />
   </ItemGroup>
@@ -85,6 +87,8 @@
     <ClInclude Include="EventOrganiser.h" />
     <ClInclude Include="EventStorage.h" />
     <ClInclude Include="GuideInfor.h" />
+    <ClInclude Include="ParserExceptions.h" />
+    <ClInclude Include="ParserLog.h" />
     <ClInclude Include="InputStringSplit.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />

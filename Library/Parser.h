@@ -10,6 +10,7 @@
 #include "Event.h"
 #include "InputStringSplit.h"
 #include "ParserProcessor.h"
+#include "ParserLog.h"
 
 class Parser
 {
@@ -28,10 +29,14 @@ public:
 		SHOW
 	};
 
+	static const std::string TOKENISE_ORIGINAL_STRING;
+
 private:
-	Parser::commandType typeOfCommand;
+	ParserLog logger;
 	InputStringSplit splitter;
 	ParserProcessor processor;
+
+	Parser::commandType typeOfCommand;
 	std::string command;
 	std::string details;
 	std::string original;
@@ -50,10 +55,7 @@ public:
 
 	//main methods
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
-	void retrieveCategories();	//retrieve all categories created from storage txt file 
-
-	//show
-	void identifyShowCommand();	//determine what show cType it is based on system categories or user categories. Perform check for user categories if it exists
+	//void retrieveCategories();	//retrieve all categories created from storage txt file 
 };		
 
 #endif

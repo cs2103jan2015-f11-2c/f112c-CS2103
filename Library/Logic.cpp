@@ -59,6 +59,11 @@ vector<string> Logic::getErrorString() {
 	return display.getErrorStrings();
 }
 
+string Logic::getMainDisplayLabel() {
+	return display.getMainDisplayLabel();
+}
+
+
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
 bool Logic::executeUserInput(string input) {
@@ -235,9 +240,15 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 	case Parser::SHOW: {
 		Event eventsToShow = parserPtr->getEvent();
+		
+		vector<tm> tmVec;
+		tmVec.push_back(eventsToShow.getStartDate());
+		tmVec.push_back(eventsToShow.getEndDate());
+		display.setMainDisplayLabel(tmVec);
 
-		//eventStore.???
+		tempEvents = eventStore.showDates(eventsToShow);
 
+		display.setNormalEvents(tempEvents, Display::GARBAGE_INT);
 		break;
 					   }
 

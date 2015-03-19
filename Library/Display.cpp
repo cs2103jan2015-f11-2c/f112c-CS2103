@@ -1,7 +1,12 @@
 #include "Display.h"
 
 
+<<<<<<< HEAD
 const string Display::NO_EVENTS_MESSAGE = "Currently no task";
+=======
+const int Display::GARBAGE_INT = -12345;
+const string Display::NO_EVENTS_MESSAGE = "nothing here";
+>>>>>>> origin/master
 const string Display::ADDED_MESSAGE = " added";
 const string Display::EDITED_MESSAGE = " edited";
 const string Display::DELETED_MESSAGE = " deleted";
