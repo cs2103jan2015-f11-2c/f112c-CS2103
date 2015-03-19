@@ -32,22 +32,22 @@ const std::string CommandSuggestion::COMMAND_EDI = "edi";
 const std::string CommandSuggestion::COMMAND_SEARC = "searc";
 const std::string CommandSuggestion::COMMAND_SHO = "sho";
 
-const std::string CommandSuggestion::SUGGESTION_ADD_1 = " add lunch";
-const std::string CommandSuggestion::SUGGESTION_ADD_2 = " add CS2103 exam @10feb 11am-2pm";
-const std::string CommandSuggestion::SUGGESTION_ADD_3 = " add Holidays @15june-30june 9am-9am";
+const std::string CommandSuggestion::SUGGESTION_ADD_1 = " add CS2103 finals; 8feb 8am to 1015am (1 day event)";
+const std::string CommandSuggestion::SUGGESTION_ADD_2 = " add Holiday; 17 april to 19 april from 9.30pm to 11.45pm (event over serveral days)";
+const std::string CommandSuggestion::SUGGESTION_ADD_3 = " add Go for a run; 9am (Today)";
 
 const std::string CommandSuggestion::SUGGESTION_DELETE_1 = " delete 2";
-const std::string CommandSuggestion::SUGGESTION_DELETE_2 =  " delete CS2103 exam" ;
+const std::string CommandSuggestion::SUGGESTION_DELETE_2 =  " delete Study" ;
 
-const std::string CommandSuggestion::SUGGESTION_EDIT_1 = " edit 4 time 4pm-6pm";
-const std::string CommandSuggestion::SUGGESTION_EDIT_2 =  " delete CS2103 exam" ;
+const std::string CommandSuggestion::SUGGESTION_EDIT_1 = " edit CS2103 finals; CS2103 V0.5; (change name) ";
+const std::string CommandSuggestion::SUGGESTION_EDIT_2 =  " edit CS2103 finals; 9am-10am (change time)" ;
 
 const std::string CommandSuggestion::SUGGESTION_SEARCH_1 = " search CS2103 exam";
 const std::string CommandSuggestion::SUGGESTION_SEARCH_2 = " search 10feb";
 
 const std::string CommandSuggestion::SUGGESTION_SHOW_1 = " show 10feb";
-const std::string CommandSuggestion::SUGGESTION_SHOW_2 = " show week 10feb(date where the week is in)";
-const std::string CommandSuggestion::SUGGESTION_SHOW_3 = " show month 3 (which month)";
+const std::string CommandSuggestion::SUGGESTION_SHOW_2 = " show 14 apr – 18apr";
+const std::string CommandSuggestion::SUGGESTION_SHOW_3 = " show month 14 apr";
 
 
 void CommandSuggestion::setUpsuggestionAdd(){

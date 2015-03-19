@@ -345,9 +345,6 @@
   <data name="mainDisplayLabel.Text" xml:space="preserve">
     <value>Main Display Label</value>
   </data>
-  <data name="mainDisplayLabel.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
   <data name="mainDisplayLabel.ToolTip" xml:space="preserve">
     <value>Date</value>
   </data>
