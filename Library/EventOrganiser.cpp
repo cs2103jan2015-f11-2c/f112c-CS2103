@@ -1,6 +1,7 @@
 #include "EventOrganiser.h"
 
-const int EventOrganiser::totalMonthsInAYear = 12;
+const int EventOrganiser::TOTAL_MONTHS_IN_A_YEAR = 12;
+const string EventOrganiser::MARKER_CODE = "-MSmsgjyw-";
 
 EventOrganiser::EventOrganiser(void)
 {
@@ -212,7 +213,7 @@ vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 				//}
 			}
 		} else if(k < endyear){
-			for(j = startmonth; j <= totalMonthsInAYear; j++){
+			for(j = startmonth; j <= TOTAL_MONTHS_IN_A_YEAR; j++){
 				tempTM.tm_mon = j;
 				for(i = startday; i <= convertor.determineLastDayOfMth(j,k); i++){
 					tempTM.tm_mday = i;
@@ -236,7 +237,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	vector<struct tm> exisitngEventDates;
 	bool isPushed = false;
 	Event marker;
-	marker.setName("-MSmsgjyw-");
+	marker.setName(MARKER_CODE);
 	vector<Event> sortResults;
 
 	sortResults = sortEventVectorByDate(eventsToFilter);
@@ -268,9 +269,9 @@ vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 	vector<Event> tempVector;
 
 	for(int i=0;i<showResult.size();i++){
-		if(showResult[i].getName() != "-MSmsgjyw-"){
+		if(showResult[i].getName() != MARKER_CODE){
 			tempVector.push_back(showResult[i]);
-		} else if(showResult[i].getName() == "-MSmsgjyw-"){
+		} else if(showResult[i].getName() == MARKER_CODE){
 			returnVector.push_back(showResult[i]);
 			for(int j=0;j<tempVector.size();j++){
 				returnVector.push_back(tempVector[j]);
