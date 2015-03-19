@@ -649,7 +649,7 @@ private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 
 				if(displayToMain[i].isNew && displayToMain[i].isClash){
 					display->SelectionColor = Color::Red;
-					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,14, FontStyle::Bold);
 					display->SelectedText = temp + "\n" ;
 				} else if ( displayToMain[i].isClash ){
 					display->SelectionColor = Color::Red;
