@@ -547,8 +547,12 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 
 private: void loadData(){
 			 DateTime current = DateTime::Now;
-			 String^ time = current.ToString(" dd  MMM  yyyy ,  dddd");
+			 String^ time = current.ToString(" dd  MMM  yyyy ,  dddd"); 
+			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
+			 log ("Program starts at: " + convertTostd(timeToLog));
 			 displayToMainDisplayLabel(convertTostd(time));
+
+			
 
 			 std::string loadCommand = "show today";
 			 executeUserInput(loadCommand);
@@ -637,6 +641,8 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 					String^ temp = convertToSys(displayToFeedback[i]);
 					feedbackBox->Text += temp + "\n" ;
 				}
+
+			log ("Feedback displayed");
 		}
 
 //Pre-condition : vector displayToMain to be correctly updated
@@ -668,6 +674,8 @@ private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 					}
 			
 			}
+
+			log ("Main displayed");
 		 }
 
 //Pre-condition : vector displayToMain to be correctly updated
@@ -675,6 +683,8 @@ private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 			 String^ mainLabelDisplay = convertToSys (displayToMainLabel);
 			 mainDisplayLabel->Text = mainLabelDisplay; 
+
+			 log ("Main label displayed");
 		}
 
 
@@ -697,6 +707,8 @@ private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFl
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					  }
 				}
+
+				log ("Floating displayed");
 		}
 
 //===================================================================================================================================================================
@@ -744,6 +756,7 @@ public: void resetCommandBar(){
 //It proceed on to call functions to display the relevant information to the various displays on the UI 
 public: void executeUserInput(std::string input){
   			 bool isExecuted = lGPtr->executeUserInput(input);
+			 log("Logic return: " + convertTostd(isExecuted.ToString()));
 
 			 if(isExecuted){
 				 displayToAllDisplays();
@@ -760,6 +773,9 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 String^ temp = commandBox->Text;
 			 resetCommandBar();
 			 unDisplaySuggestion();
+			 
+			 std::string input = convertTostd(temp);
+			 log("User Command: " + input);
 
 			 std::string firstfourletters = extractFirstFourLetters(convertTostd (temp));
 
@@ -772,7 +788,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 return;
 			 }
 
-			 std::string input = convertTostd(temp);
+			 
 
 			 executeUserInput(input);
 		 }
@@ -1015,8 +1031,26 @@ private: System::Void calenderIcon_Click(System::Object^  sender, System::EventA
 
 //===================================================================================================================================================================
 
+/*
+* =================================================================================================================================================================== 
+* Logging function
+* ===================================================================================================================================================================
+*/
+
+private: Void log(std::string logString){
+			 std::ofstream outFile("GUILog.txt",std::ios::app);
+
+			 outFile << logString + "\n";
+
+			 outFile.close();
+		 }
 
 
+
+
+
+
+//===================================================================================================================================================================
 
 private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::EventArgs^  e) {			 
 		 }
