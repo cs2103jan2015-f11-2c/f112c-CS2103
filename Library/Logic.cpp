@@ -255,8 +255,11 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::SEARCH:
 		break;
 
-	case Parser::ERROR_:
+	case Parser::ERROR_: {
+		display.setFeedbackStrings(userEvent.getFeedback());
+		isDone = false;
 		break;
+						 }
 
 	default:
 		break;
