@@ -126,7 +126,7 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 		returnToLogicVector = currentFloatingContent;
 	} else{
 		currentContent.push_back(newEvent);
-		returnToLogicVector = eventOrganiser.showDay(newEvent.getStartDate().tm_mday,newEvent.getStartDate().tm_mon,newEvent.getStartDate().tm_year, currentContent);
+		returnToLogicVector = showDates(newEvent);
 	}
 	writeToCurrentFile();
 
@@ -158,7 +158,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	if(indexOfEventID > INVALID){ 
 		eventToBeDeleted = currentContent[indexOfEventID];
 		currentContent.erase(currentContent.begin() + indexOfEventID);
-		returnToLogicVector = eventOrganiser.showDay(eventToBeDeleted.getStartDate().tm_mday,eventToBeDeleted.getStartDate().tm_mon,eventToBeDeleted.getStartDate().tm_year, currentContent);
+		returnToLogicVector = showDates(eventToBeDeleted);	
 	}else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
 		if(indexOfEventID > INVALID){
@@ -207,7 +207,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 		if(editedEvent.getDescription() != ""){
 			(currentContent[indexOfEventID]).setDescription(editedEvent.getDescription());
 		}
-		returnToLogicVector = eventOrganiser.showDay(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year, currentContent);
+		returnToLogicVector = showDates(editedEvent);
 	}
 	else{ //Floating Case
 		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
