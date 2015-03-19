@@ -1,4 +1,0 @@
-executing addfloat command
-executing addfloat command
-executing addfloat command
-executing delete command
