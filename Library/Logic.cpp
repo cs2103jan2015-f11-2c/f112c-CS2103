@@ -227,12 +227,13 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 		break;
 					   }
 
-	case Parser::SHOW:
+	case Parser::SHOW: {
 		Event eventsToShow = parserPtr->getEvent();
 
 		//eventStore.???
 
 		break;
+					   }
 
 	case Parser::SEARCH:
 		break;

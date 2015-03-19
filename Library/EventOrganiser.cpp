@@ -1,6 +1,6 @@
 #include "EventOrganiser.h"
 
-const int totalMonthsInAYear = 12;
+const int EventOrganiser::totalMonthsInAYear = 12;
 
 EventOrganiser::EventOrganiser(void)
 {
@@ -173,7 +173,7 @@ bool EventOrganiser::isLatterMinSmaller(Event eventTime1, Event eventTime2) //re
 	return isMinBigger;
 }
 
-vector<struct tm> eventDateToVector(Event showEventDates){
+vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	
 	struct tm tempStartDate = showEventDates.getStartDate();
 	int startday = tempStartDate.tm_mday;
