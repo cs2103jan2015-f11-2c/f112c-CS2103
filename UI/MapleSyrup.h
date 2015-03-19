@@ -2,10 +2,13 @@
 #include <iostream>
 
 #include <msclr\marshal_cppstd.h>
+#include <assert.h>
 
 #include "Logic.h"
 #include "Conversion.h"
 #include "CommandSuggestion.h"
+
+
 
 namespace UI {
 
@@ -594,26 +597,15 @@ public: String^ convertToSys(std::string stdStr){
 //Get the display vectors from Logic.h when invoked by function executeUserInput(). 
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
 //Upon successful display to these displays, it will return true to caller. 
-private: bool displayToAllDisplays(){
+private:void displayToAllDisplays(){
 			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 			//std::string displayToMainLabel = lGPtr->get
 
-
-			bool checkAllDisplayed;
-
-			bool displayFeedback = displayToFeedbackBox (displayToFeedback);
-			bool displayFloating = displayToFloatingDisplay (displayToFloating);
-			bool displayMain = displayToMainDisplay (displayToMain);
-
-			if (!displayFeedback || !displayFloating || !displayMain){
-				checkAllDisplayed = false;
-			} else {
-				checkAllDisplayed = true;
-			}
-
-			return checkAllDisplayed;
+			displayToFeedbackBox (displayToFeedback);
+			displayToFloatingDisplay (displayToFloating);
+			displayToMainDisplay (displayToMain);
 		}
 
 //Pre-condition : None
@@ -629,24 +621,17 @@ public: bool isOdd (int num){
 
 //Pre-condition : vector displayToFeedback to be correctly updated
 //Display feedback to feedbackBox
-private: bool displayToFeedbackBox(vector<std::string> displayToFeedback){
-			bool feedbackDisplayed = true;
+private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 			feedbackBox->Text = "";
 			for (int i=0; i< displayToFeedback.size(); i++){
 					String^ temp = convertToSys(displayToFeedback[i]);
 					feedbackBox->Text += temp + "\n" ;
 				}
-
-			// if got error, set feedbackDisplayed = false;
-			//
-
-			return feedbackDisplayed;
 		}
 
 //Pre-condition : vector displayToMain to be correctly updated
 //Display information to main display
-private: bool displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain){
-			bool mainDisplayed = true;
+private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain){
 			display->Text = "";
 
 			for (int i=0; i< displayToMain.size(); i++){
@@ -671,13 +656,9 @@ private: bool displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 							display->SelectedText = temp + "\n" ;
 							}
 					}
+			
 			}
-
-			// if got error, set mainDisplayed = false;
-			//
-			return mainDisplayed;
-
-		}
+		 }
 
 //Pre-condition : vector displayToMain to be correctly updated
 //Display the label of what is being displayed on the main display onto mainDisplayLabel
@@ -690,8 +671,7 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
-private: bool displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFloating){
-			bool floatingDisplayed = true;
+private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFloating){
 			floatingTasksDisplay->Text = "";
 
 				for (int i=0; i< displayToFloating.size(); i++){
@@ -707,10 +687,6 @@ private: bool displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFl
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					  }
 				}
-
-			// if got error, set floatingDisplayed = false;
-			//
-			return floatingDisplayed;
 		}
 
 //===================================================================================================================================================================
@@ -738,21 +714,13 @@ public: std::string extractFirstFourLetters(std::string input){
 //Get the error string from Logic.h when invoked by function executeUserInput(). 
 //It proceed on to display this error string onto the main display of the UI.
 //Upon successful display, it will return true to caller. 
-private: bool displayErrorString(){
-			bool isErrorStringShown;
-
+private: void displayErrorString(){
 			vector<std::string> tempErrorString = lGPtr->getErrorString();
 
 			for (int i=0; i < tempErrorString.size(); i++){
 			String^ errorString = convertToSys(tempErrorString[i]);
 			display->Text += errorString;
 			}
-
-			//if there is error, isErrorStringShown = false;
-			
-			isErrorStringShown = true;
-
-			return isErrorStringShown;
 		}
 
 //Pre-condition : Ensure command from user is passed into this function
@@ -781,18 +749,12 @@ public: void resetCommandBar(){
 //It proceed on to call functions to display the relevant information to the various displays on the UI 
 public: void executeUserInput(std::string input){
   			 bool isExecuted = lGPtr->executeUserInput(input);
-			 
-			 bool isAllDisplayed = false;
-			 bool isErrorStringDisplayed = false ;
+
 			 if(isExecuted){
-				 isAllDisplayed = displayToAllDisplays();
+				 displayToAllDisplays();
 			 } else {
-				 isErrorStringDisplayed = displayErrorString();
+				 displayErrorString();
 			 }
-
-			 // if (isAllDisplayed && isErrorStringDisplayed), Error
-			 //Else carry on
-
 		}
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
