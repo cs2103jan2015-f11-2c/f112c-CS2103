@@ -239,6 +239,8 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	vector<struct tm> exisitngEventDates;
 	bool isPushed = false;
 	vector<Event> sortResults;
+	time_t t = time(0);
+	struct tm* temp = localtime(&t);
 
 	Event marker;
 	marker.setName(MARKER_CODE);
@@ -259,8 +261,14 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			}
 		}
 		if(isPushed){
+		/*	temp->tm_mday = wantedEventDates[i].tm_mday;
+			temp->tm_mon = wantedEventDates[i].tm_mday;
+			temp->tm_year = wantedEventDates[i].tm_mday;
+			*/
 			marker.setStartDate(wantedEventDates[i].tm_mday, wantedEventDates[i].tm_mon, wantedEventDates[i].tm_year);
+			marker.setStartTime(0,0);
 			mktime(&marker.getStartDate());
+
 			returnVector.push_back(marker);
 			isPushed = false;  //reset bool
 		}
