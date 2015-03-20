@@ -151,29 +151,29 @@ int Conversion::monthToInt (std::string month){
 
 std::string Conversion::intToMonth (int monthInNum){
 	if(monthInNum == 0){
-		return "jan";
+		return "Jan";
 	} else if(monthInNum  == 1){
-		return "feb";
+		return "Feb";
 	} else if(monthInNum  == 2){
-		return "mar";
+		return "Mar";
 	} else if(monthInNum  == 3){
-		return "apr";
+		return "Apr";
 	} else if(monthInNum  == 4){
-		return "may";
+		return "May";
 	} else if(monthInNum  == 5){
-		return "jun";
+		return "Jun";
 	} else if(monthInNum  == 6){
-		return "jul";
+		return "Jul";
 	} else if(monthInNum  == 7){
-		return "aug";
+		return "Aug";
 	} else if(monthInNum  == 8){
-		return "sep";
+		return "Sep";
 	} else if(monthInNum  == 9){
-		return "oct";
+		return "Oct";
 	} else if(monthInNum  == 10){
-		return "nov";
+		return "Nov";
 	} else if(monthInNum  == 11){
-		return "dec";
+		return "Dec";
 	} else {
 		return "Invalid month";
 	}
@@ -183,19 +183,19 @@ std::string Conversion::intToMonth (int monthInNum){
 
 std::string Conversion::intToDayOfWeek (int dayInNum){
 	if(dayInNum == 0){
-		return "sun";
+		return "Sun";
 	} else if (dayInNum == 1){
-		return "mon";
+		return "Mon";
 	} else if (dayInNum == 2){
-		return "tues";
+		return "Tues";
 	} else if (dayInNum == 3){
-		return "wed";
+		return "Wed";
 	} else if (dayInNum == 4){
-		return "thurs";
+		return "Thurs";
 	} else if (dayInNum == 5){
-		return "fri";
+		return "Fri";
 	} else if (dayInNum == 6){
-		return "sat";
+		return "Sat";
 	} else{
 		return "Invalid day";
 	}
