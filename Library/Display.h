@@ -54,8 +54,8 @@ public:
 	//constructor, destructor
 	Display();
 	//~Display();
-	
 
+public: 
 	//getters
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
@@ -76,7 +76,6 @@ public:
 
 	Event getEventFromID(int id);
 
-public: 
 	//setter
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
 	
