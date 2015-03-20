@@ -14,8 +14,11 @@ private:
 public:
 	ParserLog();
 
+	void logParserStart(std::string);
 	void logParserEnterFunc(std::string);
 	void logParserError(std::string);
+	void logParserSuccess(std::string);
+	void logParserFailure(std::string);
 };
 
 #endif

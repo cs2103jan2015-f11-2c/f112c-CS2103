@@ -4,6 +4,7 @@ const std::string Parser::TOKENISE_ORIGINAL_STRING = "tokeniseOriginalString";
 
 Parser::Parser(std::string input)
 {
+	logger.logParserStart(input);
 	original = input;
 	//this->retrieveCategories();
 	this->tokenizeOriginalString();
@@ -71,9 +72,11 @@ void Parser::tokenizeOriginalString(){
 		} else if(command == "search"){
 			typeOfCommand = Parser::SEARCH;
 		}
+		logger.logParserSuccess(original);
 	} catch (ParserExceptions& e){
 		tempEventStore.setFeedback(e.getfeedback());
 		typeOfCommand = Parser::ERROR_;
+		logger.logParserFailure(original);
 	}
 	return;
 }

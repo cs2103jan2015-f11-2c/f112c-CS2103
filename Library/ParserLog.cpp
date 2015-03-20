@@ -5,6 +5,13 @@ const std::string ParserLog::textfilename = "ParserLog.txt";
 ParserLog::ParserLog(){
 }
 
+void ParserLog::logParserStart(std::string input){
+	std::ofstream writeFile;
+	writeFile.open(textfilename,std::ios::app);
+	writeFile << "Initialised parsing of input \"" << input << "\"" << std::endl;
+	writeFile.close();
+}
+
 void ParserLog::logParserEnterFunc(std::string functionName){
 	std::ofstream writeFile;
 	writeFile.open(textfilename,std::ios::app);
@@ -16,5 +23,19 @@ void ParserLog::logParserError(std::string errorCode){
 	std::ofstream writeFile;
 	writeFile.open(textfilename,std::ios::app);
 	writeFile << "Encountered error. Error code: " << errorCode << std::endl;
+	writeFile.close();
+}
+
+void ParserLog::logParserSuccess(std::string input){
+	std::ofstream writeFile;
+	writeFile.open(textfilename,std::ios::app);
+	writeFile << "Successfully parsed input \"" << input << "\"" << std::endl;
+	writeFile.close();
+}
+
+void ParserLog::logParserFailure(std::string input){
+	std::ofstream writeFile;
+	writeFile.open(textfilename,std::ios::app);
+	writeFile << "Failed to parse input \"" << input << "\"" << std::endl;
 	writeFile.close();
 }
