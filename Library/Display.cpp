@@ -284,8 +284,6 @@ void Display::normalEventsToString() {
 					out << " "; 
 				}	
 			}
-
-			out << normalEvents[i].getID();
 		}
 
 		//Constructing MAIN_EVENT items and initializing
