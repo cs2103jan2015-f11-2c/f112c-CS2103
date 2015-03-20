@@ -95,16 +95,19 @@ Event Display::getEventFromID(int id) {
 
 
 //setters
-void Display::setNormalEvents(vector<Event> events, int id) {
+void Display::setNormalEvents(vector<Event> events, string feedback, vector<tm> label, int id) {
 	newID = id;
 	normalEvents = events;
+	setMainDisplayLabel(label);
+	setFeedbackStrings(feedback);
 	normalEventsToString();
 }
 
-void Display::setFloatingEvents(vector<Event> events, int id) {
+void Display::setFloatingEvents(vector<Event> events, string feedback, int id) {
 	newID = id;
 	floatingEvents = events;
 	totalFloatingEvents = events.size();
+	setFeedbackStrings(feedback);
 	floatingEventsToString();
 }
 

@@ -81,8 +81,10 @@ public:
 
 
 	//setters
-	void setNormalEvents(vector<Event> events, int id);
-	void setFloatingEvents(vector<Event> events, int id);
+	void setNormalEvents(vector<Event> events, string feedback, vector<tm> label, int id);
+	void setFloatingEvents(vector<Event> events, string feedback, int id);
+	
+private:
 	void setFeedbackEvents(vector<Event> events);
 	void setMainDisplayLabel (vector<tm> label);
 
