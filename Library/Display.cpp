@@ -236,6 +236,7 @@ void Display::normalEventsToString() {
 		ostringstream out;
 
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
+			out << "\n";
 			out << "[";
 			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
@@ -374,6 +375,7 @@ void Display::setMainDisplayLabel (vector<tm> label){
 
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
 		//1 day only
+		isSingleDay = true;
 		Conversion convert;
 		string dayOfMonth = convert.intToString(label[0].tm_mday);
 
@@ -384,6 +386,7 @@ void Display::setMainDisplayLabel (vector<tm> label){
 		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
 	} else {
 		//More than 1 day
+		isSingleDay = false;
 		Conversion convert;
 		string startDayOfMonth = convert.intToString(label[0].tm_mday);
 		string startMonth = convert.intToMonth(label[0].tm_mon);

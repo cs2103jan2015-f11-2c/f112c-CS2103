@@ -16,3 +16,22 @@ Data: float at location: addFloat
 Entered addEvent
 Data: fyi at location: addNormal
 Entered showDates
+Entered showDates
+Entered addEvent
+Data: hey at location: addFloat
+Entered showDates
+Entered showDates
+Entered addEvent
+Data: cs2103 at location: addNormal
+Entered showDates
+Entered showDates
+Entered deleteEvent
+Entered showDates
+Entered showDates
+Entered addEvent
+Data: hello at location: addNormal
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates

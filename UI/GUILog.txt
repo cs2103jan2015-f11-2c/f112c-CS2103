@@ -128,3 +128,82 @@ Feedback displayed
 Floating displayed
 Main displayed
 Main label displayed
+Program starts at: 20 Mar,Friday, 11:35:15
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hey;
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 11:41:15
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 12:08:42
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add cs2103; 8fb 10am-1130am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 12:13:39
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Program starts at: 20 Mar,Friday, 12:14:11
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show mar
+Program starts at: 20 Mar,Friday, 12:16:42
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello;21 mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 12:31:15
+Main label displayed
+Program starts at: 20 Mar,Friday, 12:31:40
+Main label displayed
+Program starts at: 20 Mar,Friday, 12:32:08
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed

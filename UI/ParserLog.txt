@@ -105,3 +105,135 @@ Entered identifyTime
 Entered addEventCorrector
 Entered eventMkTimeCorrector
 Successfully parsed input "add fyi; 10feb 1pm"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add hey;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey;"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add cs2103; 8fb 10am-1130am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add cs2103; 8fb 10am-1130am"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "delete 1"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Successfully parsed input "delete 1"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add hello;21 mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello;21 mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"

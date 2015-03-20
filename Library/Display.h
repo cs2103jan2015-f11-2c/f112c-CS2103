@@ -39,6 +39,9 @@ private:
 
 	int newID;
 	int totalNumEvents;
+	int	mainStringHeaderCounter;
+	bool isSingleDay;
+
 
 	// This is required as events' numberings in main display will carry on from here
 	// For now, main display events' numbering will start from 1
