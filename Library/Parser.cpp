@@ -71,6 +71,8 @@ void Parser::tokenizeOriginalString(){
 			typeOfCommand = Parser::SHOW;
 		} else if(command == "search"){
 			typeOfCommand = Parser::SEARCH;
+		} else {
+			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_COMMAND);
 		}
 		logger.logParserSuccess(original);
 	} catch (ParserExceptions& e){

@@ -13,12 +13,19 @@ InputStringSplit::InputStringSplit(){
 }
 
 std::string InputStringSplit::extractFirstWord(std::string input){
-	logger.logParserEnterFunc("extractFirstWord");
+	logger.logParserEnterFunc(EXTRACT_FIRST_WORD);
 
-	if(input.empty()){
+	bool missingInput = true;
+	for (unsigned int i = 0; i < input.size() && missingInput; i++){
+		if(isalnum(input[i])){
+			missingInput = false;
+		}
+	}
+	if(missingInput){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
+
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(" ");
 	std::string tempStr = input.substr(0,strCutIndex);
@@ -29,13 +36,30 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 std::string InputStringSplit::extractDetails(std::string input){
 	logger.logParserEnterFunc(EXTRACT_DETAILS);
 
-	if(input.empty() || (input.find_first_not_of(" ") == std::string::npos)){
+	bool missingInput = true;
+	for (unsigned int i = 0; i < input.size() && missingInput; i++){
+		if(isalnum(input[i])){
+			missingInput = false;
+		}
+	}
+	if(missingInput){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
+
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(" ");
-	std::string tempStr = input.substr(input.find_first_not_of(" ;",strCutIndex));
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
+	strCutIndex = input.find_first_not_of(" ;",strCutIndex);
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
+
+	std::string tempStr = input.substr(strCutIndex);
 	//assert string not empty
 	return tempStr;
 }

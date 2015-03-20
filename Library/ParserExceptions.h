@@ -21,6 +21,7 @@ public:
 	static const std::string ERROR_TOO_MANY_DEL;
 	static const std::string ERROR_MISSING_INDEX;
 	static const std::string ERROR_INSUFFICIENT_INFO;
+	static const std::string ERROR_UNKNOWN_COMMAND;
 	
 	ParserExceptions(std::string);
 
