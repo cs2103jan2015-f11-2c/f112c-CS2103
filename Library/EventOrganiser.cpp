@@ -260,6 +260,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 		}
 		if(isPushed){
 			marker.setStartDate(wantedEventDates[i].tm_mday, wantedEventDates[i].tm_mon, wantedEventDates[i].tm_year);
+			mktime(&marker.getStartDate());
 			returnVector.push_back(marker);
 			isPushed = false;  //reset bool
 		}
