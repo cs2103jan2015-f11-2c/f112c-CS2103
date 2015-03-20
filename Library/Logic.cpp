@@ -83,86 +83,82 @@ bool Logic::executeUserInput(string input) {
 //executes exact user command after parsing
 void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& isDone) {
 	string eventName = parserPtr->getNameOfEvent(), feedback;
-	int index, id;
-	vector<Event> tempEvents;
 
 	log(commandToString(command));
 	
 	switch (command) {
 	case Parser::ADDFLOAT: {
-		try {
-			if (!userEvent.getIsFloating()) {
-				throw EXCEPTION_WRONG_ISFLOATING;
-			}
-		} catch (string exception) {
-				log(exception);
-			}
-		
-		int newID = userEvent.getID();
-		tempEvents = eventStore.addEvent(userEvent);
-		display.setFloatingEvents(tempEvents, newID);
-		
-		tempEvents = display.getNormalEvents();
-		display.setNormalEvents(tempEvents, newID);
+		assert(userEvent.getIsFloating());
 
-		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
-		display.setFeedbackStrings(feedback);
+		int newID = userEvent.getID();
+		vector<Event> floatingEvents = eventStore.addEvent(userEvent);
+		vector<Event> normalEvents = display.getNormalEvents();
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+		feedback = userEvent.getName() + Display::ADDED_MESSAGE;;
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, newID);
+		
 		break;
 						   }
 	
 	case Parser::ADD: {
-		try {
-			if (userEvent.getIsFloating()) {
-				throw EXCEPTION_WRONG_ISFLOATING;
-			}
-		} catch (string exception) {
-				log(exception);
-			}
+		assert(!userEvent.getIsFloating());
 
 		int newID = userEvent.getID();
-		tempEvents = eventStore.addEvent(userEvent);
-		display.setNormalEvents(tempEvents, newID);
-
-		tempEvents = display.getFloatingEvents();
-		display.setFloatingEvents(tempEvents, Display::GARBAGE_INT);
-
+		vector<Event> floatingEvents;
+		vector<Event> normalEvents = eventStore.addEvent(userEvent);
 		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
-		display.setFeedbackStrings(feedback);
+		vector<tm> tmRange;
+		tmRange.push_back(userEvent.getStartDate());
+		tmRange.push_back(userEvent.getEndDate());
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmRange, newID);
+
 		break;
 					  }
 
 	case Parser::DELETE_: {
-		id = convertNameToID(eventName);
+		int id = convertNameToID(eventName);
 
 		Event uselessEvent;
 
 		if (id == INVALID_NUMBER) {
 			//if desired event is not in display vectors, check if it is in eventStore
-			tempEvents = eventStore.checkMultipleResults(eventName);
+			vector<Event> tempEvents = eventStore.checkMultipleResults(eventName);
 
 			int numResults = tempEvents.size();
 
 			switch (numResults) {
 			//if eventStore returns no events, means the event user wants to delete does not exist
 			case 0: {
+				int newID = display.getNewID();
+				vector<Event> floatingEvents = display.getFloatingEvents();
+				vector<Event> normalEvents = display.getNormalEvents();
 				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
-				display.setFeedbackStrings(feedback);
+				vector<tm> tmVec = display.getTempMainDisplayLabel();
+
+				display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, newID);
+
 				break;
 					}
 
-
 			//if eventStore returns 1 event, delete that event
 			case 1: {
-				uselessEvent = tempEvents[0];
-				id = uselessEvent.getID();
-
-				tempEvents = eventStore.deleteEvent(id, uselessEvent);
-
 				bool isFloat = tempEvents[0].getIsFloating();
-				setDisplay(isFloat, tempEvents, INVALID_NUMBER);
-		
+				vector<Event> floatingEvents, normalEvents;
+
+				if (isFloat) {
+					floatingEvents = eventStore.deleteEvent(id, tempEvents[0]);
+					normalEvents = display.getNormalEvents();
+				} else {
+					floatingEvents = display.getFloatingEvents();
+					normalEvents = eventStore.deleteEvent(id, tempEvents[0]);
+				}
+
 				feedback = eventName + Display::DELETED_MESSAGE;
-				display.setFeedbackStrings(feedback);
+				vector<tm> tmVec = display.getTempMainDisplayLabel();
+				
+				display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
 
 				break;
 					}
@@ -174,13 +170,21 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			}
 
 		} else { //if desired event found in display vectors, call eventStore to delete it immediately
-			tempEvents = eventStore.deleteEvent(id, uselessEvent);
+			vector<Event> floatingEvents, normalEvents, tempEvents;
+			Event emptyEvent;
+
+			tempEvents = eventStore.deleteEvent(id, emptyEvent);
+			
+			//if (tempEvents.empty()) {
+
+			
+			
 			
 			bool isFloat = tempEvents[0].getIsFloating();
 			setDisplay(isFloat, tempEvents, INVALID_NUMBER);
 			
 			feedback = eventName + Display::DELETED_MESSAGE;
-			display.setFeedbackStrings(feedback);
+			
 		}
 		
 		break;
@@ -188,11 +192,11 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 	case Parser::EDIT: {
 		Event editedEvent = parserPtr->getEvent();
-		id = convertNameToID(eventName);
+		int id = convertNameToID(eventName);
 
 		//if desired event is not in display vectors, check if it is in eventStore
 		if (id == INVALID_NUMBER) {
-			tempEvents = eventStore.checkMultipleResults(eventName);
+			vector<Event> tempEvents = eventStore.checkMultipleResults(eventName);
 
 			int numResults = tempEvents.size();
 
@@ -200,7 +204,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			//if eventStore returns no events, means the event user wants to edit does not exist
 			case 0: {
 				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
-				display.setFeedbackStrings(feedback);
+				//display.setFeedbackStrings(feedback);
 				break;
 					}
 
@@ -216,7 +220,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 				setDisplay(isFloat, tempEvents, id);
 		
 				feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
-				display.setFeedbackStrings(feedback);
+				//display.setFeedbackStrings(feedback);
 
 				break;
 					}
@@ -229,13 +233,13 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 		} else { //if desired event found in display vectors, call eventStore to edit it immediately
 			Event eventToEdit = display.getEventFromID(id);
-			tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
+			//tempEvents = eventStore.editEvent(id, eventToEdit, editedEvent);
 			
 			bool isFloat = tempEvents[0].getIsFloating();
 			setDisplay(isFloat, tempEvents, id);
 		
 			feedback = eventToEdit.getName() + Display::EDITED_MESSAGE;
-			display.setFeedbackStrings(feedback);
+			//display.setFeedbackStrings(feedback);
 		}
 
 		break;

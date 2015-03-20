@@ -4,6 +4,7 @@
 #define LOGIC_H
 
 
+#include <cassert>
 #include <fstream>
 #include "Parser.h"
 #include "EventStorage.h"
@@ -12,7 +13,6 @@
 
 using std::ifstream;
 using std::ofstream;
-using std::cerr;
 
 class Logic {
 private:
