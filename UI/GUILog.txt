@@ -89,3 +89,42 @@ Feedback displayed
 Floating displayed
 Main displayed
 Main label displayed
+Program starts at: 20 Mar,Friday, 11:20:07
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 11:20:57
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add float
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 20 Mar,Friday, 11:28:32
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add float;
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add fyi; 10feb 1pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
