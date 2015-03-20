@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 
-#include <msclr\marshal_cppstd.h>
 #include <assert.h>
 
 #include "Logic.h"
@@ -583,14 +582,18 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 //Pre-condition : None
 //Convert a System::String^ type to std::string type
 public: std::string convertTostd(String^ sysStr){
-			std::string newString = msclr::interop::marshal_as<std::string>(sysStr);
-			return newString;
+			char buffer[999];
+			sprintf(buffer,"%s",sysStr);
+			std::string stdString(buffer);
+			return stdString;
 		}
 
 //Pre-condition : None
 //Convert a std::string type to System::String^ type
 public: String^ convertToSys(std::string stdStr){
-			String^ 
+			String^ sysString = gcnew String(stdStr.c_str());
+			Console::WriteLine(sysString);
+			return sysString;
 		}
 
 //===================================================================================================================================================================
@@ -1065,9 +1068,6 @@ private: System::Void allDisplay_Click(System::Object^  sender, System::EventArg
 private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void introductionDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
-			SetCurrentDirectoryA("D:\\NUS\\CS2103\\Team\\V0.0");
-			Process::Start("[f11-2c][V0.0].pdf");
-
 		 }
 private: System::Void commandsDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
