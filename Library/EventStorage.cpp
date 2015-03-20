@@ -185,7 +185,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	}
 	
 	writeToCurrentFile();
-	logger.logStorageStringData("returning","n");
+	logger.logStoragePosition("Leaving deleteEvent");
 	return returnToLogicVector;
 
 	//saving in archive for Undo
@@ -261,6 +261,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	}
 	
 	writeToCurrentFile();
+	logger.logStoragePosition("Leaving editEvent");
 	return returnToLogicVector;
 
 	//store in event archive

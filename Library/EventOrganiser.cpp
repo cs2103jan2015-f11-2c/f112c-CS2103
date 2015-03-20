@@ -241,6 +241,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	vector<Event> sortResults;
 	time_t t = time(0);
 	struct tm* temp = localtime(&t);
+	Event tempEvent;
 
 	Event marker;
 	marker.setName(MARKER_CODE);
@@ -255,8 +256,23 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			exisitngEventDates = eventDateToVector(eventsToFilter[j]);
 			for(int k=0; k<exisitngEventDates.size();k++){
 				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) && (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
-					returnVector.push_back(eventsToFilter[j]);
-					isPushed = true;
+					//check all day.. set starttime and endtime
+					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
+						tempEvent = eventsToFilter[j];
+						if(wantedEventDates[i].tm_mday == tempEvent.getStartDate().tm_mday){ //start of multiday
+							tempEvent.setEndTime(23,59);
+						} else if(wantedEventDates[i].tm_mday == tempEvent.getEndDate().tm_mday){ //end of multiday
+							tempEvent.setStartTime(0,0);
+						} else{ //between multiday
+							tempEvent.setStartTime(0,0);
+							tempEvent.setEndTime(23,59);
+						}
+						returnVector.push_back(tempEvent);
+						isPushed = true;
+					} else{
+						returnVector.push_back(eventsToFilter[j]);
+						isPushed = true;
+					}
 				}
 			}
 		}
