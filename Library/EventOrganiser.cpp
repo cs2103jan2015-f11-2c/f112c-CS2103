@@ -265,6 +265,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			temp->tm_mon = wantedEventDates[i].tm_mday;
 			temp->tm_year = wantedEventDates[i].tm_mday;
 			*/
+			logger.logStoragePosition("pushing in to show vector");
 			marker.setStartDate(wantedEventDates[i].tm_mday, wantedEventDates[i].tm_mon, wantedEventDates[i].tm_year);
 			marker.setStartTime(0,0);
 			mktime(&marker.getStartDate());
