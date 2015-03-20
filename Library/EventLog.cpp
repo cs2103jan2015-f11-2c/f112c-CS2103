@@ -15,13 +15,13 @@ void EventLog::logStoragePosition(std::string functionName){
 void EventLog::logStorageIntData(std::string location, int data){
 	std::ofstream writeFile;
 	writeFile.open(textFile,std::ios::app);
-	writeFile << "Data: " << data << " at location: " << location << std::endl;
+	writeFile << "At status: " << location <<  "--Data: " << data << std::endl;
 	writeFile.close();
 }
 
 void EventLog::logStorageStringData(std::string location, std::string data){
 	std::ofstream writeFile;
 	writeFile.open(textFile,std::ios::app);
-	writeFile << "Data: " << data << " at location: " << location << std::endl;
+	writeFile << "At status: " << location <<  "--Data: " << data << std::endl;
 	writeFile.close();
 }

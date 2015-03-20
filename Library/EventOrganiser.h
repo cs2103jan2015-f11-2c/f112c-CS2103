@@ -5,6 +5,7 @@
 
 #include "Event.h"
 #include "Conversion.h"
+#include "EventLog.h"
 
 class EventOrganiser{
 private:
@@ -12,6 +13,7 @@ private:
 	static const int TOTAL_MONTHS_IN_A_YEAR;
 	static const int UNIQUE_ID;
 	static const string MARKER_CODE;
+	EventLog logger;
 
 public:
 	EventOrganiser(void);
