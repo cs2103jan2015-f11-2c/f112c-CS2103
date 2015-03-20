@@ -128,10 +128,14 @@ bool ParserProcessor::identifyDate(int index){
 				}
 			} 
 			
-			day = tempInt;
-			month = convertor.monthToInt(strMonth);
 			year = now->tm_year;
-			
+			month = convertor.monthToInt(strMonth);
+			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
+				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
+				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
+			}
+			day = tempInt;
+
 			if(!startDayFound){
 				startDayFound = true;
 				tempEventStore.setStartDate(day,month,year);
@@ -179,7 +183,15 @@ bool ParserProcessor::identifyTime(int index){
 			
 			if(tempInt >= 100){
 				minute = tempInt%100;
+				if(minute > 60){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+				}
 				hour = tempInt/100;
+				if(hour > 12){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+				}
 				if(afterTwelve){
 					if (hour < 12){
 						hour = hour + 12;
@@ -208,7 +220,15 @@ bool ParserProcessor::identifyTime(int index){
 				} catch (const std::invalid_argument& e){
 					hour = tempInt;
 					minute = 0;
-				} 
+				}
+				if(minute > 60){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+				}
+				if(hour > 12){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+				}
 				if(afterTwelve){
 					if(hour < 12){
 						hour = hour + 12;
@@ -451,8 +471,12 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 				}
 			}
 
-			day = tempInt;
 			month = convertor.monthToInt(strMonth);
+			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
+				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
+				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
+			}
+			day = tempInt;
 
 			//create startDate and endDate based on what Show is found
 			if(!systemShowWeek){

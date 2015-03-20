@@ -22,6 +22,9 @@ public:
 	static const std::string ERROR_MISSING_INDEX;
 	static const std::string ERROR_INSUFFICIENT_INFO;
 	static const std::string ERROR_UNKNOWN_COMMAND;
+	static const std::string ERROR_UNKNOWN_DATE;
+	static const std::string ERROR_UNKNOWN_HOUR;
+	static const std::string ERROR_UNKNOWN_MINUTE;
 	
 	ParserExceptions(std::string);
 

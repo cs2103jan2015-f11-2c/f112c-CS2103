@@ -11,7 +11,9 @@ const std::string ParserExceptions::ERROR_TOO_MANY_DEL = "PS007";
 const std::string ParserExceptions::ERROR_MISSING_INDEX = "PS008";
 const std::string ParserExceptions::ERROR_INSUFFICIENT_INFO = "PS009";
 const std::string ParserExceptions::ERROR_UNKNOWN_COMMAND = "PS010";
-
+const std::string ParserExceptions::ERROR_UNKNOWN_DATE = "PS011";
+const std::string ParserExceptions::ERROR_UNKNOWN_HOUR = "PS012";
+const std::string ParserExceptions::ERROR_UNKNOWN_MINUTE = "PS013";
 
 ParserExceptions::ParserExceptions(std::string errorCode){
 	if(errorCode == ERROR_MISSING_INPUT){
@@ -46,6 +48,15 @@ ParserExceptions::ParserExceptions(std::string errorCode){
 	}
 	if(errorCode == ERROR_UNKNOWN_COMMAND){
 		feedback = "Error: Unknown command.";
+	}
+	if(errorCode == ERROR_UNKNOWN_DATE){
+		feedback = "Error: Unknown date input.";
+	}
+	if(errorCode == ERROR_UNKNOWN_HOUR){
+		feedback = "Error: Invalid hour input for time.";
+	}
+	if(errorCode == ERROR_UNKNOWN_MINUTE){
+		feedback = "Error: Invalid minutes input for time.";
 	}
 }
 
