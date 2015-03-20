@@ -1,7 +1,7 @@
 #include "Logic.h"
 
 //for logging
-const string Logic::LOG_FILE_NAME = "logicLog.txt";
+const string Logic::LOG_FILE_NAME = "LogicLog.txt";
 const string Logic::ADDFLOAT_STRING = "executing addfloat command";
 const string Logic::ADD_STRING = "executing add command";
 const string Logic::DELETE_STRING = "executing delete command";
@@ -257,7 +257,6 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 	case Parser::ERROR_: {
 		display.setFeedbackStrings(userEvent.getFeedback());
-		isDone = false;
 		break;
 						 }
 
