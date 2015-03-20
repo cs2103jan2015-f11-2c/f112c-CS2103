@@ -123,6 +123,9 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 		tempEvents = eventStore.addEvent(userEvent);
 		display.setNormalEvents(tempEvents, newID);
 
+		tempEvents = display.getFloatingEvents();
+		display.setFloatingEvents(tempEvents, Display::GARBAGE_INT);
+
 		feedback = userEvent.getName() + Display::ADDED_MESSAGE;
 		display.setFeedbackStrings(feedback);
 		break;
