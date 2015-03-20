@@ -590,9 +590,7 @@ public: std::string convertTostd(String^ sysStr){
 //Pre-condition : None
 //Convert a std::string type to System::String^ type
 public: String^ convertToSys(std::string stdStr){
-			String^ newString = gcnew String(stdStr.c_str());
-			Console::WriteLine(newString);
-			return newString;
+			String^ 
 		}
 
 //===================================================================================================================================================================

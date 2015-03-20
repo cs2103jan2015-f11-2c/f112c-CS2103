@@ -95,44 +95,45 @@ Event Display::getEventFromID(int id) {
 
 
 //setters
-void Display::setNormalEvents(vector<Event> events, string feedback, vector<tm> label, int id) {
+
+void Display::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
 	newID = id;
+	setFeedbackStrings(feedback);
+
+	setFloatingEvents(floatingEvents);
+
+	setNormalEvents(normalEvents, label);
+}
+
+void Display::setFeedbackStrings(string newFeedback) {
+	feedbackDisplayStrings.push_back(newFeedback);
+	
+	while (feedbackDisplayStrings.size()>3){
+		feedbackDisplayStrings.erase(feedbackDisplayStrings.begin());
+	}
+
+	assert (feedbackDisplayStrings.size()<=3);
+}
+
+void Display::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEvents = events;
 	setMainDisplayLabel(label);
-	setFeedbackStrings(feedback);
 	normalEventsToString();
 }
 
-void Display::setFloatingEvents(vector<Event> events, string feedback, int id) {
-	newID = id;
+void Display::setFloatingEvents(vector<Event> events) {
 	floatingEvents = events;
 	totalFloatingEvents = events.size();
-	setFeedbackStrings(feedback);
 	floatingEventsToString();
 }
 
-void Display::setFeedbackEvents(vector<Event> events) {
-	//Maximum only 3
-	feedbackEvents.clear();
-
-	for (int i=0; i<3 || i< events.size();i++){
-		feedbackEvents.push_back(events[events.size()-i]);
-	}
-
-	std::reverse(feedbackEvents.begin(),feedbackEvents.end());
-
-	assert(feedbackEvents.size()<=3);
-}
-
-
 bool Display::setIsNew(int vectorIndex){
 	bool isNew;
-	if ( newID == normalEvents[vectorIndex].getID()){
+	if (newID == normalEvents[vectorIndex].getID()){
 		isNew = true;
 	} else {
 		isNew = false;
 	}
-
 	return isNew;
 }
 
@@ -231,10 +232,9 @@ void Display::normalEventsToString() {
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
 	int newEventIndex = -1;
+
 	//This for loop requires refactoring
-
 	int indexForNormalEvents = getTotalFloatingEvents();
-
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
@@ -345,21 +345,10 @@ void Display::floatingEventsToString() {
 
 		out.clear();
 	}
-
-	//Add in assertion to check only 1 or 0 new
-
 	assert(floatingDisplayStrings.size()>=1);
 }
 
-void Display::setFeedbackStrings(string newFeedback) {
-	feedbackDisplayStrings.push_back(newFeedback);
-	
-	while (feedbackDisplayStrings.size()>3){
-		feedbackDisplayStrings.erase(feedbackDisplayStrings.begin());
-	}
 
-	assert (feedbackDisplayStrings.size()<=3);
-}
 
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	EVENT_STRING noEvent;
@@ -401,12 +390,25 @@ void Display::setMainDisplayLabel (vector<tm> label){
 	}
 }
 
-
 string Display::getMainDisplayLabel(){
 	return mainDisplayLabel;
 }
 
+//========================================================================================================================
 
+// Not in use for now
+void Display::setFeedbackEvents(vector<Event> events) {
+	//Maximum only 3
+	feedbackEvents.clear();
+
+	for (int i=0; i<3 || i< events.size();i++){
+		feedbackEvents.push_back(events[events.size()-i]);
+	}
+
+	std::reverse(feedbackEvents.begin(),feedbackEvents.end());
+
+	assert(feedbackEvents.size()<=3);
+}
 
 /*
 void Display::setNewestEvent(int id) {

@@ -37,6 +37,8 @@ private:
 	vector<string> errorStrings;
 	string mainDisplayLabel;
 
+
+	vector<tm> tempMainDisplayLabel;
 	int newID;
 	int totalNumEvents;
 	int	mainStringHeaderCounter;
@@ -71,6 +73,7 @@ public:
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
 	string getMainDisplayLabel();
+	vector<tm> getTempMainDisplayLabel();
 
 	int getTotalNumEvents();
 	int getTotalFloatingEvents();
@@ -79,12 +82,13 @@ public:
 	int getNewID();
 	Event getEventFromID(int id);
 
-
-	//setters
-	void setNormalEvents(vector<Event> events, string feedback, vector<tm> label, int id);
-	void setFloatingEvents(vector<Event> events, string feedback, int id);
+public: 
+	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
+	
 	
 private:
+	void setNormalEvents(vector<Event> events,vector<tm> label);
+	void setFloatingEvents(vector<Event> events);
 	void setFeedbackEvents(vector<Event> events);
 	void setMainDisplayLabel (vector<tm> label);
 
