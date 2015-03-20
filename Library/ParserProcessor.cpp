@@ -379,7 +379,8 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
-	unsigned int i = 0, tempi = 0; 
+	unsigned int i = 0;
+	int tempi = 0; 
 	int j = 0;
 	if(systemShowDay || systemShowWeek || systemShowMonth){
 		tempi++;
