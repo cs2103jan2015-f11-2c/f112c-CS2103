@@ -11,9 +11,10 @@ Search::~Search(void)
 }
 
 int Search::searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSearch){
-	
+	logger.logStorageIntData("searching For this EventID",eventID);
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getID() == eventID){
+			logger.logStorageIntData("searching current content... index:",i);
 			return i;
 		}
 	} 

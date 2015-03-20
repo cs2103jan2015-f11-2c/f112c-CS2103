@@ -162,10 +162,13 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 
 	if(eventID == INVALID){ //event is not a user display Index
 		eventID = eventToBeDeleted.getID(); //set relevant eventID 
+		logger.logStorageIntData("eventID to delete: ",eventID);
 	}
-	assert(eventID != INVALID);
+	//assert(eventID != INVALID);
 	//Normal Case
+	logger.logStoragePosition("entering search");
 	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
+	logger.logStorageIntData("getting index from currentContent",indexOfEventID);
 	if(indexOfEventID > INVALID){ 
 		eventToBeDeleted = currentContent[indexOfEventID];
 		logger.logStorageStringData("deleteNormal",eventToBeDeleted.getName());
@@ -182,6 +185,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	}
 	
 	writeToCurrentFile();
+	logger.logStorageStringData("returning","n");
 	return returnToLogicVector;
 
 	//saving in archive for Undo

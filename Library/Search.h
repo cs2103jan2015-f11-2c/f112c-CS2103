@@ -5,11 +5,12 @@
 
 #include "Event.h"
 #include <assert.h>
+#include "EventLog.h"
 
 class Search{
 private:
 	vector<Event> searchResultsToReturn;
-
+	EventLog logger;
 public:
 	//Constructor, Destructor
 	Search(void);
