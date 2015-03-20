@@ -30,25 +30,17 @@ private:
 	vector<Event> normalEvents;
 	vector<Event> floatingEvents;
 	vector<Event> feedbackEvents;
-	
+	vector<tm> tempMainDisplayLabel;
+
 	vector<EVENT_STRING> mainDisplayStrings;
+	string mainDisplayLabel;
 	vector<EVENT_STRING> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 	vector<string> errorStrings;
-	string mainDisplayLabel;
-
-
-	vector<tm> tempMainDisplayLabel;
+	
 	int newID;
-	int totalNumEvents;
 	int	mainStringHeaderCounter;
 	bool isSingleDay;
-
-
-	// This is required as events' numberings in main display will carry on from here
-	// For now, main display events' numbering will start from 1
-	int totalFloatingEvents;
-
 
 public:
 	static const int GARBAGE_INT;
@@ -68,33 +60,38 @@ public:
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
 	vector<Event> getFeedbackEvents();
+	vector<tm> getTempMainDisplayLabel();
+
 	vector<EVENT_STRING> getMainDisplayStrings();
 	vector<EVENT_STRING> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
 	string getMainDisplayLabel();
-	vector<tm> getTempMainDisplayLabel();
-
+	
 	int getTotalNumEvents();
 	int getTotalFloatingEvents();
 	int getTotalNormalEvents();
 	int getIDFromIndex(int index);
 	int getNewID();
+
 	Event getEventFromID(int id);
 
 public: 
+	//setter
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
 	
-	
 private:
+	//private setters
 	void setNormalEvents(vector<Event> events,vector<tm> label);
+	void setFeedbackStrings(string newFeedback);
 	void setFloatingEvents(vector<Event> events);
 	void setFeedbackEvents(vector<Event> events);
 	void setMainDisplayLabel (vector<tm> label);
 
+	//private methods
 	void normalEventsToString();
 	void floatingEventsToString();
-	void setFeedbackStrings(string newFeedback);
+	
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
 	bool setIsNew(int);

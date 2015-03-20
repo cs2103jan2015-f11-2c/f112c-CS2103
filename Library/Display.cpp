@@ -3,10 +3,10 @@
 
 const int Display::GARBAGE_INT = -12345;
 const string Display::NO_EVENTS_MESSAGE = "Currently no task";
-const string Display::ADDED_MESSAGE = " added";
-const string Display::EDITED_MESSAGE = " edited";
-const string Display::DELETED_MESSAGE = " deleted";
-const string Display::EVENT_NOT_FOUND_MESSAGE = " not found";
+const string Display::ADDED_MESSAGE = " added.";
+const string Display::EDITED_MESSAGE = " edited.";
+const string Display::DELETED_MESSAGE = " deleted.";
+const string Display::EVENT_NOT_FOUND_MESSAGE = " not found.";
 const string Display::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 
 //constructor
@@ -17,7 +17,6 @@ Display::Display() {
 	mainDisplayStrings.clear();
 	floatingDisplayStrings.clear();
 	feedbackDisplayStrings.clear();
-	
 }
 
 
@@ -32,6 +31,10 @@ vector<Event> Display::getFloatingEvents() {
 
 vector<Event> Display::getFeedbackEvents() {
 	return feedbackEvents;
+}
+
+vector<tm> Display::getTempMainDisplayLabel() {
+	return tempMainDisplayLabel;
 }
 
 vector<Display::EVENT_STRING> Display::getMainDisplayStrings() {
@@ -101,7 +104,6 @@ void Display::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEven
 	setFeedbackStrings(feedback);
 
 	setFloatingEvents(floatingEvents);
-
 	setNormalEvents(normalEvents, label);
 }
 
@@ -115,16 +117,72 @@ void Display::setFeedbackStrings(string newFeedback) {
 	assert (feedbackDisplayStrings.size()<=3);
 }
 
+void Display::setFloatingEvents(vector<Event> events) {
+	floatingEvents = events;
+	floatingEventsToString();
+}
+
+void Display::floatingEventsToString() {
+	floatingDisplayStrings.clear();
+
+	if (floatingEvents.empty()) {
+		setNoEventsMessage(floatingDisplayStrings);
+		return;
+	}
+	
+
+	for (int i = 0; i < floatingEvents.size(); i++) {
+		ostringstream out;
+		out << (i + 1) << "." << " " << floatingEvents[i].getName();
+		
+		EVENT_STRING temp;
+		temp.eventString = out.str();
+
+		if (floatingEvents[i].getID() == newID){
+			temp.isNew = true;
+		} else{
+			temp.isNew = false;
+		}
+
+		floatingDisplayStrings.push_back(temp);
+
+		out.clear();
+	}
+	assert(floatingDisplayStrings.size()>=1);
+}
+
 void Display::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEvents = events;
 	setMainDisplayLabel(label);
 	normalEventsToString();
 }
 
-void Display::setFloatingEvents(vector<Event> events) {
-	floatingEvents = events;
-	totalFloatingEvents = events.size();
-	floatingEventsToString();
+void Display::setMainDisplayLabel (vector<tm> label){
+	assert(label.size()==2);
+
+	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
+		//1 day only
+		isSingleDay = true;
+		Conversion convert;
+		string dayOfMonth = convert.intToString(label[0].tm_mday);
+
+		string month = convert.intToMonth(label[0].tm_mon);
+
+		string dayOfWeek = convert.intToDayOfWeek(label[0].tm_wday);
+
+		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
+	} else {
+		//More than 1 day
+		isSingleDay = false;
+		Conversion convert;
+		string startDayOfMonth = convert.intToString(label[0].tm_mday);
+		string startMonth = convert.intToMonth(label[0].tm_mon);
+
+		string endDayOfMonth = convert.intToString(label[1].tm_mday);
+		string endMonth = convert.intToMonth(label[1].tm_mon);
+
+		mainDisplayLabel = startDayOfMonth + " " + startMonth + " - " + endDayOfMonth + endMonth;
+	}
 }
 
 bool Display::setIsNew(int vectorIndex){
@@ -317,39 +375,6 @@ void Display::normalEventsToString() {
 	assert(mainDisplayStrings.size()>=1);
 }
 
-
-
-void Display::floatingEventsToString() {
-	floatingDisplayStrings.clear();
-
-	if (floatingEvents.empty()) {
-		setNoEventsMessage(floatingDisplayStrings);
-		return;
-	}
-	
-
-	for (int i = 0; i < floatingEvents.size(); i++) {
-		ostringstream out;
-		out << (i + 1) << "." << " " << floatingEvents[i].getName();
-		
-		EVENT_STRING temp;
-		temp.eventString = out.str();
-
-		if (floatingEvents[i].getID() == newID){
-			temp.isNew = true;
-		} else{
-			temp.isNew = false;
-		}
-
-		floatingDisplayStrings.push_back(temp);
-
-		out.clear();
-	}
-	assert(floatingDisplayStrings.size()>=1);
-}
-
-
-
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	EVENT_STRING noEvent;
 	noEvent.eventString = NO_EVENTS_MESSAGE;
@@ -362,37 +387,8 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 }
 
 
-void Display::setMainDisplayLabel (vector<tm> label){
-	assert(label.size()==2);
 
-	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
-		//1 day only
-		isSingleDay = true;
-		Conversion convert;
-		string dayOfMonth = convert.intToString(label[0].tm_mday);
 
-		string month = convert.intToMonth(label[0].tm_mon);
-
-		string dayOfWeek = convert.intToDayOfWeek(label[0].tm_wday);
-
-		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
-	} else {
-		//More than 1 day
-		isSingleDay = false;
-		Conversion convert;
-		string startDayOfMonth = convert.intToString(label[0].tm_mday);
-		string startMonth = convert.intToMonth(label[0].tm_mon);
-
-		string endDayOfMonth = convert.intToString(label[1].tm_mday);
-		string endMonth = convert.intToMonth(label[1].tm_mon);
-
-		mainDisplayLabel = startDayOfMonth + " " + startMonth + " - " + endDayOfMonth + endMonth;
-	}
-}
-
-string Display::getMainDisplayLabel(){
-	return mainDisplayLabel;
-}
 
 //========================================================================================================================
 
