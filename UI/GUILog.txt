@@ -207,3 +207,16 @@ Feedback displayed
 Floating displayed
 Main displayed
 Main label displayed
+Program starts at: 21 Mar,Saturday, 14:58:57
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add wtf;

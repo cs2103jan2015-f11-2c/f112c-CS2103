@@ -53,6 +53,10 @@ vector<string> Display::getErrorStrings() {
 	return errorStrings;
 }
 
+string Display::getMainDisplayLabel() {
+	return "";
+}
+
 int Display::getTotalNumEvents() {
 	return floatingEvents.size() + normalEvents.size();
 }
@@ -113,7 +117,6 @@ Event Display::getEventFromID(int id) {
 
 
 //setters
-
 void Display::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
 	newID = id;
 	setFeedbackStrings(feedback);
