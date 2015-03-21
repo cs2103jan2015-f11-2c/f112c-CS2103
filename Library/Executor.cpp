@@ -2,14 +2,12 @@
 
 
 Executor::Executor() {
-	while (!commandStack.empty()) {
-		commandStack.pop();
+	while (!commandPtrStack.empty()) {
+		commandPtrStack.pop();
 	}
 }
 
-/*
-void Executor::execute(ICommand command) {
-	command.execute();
-	commandStack.push(command);
+void Executor::execute(ICommand* command) {
+	command->execute();
+	commandPtrStack.push(command);
 }
-*/

@@ -11,12 +11,12 @@ using std::stack;
 
 class Executor {
 private:
-	stack<ICommand> commandStack;
+	stack<ICommand*> commandPtrStack;
 
 public:
 	Executor();
 
-	//void execute(ICommand command);
+	void execute(ICommand* command);
 
 };
 
