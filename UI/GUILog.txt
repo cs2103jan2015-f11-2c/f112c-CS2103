@@ -1278,3 +1278,22 @@ Floating displayed
 Main displayed
 Main label displayed
 User Command: delete bday party;
+Program starts at: 21 Mar,Saturday, 17:17:41
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add JB; monday to thursday 
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: exit

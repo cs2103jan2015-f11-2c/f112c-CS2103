@@ -6,6 +6,7 @@ const std::string ParserProcessor::PROCESS_ADD_EVENT = "processAddEvent";
 const std::string ParserProcessor::PROCESS_EDIT_EVENT = "processEditEvent";
 const std::string ParserProcessor::IDENTIFY_EVENT_NAME = "identifyEventName";
 const std::string ParserProcessor::IDENTIFY_DATE = "identifyDate";
+const std::string ParserProcessor::IDENTIFY_DAY = "identifyDay";
 const std::string ParserProcessor::IDENTIFY_TIME = "identifyTime";
 const std::string ParserProcessor::ADD_EVENT_CORRECTOR = "addEventCorrector";
 const std::string ParserProcessor::EDIT_EVENT_CORRECTOR = "editEventCorrector";
@@ -28,6 +29,17 @@ ParserProcessor::ParserProcessor(){
 	
 	keywordTime[0] = "am";
 	keywordTime[1] = "pm";
+
+	keywordDay[0] = "today";
+	keywordDay[1] = "tomorrow";
+	keywordDay[2] = "mon";
+	keywordDay[3] = "tues";
+	keywordDay[4] = "wed";
+	keywordDay[5] = "thurs";
+	keywordDay[6] = "fri";
+	keywordDay[7] = "sat";
+	keywordDay[8] = "sun";
+	keywordDay[9] = "next";
 
 	matchFound = false;
 	startDayFound = false;
@@ -65,6 +77,7 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 		}
 
 		for(i = 1; i < fragmentedWords.size(); i++){
+			matchFound = identifyDay(i);
 			matchFound = identifyDate(i);
 			matchFound = identifyTime(i);
 			matchFound = false;
@@ -96,6 +109,60 @@ bool ParserProcessor::identifyEventName(int index){
 		nameFound = true;
 	}
 	return nameFound;
+}
+
+bool ParserProcessor::identifyDay(int index){
+	logger.logParserEnterFunc(IDENTIFY_DAY);
+
+	Conversion convertor;
+	int tempIndex = 0, tempInt = 0;
+	int nowday = 0, nowweekday = 0, numWdaysApart = 0;
+	int day = 0, month = 0, year = 0, weekday = 0;
+	std::string strDay;
+
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS-1 && !matchFound; j++){   // NUMBER_OF_KEYWORDS_DAYS-1 because keyword "next" is not going to be searched first
+		if(fragmentedWords[index].find(keywordDay[j]) != std::string::npos){
+			tempIndex = index;
+			strDay = keywordDay[j];
+			matchFound = true;
+		
+			if(strDay == "today"){
+				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+				tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
+				startDayFound = true;
+				endDayFound = true;
+			} else if(strDay == "tomorrow"){
+				tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
+				tempEventStore.setEndDate(now->tm_mday+1,now->tm_mon,now->tm_year);
+				startDayFound = true;
+				endDayFound = true;
+			} else {
+				nowweekday = now->tm_wday;
+				weekday = convertor.dayOfWeekToInt(strDay);
+				if(weekday > nowweekday){
+					numWdaysApart = weekday - nowweekday;
+				} else if(weekday <= nowweekday){
+					numWdaysApart = weekday -(nowweekday - NUMBER_OF_DAYSINAWEEK);
+				}
+				tempIndex--;
+				if(fragmentedWords[tempIndex] == "next"){
+					if(weekday < nowweekday){
+						numWdaysApart = numWdaysApart + 7;
+					}
+				}
+				if(!startDayFound){
+					startDayFound = true;
+					tempEventStore.setStartDate(now->tm_mday+numWdaysApart,now->tm_mon,now->tm_year);
+				} else if (!endDayFound){
+					endDayFound = true;
+					tempEventStore.setEndDate(now->tm_mday+numWdaysApart,now->tm_mon,now->tm_year);
+				} else {
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+				}
+			}
+		}
+	}
+	return matchFound;
 }
 
 bool ParserProcessor::identifyDate(int index){

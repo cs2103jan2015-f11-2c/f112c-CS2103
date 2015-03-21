@@ -17,6 +17,7 @@ private:
 	static const std::string PROCESS_ADD_EVENT;
 	static const std::string PROCESS_EDIT_EVENT;
 	static const std::string IDENTIFY_EVENT_NAME;
+	static const std::string IDENTIFY_DAY;
 	static const std::string IDENTIFY_DATE;
 	static const std::string IDENTIFY_TIME;
 	static const std::string ADD_EVENT_CORRECTOR;
@@ -26,10 +27,13 @@ private:
 
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
+	static const int NUMBER_OF_KEYWORDS_DAYS = 10;
+	static const int NUMBER_OF_DAYSINAWEEK = 7;
 	static const std::string LOCKUP_USED_INFORMATION;
-
+	
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];
+	std::string keywordDay[NUMBER_OF_KEYWORDS_DAYS];
 	
 	//boolean variables for Add and Edit command
 	bool matchFound;
@@ -65,6 +69,7 @@ public:
 	Event processEditEvent(std::vector<std::string>);
 	bool identifyEventName(int);
 	//bool identifyAtDue(std::vector<std::string>, int);
+	bool identifyDay(int);
 	bool identifyDate(int);
 	bool identifyTime(int);
 	void addEventCorrector();

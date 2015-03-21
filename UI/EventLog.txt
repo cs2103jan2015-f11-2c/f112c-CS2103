@@ -237,3 +237,8 @@ At status: getting index from currentContent--Data: 20
 At status: deleteNormal--Data: bday party
 Entered showDates
 Entered Leaving deleteEvent
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: JB
+Entered showDates

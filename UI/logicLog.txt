@@ -1,13 +1,3 @@
 executing show command
 executing show command
-executing show command
-executing show command
 executing add command
-executing show command
-executing delete command
-executing show command
-executing show command
-executing show command
-executing delete command
-executing delete command
-entered case 1

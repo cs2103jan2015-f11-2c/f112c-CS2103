@@ -201,7 +201,7 @@ std::string Conversion::intToDayOfWeek (int dayInNum){
 	}
 }
 
-int dayOfWeekToInt (std::string day){
+int Conversion::dayOfWeekToInt (std::string day){
 	if(day == "sun"){
 		return 0;
 	} else if (day == "mon"){
