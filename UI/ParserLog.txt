@@ -1122,3 +1122,321 @@ Entered fragmentShowString
 Entered processShowEvent
 Entered eventMkTimeCorrector
 Successfully parsed input "show 20mar to 25mar"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show apr"
+Initialised parsing of input "show month apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month apr"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show apr"
+Initialised parsing of input "show mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month apr"
+Initialised parsing of input "show mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show mar"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show apr"
+Initialised parsing of input "show month apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month apr"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show mar"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show mar"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "redo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "redo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "show 10feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 10feb"
+Initialised parsing of input "show 20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20feb"
+Initialised parsing of input "show 30feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show 30feb"
+Initialised parsing of input "show 2mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 2mar"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "undo"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "undo"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"

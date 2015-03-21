@@ -317,7 +317,7 @@ void Display::normalEventsToString() {
 		ostringstream out;
 
 		//Generate header
-		if (normalEvents[i].getName() == NEW_DAY_MESSAGE && !isSingleDay){
+		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
 
 			if (headCounter!=0){
 				out << "\n";
@@ -345,10 +345,7 @@ void Display::normalEventsToString() {
 			out << "]";
 			out << "===============================================";
 			out << "\n";
-		} else if (normalEvents[i].getName() == NEW_DAY_MESSAGE && isSingleDay){
-			out << "[ Today ]=========================================================";
-			out << "\n";
-		}
+		} 
 		 //Generate event list
 		 else {
 			out << (++indexForNormalEvents) << "." ;
