@@ -39,3 +39,49 @@ Entered showDates
 Entered showDates
 Entered addEvent
 At status: addFloat--Data: wtf
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addFloat--Data: hehey
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addFloat--Data: hellohello
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: hey
+Entered showDates
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: yo
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: oioioi
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: hahahahaha
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: heyheyheyheyhey
+Entered showDates
+Entered deleteEvent
+Entered entering search
+At status: searching For this EventID--Data: -123
+At status: getting index from currentContent--Data: -1
+At status: searching For this EventID--Data: -123
+Entered Leaving deleteEvent
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates

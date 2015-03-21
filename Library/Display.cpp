@@ -54,7 +54,7 @@ vector<string> Display::getErrorStrings() {
 }
 
 string Display::getMainDisplayLabel() {
-	return "";
+	return mainDisplayLabel;
 }
 
 int Display::getTotalNumEvents() {

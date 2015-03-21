@@ -552,7 +552,6 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 
 			//Have a welcome message
 
-			//Invoke a show() to logic so as to display floating tasks and today's tasks
 }
 
 private: void loadData(){
@@ -562,13 +561,13 @@ private: void loadData(){
 			 log ("Program starts at: " + convertTostd(timeToLog));
 			 displayToMainDisplayLabel(convertTostd(time));
 
-			
+			 std::string loadCommand2 = "show floating";
+			 executeUserInput(loadCommand2);
 
 			 std::string loadCommand1 = "show today";
 			 executeUserInput(loadCommand1);
 
-			 std::string loadCommand2 = "show floating";
-			 executeUserInput(loadCommand2);
+			 
 		 }
 
 //Pre-condition : None 
@@ -847,21 +846,21 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 */
 
 private: void displayHelpIntroduction(){
+			 std::string toMainDisplayLabel = "Help Introduction";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
 
-
-
+			 vector<Display::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
+			 displayToMainDisplay(helpIntroduction);
 		 }
 
 
 private: void displayHelpCommands(){
+			 std::string toMainDisplayLabel = "Commands";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
 
-
-
+			 vector<Display::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
+			 displayToMainDisplay(helpCommands);
 		 }
-
-
-
-
 
 
 
@@ -1153,8 +1152,11 @@ private: System::Void archiveDisplay_Click(System::Object^  sender, System::Even
 */
 
 private: System::Void introductionDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpIntroduction();
 		 }
+
 private: System::Void commandsDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpCommands();
 		 }
 
 //===================================================================================================================================================================

@@ -220,3 +220,189 @@ Floating displayed
 Main displayed
 Main label displayed
 User Command: add wtf;
+Program starts at: 21 Mar,Saturday, 15:10:47
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show today
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:12:23
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:12:35
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:12:50
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:14:01
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hehey;
+Program starts at: 21 Mar,Saturday, 15:14:21
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add heyheyhey
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add heyheyhey
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hellohello;
+Program starts at: 21 Mar,Saturday, 15:14:39
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hey;10pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:15:11
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add yo;10am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add oioioi;2am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hahahahaha;10pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add heyheyheyheyhey;8am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Program starts at: 21 Mar,Saturday, 15:19:04
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: help
+Main label displayed
+Main displayed
+Program starts at: 21 Mar,Saturday, 15:20:29
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: commands
+Main label displayed
+Main displayed
+Program starts at: 21 Mar,Saturday, 15:21:33
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+User Command: exit
