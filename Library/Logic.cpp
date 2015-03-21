@@ -2,13 +2,15 @@
 
 //for logging
 const string Logic::LOG_FILE_NAME = "LogicLog.txt";
-const string Logic::ADDFLOAT_STRING = "executing addfloat command";
-const string Logic::ADD_STRING = "executing add command";
-const string Logic::DELETE_STRING = "executing delete command";
-const string Logic::EDIT_STRING = "executing edit command";
-const string Logic::SHOW_STRING = "executing show command";
-const string Logic::SEARCH_STRING = "executing search command";
-const string Logic::ERROR_STRING = "executing error command";
+const string Logic::ADDFLOAT_EXECUTING = "executing addfloat command";
+const string Logic::ADD_EXECUTING = "executing add command";
+const string Logic::DELETE_EXECUTING = "executing delete command";
+const string Logic::EDIT_EXECUTING = "executing edit command";
+const string Logic::SHOW_EXECUTING = "executing show command";
+const string Logic::SEARCH_EXECUTING = "executing search command";
+const string Logic::ERROR_EXECUTING = "executing error command";
+const string Logic::CASE_0 = "entered case 0";
+const string Logic::CASE_1 = "entered case 1";
 
 //for exceptions
 const string Logic::EXCEPTION_WRONG_ISFLOATING = "exception: isFloating set wrong";
@@ -131,6 +133,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			switch (numResults) {
 			//if eventStore returns no events, means the event user wants to delete does not exist
 			case 0: {
+				log(CASE_0);
+
 				vector<Event> floatingEvents = display.getFloatingEvents();
 				vector<Event> normalEvents = display.getNormalEvents();
 				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
@@ -142,6 +146,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 			//if eventStore returns 1 event, delete that event
 			case 1: {
+				log(CASE_1);
+
 				bool isFloat = tempEvents[0].getIsFloating();
 				vector<Event> floatingEvents, normalEvents;
 
@@ -200,6 +206,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			switch (numResults) {
 			//if eventStore returns no events, means the event user wants to edit does not exist
 			case 0: {
+				log(CASE_0);
+
 				vector<Event> floatingEvents = display.getFloatingEvents();
 				vector<Event> normalEvents = display.getNormalEvents();
 				feedback = eventName + Display::EVENT_NOT_FOUND_MESSAGE;
@@ -212,6 +220,8 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 			//if eventStore returns 1 event, edit that event
 			case 1: {
+				log(CASE_1);
+
 				Event eventToEdit = tempEvents[0];
 				bool isFloat = eventToEdit.getIsFloating();
 				id = eventToEdit.getID();
@@ -324,25 +334,25 @@ string Logic::commandToString(Parser::commandType command) {
 	switch (command) {
 
 	case Parser::ADDFLOAT:
-		return ADDFLOAT_STRING;
+		return ADDFLOAT_EXECUTING;
 	
 	case Parser::ADD:
-		return ADD_STRING;
+		return ADD_EXECUTING;
 
 	case Parser::DELETE_: 
-		return DELETE_STRING;
+		return DELETE_EXECUTING;
 
 	case Parser::EDIT:
-		return EDIT_STRING;
+		return EDIT_EXECUTING;
 
 	case Parser::SHOW:
-		return SHOW_STRING;
+		return SHOW_EXECUTING;
 
 	case Parser::SEARCH:
-		return SEARCH_STRING;
+		return SEARCH_EXECUTING;
 
 	case Parser::ERROR_:
-		return ERROR_STRING;
+		return ERROR_EXECUTING;
 
 	default:
 		break;

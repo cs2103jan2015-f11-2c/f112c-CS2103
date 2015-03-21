@@ -24,13 +24,15 @@ private:
 public:
 	//for logging
 	static const string LOG_FILE_NAME;
-	static const string ADDFLOAT_STRING;
-	static const string ADD_STRING;
-	static const string DELETE_STRING;
-	static const string EDIT_STRING;
-	static const string SHOW_STRING;
-	static const string SEARCH_STRING;
-	static const string ERROR_STRING;
+	static const string ADDFLOAT_EXECUTING;
+	static const string ADD_EXECUTING;
+	static const string DELETE_EXECUTING;
+	static const string EDIT_EXECUTING;
+	static const string SHOW_EXECUTING;
+	static const string SEARCH_EXECUTING;
+	static const string ERROR_EXECUTING;
+	static const string CASE_0;
+	static const string CASE_1;
 
 	//for exceptions
 	static const string EXCEPTION_WRONG_ISFLOATING;
