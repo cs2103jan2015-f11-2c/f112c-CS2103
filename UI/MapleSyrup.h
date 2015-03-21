@@ -561,13 +561,11 @@ private: void loadData(){
 			 log ("Program starts at: " + convertTostd(timeToLog));
 			 displayToMainDisplayLabel(convertTostd(time));
 
-			 std::string loadCommand2 = "show floating";
-			 executeUserInput(loadCommand2);
-
-			 std::string loadCommand1 = "show today";
+			 std::string loadCommand1 = "show floating";
 			 executeUserInput(loadCommand1);
 
-			 
+			 std::string loadCommand2 = "show today";
+			 executeUserInput(loadCommand2); 
 		 }
 
 //Pre-condition : None 
@@ -1132,6 +1130,7 @@ private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::E
 * ===================================================================================================================================================================
 */
 private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 
 		 }
 private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
