@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef HELP_H
-#define HELP_H
+#ifndef UIHELP_H
+#define UIHELP_H
 
 #include <iostream>
 #include <string>

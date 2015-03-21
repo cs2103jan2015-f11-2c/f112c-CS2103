@@ -6,6 +6,8 @@
 #include "Logic.h"
 #include "Conversion.h"
 #include "CommandSuggestion.h"
+#include "UIHelp.h"
+#include "UIShow.h"
 
 
 
@@ -32,6 +34,10 @@ namespace UI {
 		
 		Conversion* cVPtr;
 
+		UIHelp* helpPtr;
+
+		UIShow* showPtr;
+
 	private: System::Windows::Forms::Button^  showButton;
 	private: System::Windows::Forms::Button^  helpButton;
 	private: System::Windows::Forms::Button^  introductionDisplay;
@@ -57,6 +63,10 @@ namespace UI {
 			lGPtr = new Logic;
 
 			cVPtr = new Conversion;
+
+			helpPtr = new UIHelp;
+
+			showPtr = new UIShow;
 		}
 
 	protected:
@@ -554,8 +564,11 @@ private: void loadData(){
 
 			
 
-			 std::string loadCommand = "show today";
-			 executeUserInput(loadCommand);
+			 std::string loadCommand1 = "show today";
+			 executeUserInput(loadCommand1);
+
+			 std::string loadCommand2 = "show floating";
+			 executeUserInput(loadCommand2);
 		 }
 
 //Pre-condition : None 
@@ -729,7 +742,24 @@ private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFl
 //Pre-condition : None
 //Extract the first 4 letters of an input. It is also being converted to all lowercase
 public: std::string extractFirstFourLetters(std::string input){
+			if (input.size() < 4){
+				return input;
+			}
+
 			std::string tempOutput = input.substr(0,4);
+			std::string output = cVPtr->toLowerCase(tempOutput);
+			
+			return output;
+		}
+
+//Pre-condition : None
+//Extract the first 4 letters of an input. It is also being converted to all lowercase
+public: std::string extractFirstEightLetters(std::string input){
+			if (input.size() < 8){
+				return input;
+			}
+
+			std::string tempOutput = input.substr(0,8);
 			std::string output = cVPtr->toLowerCase(tempOutput);
 			
 			return output;
@@ -779,18 +809,22 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 std::string input = convertTostd(temp);
 			 log("User Command: " + input);
 
-			 std::string firstfourletters = extractFirstFourLetters(convertTostd (temp));
+			 std::string firstFourLetters = extractFirstFourLetters(convertTostd (temp));
 
-			if (firstfourletters == "exit"){
+			if (firstFourLetters == "exit"){
 				Application::Exit();
 				return;
 			}
 
-			if (firstfourletters == "help"){
-				
-				
+			if (firstFourLetters == "help"){
+				displayHelpIntroduction();
 				return;
+			}
 
+			std::string firstEightLetters = extractFirstEightLetters( convertTostd (temp));
+			if (firstEightLetters == "commands"){
+				displayHelpCommands();
+				return;
 			}
 			
 			if (temp == ""){
@@ -805,6 +839,33 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 
 //===================================================================================================================================================================
 
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link commandBar to CommandSuggestion.h to display the various suggestions 
+* ===================================================================================================================================================================
+*/
+
+private: void displayHelpIntroduction(){
+
+
+
+		 }
+
+
+private: void displayHelpCommands(){
+
+
+
+		 }
+
+
+
+
+
+
+
+//===================================================================================================================================================================
 
 /*
 * =================================================================================================================================================================== 
@@ -1064,6 +1125,13 @@ private: Void log(std::string logString){
 private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::EventArgs^  e) {			 
 		 }
 
+
+
+/*
+* =================================================================================================================================================================== 
+* Show button functions
+* ===================================================================================================================================================================
+*/
 private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -1074,10 +1142,23 @@ private: System::Void allDisplay_Click(System::Object^  sender, System::EventArg
 		 }
 private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
+
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Help button functions
+* ===================================================================================================================================================================
+*/
+
 private: System::Void introductionDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void commandsDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
+
+//===================================================================================================================================================================
+
 private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {

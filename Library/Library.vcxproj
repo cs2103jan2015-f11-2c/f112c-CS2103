@@ -78,6 +78,7 @@
     <ClCompile Include="ParserProcessor.cpp" />
     <ClCompile Include="Search.cpp" />
     <ClCompile Include="UIHelp.cpp" />
+    <ClCompile Include="UIShow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandSuggestion.h" />
@@ -96,6 +97,7 @@
     <ClInclude Include="ParserProcessor.h" />
     <ClInclude Include="Search.h" />
     <ClInclude Include="UIHelp.h" />
+    <ClInclude Include="UIShow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
