@@ -147,6 +147,9 @@
   <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
     <value>done</value>
   </data>
+  <data name="commandBox.AutoCompleteCustomSource10" xml:space="preserve">
+    <value>commands</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="commandBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 11.25pt</value>

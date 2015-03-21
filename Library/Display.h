@@ -78,7 +78,7 @@ public:
 
 	//setter
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
-	
+
 private:
 	//private setters
 	void setNormalEvents(vector<Event> events,vector<tm> label);
