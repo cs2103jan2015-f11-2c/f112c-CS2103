@@ -1130,12 +1130,24 @@ private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::E
 * ===================================================================================================================================================================
 */
 private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
-			 
+			 std::string loadCommand = "show today";
+			 executeUserInput(loadCommand);
+
 		 }
 private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = "show week";
+			 executeUserInput(loadCommand);
 		 }
+
 private: System::Void monthDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = "show month";
+			 executeUserInput(loadCommand);
 		 }
+
+
+
+
+
 private: System::Void allDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {

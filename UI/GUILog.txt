@@ -1659,3 +1659,342 @@ Feedback displayed
 Floating displayed
 Main displayed
 Main label displayed
+Program starts at: 22 Mar,Sunday, 00:09:04
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete test1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 21mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 14
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 12
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 10
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 9
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show floating
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 2
+Program starts at: 22 Mar,Sunday, 00:10:09
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show today
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 13feb to 14feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hey;
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 2
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add vrvwever;next fri
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 3
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show oioi
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show next friday
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show fri
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show next fri
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show tomorrow
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show today
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: delete 1
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: help
+Main label displayed
+Main displayed
+User Command: commands
+Main label displayed
+Main displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 22 Mar,Sunday, 00:12:29
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show apr
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 1mar to 1apr
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add lll;fri
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 22 Mar,Sunday, 00:14:25
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show all
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: exit
