@@ -72,17 +72,17 @@ const std::string UIHelp::HELP_GUIDE_REDO = "TBC \n";
 
 const std::string UIHelp::HELP_GUIDE_EXIT = "TBC \n";
 
-const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1. Add",
-																		"2. Delete",
-																		"3. Edit",
-																		"4. Done",
-																		"5. Search",
-																		"6. Show",
-																		"7. Undo",
-																		"8. Redo",
-																		"9. Exit",
-																		"10. Help",
-																		"11. Commands",
+const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tAdd",
+																		"2.\tDelete",
+																		"3.\tEdit",
+																		"4.\tDone",
+																		"5.\tSearch",
+																		"6.\tShow",
+																		"7.\tUndo",
+																		"8.\tRedo",
+																		"9.\tExit",
+																		"10.\tHelp",
+																		"11.\tCommands",
 																	};
 
 

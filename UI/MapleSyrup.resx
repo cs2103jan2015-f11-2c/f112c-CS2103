@@ -3697,6 +3697,30 @@
   <data name="&gt;&gt;redoButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="calenderTop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>378, 3</value>
+  </data>
+  <data name="calenderTop.TabIndex" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="calenderTop.ToolTip" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="calenderTop.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;calenderTop.Name" xml:space="preserve">
+    <value>calenderTop</value>
+  </data>
+  <data name="&gt;&gt;calenderTop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MonthCalendar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;calenderTop.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;calenderTop.ZOrder" xml:space="preserve">
+    <value>28</value>
+  </data>
   <data name="showButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
@@ -3874,27 +3898,6 @@
   <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>204, 17</value>
   </metadata>
-  <data name="calenderTop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>378, 3</value>
-  </data>
-  <data name="calenderTop.TabIndex" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <data name="calenderTop.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;calenderTop.Name" xml:space="preserve">
-    <value>calenderTop</value>
-  </data>
-  <data name="&gt;&gt;calenderTop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.MonthCalendar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;calenderTop.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;calenderTop.ZOrder" xml:space="preserve">
-    <value>28</value>
-  </data>
   <data name="backButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>271, 10</value>
   </data>

@@ -451,3 +451,112 @@ Entered showDates
 Entered showDates
 Entered showDates
 Entered showDates
+Entered showDates
+Entered showDates
+Entered deleteEvent
+Entered entering search
+At status: searching For this EventID--Data: -123
+At status: getting index from currentContent--Data: -1
+At status: searching For this EventID--Data: -123
+Entered Leaving deleteEvent
+Entered showDates
+Entered addEvent
+At status: addFloat--Data: buivbrwer
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: test3
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: test4
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: test5
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: test6
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: oi
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
