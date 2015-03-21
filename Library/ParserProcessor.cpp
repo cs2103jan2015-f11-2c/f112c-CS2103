@@ -41,6 +41,10 @@ ParserProcessor::ParserProcessor(){
 	keywordDay[8] = "sun";
 	keywordDay[9] = "next";
 
+	keywordSpecial[0] = "due";
+	keywordSpecial[1] = "to";
+	keywordSpecial[2] = "every";
+
 	matchFound = false;
 	startDayFound = false;
 	endDayFound = false;
@@ -48,12 +52,14 @@ ParserProcessor::ParserProcessor(){
 	endTimeFound = false;
 	afterTwelve = false;
 	nameFound = false;
+	toFound = false;
 
 	oneMatchFound = false;
 	twoMatchFound = false;
 	systemShowDay = false;
 	systemShowWeek = false;
 	systemShowMonth = false;
+	systemShowFloat = false;
 	userShowDay = false;
 	userShowRangeOfDays = false;
 	userShowMonth = false;
@@ -179,22 +185,26 @@ bool ParserProcessor::identifyDate(int index){
 			strMonth = keywordMonths[j];
 			matchFound = true;
 			
+			//Extracting day integer
 			try {
 				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
 				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
 				tempIndex--;
-				try {
-					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-					tempInt = tempStoi;
-				} catch (std::invalid_argument& e){
-					logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
-					throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
+				if(tempIndex >= 0){
+					try {
+						auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+						fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+						tempInt = tempStoi;
+					} catch (std::invalid_argument& e){
+						logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
+						throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
+					}
 				}
 			} 
 			
+			//Registering day, month, year
 			year = now->tm_year;
 			month = convertor.monthToInt(strMonth);
 			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
@@ -202,8 +212,31 @@ bool ParserProcessor::identifyDate(int index){
 				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
 			}
 			day = tempInt;
-
-			if(!startDayFound){
+			
+			//Check for 'to'
+			tempIndex--;
+			if(tempIndex >= 0){
+				if(fragmentedWords[tempIndex] == "to"){
+					tempIndex--;
+					if(tempIndex >= 0){
+						try {
+							auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+							fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+							tempInt = tempStoi;
+							toFound = true;
+						} catch (std::invalid_argument& e){
+						}
+					}
+				}
+			}
+			
+			//Creating start and end date in Event
+			if(toFound){
+				startDayFound = true;
+				tempEventStore.setStartDate(tempInt,month,year);
+				endDayFound = true;
+				tempEventStore.setEndDate(day,month,year);
+			} else if(!startDayFound){
 				startDayFound = true;
 				tempEventStore.setStartDate(day,month,year);
 			} else if(!endDayFound){
@@ -223,6 +256,7 @@ bool ParserProcessor::identifyTime(int index){
 
 	int tempIndex = 0, tempInt = 0;
 	int hour = 0, minute = 0;
+	int toHour = 0, toMinute = 0;
 	
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_TIME && !matchFound; j++){
 		if(fragmentedWords[index].find(keywordTime[j]) != std::string::npos){
@@ -231,23 +265,27 @@ bool ParserProcessor::identifyTime(int index){
 				afterTwelve = true;
 			}
 			matchFound = true;
-	
+			
+			//Extracting hour and minute integers
 			try {
 				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
 				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
 			} catch (const std::invalid_argument& e){
 				tempIndex--;
-				try {
-					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-					tempInt = tempStoi;
-				} catch (std::invalid_argument& e){
-					logger.logParserError(ParserExceptions::ERROR_MISSING_HOUR_MIN);
-					throw ParserExceptions(ParserExceptions::ERROR_MISSING_HOUR_MIN);
+				if(tempIndex >= 0){
+					try {
+						auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+						fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+						tempInt = tempStoi;
+					} catch (std::invalid_argument& e){
+						logger.logParserError(ParserExceptions::ERROR_MISSING_HOUR_MIN);
+						throw ParserExceptions(ParserExceptions::ERROR_MISSING_HOUR_MIN);
+					}
 				}
 			} 
 			
+			//Registering hour and minute
 			if(tempInt >= 100){
 				minute = tempInt%100;
 				if(minute > 60){
@@ -268,53 +306,120 @@ bool ParserProcessor::identifyTime(int index){
 						hour = 0;
 					}
 				}
-				if(!startTimeFound){
-					tempEventStore.setStartTime(hour,minute);
-					startTimeFound = true;
-				} else if(!endTimeFound){
-					tempEventStore.setEndTime(hour,minute);
-					endTimeFound = true;
-				} else {
-					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
-					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
-				}
 			} else if(tempInt < 100){
 				tempIndex--;
-				try {
-					hour = std::stoi(fragmentedWords[tempIndex]);
-					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-					minute = tempInt;
-				} catch (const std::invalid_argument& e){
-					hour = tempInt;
-					minute = 0;
-				}
-				if(minute > 60){
-					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
-					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
-				}
-				if(hour > 12){
-					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
-					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
-				}
-				if(afterTwelve){
-					if(hour < 12){
-						hour = hour + 12;
+				if(tempIndex >= 0){
+					try {
+						hour = std::stoi(fragmentedWords[tempIndex]);
+						fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+						minute = tempInt;
+						tempIndex--;
+					} catch (const std::invalid_argument& e){
+						hour = tempInt;
+						minute = 0;
 					}
-				} else {
-					if(hour == 12){
-						hour = 0;
+					if(minute > 60){
+						logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+						throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+					}
+					if(hour > 12){
+						logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+						throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+					}
+					if(afterTwelve){
+						if(hour < 12){
+							hour = hour + 12;
+						}
+					} else {
+						if(hour == 12){
+							hour = 0;
+						}
 					}
 				}
-				if(!startTimeFound){
-					startTimeFound = true;
-					tempEventStore.setStartTime(hour,minute);
-				} else if(!endTimeFound){
-					endTimeFound = true;
-					tempEventStore.setEndTime(hour,minute);
-				} else {
-					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
-					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			}
+			
+			//Check for 'to'
+			if(tempIndex >= 0){
+				if(fragmentedWords[tempIndex] == "to"){
+					tempIndex--;
+					if(tempIndex >= 0){
+						try {
+							auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+							fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+							tempInt = tempStoi;
+							toFound = true;
+
+							if(tempInt >= 100){
+								toMinute = tempInt%100;
+								if(toMinute > 60){
+									logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+									throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+								}
+								toHour = tempInt/100;
+								if(toHour > 12){
+									logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+									throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+								}
+								if(afterTwelve){
+									if (toHour < 12){
+										toHour = toHour + 12;
+									}
+								} else {
+									if (toHour == 12){
+										toHour = 0;
+									}
+								}
+							} else if(tempInt < 100){
+								tempIndex--;
+								if(tempIndex >= 0){
+									try {
+										toHour = std::stoi(fragmentedWords[tempIndex]);
+										fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+										toMinute = tempInt;
+									} catch (const std::invalid_argument& e){
+										toHour = tempInt;
+										toMinute = 0;
+									}
+									if(toMinute > 60){
+										logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+										throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+									}
+									if(toHour > 12){
+										logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+										throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+									}
+									if(afterTwelve){
+										if(toHour < 12){
+											toHour = toHour + 12;
+										}
+									} else {
+										if(toHour == 12){
+											toHour = 0;
+										}
+									}
+								}
+							}
+						} catch (std::invalid_argument& e){
+						}
+					}
 				}
+			}
+			
+			//Creating start time and end time
+			if(toFound){
+				startTimeFound = true;
+				tempEventStore.setStartTime(toHour,toMinute);
+				endTimeFound = true;
+				tempEventStore.setEndTime(hour,minute);
+			} else if(!startTimeFound){
+				startTimeFound = true;
+				tempEventStore.setStartTime(hour,minute);
+			} else if(!endTimeFound){				
+				endTimeFound = true;
+				tempEventStore.setEndTime(hour,minute);
+			} else {
+				logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+				throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 			}
 		}
 	}
@@ -463,13 +568,16 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 		tempEventStore.setStartDate(day,month,year);
 		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		systemShowMonth = true;
+	} else if(firstWord == "floating"){
+		tempEventStore.setIsFloating(true);
+		systemShowFloat = true;
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
 	unsigned int i = 0;
 	int tempi = 0; 
 	int j = 0;
-	if(systemShowDay || systemShowWeek || systemShowMonth){
+	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowFloat){
 		tempi++;
 	}
 	for(i = tempi; i < fragmentedWords.size(); i++){

@@ -29,11 +29,13 @@ private:
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
 	static const int NUMBER_OF_KEYWORDS_DAYS = 10;
 	static const int NUMBER_OF_DAYSINAWEEK = 7;
+	static const int NUMBER_OF_KEYWORDS_SPECIAL = 3;
 	static const std::string LOCKUP_USED_INFORMATION;
 	
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];
 	std::string keywordDay[NUMBER_OF_KEYWORDS_DAYS];
+	std::string keywordSpecial[NUMBER_OF_KEYWORDS_SPECIAL];
 	
 	//boolean variables for Add and Edit command
 	bool matchFound;
@@ -43,6 +45,7 @@ private:
 	bool endTimeFound;
 	bool afterTwelve;
 	bool nameFound;
+	bool toFound;
 
 	//boolean variables for Show command
 	//to check if Show is a range of days 
@@ -52,6 +55,7 @@ private:
 	bool systemShowDay;
 	bool systemShowWeek;
 	bool systemShowMonth;
+	bool systemShowFloat;
 	bool userShowDay;
 	bool userShowRangeOfDays;
 	bool userShowMonth;

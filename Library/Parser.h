@@ -26,7 +26,8 @@ public:
 		EDIT,
 		ERROR_,
 		SEARCH,
-		SHOW
+		SHOW,
+		SHOWFLOAT
 	};
 
 	static const std::string TOKENISE_ORIGINAL_STRING;
