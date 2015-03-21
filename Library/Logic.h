@@ -11,6 +11,7 @@
 #include "Event.h"
 #include "Display.h"
 #include "ICommand.h"
+#include "Executor.h"
 
 using std::ifstream;
 using std::ofstream;
@@ -20,6 +21,7 @@ private:
 	Parser* parserPtr;
 	EventStorage eventStore;
 	Display display;
+	Executor executor;
 	vector<string> logStrings;
 
 public:
