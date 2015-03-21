@@ -170,21 +170,22 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 			}
 
 		} else { //if desired event found in display vectors, call eventStore to delete it immediately
+			bool isFloat = display.getIsFloatingFromID(id);
 			vector<Event> floatingEvents, normalEvents, tempEvents;
 			Event emptyEvent;
 
-			tempEvents = eventStore.deleteEvent(id, emptyEvent);
-			
-			if (tempEvents.empty()) {
-
-			
-			
-			
-			bool isFloat = tempEvents[0].getIsFloating();
-			setDisplay(isFloat, tempEvents, INVALID_NUMBER);
+			if (isFloat) {
+				floatingEvents = eventStore.deleteEvent(id, emptyEvent);
+				normalEvents = display.getNormalEvents();
+				} else {
+					floatingEvents = display.getFloatingEvents();
+					normalEvents = eventStore.deleteEvent(id, emptyEvent);
+				}
 			
 			feedback = eventName + Display::DELETED_MESSAGE;
+			vector<tm> tmVec = display.getTempMainDisplayLabel();
 			
+			display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
 		}
 		
 		break;
