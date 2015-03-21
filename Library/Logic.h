@@ -10,6 +10,7 @@
 #include "EventStorage.h"
 #include "Event.h"
 #include "Display.h"
+#include "ICommand.h"
 
 using std::ifstream;
 using std::ofstream;
