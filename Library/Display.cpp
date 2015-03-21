@@ -204,10 +204,22 @@ void Display::setMainDisplayLabel (vector<tm> label){
 		string startDayOfMonth = convert.intToString(label[0].tm_mday);
 		string startMonth = convert.intToMonth(label[0].tm_mon);
 
+		mainDisplayLabel = startDayOfMonth + " " + startMonth;
+
+		if (label[0].tm_year != label[1].tm_year){
+			string startYear = convert.intToString(label[0].tm_year+ 1900) ;
+			mainDisplayLabel += " " + startYear;
+		}
+
+		mainDisplayLabel += " - ";
+
 		string endDayOfMonth = convert.intToString(label[1].tm_mday);
 		string endMonth = convert.intToMonth(label[1].tm_mon);
 
-		mainDisplayLabel = startDayOfMonth + " " + startMonth + " - " + endDayOfMonth + endMonth;
+		mainDisplayLabel += endDayOfMonth + " " + endMonth;
+
+		string endYear = convert.intToString(label[1].tm_year + 1900);
+		mainDisplayLabel += " " +endYear;
 	}
 }
 

@@ -1,3 +1,10 @@
 executing show command
 executing show command
-executing add command
+executing show command
+executing show command
+executing show command
+executing show command
+executing show command
+executing show command
+executing show command
+executing show command

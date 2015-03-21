@@ -2,12 +2,14 @@
 #include <iostream>
 
 #include <assert.h>
+#include <cctype>
 
 #include "Logic.h"
 #include "Conversion.h"
 #include "CommandSuggestion.h"
 #include "UIHelp.h"
 #include "UIShow.h"
+
 
 
 
@@ -167,6 +169,7 @@ namespace UI {
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
 			this->redoButton = (gcnew System::Windows::Forms::Button());
+			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->introductionDisplay = (gcnew System::Windows::Forms::Button());
@@ -174,7 +177,6 @@ namespace UI {
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
-			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
 			this->backButton = (gcnew System::Windows::Forms::Button());
 			this->nextButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
@@ -415,6 +417,16 @@ namespace UI {
 			this->redoButton->UseVisualStyleBackColor = false;
 			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
 			// 
+			// calenderTop
+			// 
+			resources->ApplyResources(this->calenderTop, L"calenderTop");
+			this->calenderTop->MaxSelectionCount = 9999;
+			this->calenderTop->Name = L"calenderTop";
+			this->calenderTop->ScrollChange = 1;
+			this->toolTip1->SetToolTip(this->calenderTop, resources->GetString(L"calenderTop.ToolTip"));
+			this->calenderTop->DateSelected += gcnew System::Windows::Forms::DateRangeEventHandler(this, &MapleSyrup::calenderTop_DateSelected);
+			this->calenderTop->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_MouseLeave);
+			// 
 			// showButton
 			// 
 			this->showButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -464,13 +476,6 @@ namespace UI {
 			resources->ApplyResources(this->suggestBar, L"suggestBar");
 			this->suggestBar->Name = L"suggestBar";
 			this->suggestBar->TabStop = false;
-			// 
-			// calenderTop
-			// 
-			resources->ApplyResources(this->calenderTop, L"calenderTop");
-			this->calenderTop->Name = L"calenderTop";
-			this->calenderTop->ScrollChange = 1;
-			this->calenderTop->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_MouseLeave);
 			// 
 			// backButton
 			// 
@@ -561,13 +566,11 @@ private: void loadData(){
 			 log ("Program starts at: " + convertTostd(timeToLog));
 			 displayToMainDisplayLabel(convertTostd(time));
 
-			 std::string loadCommand2 = "show floating";
-			 executeUserInput(loadCommand2);
-
-			 std::string loadCommand1 = "show today";
+			 std::string loadCommand1 = showPtr->getShowFloat();
 			 executeUserInput(loadCommand1);
 
-			 
+			 std::string loadCommand2 = showPtr->getShowDay();
+			 executeUserInput(loadCommand2); 
 		 }
 
 //Pre-condition : None 
@@ -1077,11 +1080,12 @@ private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Win
 
 // Display Calender
 private: System::Void calenderTop_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-			if(topCalenderDisplayed == true){
+			/*
+			 if(topCalenderDisplayed == true){
 				 calenderTop->Visible = false;
 				 topCalenderDisplayed = false;
 			 }
-			 
+			 */
 		 }
 
 private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -1132,11 +1136,24 @@ private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::E
 * ===================================================================================================================================================================
 */
 private: System::Void dayDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowDay();
+			 executeUserInput(loadCommand);
+
 		 }
 private: System::Void weekDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowWeek();
+			 executeUserInput(loadCommand);
 		 }
+
 private: System::Void monthDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowMonth();
+			 executeUserInput(loadCommand);
 		 }
+
+
+
+
+
 private: System::Void allDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 private: System::Void archiveDisplay_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -1168,5 +1185,59 @@ private: System::Void redoButton_Click(System::Object^  sender, System::EventArg
 private: System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 
+
+private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {
+			 
+			 //Start
+			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
+			 std::string startDate = convertTostd( tempStartDate );
+
+			 std::string startDateDay = "";
+			 int i=0;
+			 for (; std::isdigit(startDate[i]);i++){
+				 startDateDay += startDate[i];
+			 }
+
+			 i++;
+
+			 std::string startDateMonth = "";
+			 for (; std::isdigit(startDate[i]);i++){
+				 startDateMonth += startDate[i];
+			 }
+
+			 int startDateMonthNum = cVPtr->stringToInt(startDateMonth);
+			 std::string startDateMonthString = cVPtr->toLowerCase(cVPtr->intToMonth(startDateMonthNum-1));
+
+			 //end
+			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
+			 std::string endDate = convertTostd( tempEndDate );
+
+			 std::string endDateDay = "";
+			 i=0;
+			 for (; std::isdigit(endDate[i]);i++){
+				 endDateDay += endDate[i];
+			 }
+
+			 i++;
+
+			 std::string endDateMonth = "";
+			 for (; std::isdigit(endDate[i]);i++){
+				 endDateMonth += endDate[i];
+			 }
+
+			 int endDateMonthNum = cVPtr->stringToInt(endDateMonth);
+			 std::string endDateMonthString = cVPtr->toLowerCase(cVPtr->intToMonth(endDateMonthNum-1));
+
+
+
+
+
+
+			 std::string command = "show " + startDateDay + startDateMonthString + " to " + endDateDay + endDateMonthString;
+
+
+			 executeUserInput(command);
+
+		 }
 };
 }
