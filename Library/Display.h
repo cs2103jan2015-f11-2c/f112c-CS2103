@@ -39,7 +39,6 @@ private:
 	vector<string> errorStrings;
 	
 	int newID;
-	int	mainStringHeaderCounter;
 	bool isSingleDay;
 
 public:

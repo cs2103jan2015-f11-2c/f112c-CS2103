@@ -406,3 +406,431 @@ Main displayed
 Main label displayed
 Main displayed
 User Command: exit
+Program starts at: 21 Mar,Saturday, 15:22:49
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 10feb to 20feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show today
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:26:03
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hey;20feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:28:47
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add test1;22mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 22mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:30:06
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:33:31
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 22mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 30 mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:36:53
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:40:46
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:43:37
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:45:11
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:45:44
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:47:29
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:47:58
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:50:30
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:50:49
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 10feb to 20feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 15feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month 14mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month apr
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show month may
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:52:48
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:53:19
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+Main label displayed
+Main displayed
+User Command: show today
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show tomorrow
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20feb
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hey;10pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:55:12
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add heyhey 10pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello;10pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Program starts at: 21 Mar,Saturday, 15:55:45
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello;9am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello2; 10am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello3;11am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add hello4;5pm
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add oioi;10am
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 30 mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add oi; 21mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 20 mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: show 20mar to 25mar
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: help
+Main label displayed
+Main displayed
+User Command: commands
+Main label displayed
+Main displayed
+User Command: exit

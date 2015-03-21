@@ -531,3 +531,594 @@ Entered fragmentShowString
 Entered processShowEvent
 Entered eventMkTimeCorrector
 Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show 10feb to 20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 10feb to 20feb"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show 20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20feb"
+Initialised parsing of input "add hey;20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey;20feb"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add test1;22mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add test1;22mar"
+Initialised parsing of input "show 20mar to 22mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 22mar"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show 20mar to 22mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 22mar"
+Initialised parsing of input "show 20mar to 30 mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 30 mar"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show 10feb to 20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 10feb to 20feb"
+Initialised parsing of input "show 15feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 15feb"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show month 14mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month 14mar"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month apr"
+Initialised parsing of input "show month mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month mar"
+Initialised parsing of input "show month may"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month may"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show tomorrow"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show tomorrow"
+Initialised parsing of input "show 20feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20feb"
+Initialised parsing of input "add hey;10pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey;10pm"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add heyhey 10pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Encountered error. Error code: PS001
+Failed to parse input "add heyhey 10pm"
+Initialised parsing of input "add hello;10pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello;10pm"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add hello;9am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello;9am"
+Initialised parsing of input "add hello2; 10am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello2; 10am"
+Initialised parsing of input "add hello3;11am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello3;11am"
+Initialised parsing of input "add hello4;5pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello4;5pm"
+Initialised parsing of input "add oioi;10am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add oioi;10am"
+Initialised parsing of input "show 20mar to 30 mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 30 mar"
+Initialised parsing of input "add oi; 21mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add oi; 21mar"
+Initialised parsing of input "show 20mar to 20 mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 20 mar"
+Initialised parsing of input "show 20mar to 25mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 20mar to 25mar"

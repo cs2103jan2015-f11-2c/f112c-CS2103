@@ -305,6 +305,8 @@ void Display::normalEventsToString() {
 		return;
 	}
 	
+	int headCounter =0;
+
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
 	int newEventIndex = -1;
@@ -314,8 +316,16 @@ void Display::normalEventsToString() {
 	for (int i=0; i < normalEvents.size(); i++){
 		ostringstream out;
 
-		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-			out << "\n";
+		//Generate header
+		if (normalEvents[i].getName() == NEW_DAY_MESSAGE && !isSingleDay){
+
+			if (headCounter!=0){
+				out << "\n";
+			}
+			
+
+			headCounter++;
+
 			out << "[";
 			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
@@ -334,7 +344,13 @@ void Display::normalEventsToString() {
 
 			out << "]";
 			out << "===============================================";
-		} else {
+			out << "\n";
+		} else if (normalEvents[i].getName() == NEW_DAY_MESSAGE && isSingleDay){
+			out << "[ Today ]=========================================================";
+			out << "\n";
+		}
+		 //Generate event list
+		 else {
 			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
 			out << "[" ;
@@ -390,7 +406,7 @@ void Display::normalEventsToString() {
 	
 	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
 
-	assert(mainDisplayStrings.size()>=1);
+	//assert(mainDisplayStrings.size()>=1);
 }
 
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
