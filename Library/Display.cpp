@@ -17,6 +17,14 @@ Display::Display() {
 	mainDisplayStrings.clear();
 	floatingDisplayStrings.clear();
 	feedbackDisplayStrings.clear();
+
+	time_t timeNow;
+	tm* tmNow;
+	time(&timeNow);
+	tmNow = localtime(&timeNow);
+	tempMainDisplayLabel.push_back(*tmNow);
+	tempMainDisplayLabel.push_back(*tmNow);
+
 }
 
 
