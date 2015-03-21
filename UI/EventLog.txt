@@ -184,3 +184,56 @@ Entered showDates
 Entered showDates
 Entered showDates
 Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: party
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: holiday
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: party
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: bday party
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered checkMultipleResults
+Entered deleteEvent
+At status: eventID to delete: --Data: 1426925608
+Entered entering search
+At status: searching For this EventID--Data: 1426925608
+At status: searching current content... index:--Data: 19
+At status: getting index from currentContent--Data: 19
+At status: deleteNormal--Data: holiday
+Entered showDates
+Entered Leaving deleteEvent
+Entered showDates
+Entered showDates
+Entered showDates
+Entered showDates
+Entered addEvent
+At status: addNormal--Data: hello
+Entered showDates
+Entered showDates
+Entered checkMultipleResults
+Entered showDates
+Entered showDates
+Entered showDates
+Entered checkMultipleResults
+Entered checkMultipleResults
+Entered deleteEvent
+At status: eventID to delete: --Data: 1426925633
+Entered entering search
+At status: searching For this EventID--Data: 1426925633
+At status: searching current content... index:--Data: 20
+At status: getting index from currentContent--Data: 20
+At status: deleteNormal--Data: bday party
+Entered showDates
+Entered Leaving deleteEvent

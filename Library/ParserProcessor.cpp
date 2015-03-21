@@ -443,7 +443,6 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 				tempi--;
 				if(tempi >= 0){
 					try {
-					//if (isdigit((fragmentedWords[tempi])[0])){
 						auto tempStoi = std::stoi(fragmentedWords[tempi]);
 						fragmentedWords[tempi] = LOCKUP_USED_INFORMATION;
 						tempInt = tempStoi;
@@ -472,9 +471,11 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 			}
 
 			month = convertor.monthToInt(strMonth);
-			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
-				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
-				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
+			if(userShowDay || userShowRangeOfDays){
+				if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
+				}
 			}
 			day = tempInt;
 

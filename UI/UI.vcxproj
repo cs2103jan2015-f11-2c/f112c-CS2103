@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\USER\Documents\GitHub\f112c-CS2103\Library;D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library;C:\Users\George Lam\Desktop\vsWork\f112c-CS2103\Library;D:\NUS\CS2103\Team\f112c-CS2103\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Joshua\Documents\GitHub\f112c-CS2103\Library;C:\Users\USER\Documents\GitHub\f112c-CS2103\Library;D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library;C:\Users\George Lam\Desktop\vsWork\f112c-CS2103\Library;D:\NUS\CS2103\Team\f112c-CS2103\Library;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -1440,3 +1440,295 @@ Entered fragmentShowString
 Entered processShowEvent
 Entered eventMkTimeCorrector
 Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "add party; 24 apr 10 feb"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add party; 24 apr 10 feb"
+Initialised parsing of input "add holiday; 24 apr to 27 apr "
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add holiday; 24 apr to 27 apr "
+Initialised parsing of input "add party; 25 apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add party; 25 apr"
+Initialised parsing of input "add bday party; 25 apr 10am to 3pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add bday party; 25 apr 10am to 3pm"
+Initialised parsing of input "show 25 apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 25 apr"
+Initialised parsing of input "show 26 apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 26 apr"
+Initialised parsing of input "show april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show april"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show month april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month april"
+Initialised parsing of input "show may"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show may"
+Initialised parsing of input "show month may"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show month may"
+Initialised parsing of input "show may"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show may"
+Initialised parsing of input "show march"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Encountered error. Error code: PS011
+Failed to parse input "show march"
+Initialised parsing of input "show week"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show week"
+Initialised parsing of input "show 22 mar to 25 apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 22 mar to 25 apr"
+Initialised parsing of input "delete holiday;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Successfully parsed input "delete holiday;"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show april"
+Initialised parsing of input "show month apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month apr"
+Initialised parsing of input "add hello; 3 apr 3pm to 6pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hello; 3 apr 3pm to 6pm"
+Initialised parsing of input "show april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show april"
+Initialised parsing of input "delete party;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Successfully parsed input "delete party;"
+Initialised parsing of input "show april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show april"
+Initialised parsing of input "show month"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show month"
+Initialised parsing of input "show april"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show april"
+Initialised parsing of input "delete party;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Successfully parsed input "delete party;"
+Initialised parsing of input "delete bday party;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Successfully parsed input "delete bday party;"
