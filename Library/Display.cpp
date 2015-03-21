@@ -82,6 +82,21 @@ int Display::getNewID() {
 	return newID;
 }
 
+
+bool Display::getIsFloatingFromID(int id) {
+	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
+		if (floatingEvents[i].getID() == id) {
+			return floatingEvents[i].getIsFloating();
+		}
+	}
+
+	for (int i = 0 ; i < getTotalNormalEvents(); i++) {
+		if (normalEvents[i].getID() == id) {
+			return normalEvents[i].getIsFloating();
+		}
+	}
+}
+
 Event Display::getEventFromID(int id) {
 	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
 		if (floatingEvents[i].getID() == id) {

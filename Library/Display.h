@@ -74,6 +74,7 @@ public:
 	int getIDFromIndex(int index);
 	int getNewID();
 
+	bool getIsFloatingFromID(int id);
 	Event getEventFromID(int id);
 
 	//setter

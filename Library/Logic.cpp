@@ -175,7 +175,7 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 			tempEvents = eventStore.deleteEvent(id, emptyEvent);
 			
-			//if (tempEvents.empty()) {
+			if (tempEvents.empty()) {
 
 			
 			
