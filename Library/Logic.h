@@ -8,7 +8,6 @@
 #include <fstream>
 #include "Parser.h"
 #include "EventStorage.h"
-#include "Event.h"
 #include "Display.h"
 #include "ICommand.h"
 #include "Executor.h"
@@ -60,9 +59,11 @@ public:
 	string getMainDisplayLabel();
 
 
-	//executorss
+	//executors
 	bool executeUserInput(string input);
 	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
+	ICommand* createCommand(Parser::commandType command, Event userEvent);
+	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent);
 	void deleteParserPtr();
 
 

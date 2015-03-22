@@ -75,7 +75,11 @@ bool Logic::executeUserInput(string input) {
 	Event userEvent = getEvent();
 	bool isDone = true;
 
-	executeCommand(command, userEvent, isDone);
+	//executeCommand(command, userEvent, isDone);
+
+	ICommand* commandPtr = createCommand(command, userEvent);
+	executor.execute(commandPtr);
+	setDisplay(commandPtr, command, userEvent);
 
 	deleteParserPtr();
 
@@ -299,6 +303,37 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	case Parser::ERROR_: {
 		break;
 						 }
+
+	default:
+		break;
+	}
+}
+
+ICommand* Logic::createCommand(Parser::commandType command, Event userEvent) {
+	switch (command) {
+	case Parser::ADDFLOAT: {
+		ICommand* command = new AddCommand(&eventStore, userEvent);
+		return command;
+		break;
+						   }
+
+	default:
+		break;
+	}
+}
+
+void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent) {
+	switch (command) {
+	case Parser::ADDFLOAT: {
+		vector<Event> floatingEvents = commandPtr->getEventVector();
+		vector<Event> normalEvents = display.getNormalEvents();
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		int id = userEvent.getID();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
+		break;
+						   }
 
 	default:
 		break;

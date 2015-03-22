@@ -9,7 +9,7 @@
 class ICommand {
 public:
 	virtual void execute() = 0;
-
+	virtual vector<Event> getEventVector() = 0;
 };
 
 
