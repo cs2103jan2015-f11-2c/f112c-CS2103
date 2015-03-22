@@ -48,8 +48,6 @@ public:
 
 
 	//getters
-	Parser::commandType getCommand();
-	Event getEvent();
 	EventStorage getEventStorage();
 
 	vector<Display::EVENT_STRING> getFloatingStrings();
@@ -62,7 +60,7 @@ public:
 	//executors
 	bool executeUserInput(string input);
 	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
-	ICommand* createCommand(Parser::commandType command, Event userEvent);
+	ICommand* createCommand(Parser::commandType command, Event userEvent, string nameOfEvent);
 	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent);
 	void deleteParserPtr();
 

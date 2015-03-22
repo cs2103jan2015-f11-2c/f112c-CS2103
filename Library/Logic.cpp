@@ -33,14 +33,6 @@ Logic::~Logic() {
 
 
 	//GETTERS
-Parser::commandType Logic::getCommand() {
-	return parserPtr->getCommandType();
-}
-
-Event Logic::getEvent() {
-	return parserPtr->getEvent();
-}
-
 EventStorage Logic::getEventStorage() {
 	return eventStore;
 }
@@ -71,17 +63,18 @@ string Logic::getMainDisplayLabel() {
 bool Logic::executeUserInput(string input) {
 	parserPtr = new Parser(input);
 
-	Parser::commandType command = getCommand();
-	Event userEvent = getEvent();
+	Parser::commandType commandType = parserPtr->getCommandType();
+	Event userEvent = parserPtr->getEvent();
+	string nameOfEvent = parserPtr->getNameOfEvent();
 	bool isDone = true;
 
-	//executeCommand(command, userEvent, isDone);
+	executeCommand(commandType, userEvent, isDone);
 
-	
-	ICommand* commandPtr = createCommand(command, userEvent);
+	/*
+	ICommand* commandPtr = createCommand(commandType, userEvent, nameOfEvent);
 	executor.execute(commandPtr);
-	setDisplay(commandPtr, command, userEvent);
-	
+	setDisplay(commandPtr, commandType, userEvent);
+	*/
 
 	deleteParserPtr();
 
@@ -311,18 +304,24 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	}
 }
 
-ICommand* Logic::createCommand(Parser::commandType command, Event userEvent) {
+ICommand* Logic::createCommand(Parser::commandType command, Event userEvent, string nameOfEvent) {
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
-		ICommand* command = new AddCommand(&eventStore, userEvent);
-		return command;
+		ICommand* addCommand = new AddCommand(&eventStore, userEvent);
+		return addCommand;
 		break;
 						   }
+	
+	case Parser::DELETE_: {
+		ICommand* checkMultipleCommand = new CheckMultipleCommand(&eventStore, nameOfEvent);
+		return checkMultipleCommand;
+		break;
+						  }
 
 	case Parser::SHOW: {
-		ICommand* command = new ShowCommand(&eventStore, userEvent);
-		return command;
+		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
+		return showCommand;
 		break;
 					   }
 
