@@ -2678,3 +2678,22 @@ Feedback displayed
 Floating displayed
 Main displayed
 Main label displayed
+Program starts at: 22 Mar,Sunday, 16:35:24
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: add motherfuker;
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+User Command: exit

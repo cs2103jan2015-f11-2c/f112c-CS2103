@@ -1,0 +1,26 @@
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add motherfuker;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add motherfuker;"
