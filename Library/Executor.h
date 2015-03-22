@@ -16,7 +16,7 @@ private:
 public:
 	Executor();
 
-	void execute(ICommand* command);
+	ICommand* execute(ICommand* command);
 
 };
 

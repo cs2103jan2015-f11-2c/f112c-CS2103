@@ -7,7 +7,8 @@ Executor::Executor() {
 	}
 }
 
-void Executor::execute(ICommand* command) {
+ICommand* Executor::execute(ICommand* command) {
 	command->execute();
 	undoStack.push(command);
+	return undoStack.top();
 }

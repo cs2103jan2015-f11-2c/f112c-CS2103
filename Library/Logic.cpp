@@ -68,13 +68,12 @@ bool Logic::executeUserInput(string input) {
 	string nameOfEvent = parserPtr->getNameOfEvent();
 	bool isDone = true;
 
-	executeCommand(commandType, userEvent, isDone);
+	//executeCommand(commandType, userEvent, isDone);
 
-	/*
-	ICommand* commandPtr = createCommand(commandType, userEvent, nameOfEvent);
-	executor.execute(commandPtr);
+	
+	ICommand* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
 	setDisplay(commandPtr, commandType, userEvent);
-	*/
+	
 
 	deleteParserPtr();
 
@@ -304,24 +303,24 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 	}
 }
 
-ICommand* Logic::createCommand(Parser::commandType command, Event userEvent, string nameOfEvent) {
+ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
 		ICommand* addCommand = new AddCommand(&eventStore, userEvent);
-		return addCommand;
+		return executor.execute(addCommand);
 		break;
 						   }
 	
 	case Parser::DELETE_: {
-		ICommand* checkMultipleCommand = new CheckMultipleCommand(&eventStore, nameOfEvent);
-		return checkMultipleCommand;
+		//ICommand* checkMultipleCommand = new CheckMultipleCommand(&eventStore, nameOfEvent);
+		//return checkMultipleCommand;
 		break;
 						  }
 
 	case Parser::SHOW: {
 		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
-		return showCommand;
+		return executor.execute(showCommand);
 		break;
 					   }
 
