@@ -11,7 +11,7 @@ using std::stack;
 
 class Executor {
 private:
-	stack<ICommand*> commandPtrStack;
+	stack<ICommand*> undoStack, redoStack;
 
 public:
 	Executor();
