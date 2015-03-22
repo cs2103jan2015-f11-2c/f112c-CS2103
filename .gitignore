@@ -233,3 +233,9 @@ UI/mytext.txt
 *.txt
 *.txt
 *.txt
+*.txt
+UI/EventLog.txt
+UI/GUILog.txt
+UI/logicLog.txt
+UI/mytext.txt
+UI/ParserLog.txt

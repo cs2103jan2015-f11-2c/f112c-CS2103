@@ -24,3 +24,281 @@ Entered identifyEventName
 Entered addEventCorrector
 Entered eventMkTimeCorrector
 Successfully parsed input "add motherfuker;"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show float"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show float"
+Initialised parsing of input "showfloat"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "showfloat"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show float"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show float"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show float"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show float"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add hey;"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey;"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "tomorrow"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "tomorrow"
+Initialised parsing of input "tomorrow"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "tomorrow"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "show"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "show"
+Initialised parsing of input "search"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "search"
+Initialised parsing of input "search"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Encountered error. Error code: PS000
+Failed to parse input "search"
+Initialised parsing of input "show 2mar to 20mar"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 2mar to 20mar"
+Initialised parsing of input "show 4apr to 4apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 4apr to 4apr"
+Initialised parsing of input "show 19mar to 4apr"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show 19mar to 4apr"
