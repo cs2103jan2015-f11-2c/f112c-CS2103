@@ -313,8 +313,11 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 						   }
 	
 	case Parser::DELETE_: {
-		//ICommand* checkMultipleCommand = new CheckMultipleCommand(&eventStore, nameOfEvent);
-		//return checkMultipleCommand;
+		int id = convertNameToID(nameOfEvent);
+		Event eventToDelete;
+		eventToDelete.setName(nameOfEvent);
+		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
+		return executor.execute(deleteCommand);
 		break;
 						  }
 
@@ -332,38 +335,55 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent) {
 	switch (command) {
 	case Parser::ADD: {
-		vector<Event> floatingEvents = display.getFloatingEvents();
 		vector<Event> normalEvents = commandPtr->getEventVector();
+		vector<Event> floatingEvents = display.getFloatingEvents();
+		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
 		vector<tm> tmVec;
 		tmVec.push_back(userEvent.getStartDate());
 		tmVec.push_back(userEvent.getEndDate());
-		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
 		int id = userEvent.getID();
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
 						   }
 	
-	case Parser::ADDFLOAT: {
-		vector<Event> floatingEvents = commandPtr->getEventVector();
+	case Parser::ADDFLOAT: {		
 		vector<Event> normalEvents = display.getNormalEvents();
-		vector<tm> tmVec = display.getTempMainDisplayLabel();
+		vector<Event> floatingEvents = commandPtr->getEventVector();
 		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
 		int id = userEvent.getID();
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
 						   }
 
+	case Parser::DELETE_: {
+		vector<Event> normalEvents, floatingEvents;
+
+		if (commandPtr->getIsFloating()) {
+			normalEvents = display.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+		} else {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = display.getFloatingEvents();
+		}
+		string feedback = userEvent.getName() + Display::DELETED_MESSAGE;
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+		break;
+						  }
+
 	case Parser::SHOW: {
 		vector<Event> normalEvents = commandPtr->getEventVector();
 		vector<Event> floatingEvents = display.getFloatingEvents();
+		string emptyFeedback;
 		vector<tm> tmVec;
 		tmVec.push_back(userEvent.getStartDate());
 		tmVec.push_back(userEvent.getEndDate());
-		string emptyString;
-
-		display.setAllEvents(normalEvents, floatingEvents, emptyString, tmVec, Display::GARBAGE_INT);
+		
+		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
 		break;
 					   }
 

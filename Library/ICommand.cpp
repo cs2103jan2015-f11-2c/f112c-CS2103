@@ -15,6 +15,10 @@ vector<Event> AddCommand::getEventVector() {
 	return addedEvents;
 }
 
+bool AddCommand::getIsFloating() {
+	return isFloating;
+}
+
 
 
 
@@ -30,6 +34,10 @@ void DeleteCommand::execute() {
 
 vector<Event> DeleteCommand::getEventVector() {
 	return deletedEvents;
+}
+
+bool DeleteCommand::getIsFloating() {
+	return isFloating;
 }
 
 
@@ -48,6 +56,10 @@ void EditCommand::execute() {
 
 vector<Event> EditCommand::getEventVector() {
 	return editedResults;
+}
+
+bool EditCommand::getIsFloating() {
+	return isFloating;
 }
 
 
@@ -71,6 +83,9 @@ int CheckMultipleCommand::getNumResults() {
 	return numResults;
 }
 
+bool CheckMultipleCommand::getIsFloating() {
+	return isFloating;
+}
 
 
 
@@ -85,4 +100,8 @@ void ShowCommand::execute() {
 
 vector<Event> ShowCommand::getEventVector() {
 	return eventsToShow;
+}
+
+bool ShowCommand::getIsFloating() {
+	return isFloating;
 }
