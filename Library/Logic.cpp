@@ -77,9 +77,11 @@ bool Logic::executeUserInput(string input) {
 
 	//executeCommand(command, userEvent, isDone);
 
+	
 	ICommand* commandPtr = createCommand(command, userEvent);
 	executor.execute(commandPtr);
 	setDisplay(commandPtr, command, userEvent);
+	
 
 	deleteParserPtr();
 
@@ -311,11 +313,18 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 
 ICommand* Logic::createCommand(Parser::commandType command, Event userEvent) {
 	switch (command) {
+	case Parser::ADD:
 	case Parser::ADDFLOAT: {
 		ICommand* command = new AddCommand(&eventStore, userEvent);
 		return command;
 		break;
 						   }
+
+	case Parser::SHOW: {
+		ICommand* command = new ShowCommand(&eventStore, userEvent);
+		return command;
+		break;
+					   }
 
 	default:
 		break;
@@ -324,6 +333,19 @@ ICommand* Logic::createCommand(Parser::commandType command, Event userEvent) {
 
 void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent) {
 	switch (command) {
+	case Parser::ADD: {
+		vector<Event> floatingEvents = display.getFloatingEvents();
+		vector<Event> normalEvents = commandPtr->getEventVector();
+		vector<tm> tmVec;
+		tmVec.push_back(userEvent.getStartDate());
+		tmVec.push_back(userEvent.getEndDate());
+		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		int id = userEvent.getID();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
+		break;
+						   }
+	
 	case Parser::ADDFLOAT: {
 		vector<Event> floatingEvents = commandPtr->getEventVector();
 		vector<Event> normalEvents = display.getNormalEvents();
@@ -334,6 +356,18 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
 						   }
+
+	case Parser::SHOW: {
+		vector<Event> normalEvents = commandPtr->getEventVector();
+		vector<Event> floatingEvents = display.getFloatingEvents();
+		vector<tm> tmVec;
+		tmVec.push_back(userEvent.getStartDate());
+		tmVec.push_back(userEvent.getEndDate());
+		string emptyString;
+
+		display.setAllEvents(normalEvents, floatingEvents, emptyString, tmVec, Display::GARBAGE_INT);
+		break;
+					   }
 
 	default:
 		break;
