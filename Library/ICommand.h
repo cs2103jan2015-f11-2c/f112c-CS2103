@@ -103,4 +103,20 @@ public:
 	bool getIsFloating();
 };
 
+
+
+
+class ShowFloatCommand : public ICommand {
+private:
+	EventStorage* eventStore;
+	vector<Event> eventsToShow;
+	bool isFloating;
+
+public:
+	ShowFloatCommand(EventStorage* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	bool getIsFloating();
+};
+
 #endif

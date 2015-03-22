@@ -26,13 +26,12 @@ private:
 public:
 	//for logging
 	static const string LOG_FILE_NAME;
-	static const string ADDFLOAT_EXECUTING;
-	static const string ADD_EXECUTING;
-	static const string DELETE_EXECUTING;
-	static const string EDIT_EXECUTING;
-	static const string SHOW_EXECUTING;
-	static const string SEARCH_EXECUTING;
-	static const string ERROR_EXECUTING;
+	static const string CREATING_ADD;
+	static const string CREATING_DELETE;
+	static const string CREATING_EDIT;
+	static const string CREATING_SHOW;
+	static const string CREATING_SHOWFLOAT;
+	static const string CREATING_SEARCH;
 	static const string CASE_0;
 	static const string CASE_1;
 
@@ -59,10 +58,10 @@ public:
 
 	//executors
 	bool executeUserInput(string input);
-	void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 	ICommand* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
-	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent);
+	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
 	void deleteParserPtr();
+	//void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 
 
 	//others

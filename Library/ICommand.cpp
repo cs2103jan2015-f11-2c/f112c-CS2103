@@ -89,6 +89,7 @@ bool CheckMultipleCommand::getIsFloating() {
 
 
 
+
 ShowCommand::ShowCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	eventRangeToShow = e;
@@ -103,5 +104,25 @@ vector<Event> ShowCommand::getEventVector() {
 }
 
 bool ShowCommand::getIsFloating() {
+	return isFloating;
+}
+
+
+
+
+ShowFloatCommand::ShowFloatCommand(EventStorage* eventStorage) {
+	eventStore = eventStorage;
+}
+
+void ShowFloatCommand::execute() {
+	eventsToShow = eventStore->getAllFloatingEvents();
+	isFloating = true;
+}
+
+vector<Event> ShowFloatCommand::getEventVector() {
+	return eventsToShow;
+}
+
+bool ShowFloatCommand::getIsFloating() {
 	return isFloating;
 }

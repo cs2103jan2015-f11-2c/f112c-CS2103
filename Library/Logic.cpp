@@ -2,13 +2,12 @@
 
 //for logging
 const string Logic::LOG_FILE_NAME = "LogicLog.txt";
-const string Logic::ADDFLOAT_EXECUTING = "executing addfloat command";
-const string Logic::ADD_EXECUTING = "executing add command";
-const string Logic::DELETE_EXECUTING = "executing delete command";
-const string Logic::EDIT_EXECUTING = "executing edit command";
-const string Logic::SHOW_EXECUTING = "executing show command";
-const string Logic::SEARCH_EXECUTING = "executing search command";
-const string Logic::ERROR_EXECUTING = "executing error command";
+const string Logic::CREATING_ADD = "creating add command";
+const string Logic::CREATING_DELETE = "creating delete command";
+const string Logic::CREATING_EDIT = "creating edit command";
+const string Logic::CREATING_SHOW = "creating show command";
+const string Logic::CREATING_SHOWFLOAT = "creating showfloat command";
+const string Logic::CREATING_SEARCH = "creating search command";
 const string Logic::CASE_0 = "entered case 0";
 const string Logic::CASE_1 = "entered case 1";
 
@@ -67,19 +66,227 @@ bool Logic::executeUserInput(string input) {
 	Event userEvent = parserPtr->getEvent();
 	string nameOfEvent = parserPtr->getNameOfEvent();
 	bool isDone = true;
-
-	//executeCommand(commandType, userEvent, isDone);
-
 	
 	ICommand* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
-	setDisplay(commandPtr, commandType, userEvent);
-	
+	setDisplay(commandPtr, commandType, userEvent, nameOfEvent);
 
 	deleteParserPtr();
 
 	return isDone;
 }
 
+ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
+	switch (command) {
+	case Parser::ADD:
+	case Parser::ADDFLOAT: {
+		log(CREATING_ADD);
+		ICommand* addCommand = new AddCommand(&eventStore, userEvent);
+		return executor.execute(addCommand);
+		break;
+						   }
+	
+	case Parser::DELETE_: {
+		log(CREATING_DELETE);
+		int id = convertNameToID(nameOfEvent);
+		Event eventToDelete;
+		eventToDelete.setName(nameOfEvent);
+		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
+		return executor.execute(deleteCommand);
+		break;
+						  }
+
+	case Parser::EDIT: {
+		log(CREATING_EDIT);
+		int id = convertNameToID(nameOfEvent);
+		
+		Event eventToEdit = display.getEventFromID(id);
+		if (id == INVALID_NUMBER) {
+			eventToEdit.setName(nameOfEvent);
+		}
+
+		ICommand* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
+		return executor.execute(editCommand);
+		break;
+					   }
+
+	case Parser::SHOW: {
+		log(CREATING_SHOW);
+		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
+		return executor.execute(showCommand);
+		break;
+					   }
+
+	case Parser::SHOWFLOAT: {
+		log(CREATING_SHOWFLOAT);
+		ICommand* showFloatCommand = new ShowFloatCommand(&eventStore);
+		return executor.execute(showFloatCommand);
+		break;
+					   }
+	default:
+		break;
+	}
+}
+
+void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent) {
+	switch (command) {
+	case Parser::ADD: {
+		vector<Event> normalEvents = commandPtr->getEventVector();
+		vector<Event> floatingEvents = display.getFloatingEvents();
+		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		vector<tm> tmVec;
+		tmVec.push_back(userEvent.getStartDate());
+		tmVec.push_back(userEvent.getEndDate());
+		int id = userEvent.getID();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
+		break;
+						   }
+	
+	case Parser::ADDFLOAT: {		
+		vector<Event> normalEvents = display.getNormalEvents();
+		vector<Event> floatingEvents = commandPtr->getEventVector();
+		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+		int id = userEvent.getID();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
+		break;
+						   }
+
+	case Parser::DELETE_: {
+		vector<Event> normalEvents, floatingEvents;
+
+		if (commandPtr->getIsFloating()) {
+			normalEvents = display.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+		} else {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = display.getFloatingEvents();
+		}
+		string feedback = nameOfEvent + Display::DELETED_MESSAGE;
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+		break;
+						  }
+	
+	case Parser::EDIT: {
+		vector<Event> normalEvents, floatingEvents;
+		vector<tm> tmVec;
+		int id;
+
+		if (commandPtr->getIsFloating()) {
+			normalEvents = display.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+			tmVec = display.getTempMainDisplayLabel();
+			id = floatingEvents[0].getID();
+		} else {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = display.getFloatingEvents();
+			tmVec.push_back(normalEvents[0].getStartDate());
+			tmVec.push_back(normalEvents[0].getEndDate());
+			id = normalEvents[0].getID();
+		}
+		string feedback = nameOfEvent + Display::DELETED_MESSAGE;
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
+		break;
+					   }
+
+	case Parser::SHOW: {
+		vector<Event> normalEvents = commandPtr->getEventVector();
+		vector<Event> floatingEvents = display.getFloatingEvents();
+		string emptyFeedback;
+		vector<tm> tmVec;
+		tmVec.push_back(userEvent.getStartDate());
+		tmVec.push_back(userEvent.getEndDate());
+		
+		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
+		break;
+					   }
+
+	case Parser::SHOWFLOAT: {
+		vector<Event> normalEvents = display.getNormalEvents();
+		vector<Event> floatingEvents = commandPtr->getEventVector();
+		string emptyFeedback;
+		vector<tm> tmVec = display.getTempMainDisplayLabel();
+
+		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
+		break;
+							}
+
+	default:
+		break;
+	}
+}
+
+void Logic::deleteParserPtr() {
+	delete parserPtr;
+	parserPtr = NULL;
+}
+
+
+	//OTHERS
+bool Logic::isNumber(string s) {
+	for (int i = 0 ; i < s.size() ; i++) {
+		if (!isdigit(s[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int Logic::convertNameToID(string name) {
+	if (isNumber(name)) {
+			int index = std::stoi(name);
+			return display.getIDFromIndex(index);
+		} else {
+			return INVALID_NUMBER;
+		}
+}
+
+string Logic::commandToString(Parser::commandType command) {
+	switch (command) {
+
+	case Parser::ADD:
+	case Parser::ADDFLOAT:
+		return CREATING_ADD;
+
+	case Parser::DELETE_: 
+		return CREATING_DELETE;
+
+	case Parser::EDIT:
+		return CREATING_EDIT;
+
+	case Parser::SHOW:
+		return CREATING_SHOW;
+
+	case Parser::SEARCH:
+		return CREATING_SEARCH;
+
+	default:
+		break;
+	}
+}
+
+void Logic::log(string logString) {
+	ofstream outFile(LOG_FILE_NAME);
+	
+	logStrings.push_back(logString);
+	for (int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+
+	outFile.close();
+
+	return;
+}
+
+
+
+
+//////////////////////////////////////old method///////////////////////////////////////////////////////////
+/*
 //executes exact user command after parsing
 void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& isDone) {
 	string eventName = parserPtr->getNameOfEvent(), feedback;
@@ -302,159 +509,4 @@ void Logic::executeCommand(Parser::commandType command, Event userEvent, bool& i
 		break;
 	}
 }
-
-ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
-	switch (command) {
-	case Parser::ADD:
-	case Parser::ADDFLOAT: {
-		ICommand* addCommand = new AddCommand(&eventStore, userEvent);
-		return executor.execute(addCommand);
-		break;
-						   }
-	
-	case Parser::DELETE_: {
-		int id = convertNameToID(nameOfEvent);
-		Event eventToDelete;
-		eventToDelete.setName(nameOfEvent);
-		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
-		return executor.execute(deleteCommand);
-		break;
-						  }
-
-	case Parser::SHOW: {
-		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
-		return executor.execute(showCommand);
-		break;
-					   }
-
-	default:
-		break;
-	}
-}
-
-void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent) {
-	switch (command) {
-	case Parser::ADD: {
-		vector<Event> normalEvents = commandPtr->getEventVector();
-		vector<Event> floatingEvents = display.getFloatingEvents();
-		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
-		vector<tm> tmVec;
-		tmVec.push_back(userEvent.getStartDate());
-		tmVec.push_back(userEvent.getEndDate());
-		int id = userEvent.getID();
-
-		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
-		break;
-						   }
-	
-	case Parser::ADDFLOAT: {		
-		vector<Event> normalEvents = display.getNormalEvents();
-		vector<Event> floatingEvents = commandPtr->getEventVector();
-		string feedback = userEvent.getName() + Display::ADDED_MESSAGE;
-		vector<tm> tmVec = display.getTempMainDisplayLabel();
-		int id = userEvent.getID();
-
-		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
-		break;
-						   }
-
-	case Parser::DELETE_: {
-		vector<Event> normalEvents, floatingEvents;
-
-		if (commandPtr->getIsFloating()) {
-			normalEvents = display.getNormalEvents();
-			floatingEvents = commandPtr->getEventVector();
-		} else {
-			normalEvents = commandPtr->getEventVector();
-			floatingEvents = display.getFloatingEvents();
-		}
-		string feedback = userEvent.getName() + Display::DELETED_MESSAGE;
-		vector<tm> tmVec = display.getTempMainDisplayLabel();
-
-		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
-		break;
-						  }
-
-	case Parser::SHOW: {
-		vector<Event> normalEvents = commandPtr->getEventVector();
-		vector<Event> floatingEvents = display.getFloatingEvents();
-		string emptyFeedback;
-		vector<tm> tmVec;
-		tmVec.push_back(userEvent.getStartDate());
-		tmVec.push_back(userEvent.getEndDate());
-		
-		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
-		break;
-					   }
-
-	default:
-		break;
-	}
-}
-
-void Logic::deleteParserPtr() {
-	delete parserPtr;
-	parserPtr = NULL;
-}
-
-
-	//OTHERS
-bool Logic::isNumber(string s) {
-	for (int i = 0 ; i < s.size() ; i++) {
-		if (!isdigit(s[i])) {
-			return false;
-		}
-	}
-	return true;
-}
-
-int Logic::convertNameToID(string name) {
-	if (isNumber(name)) {
-			int index = std::stoi(name);
-			return display.getIDFromIndex(index);
-		} else {
-			return INVALID_NUMBER;
-		}
-}
-
-string Logic::commandToString(Parser::commandType command) {
-	switch (command) {
-
-	case Parser::ADDFLOAT:
-		return ADDFLOAT_EXECUTING;
-	
-	case Parser::ADD:
-		return ADD_EXECUTING;
-
-	case Parser::DELETE_: 
-		return DELETE_EXECUTING;
-
-	case Parser::EDIT:
-		return EDIT_EXECUTING;
-
-	case Parser::SHOW:
-		return SHOW_EXECUTING;
-
-	case Parser::SEARCH:
-		return SEARCH_EXECUTING;
-
-	case Parser::ERROR_:
-		return ERROR_EXECUTING;
-
-	default:
-		break;
-	}
-}
-
-void Logic::log(string logString) {
-	ofstream outFile(LOG_FILE_NAME);
-	
-	logStrings.push_back(logString);
-	for (int i = 0 ; i < logStrings.size() ; i++) {
-		outFile << logStrings[i] << endl;
-	}
-
-	outFile.close();
-
-	return;
-}
+*/
