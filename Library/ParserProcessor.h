@@ -55,7 +55,7 @@ private:
 	bool systemShowDay;
 	bool systemShowWeek;
 	bool systemShowMonth;
-	bool systemShowFloat;
+	bool systemShowOthers;
 	bool userShowDay;
 	bool userShowRangeOfDays;
 	bool userShowMonth;
