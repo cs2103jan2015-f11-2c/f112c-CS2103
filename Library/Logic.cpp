@@ -164,7 +164,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
 		//no event found case
-		if (tempEvents.empty() /*&& tempEvents[0].getID() == INVALID_NUMBER*/) {
+		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 			normalEvents = display.getNormalEvents();
 			floatingEvents = display.getFloatingEvents();
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
