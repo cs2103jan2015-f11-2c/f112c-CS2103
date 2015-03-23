@@ -8,6 +8,7 @@
 
 class ICommand {
 public:
+	static const int INVALID_NUMBER;
 	virtual void execute() = 0;
 	virtual vector<Event> getEventVector() = 0;
 	virtual bool getIsFloating() = 0;

@@ -1,6 +1,8 @@
 #include "ICommand.h"
 
 
+const int ICommand::INVALID_NUMBER = -1;
+
 AddCommand::AddCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	userEvent = e;
@@ -39,8 +41,14 @@ void DeleteCommand::execute() {
 	vector<Event> tempEvents = eventStore->checkMultipleResults(userEvent.getName());
 	
 	switch (tempEvents.size()) {
-	case 0:
+	case 0: {
+		Event invalidEvent;
+		invalidEvent.setFeedback(userEvent.getFeedback());
+		invalidEvent.setID(INVALID_NUMBER);
+		deletedEvents.push_back(invalidEvent);
+		return;
 		break;
+			}
 
 	case 1: {
 		isFloating = tempEvents[0].getIsFloating();

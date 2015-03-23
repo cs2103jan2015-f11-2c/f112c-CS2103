@@ -88,9 +88,10 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 	case Parser::DELETE_: {
 		log(CREATING_DELETE);
 		int id = convertNameToID(nameOfEvent);
-		
+
 		Event eventToDelete;
 		eventToDelete.setName(nameOfEvent);
+
 		if (id != INVALID_NUMBER) {
 			eventToDelete = display.getEventFromID(id);
 		}
@@ -104,9 +105,10 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 		log(CREATING_EDIT);
 		int id = convertNameToID(nameOfEvent);
 		
-		Event eventToEdit = display.getEventFromID(id);
-		if (id == INVALID_NUMBER) {
-			eventToEdit.setName(nameOfEvent);
+		Event eventToEdit;
+		eventToEdit.setName(nameOfEvent);
+		if (id != INVALID_NUMBER) {
+			eventToEdit = display.getEventFromID(id);
 		}
 
 		ICommand* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
@@ -159,8 +161,19 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 						   }
 
 	case Parser::DELETE_: {
-		vector<Event> normalEvents, floatingEvents;
+		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
+		//no event found case
+		if (tempEvents.empty() /*&& tempEvents[0].getID() == INVALID_NUMBER*/) {
+			normalEvents = display.getNormalEvents();
+			floatingEvents = display.getFloatingEvents();
+			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
+			vector<tm> tmVec = display.getTempMainDisplayLabel();
+			display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+			return;
+		}
+
+		//normal case
 		if (commandPtr->getIsFloating()) {
 			normalEvents = display.getNormalEvents();
 			floatingEvents = commandPtr->getEventVector();
