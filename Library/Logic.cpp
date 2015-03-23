@@ -238,7 +238,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			id = normalEvents[0].getID();
 		}
 		Event oldEvent = commandPtr->getEvent();
-		string feedback = oldEvent.getName() + Display::DELETED_MESSAGE;
+		string feedback = oldEvent.getName() + Display::EDITED_MESSAGE;
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;

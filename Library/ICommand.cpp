@@ -152,6 +152,25 @@ Event EditCommand::getEvent() {
 
 
 
+SearchCommand::SearchCommand(EventStorage* eventStorage, Event e) {
+	eventStore = eventStorage;
+	userSearchEvent = e;
+}
+
+void SearchCommand::execute() {
+}
+
+vector<Event> SearchCommand::getEventVector() {
+	return searchResults;
+}
+
+Event SearchCommand::getEvent() {
+	return userSearchEvent;
+}
+
+
+
+
 ShowCommand::ShowCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	eventRangeToShow = e;

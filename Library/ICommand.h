@@ -74,6 +74,22 @@ public:
 
 
 
+class SearchCommand : public ICommand {
+private:
+	EventStorage* eventStore;
+	Event userSearchEvent;
+	vector<Event> searchResults;
+
+public:
+	SearchCommand(EventStorage* eventStorage, Event e);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+};
+
+
+
+
 class ShowCommand : public ICommand {
 private:
 	EventStorage* eventStore;
