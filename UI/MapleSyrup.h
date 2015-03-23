@@ -547,16 +547,22 @@ namespace UI {
 
 #pragma endregion
 
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions to load GUI & data
+* ===================================================================================================================================================================
+*/
 //Pre-condition : None
 //To display the UI
 //Invoked by MapleSyrup.cpp
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
+			clearAllLogFiles();
+
 			initializeAndUndisplayAll();
 
 			loadData();
-
-			//Have a welcome message
-
 }
 
 private: void loadData(){
@@ -573,6 +579,25 @@ private: void loadData(){
 			 executeUserInput(loadCommand2); 
 		 }
 
+
+private: void clearAllLogFiles(){
+			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" , "logicLog.txt" , "ParserLog.txt"};
+
+			 for (int i=0; i<4;i++){
+				std::ofstream out(fileName[i], std::ofstream::trunc);
+				out.close();
+			 }
+
+		 }
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions for UI shortcut
+* ===================================================================================================================================================================
+*/
+
 //Pre-condition : None 
 //Execute shortcuts for UI
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -584,6 +609,10 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 				 searchBox->Select();
 			 }
 		 }
+
+
+
+//===================================================================================================================================================================
 
 
 
