@@ -21,11 +21,12 @@ int Search::searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSe
 	return -1; //notFound
 }
 vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch){
-
+	logger.logStorageStringData("searching For this EventName", eventName);
 	vector<Event> eventVector;
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getName() == eventName){
+			logger.logStorageStringData("searching vector...",eventVectorToSearch[i].getName);
 			eventVector.push_back(eventVectorToSearch[i]);
 		}
 	}
