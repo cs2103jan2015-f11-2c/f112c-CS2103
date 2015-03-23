@@ -340,7 +340,7 @@
     <value>Microsoft Sans Serif, 12pt, style=Bold</value>
   </data>
   <data name="mainDisplayLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 13</value>
+    <value>240, 12</value>
   </data>
   <data name="mainDisplayLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>258, 19</value>
@@ -1509,7 +1509,7 @@
     <value>Stretch</value>
   </data>
   <data name="calenderIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>344, 5</value>
+    <value>611, 5</value>
   </data>
   <data name="calenderIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>33, 33</value>
@@ -3698,7 +3698,7 @@
     <value>2</value>
   </data>
   <data name="calenderTop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>378, 3</value>
+    <value>648, 3</value>
   </data>
   <data name="calenderTop.TabIndex" type="System.Int32, mscorlib">
     <value>50</value>
@@ -3899,7 +3899,7 @@
     <value>204, 17</value>
   </metadata>
   <data name="backButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 10</value>
+    <value>531, 9</value>
   </data>
   <data name="backButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>30, 25</value>
@@ -3926,7 +3926,7 @@
     <value>NoControl</value>
   </data>
   <data name="nextButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>300, 10</value>
+    <value>562, 9</value>
   </data>
   <data name="nextButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>30, 25</value>
