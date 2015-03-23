@@ -185,6 +185,22 @@ bool ParserProcessor::identifyDate(int index){
 			strMonth = keywordMonths[j];
 			matchFound = true;
 			
+			//Checking for and extracting year integer. If not found, current year is used instead
+			if(tempIndex + 1 < fragmentedWords.size()){
+				try {
+					auto tempStoi = std::stoi(fragmentedWords[tempIndex+1]);
+					tempInt = tempStoi;
+					if(tempInt > 2000){
+						year = tempInt - 1900;
+						fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
+					} else {
+						year = now->tm_year;
+					}
+				} catch (std::invalid_argument& e){
+					year = now->tm_year;
+				}
+			}
+
 			//Extracting day integer
 			try {
 				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
@@ -404,6 +420,7 @@ bool ParserProcessor::identifyTime(int index){
 					}
 				}
 			}
+			afterTwelve = false;
 			
 			//Creating start time and end time
 			if(toFound){
@@ -452,10 +469,26 @@ void ParserProcessor::addEventCorrector(){
 	}
 	if(startTimeFound && !endTimeFound){
 		struct tm tempTime = tempEventStore.getStartDate();
-		tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
+		if(tempTime.tm_hour+1 == 24 && tempTime.tm_min == 0){
+			tempEventStore.setEndTime(23,59);
+		} else {
+			tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
+		}
 	}
 	if(endDayFound && !endTimeFound){
 		tempEventStore.setEndTime(23,59);
+	}
+
+	struct tm tempEventStartDate = tempEventStore.getStartDate();
+	struct tm tempEventEndDate = tempEventStore.getEndDate();
+	if(tempEventStartDate.tm_mday == tempEventEndDate.tm_mday &&
+		tempEventStartDate.tm_mon == tempEventEndDate.tm_mon &&
+		tempEventStartDate.tm_year == tempEventEndDate.tm_year){
+			if(tempEventEndDate.tm_hour < tempEventStartDate.tm_hour){
+				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+			} else if(tempEventEndDate.tm_hour == tempEventStartDate.tm_hour && tempEventEndDate.tm_min < tempEventStartDate.tm_min){
+				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+			}
 	}
 }
 
@@ -520,7 +553,11 @@ void ParserProcessor::editEventCorrector(){
 	}
 	if(startTimeFound && !endTimeFound){
 		struct tm tempTime = tempEventStore.getStartDate();
-		tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
+		if(tempTime.tm_hour+1 == 24 && tempTime.tm_min == 0){
+			tempEventStore.setEndTime(23,59);
+		} else {
+			tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
+		}
 	}
 
 	eventMktimeCorrector();
@@ -535,6 +572,18 @@ void ParserProcessor::editEventCorrector(){
 	if(!startTimeFound){
 		tempEventStore.setStartTime(100,100);
 		tempEventStore.setEndTime(100,100);
+	}
+
+	struct tm tempEventStartDate = tempEventStore.getStartDate();
+	struct tm tempEventEndDate = tempEventStore.getEndDate();
+	if(tempEventStartDate.tm_mday == tempEventEndDate.tm_mday &&
+		tempEventStartDate.tm_mon == tempEventEndDate.tm_mon &&
+		tempEventStartDate.tm_year == tempEventEndDate.tm_year){
+			if(tempEventEndDate.tm_hour < tempEventStartDate.tm_hour){
+				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+			} else if(tempEventEndDate.tm_hour == tempEventStartDate.tm_hour && tempEventEndDate.tm_min < tempEventStartDate.tm_min){
+				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+			}
 	}
 }
 
