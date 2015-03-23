@@ -48,6 +48,26 @@ namespace UI {
 
 	private: System::Windows::Forms::MonthCalendar^  calenderTop;
 	private: System::Windows::Forms::Button^  backButton;
+	private: System::Windows::Forms::ContextMenuStrip^  showDropDown;
+	private: System::Windows::Forms::ToolStripMenuItem^  dayToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  weekToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  monthToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  allToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  archiveToolStripMenuItem;
+	private: System::Windows::Forms::ContextMenuStrip^  helpDropDown;
+	private: System::Windows::Forms::ToolStripMenuItem^  introductionToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
+	private: System::Windows::Forms::Button^  editButton;
+	private: System::Windows::Forms::ContextMenuStrip^  editDropDown;
+	private: System::Windows::Forms::ToolStripMenuItem^  undoToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  redoToolStripMenuItem;
+
+
+
+
+
+
 	private: System::Windows::Forms::Button^  nextButton;
 
 	public:
@@ -170,6 +190,20 @@ namespace UI {
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->backButton = (gcnew System::Windows::Forms::Button());
 			this->nextButton = (gcnew System::Windows::Forms::Button());
+			this->showDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->dayToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->weekToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->monthToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->allToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->archiveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->helpDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->editButton = (gcnew System::Windows::Forms::Button());
+			this->editDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->redoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -177,6 +211,9 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->BeginInit();
+			this->showDropDown->SuspendLayout();
+			this->helpDropDown->SuspendLayout();
+			this->editDropDown->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -235,7 +272,6 @@ namespace UI {
 			this->display->ShowSelectionMargin = true;
 			this->display->TabStop = false;
 			this->toolTip1->SetToolTip(this->display, resources->GetString(L"display.ToolTip"));
-			this->display->Click += gcnew System::EventHandler(this, &MapleSyrup::display_Click);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -383,6 +419,95 @@ namespace UI {
 			this->nextButton->Name = L"nextButton";
 			this->nextButton->UseVisualStyleBackColor = true;
 			// 
+			// showDropDown
+			// 
+			this->showDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->showDropDown, L"showDropDown");
+			this->showDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(5) {this->dayToolStripMenuItem, 
+				this->weekToolStripMenuItem, this->monthToolStripMenuItem, this->allToolStripMenuItem, this->archiveToolStripMenuItem});
+			this->showDropDown->Name = L"showDropDown";
+			// 
+			// dayToolStripMenuItem
+			// 
+			this->dayToolStripMenuItem->Name = L"dayToolStripMenuItem";
+			resources->ApplyResources(this->dayToolStripMenuItem, L"dayToolStripMenuItem");
+			this->dayToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::dayToolStripMenuItem_Click);
+			// 
+			// weekToolStripMenuItem
+			// 
+			this->weekToolStripMenuItem->Name = L"weekToolStripMenuItem";
+			resources->ApplyResources(this->weekToolStripMenuItem, L"weekToolStripMenuItem");
+			this->weekToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::weekToolStripMenuItem_Click);
+			// 
+			// monthToolStripMenuItem
+			// 
+			this->monthToolStripMenuItem->Name = L"monthToolStripMenuItem";
+			resources->ApplyResources(this->monthToolStripMenuItem, L"monthToolStripMenuItem");
+			this->monthToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::monthToolStripMenuItem_Click);
+			// 
+			// allToolStripMenuItem
+			// 
+			resources->ApplyResources(this->allToolStripMenuItem, L"allToolStripMenuItem");
+			this->allToolStripMenuItem->Name = L"allToolStripMenuItem";
+			// 
+			// archiveToolStripMenuItem
+			// 
+			resources->ApplyResources(this->archiveToolStripMenuItem, L"archiveToolStripMenuItem");
+			this->archiveToolStripMenuItem->Name = L"archiveToolStripMenuItem";
+			// 
+			// helpDropDown
+			// 
+			this->helpDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->helpDropDown, L"helpDropDown");
+			this->helpDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->introductionToolStripMenuItem, 
+				this->commandsToolStripMenuItem, this->shortcutsToolStripMenuItem});
+			this->helpDropDown->Name = L"helpDropDown";
+			// 
+			// introductionToolStripMenuItem
+			// 
+			this->introductionToolStripMenuItem->Name = L"introductionToolStripMenuItem";
+			resources->ApplyResources(this->introductionToolStripMenuItem, L"introductionToolStripMenuItem");
+			this->introductionToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::introductionToolStripMenuItem_Click);
+			// 
+			// commandsToolStripMenuItem
+			// 
+			this->commandsToolStripMenuItem->Name = L"commandsToolStripMenuItem";
+			resources->ApplyResources(this->commandsToolStripMenuItem, L"commandsToolStripMenuItem");
+			this->commandsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::commandsToolStripMenuItem_Click);
+			// 
+			// shortcutsToolStripMenuItem
+			// 
+			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
+			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
+			// 
+			// editButton
+			// 
+			this->editButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->editButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->editButton, L"editButton");
+			this->editButton->ForeColor = System::Drawing::Color::Black;
+			this->editButton->Name = L"editButton";
+			this->editButton->UseVisualStyleBackColor = false;
+			this->editButton->Click += gcnew System::EventHandler(this, &MapleSyrup::editButton_Click);
+			// 
+			// editDropDown
+			// 
+			this->editDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->editDropDown, L"editDropDown");
+			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->undoToolStripMenuItem, 
+				this->redoToolStripMenuItem});
+			this->editDropDown->Name = L"editDropDown";
+			// 
+			// undoToolStripMenuItem
+			// 
+			resources->ApplyResources(this->undoToolStripMenuItem, L"undoToolStripMenuItem");
+			this->undoToolStripMenuItem->Name = L"undoToolStripMenuItem";
+			// 
+			// redoToolStripMenuItem
+			// 
+			resources->ApplyResources(this->redoToolStripMenuItem, L"redoToolStripMenuItem");
+			this->redoToolStripMenuItem->Name = L"redoToolStripMenuItem";
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -390,6 +515,7 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->editButton);
 			this->Controls->Add(this->nextButton);
 			this->Controls->Add(this->backButton);
 			this->Controls->Add(this->helpButton);
@@ -425,6 +551,9 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox8))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->EndInit();
+			this->showDropDown->ResumeLayout(false);
+			this->helpDropDown->ResumeLayout(false);
+			this->editDropDown->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -918,18 +1047,19 @@ private: System::Void showButton_MouseEnter(System::Object^  sender, System::Eve
 			 }
 		 }
 
+private: System::Void editButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 editDropDown->Show(editButton,0,editButton->Height);
+		 }
+
+
+
+
 
 // To display & undisplay the Show column when clicked
 private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 if (helpDisplayed == true){
-				 unDisplayHelp();			 
-			 }
-
-			 if (showDisplayed == false){
-				 displayShow();
-			 } else {
-				 unDisplayShow();		 
-			 }
+			
+			 showDropDown->Show(showButton,0,showButton->Height);	
+			 
 		 }
 
 //Pre-condition : None 
@@ -956,15 +1086,9 @@ private: System::Void helpButton_MouseEnter(System::Object^  sender, System::Eve
 		 }
 
 // To display & undisplay the Help column when mouse click
-private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 if(showDisplayed == true){
-				 unDisplayShow();
-			 }
-			 if (helpDisplayed == false){
-				 displayHelp();
-			 } else{
-				 unDisplayHelp();
-			 }
+private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {	 
+			 helpDropDown->Show(helpButton,0,helpButton->Height);	
+			 
 		 }
 
 
@@ -1028,7 +1152,20 @@ private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::E
 * ===================================================================================================================================================================
 */
 
+private: System::Void dayToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowDay();
+			 executeUserInput(loadCommand);
+		 }
 
+private: System::Void weekToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowWeek();
+			 executeUserInput(loadCommand);
+		 }
+
+private: System::Void monthToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowMonth();
+			 executeUserInput(loadCommand);
+		 }
 //===================================================================================================================================================================
 
 
@@ -1038,16 +1175,16 @@ private: System::Void calenderIcon_MouseEnter(System::Object^  sender, System::E
 * ===================================================================================================================================================================
 */
 
+private: System::Void introductionToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpIntroduction();
+		 }
+
+private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpCommands();
+		 }
 
 
 //===================================================================================================================================================================
-
-private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
-private: System::Void display_Click(System::Object^  sender, System::EventArgs^  e) {
-		 }
 
 
 private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {
@@ -1103,5 +1240,9 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 executeUserInput(command);
 
 		 }
+
+
+
+
 };
 }
