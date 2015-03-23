@@ -838,6 +838,13 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 std::string input = convertTostd(temp);
 			 log("User Command: " + input);
 
+			//developer function
+			if (temp == "maplerocks"){
+				clearAllLogFiles();
+				Application::Exit();
+				return;
+			}
+
 			 std::string firstFourLetters = extractFirstFourLetters(convertTostd (temp));
 
 			if (firstFourLetters == "exit"){
