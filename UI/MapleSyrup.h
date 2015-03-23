@@ -624,9 +624,19 @@ public: String^ convertToSys(std::string stdStr){
 
 
 //Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Get the error string from Logic.h when invoked by function executeUserInput(). 
+//It proceed on to display this error string onto the feedbackBox of the UI.
+private: void displayErrorString(){
+			vector<std::string> displayErrorToFeedback = lGPtr->getFeedbackStrings();
+
+			displayToFeedbackBox(displayErrorToFeedback);
+		}
+
+
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
 //Get the display vectors from Logic.h when invoked by function executeUserInput(). 
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
-//Upon successful display to these displays, it will return true to caller. 
 private:void displayToAllDisplays(){
 			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
@@ -767,18 +777,6 @@ public: std::string extractFirstEightLetters(std::string input){
 			return output;
 		}
 
-//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
-//Get the error string from Logic.h when invoked by function executeUserInput(). 
-//It proceed on to display this error string onto the main display of the UI.
-//Upon successful display, it will return true to caller. 
-private: void displayErrorString(){
-			vector<std::string> tempErrorString = lGPtr->getErrorString();
-
-			for (int i=0; i < tempErrorString.size(); i++){
-			String^ errorString = convertToSys(tempErrorString[i]);
-			display->Text += errorString + "\n";
-			}
-		}
 
 public: void resetCommandBar(){
 			commandBox->Text = "";
