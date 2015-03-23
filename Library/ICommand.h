@@ -11,6 +11,8 @@ public:
 	static const int INVALID_NUMBER;
 	virtual void execute() = 0;
 	virtual vector<Event> getEventVector() = 0;
+	virtual Event getEvent() = 0;
+
 	bool getIsFloating();
 	bool getIsComplete();
 
@@ -32,6 +34,7 @@ public:
 	AddCommand(EventStorage* eventStorage, Event e);
 	void execute();
 	vector<Event> getEventVector();
+	Event getEvent();
 };
 
 
@@ -48,6 +51,7 @@ public:
 	DeleteCommand(EventStorage* eventStorage, int eventID, Event userEvent);
 	void execute();
 	vector<Event> getEventVector();
+	Event getEvent();
 };
 
 
@@ -64,24 +68,7 @@ public:
 	EditCommand(EventStorage* eventStorage, int eventID, Event toEdit, Event edited);
 	void execute();
 	vector<Event> getEventVector();
-};
-
-
-
-
-
-class CheckMultipleCommand : public ICommand {
-private:
-	EventStorage* eventStore;
-	string eventName;
-	vector<Event> multipleResults;
-	int numResults;
-
-public:
-	CheckMultipleCommand(EventStorage* eventStorage, string name);
-	void execute();
-	vector<Event> getEventVector();
-	int getNumResults();
+	Event getEvent();
 };
 
 
@@ -97,6 +84,7 @@ public:
 	ShowCommand(EventStorage* eventStorage, Event e);
 	void execute();
 	vector<Event> getEventVector();
+	Event getEvent();
 };
 
 
@@ -111,6 +99,7 @@ public:
 	ShowFloatCommand(EventStorage* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
+	Event getEvent();
 };
 
 #endif

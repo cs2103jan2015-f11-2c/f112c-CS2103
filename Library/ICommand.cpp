@@ -30,6 +30,10 @@ vector<Event> AddCommand::getEventVector() {
 	return addedEvents;
 }
 
+Event AddCommand::getEvent() {
+	return userEvent;
+}
+
 
 
 
@@ -83,6 +87,10 @@ vector<Event> DeleteCommand::getEventVector() {
 	return deletedEvents;
 }
 
+Event DeleteCommand::getEvent() {
+	return userEvent;
+}
+
 
 
 
@@ -101,25 +109,8 @@ vector<Event> EditCommand::getEventVector() {
 	return editedResults;
 }
 
-
-
-
-CheckMultipleCommand::CheckMultipleCommand(EventStorage* eventStorage, string name) {
-	eventStore = eventStorage;
-	eventName = name;
-}
-
-void CheckMultipleCommand::execute() {
-	multipleResults = eventStore->checkMultipleResults(eventName);
-	numResults = multipleResults.size();
-}
-
-vector<Event> CheckMultipleCommand::getEventVector() {
-	return multipleResults;
-}
-
-int CheckMultipleCommand::getNumResults() {
-	return numResults;
+Event EditCommand::getEvent() {
+	return editedEvent;
 }
 
 
@@ -138,6 +129,10 @@ vector<Event> ShowCommand::getEventVector() {
 	return eventsToShow;
 }
 
+Event ShowCommand::getEvent() {
+	return eventRangeToShow;
+}
+
 
 
 
@@ -152,4 +147,9 @@ void ShowFloatCommand::execute() {
 
 vector<Event> ShowFloatCommand::getEventVector() {
 	return eventsToShow;
+}
+
+Event ShowFloatCommand::getEvent() {
+	Event e;
+	return e;
 }
