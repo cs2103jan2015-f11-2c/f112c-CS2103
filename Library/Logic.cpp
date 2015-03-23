@@ -88,6 +88,10 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 	case Parser::DELETE_: {
 		log(CREATING_DELETE);
 		int id = convertNameToID(nameOfEvent);
+		ostringstream outString;
+		outString << id;
+		log(outString.str());
+
 		Event eventToDelete;
 		eventToDelete.setName(nameOfEvent);
 		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);

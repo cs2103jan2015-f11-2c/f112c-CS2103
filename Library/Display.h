@@ -43,6 +43,7 @@ private:
 
 public:
 	static const int GARBAGE_INT;
+	static const int INVALID_NUMBER;
 	static const string NO_EVENTS_MESSAGE;
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;

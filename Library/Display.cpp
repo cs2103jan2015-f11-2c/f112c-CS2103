@@ -2,6 +2,7 @@
 
 
 const int Display::GARBAGE_INT = -12345;
+const int Display::INVALID_NUMBER = -1;
 const string Display::NO_EVENTS_MESSAGE = "Currently no task";
 const string Display::ADDED_MESSAGE = " added.";
 const string Display::EDITED_MESSAGE = " edited.";
@@ -79,13 +80,23 @@ int Display::getTotalNormalEvents() {
 
 int Display::getIDFromIndex(int index) {
 	if (index > getTotalNumEvents()) {
-		return -1;
+		return INVALID_NUMBER;
 	} else {
-		if (index <= floatingEvents.size()) {
+		if (index <= getTotalFloatingEvents()) {
 			return floatingEvents[index-1].getID();
 		} else {
-			int normalIndex = index - floatingEvents.size();
-			return normalEvents[normalIndex - 1].getID();
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+
+			while (count != normalIndex) {
+				if (normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			return normalEvents[count].getID();
 		}
 	}
 }

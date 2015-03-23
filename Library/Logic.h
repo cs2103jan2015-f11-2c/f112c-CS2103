@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <fstream>
+#include <sstream>
 #include "Parser.h"
 #include "EventStorage.h"
 #include "Display.h"
@@ -14,6 +15,7 @@
 
 using std::ifstream;
 using std::ofstream;
+using std::ostringstream;
 
 class Logic {
 private:
