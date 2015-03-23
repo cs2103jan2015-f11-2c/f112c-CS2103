@@ -190,7 +190,8 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			normalEvents = commandPtr->getEventVector();
 			floatingEvents = display.getFloatingEvents();
 		}
-		string feedback = commandPtr->getEvent().getName() + Display::DELETED_MESSAGE;
+		Event deletedEvent = commandPtr->getEvent();
+		string feedback = deletedEvent.getName() + Display::DELETED_MESSAGE;
 		vector<tm> tmVec = display.getTempMainDisplayLabel();
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
@@ -223,12 +224,12 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	case Parser::SHOW: {
 		vector<Event> normalEvents = commandPtr->getEventVector();
 		vector<Event> floatingEvents = display.getFloatingEvents();
-		string emptyFeedback;
+		string feedback = Display::SHOW_MESSAGE + nameOfEvent;
 		vector<tm> tmVec;
 		tmVec.push_back(userEvent.getStartDate());
 		tmVec.push_back(userEvent.getEndDate());
 		
-		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
 		break;
 					   }
 
