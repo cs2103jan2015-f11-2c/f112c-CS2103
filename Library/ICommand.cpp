@@ -30,6 +30,7 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 
 void DeleteCommand::execute() {
 	if (id > 0) {
+		isFloating = userEvent.getIsFloating();
 		deletedEvents = eventStore->deleteEvent(id, userEvent);
 		return;
 	}
