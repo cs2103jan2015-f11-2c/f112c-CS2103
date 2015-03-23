@@ -1,0 +1,69 @@
+Initialised parsing of input "show floating"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show floating"
+Initialised parsing of input "show today"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentShowString
+Entered processShowEvent
+Entered eventMkTimeCorrector
+Successfully parsed input "show today"
+Initialised parsing of input "add hey1;10pm"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDay
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey1;10pm"
+Initialised parsing of input "add hey2;9am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDay
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hey2;9am"
+Initialised parsing of input "delete hey"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Encountered error. Error code: PS008
+Failed to parse input "delete hey"
+Initialised parsing of input "add hhihihihi;8am"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered fragmentAddString
+Entered processAddEvent
+Entered identifyEventName
+Entered identifyDay
+Entered identifyDate
+Entered identifyTime
+Entered addEventCorrector
+Entered eventMkTimeCorrector
+Successfully parsed input "add hhihihihi;8am"
+Initialised parsing of input "delete hey"
+Entered tokeniseOriginalString
+Entered extractFirstWord
+Entered extractDetails
+Entered extractDelEventName
+Encountered error. Error code: PS008
+Failed to parse input "delete hey"
