@@ -190,7 +190,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			normalEvents = commandPtr->getEventVector();
 			floatingEvents = display.getFloatingEvents();
 		}
-		string feedback = nameOfEvent + Display::DELETED_MESSAGE;
+		string feedback = commandPtr->getEvent().getName() + Display::DELETED_MESSAGE;
 		vector<tm> tmVec = display.getTempMainDisplayLabel();
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);

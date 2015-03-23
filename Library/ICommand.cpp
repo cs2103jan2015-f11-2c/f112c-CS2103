@@ -69,6 +69,7 @@ void DeleteCommand::execute() {
 	case 1: {
 		isFloating = tempEvents[0].getIsFloating();
 		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
+		userEvent = tempEvents[0];
 		isComplete = true;
 		return;
 		break;
