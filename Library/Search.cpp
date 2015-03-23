@@ -1,4 +1,5 @@
 #include "Search.h"
+const int Search::NOT_FOUND = -1 ;
 
 
 Search::Search()
@@ -18,19 +19,21 @@ int Search::searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSe
 			return i;
 		}
 	} 
-	return -1; //notFound
+	return NOT_FOUND;
 }
 vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch){
 	logger.logStorageStringData("searching For this EventName", eventName);
-	vector<Event> eventVector;
+	vector<Event> returnVector;
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
-		if(eventVectorToSearch[i].getName() == eventName){
-			logger.logStorageStringData("searching vector...",eventVectorToSearch[i].getName());
-			eventVector.push_back(eventVectorToSearch[i]);
+		int position = eventVectorToSearch[i].getName().find(eventName);
+		logger.logStorageIntData("searching vector... found at: ",position);
+		if(position > NOT_FOUND){
+			logger.logStoragePosition("pushed");
+			returnVector.push_back(eventVectorToSearch[i]);
 		}
 	}
-	return eventVector;
+	return returnVector;
 }
 
 //search all vector and all component of events save into events of vector results

@@ -11,6 +11,10 @@ class Search{
 private:
 	vector<Event> searchResultsToReturn;
 	EventLog logger;
+
+	//These are results to improve readability
+	static const int Search::NOT_FOUND;
+
 public:
 	//Constructor, Destructor
 	Search(void);
