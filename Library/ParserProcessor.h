@@ -27,7 +27,7 @@ private:
 
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
-	static const int NUMBER_OF_KEYWORDS_DAYS = 10;
+	static const int NUMBER_OF_KEYWORDS_DAYS = 11;
 	static const int NUMBER_OF_DAYSINAWEEK = 7;
 	static const int NUMBER_OF_KEYWORDS_SPECIAL = 3;
 	static const std::string LOCKUP_USED_INFORMATION;

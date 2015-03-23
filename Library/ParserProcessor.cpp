@@ -31,15 +31,16 @@ ParserProcessor::ParserProcessor(){
 	keywordTime[1] = "pm";
 
 	keywordDay[0] = "today";
-	keywordDay[1] = "tomorrow";
-	keywordDay[2] = "tmr";
-	keywordDay[3] = "mon";
-	keywordDay[4] = "tues";
-	keywordDay[5] = "wed";
-	keywordDay[6] = "thurs";
-	keywordDay[7] = "fri";
-	keywordDay[8] = "sat";
-	keywordDay[9] = "sun";
+	keywordDay[1] = "tdy";
+	keywordDay[2] = "tomorrow";
+	keywordDay[3] = "tmr";
+	keywordDay[4] = "mon";
+	keywordDay[5] = "tues";
+	keywordDay[6] = "wed";
+	keywordDay[7] = "thurs";
+	keywordDay[8] = "fri";
+	keywordDay[9] = "sat";
+	keywordDay[10] = "sun";
 
 	keywordSpecial[0] = "due";
 	keywordSpecial[1] = "to";
@@ -132,7 +133,7 @@ bool ParserProcessor::identifyDay(int index){
 			strDay = keywordDay[j];
 			matchFound = true;
 		
-			if(strDay == "today"){
+			if(strDay == "today" || strDay == "tdy"){
 				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
 				tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
 				startDayFound = true;
