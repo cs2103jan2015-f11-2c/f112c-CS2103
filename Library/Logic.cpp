@@ -228,7 +228,9 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		vector<tm> tmVec;
 		tmVec.push_back(userEvent.getStartDate());
 		tmVec.push_back(userEvent.getEndDate());
-		
+		mktime(&tmVec[0]);
+		mktime(&tmVec[1]);
+
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
 		break;
 					   }
