@@ -121,7 +121,7 @@ void EventStorage::writeToCurrentFile(){
 vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with all events on that day
 	logger.logStoragePosition("addEvent");
 	vector<Event> returnToLogicVector;
-
+	string temp;
 	if(newEvent.getIsFloating()){
 		logger.logStorageStringData("addFloat",newEvent.getName());
 		currentFloatingContent.push_back(newEvent);
@@ -132,7 +132,12 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 		returnToLogicVector = showDates(newEvent);
 	}
 	writeToCurrentFile();
-
+	if(returnToLogicVector.size() != 0 ){
+		temp = returnToLogicVector[1].getName();
+	} else{
+		temp = "Nothing";
+	}
+	logger.logStorageStringData("leaving storage... first item: ",temp);
 	return returnToLogicVector; 
 }
 
@@ -146,7 +151,7 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	eventVector = search.searchForEventWithEventName(eventName, currentContent);
 	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
 	eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
-	
+
 	logger.logStoragePosition("leaving checkMultipleResults");
 	return eventVector;
 }
@@ -223,6 +228,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 		if(editedEvent.getDescription() != ""){
 			(currentContent[indexOfEventID]).setDescription(editedEvent.getDescription());
 		}
+		logger.logStoragePosition("edited normal");
 		returnToLogicVector = showDates(editedEvent);
 	}
 	else{ //Floating Case
