@@ -60,6 +60,7 @@ ParserProcessor::ParserProcessor(){
 	systemShowDay = false;
 	systemShowWeek = false;
 	systemShowMonth = false;
+	systemShowYear = false;
 	systemShowOthers = false;
 	userShowDay = false;
 	userShowRangeOfDays = false;
@@ -605,34 +606,55 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	year = now->tm_year;
 	
 	std::string firstWord = fragmentedWords[0];
-	if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(day,month,year);
-		systemShowDay = true;
-	} else if (firstWord == "tomorrow" || firstWord == "tmr"){
-		tempEventStore.setStartDate(day+1,month,year);
-		tempEventStore.setEndDate(day+1,month,year);
-		systemShowDay = true;
-	} else if (firstWord == "week" || firstWord == "wk"){
-		weekday = now->tm_wday;
-		daysToEndWeek = 6 - weekday;
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(day+daysToEndWeek,month,year);
-		systemShowWeek = true;
-	} else if(firstWord == "month" || firstWord == "mth"){
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
-		systemShowMonth = true;
-	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important" || firstWord == "impt"){
-		tempEventStore.setName(firstWord);
-		systemShowOthers = true;
+	try {
+		auto tempStoi = std::stoi(firstWord);
+		tempInt = tempStoi;
+		fragmentedWords[0] = LOCKUP_USED_INFORMATION;
+		if(tempInt > 2000){
+			if(year == tempInt-1900){
+				tempEventStore.setStartDate(day,month,year);
+				tempEventStore.setEndDate(31,11,year);
+			} else {
+				year = tempInt-1900;
+				tempEventStore.setStartDate(1,0,year);
+				tempEventStore.setEndDate(31,11,year);
+			}
+			systemShowYear = true;
+		}
+	} catch (std::invalid_argument &e){
+		if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day,month,year);
+			systemShowDay = true;
+		} else if (firstWord == "tomorrow" || firstWord == "tmr"){
+			tempEventStore.setStartDate(day+1,month,year);
+			tempEventStore.setEndDate(day+1,month,year);
+			systemShowDay = true;
+		} else if (firstWord == "week" || firstWord == "wk"){
+			weekday = now->tm_wday;
+			daysToEndWeek = 6 - weekday;
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day+daysToEndWeek,month,year);
+			systemShowWeek = true;
+		} else if(firstWord == "month" || firstWord == "mth"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+			systemShowMonth = true;
+		} else if(firstWord == "year" || firstWord == "yr"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(31,11,year);
+			systemShowYear = true;
+		} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important" || firstWord == "impt"){
+			tempEventStore.setName(firstWord);
+			systemShowOthers = true;
+		}
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
 	unsigned int i = 0;
 	int tempi = 0; 
 	int j = 0;
-	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowOthers){
+	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowYear || systemShowOthers){
 		tempi++;
 	}
 	for(i = tempi; i < fragmentedWords.size(); i++){
@@ -655,6 +677,22 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 		}
 		
 		if(matchFound){
+			//Checking for and extracting year integer. If not found, current year is used instead
+			if(tempi + 1 < fragmentedWords.size()){
+				try {
+					auto tempStoi = std::stoi(fragmentedWords[tempi+1]);
+					tempInt = tempStoi;
+					if(tempInt > 2000){
+						year = tempInt - 1900;
+						fragmentedWords[tempi+1] = LOCKUP_USED_INFORMATION;
+					} else {
+						year = now->tm_year;
+					}
+				} catch (std::invalid_argument& e){
+					year = now->tm_year;
+				}
+			}
+
 			try {
 				//check if current string contains integer value as day
 				auto tempStoi = std::stoi(fragmentedWords[tempi]);
