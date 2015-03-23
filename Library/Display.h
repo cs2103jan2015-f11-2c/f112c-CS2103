@@ -49,6 +49,7 @@ public:
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
 	static const string EVENT_NOT_FOUND_MESSAGE;
+	static const string CHOOSE_EVENT_MESSAGE;
 	static const string NEW_DAY_MESSAGE;
 
 	//constructor, destructor

@@ -91,11 +91,10 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 
 		Event eventToDelete;
 		eventToDelete.setName(nameOfEvent);
-
 		if (id != INVALID_NUMBER) {
 			eventToDelete = display.getEventFromID(id);
 		}
-
+	
 		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
 		return executor.execute(deleteCommand);
 		break;
@@ -163,8 +162,18 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	case Parser::DELETE_: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
+		//more than one event found case
+		if (!commandPtr->getIsComplete()) {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = display.getFloatingEvents();
+			vector<tm> tmVec = display.getTempMainDisplayLabel();
+			display.setAllEvents(normalEvents, floatingEvents, Display::CHOOSE_EVENT_MESSAGE, tmVec, Display::GARBAGE_INT);
+			return;
+		}
+
 		//no event found case
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
+			log("not found case");
 			normalEvents = display.getNormalEvents();
 			floatingEvents = display.getFloatingEvents();
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
