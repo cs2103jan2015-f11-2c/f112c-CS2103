@@ -8,6 +8,7 @@ const string Display::ADDED_MESSAGE = " added.";
 const string Display::EDITED_MESSAGE = " edited.";
 const string Display::DELETED_MESSAGE = " deleted.";
 const string Display::EVENT_NOT_FOUND_MESSAGE = " not found.";
+const string Display::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select from above.";
 const string Display::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 
 //constructor

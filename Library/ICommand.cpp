@@ -3,22 +3,31 @@
 
 const int ICommand::INVALID_NUMBER = -1;
 
+bool ICommand::getIsFloating() {
+	return isFloating;
+}
+
+bool ICommand::getIsComplete() {
+	return isComplete;
+}
+
+
+
+
 AddCommand::AddCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	userEvent = e;
+	isComplete = false;
 }
 
 void AddCommand::execute() {
 	int newID = userEvent.getID();
 	addedEvents = eventStore->addEvent(userEvent);
+	isComplete = true;
 }
 
 vector<Event> AddCommand::getEventVector() {
 	return addedEvents;
-}
-
-bool AddCommand::getIsFloating() {
-	return isFloating;
 }
 
 
@@ -28,12 +37,14 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 	eventStore = eventStorage;
 	id = eventID;
 	userEvent = e;
+	isComplete = false;
 }
 
 void DeleteCommand::execute() {
 	if (id > 0) {
 		isFloating = userEvent.getIsFloating();
 		deletedEvents = eventStore->deleteEvent(id, userEvent);
+		isComplete = true;
 		return;
 	}
 	
@@ -46,6 +57,7 @@ void DeleteCommand::execute() {
 		invalidEvent.setFeedback(userEvent.getFeedback());
 		invalidEvent.setID(INVALID_NUMBER);
 		deletedEvents.push_back(invalidEvent);
+		isComplete = true;
 		return;
 		break;
 			}
@@ -53,21 +65,22 @@ void DeleteCommand::execute() {
 	case 1: {
 		isFloating = tempEvents[0].getIsFloating();
 		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
+		isComplete = true;
 		return;
 		break;
 			}
 
-	default:
+	default: {
+		deletedEvents = tempEvents;
+		isComplete = false;
+		return;
 		break;
+			 };
 	};
 }
 
 vector<Event> DeleteCommand::getEventVector() {
 	return deletedEvents;
-}
-
-bool DeleteCommand::getIsFloating() {
-	return isFloating;
 }
 
 
@@ -86,10 +99,6 @@ void EditCommand::execute() {
 
 vector<Event> EditCommand::getEventVector() {
 	return editedResults;
-}
-
-bool EditCommand::getIsFloating() {
-	return isFloating;
 }
 
 
@@ -113,10 +122,6 @@ int CheckMultipleCommand::getNumResults() {
 	return numResults;
 }
 
-bool CheckMultipleCommand::getIsFloating() {
-	return isFloating;
-}
-
 
 
 
@@ -133,10 +138,6 @@ vector<Event> ShowCommand::getEventVector() {
 	return eventsToShow;
 }
 
-bool ShowCommand::getIsFloating() {
-	return isFloating;
-}
-
 
 
 
@@ -151,8 +152,4 @@ void ShowFloatCommand::execute() {
 
 vector<Event> ShowFloatCommand::getEventVector() {
 	return eventsToShow;
-}
-
-bool ShowFloatCommand::getIsFloating() {
-	return isFloating;
 }
