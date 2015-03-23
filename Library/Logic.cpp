@@ -203,10 +203,28 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 						  }
 	
 	case Parser::EDIT: {
-		vector<Event> normalEvents, floatingEvents;
+		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
 		vector<tm> tmVec;
 		int id;
 
+		//more than one event found case
+		if (!commandPtr->getIsComplete()) {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = display.getFloatingEvents();
+			vector<tm> tmVecCurrent = display.getTempMainDisplayLabel();
+			display.setAllEvents(normalEvents, floatingEvents, Display::CHOOSE_EVENT_MESSAGE, tmVecCurrent, Display::GARBAGE_INT);
+			return;
+		}
+
+		//no event found case
+		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
+			isDone = false;
+			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
+			//display.set???
+			return;
+		}
+
+		//normal case
 		if (commandPtr->getIsFloating()) {
 			normalEvents = display.getNormalEvents();
 			floatingEvents = commandPtr->getEventVector();
@@ -219,7 +237,8 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			tmVec.push_back(normalEvents[0].getEndDate());
 			id = normalEvents[0].getID();
 		}
-		string feedback = nameOfEvent + Display::DELETED_MESSAGE;
+		Event oldEvent = commandPtr->getEvent();
+		string feedback = oldEvent.getName() + Display::DELETED_MESSAGE;
 
 		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
