@@ -145,13 +145,8 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	
 	eventVector = search.searchForEventWithEventName(eventName, currentContent);
 	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
-	try{
-		eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
-		if(eventVector.size() == 0)
-			throw "No Event Found";
-	} catch (string exception) {
-		logger.logStorageStringData("Try Block", exception);
-	}
+	eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
+	
 	return eventVector;
 }
 vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
