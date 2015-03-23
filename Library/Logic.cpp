@@ -68,7 +68,7 @@ bool Logic::executeUserInput(string input) {
 	bool isDone = true;
 	
 	ICommand* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
-	setDisplay(commandPtr, commandType, userEvent, nameOfEvent);
+	setDisplay(commandPtr, commandType, userEvent, nameOfEvent, isDone);
 
 	deleteParserPtr();
 
@@ -128,12 +128,19 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 		return executor.execute(showFloatCommand);
 		break;
 					   }
+
+	case Parser::ERROR_: {
+		Event emptyEvent;
+		return new AddCommand(&eventStore, emptyEvent);
+		break;
+						 }
+
 	default:
 		break;
 	}
 }
 
-void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent) {
+void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent, bool& isDone) {
 	switch (command) {
 	case Parser::ADD: {
 		vector<Event> normalEvents = commandPtr->getEventVector();
@@ -173,7 +180,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 
 		//no event found case
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
-			log("not found case");
+			isDone = false;
 			normalEvents = display.getNormalEvents();
 			floatingEvents = display.getFloatingEvents();
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
@@ -244,6 +251,17 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
 		break;
 							}
+
+	case Parser::ERROR_: {
+		delete commandPtr;
+		commandPtr = NULL;
+		isDone = false;
+
+		string feedback = userEvent.getFeedback();
+
+		//display.set???
+		break;
+						 }
 
 	default:
 		break;

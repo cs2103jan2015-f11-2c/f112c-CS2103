@@ -61,7 +61,7 @@ public:
 	//executors
 	bool executeUserInput(string input);
 	ICommand* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
-	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
+	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
 	void deleteParserPtr();
 	//void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 
