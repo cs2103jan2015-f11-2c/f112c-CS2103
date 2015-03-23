@@ -26,7 +26,7 @@ vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getName() == eventName){
-			logger.logStorageStringData("searching vector...",eventVectorToSearch[i].getName);
+			logger.logStorageStringData("searching vector...",eventVectorToSearch[i].getName());
 			eventVector.push_back(eventVectorToSearch[i]);
 		}
 	}
