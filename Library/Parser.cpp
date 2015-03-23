@@ -66,10 +66,17 @@ void Parser::tokenizeOriginalString(){
 			tempEventStore = processor.processEditEvent(fragmentedWords);
 			typeOfCommand = Parser::EDIT;
 		} else if(command == "show"){
+			nameOfEvent = details;
 			fragmentedWords = splitter.fragmentShowString(details);
 			tempEventStore = processor.processShowEvent(fragmentedWords);
-			if(tempEventStore.getIsFloating() == true){
+			if(tempEventStore.getName() == "floating"){
 				typeOfCommand = Parser::SHOWFLOAT;
+			} else if(tempEventStore.getName() == "all"){
+				typeOfCommand = Parser::SHOWALL;
+			} else if(tempEventStore.getName() == "due"){
+				typeOfCommand = Parser::SHOWDUE;
+			} else if(tempEventStore.getName() == "important"){
+				typeOfCommand = Parser::SHOWALLIMPORTANT;
 			} else {
 				typeOfCommand = Parser::SHOW;
 			}

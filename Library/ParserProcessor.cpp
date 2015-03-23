@@ -59,7 +59,7 @@ ParserProcessor::ParserProcessor(){
 	systemShowDay = false;
 	systemShowWeek = false;
 	systemShowMonth = false;
-	systemShowFloat = false;
+	systemShowOthers = false;
 	userShowDay = false;
 	userShowRangeOfDays = false;
 	userShowMonth = false;
@@ -568,16 +568,16 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 		tempEventStore.setStartDate(day,month,year);
 		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		systemShowMonth = true;
-	} else if(firstWord == "floating"){
-		tempEventStore.setIsFloating(true);
-		systemShowFloat = true;
+	} else if(firstWord == "floating" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important"){
+		tempEventStore.setName(firstWord);
+		systemShowOthers = true;
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
 	unsigned int i = 0;
 	int tempi = 0; 
 	int j = 0;
-	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowFloat){
+	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowOthers){
 		tempi++;
 	}
 	for(i = tempi; i < fragmentedWords.size(); i++){

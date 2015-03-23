@@ -27,7 +27,10 @@ public:
 		ERROR_,
 		SEARCH,
 		SHOW,
-		SHOWFLOAT
+		SHOWFLOAT,
+		SHOWALL,
+		SHOWDUE,
+		SHOWALLIMPORTANT
 	};
 
 	static const std::string TOKENISE_ORIGINAL_STRING;
