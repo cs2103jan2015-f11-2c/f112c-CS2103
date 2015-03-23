@@ -181,11 +181,8 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		//no event found case
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 			isDone = false;
-			normalEvents = display.getNormalEvents();
-			floatingEvents = display.getFloatingEvents();
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
-			vector<tm> tmVec = display.getTempMainDisplayLabel();
-			display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+			//display.set???
 			return;
 		}
 
