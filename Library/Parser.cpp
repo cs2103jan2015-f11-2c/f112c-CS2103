@@ -56,7 +56,7 @@ void Parser::tokenizeOriginalString(){
 			} else {
 				typeOfCommand = Parser::ADD;
 			}
-		} else if(command == "delete"){
+		} else if(command == "delete" || command == "del"){
 			nameOfEvent = splitter.extractDelEventName(details);
 			typeOfCommand = Parser::DELETE_;
 		} else if(command == "edit"){
@@ -69,13 +69,13 @@ void Parser::tokenizeOriginalString(){
 			nameOfEvent = details;
 			fragmentedWords = splitter.fragmentShowString(details);
 			tempEventStore = processor.processShowEvent(fragmentedWords);
-			if(tempEventStore.getName() == "floating"){
+			if(tempEventStore.getName() == "floating" || tempEventStore.getName() == "float"){
 				typeOfCommand = Parser::SHOWFLOAT;
 			} else if(tempEventStore.getName() == "all"){
 				typeOfCommand = Parser::SHOWALL;
 			} else if(tempEventStore.getName() == "due"){
 				typeOfCommand = Parser::SHOWDUE;
-			} else if(tempEventStore.getName() == "important"){
+			} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
 				typeOfCommand = Parser::SHOWALLIMPORTANT;
 			} else {
 				typeOfCommand = Parser::SHOW;

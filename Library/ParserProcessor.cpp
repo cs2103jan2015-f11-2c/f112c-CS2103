@@ -32,14 +32,14 @@ ParserProcessor::ParserProcessor(){
 
 	keywordDay[0] = "today";
 	keywordDay[1] = "tomorrow";
-	keywordDay[2] = "mon";
-	keywordDay[3] = "tues";
-	keywordDay[4] = "wed";
-	keywordDay[5] = "thurs";
-	keywordDay[6] = "fri";
-	keywordDay[7] = "sat";
-	keywordDay[8] = "sun";
-	keywordDay[9] = "next";
+	keywordDay[2] = "tmr";
+	keywordDay[3] = "mon";
+	keywordDay[4] = "tues";
+	keywordDay[5] = "wed";
+	keywordDay[6] = "thurs";
+	keywordDay[7] = "fri";
+	keywordDay[8] = "sat";
+	keywordDay[9] = "sun";
 
 	keywordSpecial[0] = "due";
 	keywordSpecial[1] = "to";
@@ -126,7 +126,7 @@ bool ParserProcessor::identifyDay(int index){
 	int day = 0, month = 0, year = 0, weekday = 0;
 	std::string strDay;
 
-	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS-1 && !matchFound; j++){   // NUMBER_OF_KEYWORDS_DAYS-1 because keyword "next" is not going to be searched first
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS && !matchFound; j++){   // NUMBER_OF_KEYWORDS_DAYS-1 because keyword "next" is not going to be searched first
 		if(fragmentedWords[index].find(keywordDay[j]) != std::string::npos){
 			tempIndex = index;
 			strDay = keywordDay[j];
@@ -137,7 +137,7 @@ bool ParserProcessor::identifyDay(int index){
 				tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
 				startDayFound = true;
 				endDayFound = true;
-			} else if(strDay == "tomorrow"){
+			} else if(strDay == "tomorrow" || strDay == "tmr"){
 				tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
 				tempEventStore.setEndDate(now->tm_mday+1,now->tm_mon,now->tm_year);
 				startDayFound = true;
@@ -151,7 +151,7 @@ bool ParserProcessor::identifyDay(int index){
 					numWdaysApart = weekday -(nowweekday - NUMBER_OF_DAYSINAWEEK);
 				}
 				tempIndex--;
-				if(fragmentedWords[tempIndex] == "next"){
+				if(fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt"){
 					if(weekday < nowweekday){
 						numWdaysApart = numWdaysApart + 7;
 					}
@@ -469,11 +469,12 @@ void ParserProcessor::addEventCorrector(){
 	}
 	if(startTimeFound && !endTimeFound){
 		struct tm tempTime = tempEventStore.getStartDate();
-		if(tempTime.tm_hour+1 == 24 && tempTime.tm_min == 0){
+		if((tempTime.tm_hour)+1 == 24 && tempTime.tm_min == 0){
 			tempEventStore.setEndTime(23,59);
 		} else {
 			tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
 		}
+		endTimeFound = true;
 	}
 	if(endDayFound && !endTimeFound){
 		tempEventStore.setEndTime(23,59);
@@ -603,21 +604,25 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	year = now->tm_year;
 	
 	std::string firstWord = fragmentedWords[0];
-	if (firstWord == "today"){
+	if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
 		tempEventStore.setStartDate(day,month,year);
 		tempEventStore.setEndDate(day,month,year);
 		systemShowDay = true;
-	} else if (firstWord == "week"){
+	} else if (firstWord == "tomorrow" || firstWord == "tmr"){
+		tempEventStore.setStartDate(day+1,month,year);
+		tempEventStore.setEndDate(day+1,month,year);
+		systemShowDay = true;
+	} else if (firstWord == "week" || firstWord == "wk"){
 		weekday = now->tm_wday;
 		daysToEndWeek = 6 - weekday;
 		tempEventStore.setStartDate(day,month,year);
 		tempEventStore.setEndDate(day+daysToEndWeek,month,year);
 		systemShowWeek = true;
-	} else if(firstWord == "month"){
+	} else if(firstWord == "month" || firstWord == "mth"){
 		tempEventStore.setStartDate(day,month,year);
 		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		systemShowMonth = true;
-	} else if(firstWord == "floating" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important"){
+	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important" || firstWord == "impt"){
 		tempEventStore.setName(firstWord);
 		systemShowOthers = true;
 	}
