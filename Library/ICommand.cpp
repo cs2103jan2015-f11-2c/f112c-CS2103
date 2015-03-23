@@ -29,7 +29,28 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 }
 
 void DeleteCommand::execute() {
-	deletedEvents = eventStore->deleteEvent(id, userEvent);
+	if (id > 0) {
+		deletedEvents = eventStore->deleteEvent(id, userEvent);
+		return;
+	}
+	
+
+	vector<Event> tempEvents = eventStore->checkMultipleResults(userEvent.getName());
+	
+	switch (tempEvents.size()) {
+	case 0:
+		break;
+
+	case 1: {
+		isFloating = tempEvents[0].getIsFloating();
+		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
+		return;
+		break;
+			}
+
+	default:
+		break;
+	};
 }
 
 vector<Event> DeleteCommand::getEventVector() {

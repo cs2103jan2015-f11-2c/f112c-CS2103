@@ -245,7 +245,7 @@ int Logic::convertNameToID(string name) {
 			int index = std::stoi(name);
 			return display.getIDFromIndex(index);
 		} else {
-			return INVALID_NUMBER;
+			return display.getIDFromName(name);
 		}
 }
 

@@ -72,6 +72,7 @@ public:
 	int getTotalFloatingEvents();
 	int getTotalNormalEvents();
 	int getIDFromIndex(int index);
+	int getIDFromName(string name);
 	int getNewID();
 
 	bool getIsFloatingFromID(int id);

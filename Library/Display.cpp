@@ -101,6 +101,21 @@ int Display::getIDFromIndex(int index) {
 	}
 }
 
+int Display::getIDFromName(string name) {
+	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
+		if (floatingEvents[i].getName() == name) {
+			return floatingEvents[i].getID();
+		}
+	}
+
+	for (int i = 0 ; i < getTotalNormalEvents(); i++) {
+		if (normalEvents[i].getName() == name) {
+			return normalEvents[i].getID();
+		}
+	}
+	return INVALID_NUMBER;
+}
+
 int Display::getNewID() {
 	return newID;
 }
