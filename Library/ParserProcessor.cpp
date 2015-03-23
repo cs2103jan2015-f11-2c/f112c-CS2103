@@ -609,7 +609,6 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	try {
 		auto tempStoi = std::stoi(firstWord);
 		tempInt = tempStoi;
-		fragmentedWords[0] = LOCKUP_USED_INFORMATION;
 		if(tempInt > 2000){
 			if(year == tempInt-1900){
 				tempEventStore.setStartDate(day,month,year);
@@ -620,6 +619,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 				tempEventStore.setEndDate(31,11,year);
 			}
 			systemShowYear = true;
+			fragmentedWords[0] = LOCKUP_USED_INFORMATION;
 		}
 	} catch (std::invalid_argument &e){
 		if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){

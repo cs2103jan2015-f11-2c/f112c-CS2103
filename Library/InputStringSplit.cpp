@@ -242,6 +242,11 @@ std::vector<std::string> InputStringSplit::fragmentShowString(std::string input)
 	while(!endOfString){
 		strCutIndex = input.find_first_of(" -.");
 		fragmentedWords.push_back(input.substr(0,strCutIndex));
+		if(strCutIndex != std::string::npos){
+			if(input.at(strCutIndex) == '-'){
+				fragmentedWords.push_back("to");
+			}
+		}
 		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
 		if(strCutIndex == std::string::npos){
 			endOfString = true;
