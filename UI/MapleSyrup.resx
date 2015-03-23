@@ -222,10 +222,10 @@
     <value>254, 26</value>
   </data>
   <data name="searchBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>7</value>
   </data>
   <data name="searchBox.ToolTip" xml:space="preserve">
-    <value>Search Bar</value>
+    <value>Ctrl + F</value>
   </data>
   <data name="&gt;&gt;searchBox.Name" xml:space="preserve">
     <value>searchBox</value>
@@ -256,7 +256,7 @@
     <value>692, 462</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>999</value>
   </data>
   <data name="display.Text" xml:space="preserve">
     <value />
@@ -1518,7 +1518,7 @@
     <value>25</value>
   </data>
   <data name="calenderIcon.ToolTip" xml:space="preserve">
-    <value>Calender</value>
+    <value>Calender Cltrl + D</value>
   </data>
   <data name="&gt;&gt;calenderIcon.Name" xml:space="preserve">
     <value>calenderIcon</value>
@@ -3446,7 +3446,7 @@
     <value>67, 30</value>
   </data>
   <data name="showButton.TabIndex" type="System.Int32, mscorlib">
-    <value>44</value>
+    <value>2</value>
   </data>
   <data name="showButton.Text" xml:space="preserve">
     <value>SHOW</value>
@@ -3479,7 +3479,7 @@
     <value>64, 30</value>
   </data>
   <data name="helpButton.TabIndex" type="System.Int32, mscorlib">
-    <value>45</value>
+    <value>4</value>
   </data>
   <data name="helpButton.Text" xml:space="preserve">
     <value>HELP</value>
@@ -3533,7 +3533,7 @@
     <value>30, 25</value>
   </data>
   <data name="backButton.TabIndex" type="System.Int32, mscorlib">
-    <value>51</value>
+    <value>5</value>
   </data>
   <data name="backButton.Text" xml:space="preserve">
     <value>&lt;&lt;</value>
@@ -3560,7 +3560,7 @@
     <value>30, 25</value>
   </data>
   <data name="nextButton.TabIndex" type="System.Int32, mscorlib">
-    <value>52</value>
+    <value>6</value>
   </data>
   <data name="nextButton.Text" xml:space="preserve">
     <value>&gt;&gt;</value>
@@ -3582,6 +3582,15 @@
   </metadata>
   <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 114</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
+    <value>showDropDown</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>113, 22</value>
@@ -3640,29 +3649,32 @@
   <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
     <value>Archive</value>
   </data>
-  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 114</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
-    <value>showDropDown</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>456, 17</value>
   </metadata>
   <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
   </data>
+  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>193, 70</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
+    <value>helpDropDown</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="introductionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>192, 22</value>
   </data>
   <data name="introductionToolStripMenuItem.Text" xml:space="preserve">
     <value>Introduction</value>
   </data>
+  <data name="commandsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+A</value>
+  </data>
   <data name="commandsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>192, 22</value>
   </data>
   <data name="commandsToolStripMenuItem.Text" xml:space="preserve">
     <value>Commands</value>
@@ -3670,20 +3682,14 @@
   <data name="shortcutsToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="shortcutsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+S</value>
+  </data>
   <data name="shortcutsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>192, 22</value>
   </data>
   <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
     <value>Shortcuts</value>
-  </data>
-  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 70</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
-    <value>helpDropDown</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="editButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -3701,7 +3707,7 @@
     <value>64, 30</value>
   </data>
   <data name="editButton.TabIndex" type="System.Int32, mscorlib">
-    <value>53</value>
+    <value>3</value>
   </data>
   <data name="editButton.Text" xml:space="preserve">
     <value>EDIT</value>
@@ -3723,6 +3729,15 @@
   </metadata>
   <data name="editDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="editDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 92</value>
+  </data>
+  <data name="&gt;&gt;editDropDown.Name" xml:space="preserve">
+    <value>editDropDown</value>
+  </data>
+  <data name="&gt;&gt;editDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="undoToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -3765,15 +3780,6 @@
   </data>
   <data name="pasteToolStripMenuItem.Text" xml:space="preserve">
     <value>Paste</value>
-  </data>
-  <data name="editDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 92</value>
-  </data>
-  <data name="&gt;&gt;editDropDown.Name" xml:space="preserve">
-    <value>editDropDown</value>
-  </data>
-  <data name="&gt;&gt;editDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>114, 17</value>

@@ -268,6 +268,7 @@ namespace UI {
 			// 
 			// display
 			// 
+			this->display->AcceptsTab = true;
 			this->display->AutoWordSelection = true;
 			this->display->BackColor = System::Drawing::SystemColors::ControlLightLight;
 			this->display->Cursor = System::Windows::Forms::Cursors::SizeAll;
@@ -390,7 +391,6 @@ namespace UI {
 			this->showButton->Name = L"showButton";
 			this->showButton->UseVisualStyleBackColor = false;
 			this->showButton->Click += gcnew System::EventHandler(this, &MapleSyrup::showButton_Click);
-			this->showButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::showButton_MouseEnter);
 			// 
 			// helpButton
 			// 
@@ -401,7 +401,6 @@ namespace UI {
 			this->helpButton->Name = L"helpButton";
 			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
-			this->helpButton->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::helpButton_MouseEnter);
 			// 
 			// suggestBar
 			// 
@@ -592,6 +591,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			clearAllLogFiles();
 
 			initializeAndUndisplayAll();
+			initializeShortcut();
 
 			loadData();
 }
@@ -631,14 +631,48 @@ private: void clearAllLogFiles(){
 
 //Pre-condition : None 
 //Execute shortcuts for UI
+
+private: bool isCtrlPressed;
+
+private: void initializeShortcut(){
+			 isCtrlPressed = false;
+		 }
+
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::F1){
+			 if (e->KeyCode == Keys::ControlKey){
+				 isCtrlPressed = true;
+			 }
+			 
+			 if ( isCtrlPressed && e->KeyCode == Keys::F){
+				 searchBox->Select();
+				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::D){
+				 if (topCalenderDisplayed == false){
+					calenderTop->BringToFront();
+					calenderTop->Visible = true;
+					topCalenderDisplayed = true;
+					calenderTop->Select();
+					isCtrlPressed = false;
+				 }
+				 else {
+					calenderTop->Visible = false;
+					topCalenderDisplayed = false;
+					isCtrlPressed = false;
+				 }
+
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::A){
+				 displayHelpCommands();
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::ShiftKey){
 				 commandBox->Select();
 			 }
 
-			 if (e->KeyCode == Keys::F2){
-				 searchBox->Select();
-			 }
+
 		 }
 
 
@@ -1035,42 +1069,17 @@ private: void initializeAndUndisplayAll(){
 			showDisplayed = false;
 			helpDisplayed = false;
 			topCalenderDisplayed = false;
-
-			unDisplayShow();
-			unDisplayHelp();
-		}
-
-//Pre-condition : None 
-//To display the components of column show
-private: void displayShow (){
-
-		}
-
-//Pre-condition : None 
-//To un-display the components of column show
-private: void unDisplayShow (){
-
 		}
 
 
-// To display the Show column when mouse enter
-private: System::Void showButton_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
-			 if (helpDisplayed == true){
-				 unDisplayHelp();			 
-			 }
 
-			 if (showDisplayed == false){
-				 displayShow();
-			 }
-		 }
+
+
+
 
 private: System::Void editButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 editDropDown->Show(editButton,0,editButton->Height);
 		 }
-
-
-
-
 
 // To display & undisplay the Show column when clicked
 private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -1079,50 +1088,14 @@ private: System::Void showButton_Click(System::Object^  sender, System::EventArg
 			 
 		 }
 
-//Pre-condition : None 
-// To display the components of column Help
-private: void displayHelp (){
-
-		}
-
-//Pre-condition : None 
-// To display the components of column Help
-private: void unDisplayHelp (){
-
-		}
-
-// To display Help column when mouse enter
-private: System::Void helpButton_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
-			 if(showDisplayed == true){
-				 unDisplayShow();
-			 }
-			 if (helpDisplayed == false){
-				 displayHelp();
-			 }
-
-		 }
-
 // To display & undisplay the Help column when mouse click
 private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {	 
-			 helpDropDown->Show(helpButton,0,helpButton->Height);	
-			 
+			 helpDropDown->Show(helpButton,0,helpButton->Height);	 
 		 }
 
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 			initializeAndUndisplayAll(); 
-		 }
-
-
-
-// Display Calender
-private: System::Void calenderTop_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-			/*
-			 if(topCalenderDisplayed == true){
-				 calenderTop->Visible = false;
-				 topCalenderDisplayed = false;
-			 }
-			 */
 		 }
 
 private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) {
