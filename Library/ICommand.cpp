@@ -54,7 +54,7 @@ void DeleteCommand::execute() {
 	
 
 	vector<Event> tempEvents = eventStore->checkMultipleResults(userEvent.getName());
-	
+
 	switch (tempEvents.size()) {
 	case 0: {
 		Event invalidEvent;
@@ -68,8 +68,8 @@ void DeleteCommand::execute() {
 
 	case 1: {
 		isFloating = tempEvents[0].getIsFloating();
-		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
 		userEvent = tempEvents[0];
+		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
 		isComplete = true;
 		return;
 		break;
@@ -103,7 +103,42 @@ EditCommand::EditCommand(EventStorage* eventStorage, int eventID, Event toEdit, 
 }
 
 void EditCommand::execute() {
-	editedResults = eventStore->editEvent(id, eventToEdit, editedEvent);
+	if (id > 0) {
+		isFloating = eventToEdit.getIsFloating();
+		editedResults = eventStore->editEvent(id, eventToEdit, editedEvent);
+		isComplete = true;
+		return;
+	}
+
+	vector<Event> tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
+
+	switch (tempEvents.size()) {
+	case 0: {
+		Event invalidEvent;
+		invalidEvent.setID(INVALID_NUMBER);
+		editedResults.push_back(invalidEvent);
+		isComplete = true;
+		return;
+		break;
+			}
+
+	case 1: {
+		isFloating = tempEvents[0].getIsFloating();
+		eventToEdit = tempEvents[0];
+		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+		isComplete = true;
+		return;
+		break;
+			}
+
+	default: {
+		editedResults = tempEvents;
+		isComplete = false;
+		return;
+		break;
+			 }
+	}
+
 }
 
 vector<Event> EditCommand::getEventVector() {
@@ -111,7 +146,7 @@ vector<Event> EditCommand::getEventVector() {
 }
 
 Event EditCommand::getEvent() {
-	return editedEvent;
+	return eventToEdit;
 }
 
 
