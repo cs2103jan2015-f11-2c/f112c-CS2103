@@ -62,6 +62,9 @@ namespace UI {
 	private: System::Windows::Forms::ContextMenuStrip^  editDropDown;
 	private: System::Windows::Forms::ToolStripMenuItem^  undoToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  redoToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  copyToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  pasteToolStripMenuItem;
+	private: System::Windows::Forms::Timer^  timer1;
 
 
 
@@ -139,7 +142,7 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  searchIcon;
 
 	private: System::Windows::Forms::TextBox^  commandBox;
-	private: System::Windows::Forms::Timer^  timer1;
+
 	private: System::Windows::Forms::ListBox^  suggestBar;
 
 	private: System::Windows::Forms::FontDialog^  fontDialog1;
@@ -185,7 +188,6 @@ namespace UI {
 			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
-			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->backButton = (gcnew System::Windows::Forms::Button());
@@ -204,6 +206,9 @@ namespace UI {
 			this->editDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->redoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -375,7 +380,6 @@ namespace UI {
 			this->calenderTop->ScrollChange = 1;
 			this->toolTip1->SetToolTip(this->calenderTop, resources->GetString(L"calenderTop.ToolTip"));
 			this->calenderTop->DateSelected += gcnew System::Windows::Forms::DateRangeEventHandler(this, &MapleSyrup::calenderTop_DateSelected);
-			this->calenderTop->MouseLeave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_MouseLeave);
 			// 
 			// showButton
 			// 
@@ -429,18 +433,21 @@ namespace UI {
 			// 
 			// dayToolStripMenuItem
 			// 
+			this->dayToolStripMenuItem->AutoToolTip = true;
 			this->dayToolStripMenuItem->Name = L"dayToolStripMenuItem";
 			resources->ApplyResources(this->dayToolStripMenuItem, L"dayToolStripMenuItem");
 			this->dayToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::dayToolStripMenuItem_Click);
 			// 
 			// weekToolStripMenuItem
 			// 
+			this->weekToolStripMenuItem->AutoToolTip = true;
 			this->weekToolStripMenuItem->Name = L"weekToolStripMenuItem";
 			resources->ApplyResources(this->weekToolStripMenuItem, L"weekToolStripMenuItem");
 			this->weekToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::weekToolStripMenuItem_Click);
 			// 
 			// monthToolStripMenuItem
 			// 
+			this->monthToolStripMenuItem->AutoToolTip = true;
 			this->monthToolStripMenuItem->Name = L"monthToolStripMenuItem";
 			resources->ApplyResources(this->monthToolStripMenuItem, L"monthToolStripMenuItem");
 			this->monthToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::monthToolStripMenuItem_Click);
@@ -494,8 +501,8 @@ namespace UI {
 			// 
 			this->editDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->editDropDown, L"editDropDown");
-			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->undoToolStripMenuItem, 
-				this->redoToolStripMenuItem});
+			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->undoToolStripMenuItem, 
+				this->redoToolStripMenuItem, this->copyToolStripMenuItem, this->pasteToolStripMenuItem});
 			this->editDropDown->Name = L"editDropDown";
 			// 
 			// undoToolStripMenuItem
@@ -507,6 +514,16 @@ namespace UI {
 			// 
 			resources->ApplyResources(this->redoToolStripMenuItem, L"redoToolStripMenuItem");
 			this->redoToolStripMenuItem->Name = L"redoToolStripMenuItem";
+			// 
+			// copyToolStripMenuItem
+			// 
+			this->copyToolStripMenuItem->Name = L"copyToolStripMenuItem";
+			resources->ApplyResources(this->copyToolStripMenuItem, L"copyToolStripMenuItem");
+			// 
+			// pasteToolStripMenuItem
+			// 
+			this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
+			resources->ApplyResources(this->pasteToolStripMenuItem, L"pasteToolStripMenuItem");
 			// 
 			// MapleSyrup
 			// 
@@ -581,16 +598,16 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 
 private: void loadData(){
 			 DateTime current = DateTime::Now;
-			 String^ time = current.ToString(" dd  MMM  yyyy ,  dddd"); 
 			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
 			 log ("Program starts at: " + convertTostd(timeToLog));
-			 displayToMainDisplayLabel(convertTostd(time));
 
 			 std::string loadCommand1 = showPtr->getShowFloat();
 			 executeUserInput(loadCommand1);
 
 			 std::string loadCommand2 = showPtr->getShowDay();
 			 executeUserInput(loadCommand2); 
+
+			 feedbackBox->Text = "";
 		 }
 
 
@@ -1230,10 +1247,6 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 std::string endDateMonthString = cVPtr->toLowerCase(cVPtr->intToMonth(endDateMonthNum-1));
 
 
-
-
-
-
 			 std::string command = "show " + startDateDay + startDateMonthString + " to " + endDateDay + endDateMonthString;
 
 
@@ -1241,8 +1254,9 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 
 		 }
 
-
-
+private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System::EventArgs^  e) {
+			 calenderTop->Visible=false;
+		 }
 
 };
 }

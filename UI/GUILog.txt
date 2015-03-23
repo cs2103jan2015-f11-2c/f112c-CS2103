@@ -1,0 +1,11 @@
+Program starts at: 24 Mar,Tuesday, 01:47:52
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed
+Logic return: True
+Feedback displayed
+Floating displayed
+Main displayed
+Main label displayed

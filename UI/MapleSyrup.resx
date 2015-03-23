@@ -280,10 +280,10 @@
     <value>Arial, 9.75pt</value>
   </data>
   <data name="floatingTasksDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 114</value>
+    <value>5, 95</value>
   </data>
   <data name="floatingTasksDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 409</value>
+    <value>229, 428</value>
   </data>
   <data name="floatingTasksDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -2092,7 +2092,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 83</value>
+    <value>53, 61</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2678,7 +2678,7 @@
     <value>NoControl</value>
   </data>
   <data name="floatingIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>104, 83</value>
+    <value>102, 61</value>
   </data>
   <data name="floatingIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3264,7 +3264,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 83</value>
+    <value>152, 61</value>
   </data>
   <data name="pictureBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3496,9 +3496,6 @@
   <data name="&gt;&gt;helpButton.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>108, 17</value>
-  </metadata>
   <data name="suggestBar.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
@@ -3527,7 +3524,7 @@
     <value>13</value>
   </data>
   <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>204, 17</value>
+    <value>201, 17</value>
   </metadata>
   <data name="backButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>531, 9</value>
@@ -3581,25 +3578,19 @@
     <value>4</value>
   </data>
   <metadata name="showDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>320, 17</value>
+    <value>317, 17</value>
   </metadata>
   <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
-  </data>
-  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 114</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
-    <value>showDropDown</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>113, 22</value>
   </data>
   <data name="dayToolStripMenuItem.Text" xml:space="preserve">
     <value>Day</value>
+  </data>
+  <data name="dayToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show Today</value>
   </data>
   <data name="weekToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -3610,6 +3601,9 @@
   <data name="weekToolStripMenuItem.Text" xml:space="preserve">
     <value>Week</value>
   </data>
+  <data name="weekToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show This Week</value>
+  </data>
   <data name="monthToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -3618,6 +3612,9 @@
   </data>
   <data name="monthToolStripMenuItem.Text" xml:space="preserve">
     <value>Month</value>
+  </data>
+  <data name="monthToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show This Month</value>
   </data>
   <data name="allToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -3643,8 +3640,17 @@
   <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
     <value>Archive</value>
   </data>
+  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 114</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
+    <value>showDropDown</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>459, 17</value>
+    <value>456, 17</value>
   </metadata>
   <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
@@ -3713,7 +3719,7 @@
     <value>3</value>
   </data>
   <metadata name="editDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>594, 17</value>
+    <value>591, 17</value>
   </metadata>
   <data name="editDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
@@ -3742,8 +3748,26 @@
   <data name="redoToolStripMenuItem.Text" xml:space="preserve">
     <value>Redo</value>
   </data>
+  <data name="copyToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+C</value>
+  </data>
+  <data name="copyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 22</value>
+  </data>
+  <data name="copyToolStripMenuItem.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="pasteToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+V</value>
+  </data>
+  <data name="pasteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 22</value>
+  </data>
+  <data name="pasteToolStripMenuItem.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
   <data name="editDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 70</value>
+    <value>156, 92</value>
   </data>
   <data name="&gt;&gt;editDropDown.Name" xml:space="preserve">
     <value>editDropDown</value>
@@ -3751,6 +3775,9 @@
   <data name="&gt;&gt;editDropDown.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>114, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -3860,12 +3887,6 @@
   <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;timer1.Name" xml:space="preserve">
-    <value>timer1</value>
-  </data>
-  <data name="&gt;&gt;timer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;fontDialog1.Name" xml:space="preserve">
     <value>fontDialog1</value>
   </data>
@@ -3931,6 +3952,24 @@
   </data>
   <data name="&gt;&gt;redoToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;copyToolStripMenuItem.Name" xml:space="preserve">
+    <value>copyToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;copyToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pasteToolStripMenuItem.Name" xml:space="preserve">
+    <value>pasteToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;pasteToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;timer1.Name" xml:space="preserve">
+    <value>timer1</value>
+  </data>
+  <data name="&gt;&gt;timer1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MapleSyrup</value>
