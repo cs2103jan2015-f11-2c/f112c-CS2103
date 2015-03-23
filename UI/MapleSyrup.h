@@ -845,6 +845,14 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				return;
 			}
 
+			if (temp == "maplesyrup"){
+				clearAllLogFiles();
+				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				out.close();
+				Application::Exit();
+				return;
+			}
+
 			 std::string firstFourLetters = extractFirstFourLetters(convertTostd (temp));
 
 			if (firstFourLetters == "exit"){
