@@ -147,6 +147,7 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
 	eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
 	
+	logger.logStoragePosition("leaving checkMultipleResults");
 	return eventVector;
 }
 vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
