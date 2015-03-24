@@ -186,7 +186,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 			isDone = false;
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
-			//display.set???
+			display.setFeedbackStrings(feedback);
 			return;
 		}
 
@@ -224,7 +224,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 			isDone = false;
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
-			//display.set???
+			display.setFeedbackStrings(feedback);
 			return;
 		}
 
@@ -279,7 +279,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 
 		string feedback = userEvent.getFeedback();
 
-		//display.set???
+		display.setFeedbackStrings(feedback);
 		break;
 						 }
 
