@@ -53,17 +53,20 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		return "help";
 	}
 
-	//function to check whether it is single or multiple day
+	std::string newShowCommand = "";
 
+	//function to check whether it is single or multiple day
 	bool isSingleDate = checkIsSingleDate(mainDisplayDate);
 	if ( isSingleDate ){
-
-		// Forward by 1 day
+		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
+		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
 	} else {
-		// Count number of days 
-		// Forward by this no. of days
+		int numDays = countNumDays (mainDisplayDate[0], mainDisplayDate[1]);
+		tm newStartDate = shiftDate(mainDisplayDate[0], numDays);
+		tm newEndDate = shiftDate(mainDisplayDate[1], numDays);
+		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 	}
-	
+	return newShowCommand;
 	
 }
 
@@ -87,12 +90,32 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		tm newDateToShow = shiftDate(mainDisplayDate[0],-1);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
 	} else {
-		// Count number of days 
-		// backward by this no. of days
+		int numDays = countNumDays (mainDisplayDate[0], mainDisplayDate[1]);
+		tm newStartDate = shiftDate(mainDisplayDate[0], -numDays);
+		tm newEndDate = shiftDate(mainDisplayDate[1], -numDays);
+		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 	}
-	
 	return newShowCommand;
 }
+
+int UIShow::countNumDays(tm startDay, tm endDay){
+	initializeTime(startDay);
+	initializeTime(endDay);
+	std::time_t start = std::mktime(&startDay);
+	std::time_t end = std::mktime(&endDay);
+
+	int dayDifference = std::difftime(end,start)/(60*60*24);
+
+	return dayDifference + 1;
+}
+
+void UIShow::initializeTime(tm date){
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 0;
+}
+
+
 
 std::string UIShow::convertFromTmToStr(tm date){
 	std::string dateString = "";
@@ -101,7 +124,7 @@ std::string UIShow::convertFromTmToStr(tm date){
 	dateString += convert.intToString(date.tm_mday);
 	dateString += convert.intToMonth(date.tm_mon);
 	dateString += " ";
-	dateString += convert.intToString(date.tm_year);
+	dateString += convert.intToString(date.tm_year + 1900);
 
 	return dateString;
 }
@@ -113,7 +136,7 @@ tm UIShow::shiftDate(tm date, int numDaysToShift){
 	newDatePtr->tm_mday = date.tm_mday + numDaysToShift;
 	newDatePtr->tm_mon = date.tm_mon;
 	newDatePtr->tm_year = date.tm_year;
-	mktime(newDatePtr);
+	std::mktime(newDatePtr);
 
 	struct tm newDate;
 	newDate.tm_mday = newDatePtr->tm_mday;

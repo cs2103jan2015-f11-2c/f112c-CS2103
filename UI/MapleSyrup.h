@@ -415,12 +415,14 @@ namespace UI {
 			resources->ApplyResources(this->backButton, L"backButton");
 			this->backButton->Name = L"backButton";
 			this->backButton->UseVisualStyleBackColor = true;
+			this->backButton->Click += gcnew System::EventHandler(this, &MapleSyrup::backButton_Click);
 			// 
 			// nextButton
 			// 
 			resources->ApplyResources(this->nextButton, L"nextButton");
 			this->nextButton->Name = L"nextButton";
 			this->nextButton->UseVisualStyleBackColor = true;
+			this->nextButton->Click += gcnew System::EventHandler(this, &MapleSyrup::nextButton_Click);
 			// 
 			// showDropDown
 			// 
@@ -1227,5 +1229,21 @@ private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System
 			 calenderTop->Visible=false;
 		 }
 
+private: System::Void backButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+
+			 
+			 executeUserInput(newShowCommand);
+		 }
+private: System::Void nextButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+
+			 
+			 executeUserInput(newShowCommand);
+		 }
 };
 }

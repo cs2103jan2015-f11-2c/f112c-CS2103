@@ -53,6 +53,10 @@ public:
 	//e.g. It takes in Mar. It will return Feb
 	std::string displayBack(std::string, std::vector<tm>);
 
+	int countNumDays(tm, tm);
+
+	void initializeTime(tm);
+
 	std::string convertFromTmToStr(tm);
 
 	bool checkIsSingleDate(std::vector<tm>);

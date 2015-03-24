@@ -206,6 +206,7 @@ void Display::floatingEventsToString() {
 
 void Display::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEvents = events;
+	tempMainDisplayLabel = label;
 	setMainDisplayLabel(label);
 	normalEventsToString();
 }
