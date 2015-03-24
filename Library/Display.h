@@ -23,6 +23,7 @@ public:
 		string eventString;
 		bool isNew;
 		bool isClash;
+		bool isMarker;
 	};
 
 
@@ -39,7 +40,6 @@ private:
 	vector<string> errorStrings;
 	
 	int newID;
-	bool isSingleDay;
 
 public:
 	static const int GARBAGE_INT;

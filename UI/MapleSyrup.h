@@ -604,10 +604,9 @@ private: void loadData(){
 			 std::string loadCommand1 = showPtr->getShowFloat();
 			 executeUserInput(loadCommand1);
 
+
 			 std::string loadCommand2 = showPtr->getShowDay();
 			 executeUserInput(loadCommand2); 
-
-			 feedbackBox->Text = "";
 		 }
 
 
@@ -776,7 +775,7 @@ private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 
 				if(displayToMain[i].isNew && displayToMain[i].isClash){
 					display->SelectionColor = Color::Red;
-					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,14, FontStyle::Bold);
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Italic);
 					display->SelectedText = temp + "\n" ;
 				} else if ( displayToMain[i].isClash ){
 					display->SelectionColor = Color::Red;
@@ -785,11 +784,11 @@ private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain)
 						display->SelectionColor = Color::Green;
 						display->SelectedText = temp + "\n" ;
 					} else{
-						if(isOdd(i)){
-							display->SelectionColor = Color::Blue;
+						if(displayToMain[i].isMarker){
+							display->SelectionColor = Color::Gray;
 							display->SelectedText = temp + "\n" ;
 						} else {
-							display->SelectionColor = Color::LightSlateGray;
+							display->SelectionColor = Color::MidnightBlue;
 							display->SelectedText = temp + "\n" ;
 							}
 					}
@@ -820,11 +819,8 @@ private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFl
 					if (displayToFloating[i].isNew){
 						floatingTasksDisplay->SelectionColor = Color::Green;
 						floatingTasksDisplay->SelectedText = temp + "\n";
-					} else if(isOdd(i)){
-						floatingTasksDisplay->SelectionColor = Color::Blue;
-						floatingTasksDisplay->SelectedText = temp + "\n";
 					} else {
-						floatingTasksDisplay->SelectionColor = Color::LightSlateGray;
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					  }
 				}

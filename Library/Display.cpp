@@ -7,9 +7,9 @@ const string Display::NO_EVENTS_MESSAGE = "Currently no task";
 const string Display::ADDED_MESSAGE = " added.";
 const string Display::EDITED_MESSAGE = " edited.";
 const string Display::DELETED_MESSAGE = " deleted.";
-const string Display::SHOW_MESSAGE = "showing";
+const string Display::SHOW_MESSAGE = "showing ";
 const string Display::EVENT_NOT_FOUND_MESSAGE = " not found.";
-const string Display::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select from above.";
+const string Display::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select one from above via index.";
 const string Display::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 
 //constructor
@@ -156,7 +156,6 @@ Event Display::getEventFromID(int id) {
 void Display::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
 	newID = id;
 	setFeedbackStrings(feedback);
-
 	setFloatingEvents(floatingEvents);
 	setNormalEvents(normalEvents, label);
 }
@@ -184,13 +183,13 @@ void Display::floatingEventsToString() {
 		return;
 	}
 	
-
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
 		out << (i + 1) << "." << " " << floatingEvents[i].getName();
 		
 		EVENT_STRING temp;
 		temp.eventString = out.str();
+		temp.isMarker = false;
 
 		if (floatingEvents[i].getID() == newID){
 			temp.isNew = true;
@@ -216,7 +215,6 @@ void Display::setMainDisplayLabel (vector<tm> label){
 
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
 		//1 day only
-		isSingleDay = true;
 		Conversion convert;
 		string dayOfMonth = convert.intToString(label[0].tm_mday);
 
@@ -227,7 +225,6 @@ void Display::setMainDisplayLabel (vector<tm> label){
 		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
 	} else {
 		//More than 1 day
-		isSingleDay = false;
 		Conversion convert;
 		string startDayOfMonth = convert.intToString(label[0].tm_mday);
 		string startMonth = convert.intToMonth(label[0].tm_mon);
@@ -354,24 +351,26 @@ void Display::normalEventsToString() {
 	}
 	
 	int headCounter =0;
-
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
 	int newEventIndex = -1;
 
 	//This for loop requires refactoring
 	int indexForNormalEvents = getTotalFloatingEvents();
+
 	for (int i=0; i < normalEvents.size(); i++){
+		//Constructing MAIN_EVENT items and initializing
+		EVENT_STRING toBePushed;
+
 		ostringstream out;
 
 		//Generate header
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-
+			toBePushed.isMarker = true;
 			if (headCounter!=0){
 				out << "\n";
 			}
 			
-
 			headCounter++;
 
 			out << "[";
@@ -396,6 +395,8 @@ void Display::normalEventsToString() {
 		} 
 		 //Generate event list
 		 else {
+			toBePushed.isMarker = false;
+
 			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
 			out << "[" ;
@@ -426,9 +427,6 @@ void Display::normalEventsToString() {
 				}	
 			}
 		}
-
-		//Constructing MAIN_EVENT items and initializing
-		EVENT_STRING toBePushed;
 		toBePushed.eventString = out.str();
 
 		toBePushed.isNew = setIsNew(i);
@@ -451,7 +449,7 @@ void Display::normalEventsToString() {
 	
 	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
 
-	//assert(mainDisplayStrings.size()>=1);
+	assert(mainDisplayStrings.size()>=1);
 }
 
 void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
@@ -459,6 +457,7 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	noEvent.eventString = NO_EVENTS_MESSAGE;
 	noEvent.isClash= false;
 	noEvent.isNew = false;
+	noEvent.isMarker = false;
 	
 	displayVec.push_back(noEvent);
 
