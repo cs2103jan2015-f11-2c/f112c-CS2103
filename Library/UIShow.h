@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <ctime>
 
 class UIShow
 {
@@ -49,6 +50,16 @@ public:
 	//e.g. It takes in Mar. It will return Feb
 	std::string displayBack(std::string);
 
+
+	bool checkIsSingleDate(std::string);
+
+	//Pass in the date and the number of days to be shifted. It will return the shifted tm
+	tm shiftDate(tm, int);
+
+
+
+
+//===================================================================================================================================================================
 	//Pre-condition : Non
 	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
 	//This function takes in a string that contains that date(s) that is being displayed in the main display currently
