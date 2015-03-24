@@ -223,7 +223,9 @@ bool ParserProcessor::identifyDate(int index){
 			} 
 			
 			//Registering day, month, year
-			year = now->tm_year;
+			if (year == 0){
+				year = now->tm_year;
+			}
 			month = convertor.monthToInt(strMonth);
 			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
 				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
@@ -514,14 +516,15 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 
 	fragmentedWords = fragmentedWords_;
 	
-	fragmentedWords.insert(fragmentedWords.begin(),LOCKUP_USED_INFORMATION);
-
 	try {
-		unsigned int i;
-		for(i = 0; i < fragmentedWords.size(); i++){
-			if(!nameFound){
-				matchFound = identifyEventName(i);
-			}
+		unsigned int i = 0;
+		identifyEventName(i);
+		if(nameFound){
+			i++;
+		}
+
+		for(; i < fragmentedWords.size(); i++){
+			matchFound = identifyDay(i);
 			matchFound = identifyDate(i);
 			matchFound = identifyTime(i);
 			matchFound = false;
