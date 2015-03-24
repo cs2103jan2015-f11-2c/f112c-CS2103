@@ -56,6 +56,7 @@ public:
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 	string getMainDisplayLabel();
+	vector<tm> getTempMainDisplayLabel();
 
 
 	//executors

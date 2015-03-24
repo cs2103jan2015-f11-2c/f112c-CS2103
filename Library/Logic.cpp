@@ -56,6 +56,10 @@ string Logic::getMainDisplayLabel() {
 	return display.getMainDisplayLabel();
 }
 
+vector<tm> Logic::getTempMainDisplayLabel() {
+	return display.getTempMainDisplayLabel();
+}
+
 
 	//EXECUTORS
 //called by UI with original user input string, returns vector of Events after input fully executed
