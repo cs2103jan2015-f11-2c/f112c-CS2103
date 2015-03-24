@@ -10,8 +10,7 @@
 #include "UIHelp.h"
 #include "UIShow.h"
 
-
-
+ 
 
 namespace UI {
 
@@ -23,6 +22,9 @@ namespace UI {
 	using namespace System::Drawing;
 
 	using namespace System::Diagnostics;
+
+	using namespace System::Web;
+	using namespace System::Net::Mail;
 
 	/// <summary>
 	/// Summary for MapleSyrup
@@ -65,6 +67,7 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  copyToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  pasteToolStripMenuItem;
 	private: System::Windows::Forms::Timer^  timer1;
+	private: System::Windows::Forms::ToolStripMenuItem^  emailToolStripMenuItem;
 
 
 
@@ -209,6 +212,7 @@ namespace UI {
 			this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->emailToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -467,8 +471,8 @@ namespace UI {
 			// 
 			this->helpDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->helpDropDown, L"helpDropDown");
-			this->helpDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->introductionToolStripMenuItem, 
-				this->commandsToolStripMenuItem, this->shortcutsToolStripMenuItem});
+			this->helpDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->introductionToolStripMenuItem, 
+				this->commandsToolStripMenuItem, this->shortcutsToolStripMenuItem, this->emailToolStripMenuItem});
 			this->helpDropDown->Name = L"helpDropDown";
 			// 
 			// introductionToolStripMenuItem
@@ -525,6 +529,12 @@ namespace UI {
 			// 
 			this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
 			resources->ApplyResources(this->pasteToolStripMenuItem, L"pasteToolStripMenuItem");
+			// 
+			// emailToolStripMenuItem
+			// 
+			this->emailToolStripMenuItem->Name = L"emailToolStripMenuItem";
+			resources->ApplyResources(this->emailToolStripMenuItem, L"emailToolStripMenuItem");
+			this->emailToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::emailToolStripMenuItem_Click);
 			// 
 			// MapleSyrup
 			// 
@@ -1244,6 +1254,29 @@ private: System::Void nextButton_Click(System::Object^  sender, System::EventArg
 
 			 
 			 executeUserInput(newShowCommand);
+		 }
+private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 
+			 std::string emails[4] = { "kangter@gmail.com","joshua.chejy@gmail.com","owj_88@hotmail.com" };
+
+			 
+			 for (int i=0 ;i<1;i++){
+			
+
+			 MailMessage^ mail = gcnew MailMessage("maplesyrupcs@gmail.com","joshua.chejy@gmail.com", "Test", "This email is sent via MapleSyrup Program");
+
+			 SmtpClient^ client = gcnew SmtpClient ("smtp.gmail.com");
+			 
+			 client->Port = 587;
+
+			 client->Credentials = gcnew System::Net::NetworkCredential("maplesyrupcs@gmail.com","wjgljcyk");
+
+			 client->EnableSsl = true;
+
+			 client->Send(mail);
+
+			 }
+
 		 }
 };
 }
