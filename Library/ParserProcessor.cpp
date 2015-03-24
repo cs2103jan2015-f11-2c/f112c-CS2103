@@ -480,6 +480,12 @@ void ParserProcessor::addEventCorrector(){
 		}
 		endTimeFound = true;
 	}
+	if(startTimeFound && endTimeFound){
+		struct tm tempTime = tempEventStore.getEndDate();
+		if(tempTime.tm_hour == 0 && tempTime.tm_min == 0){
+			tempEventStore.setEndTime(23,59);
+		}
+	}
 	if(endDayFound && !endTimeFound){
 		tempEventStore.setEndTime(23,59);
 	}
@@ -623,6 +629,19 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 			}
 			systemShowYear = true;
 			fragmentedWords[0] = LOCKUP_USED_INFORMATION;
+			if(fragmentedWords.size() > 2){
+				if(fragmentedWords[1] == "to"){
+					try {
+						auto tempStoi = std::stoi(fragmentedWords[2]);
+						tempInt = tempStoi;
+						fragmentedWords[2] = LOCKUP_USED_INFORMATION;
+						if(tempInt > 2000){
+							tempEventStore.setEndDate(31,11,tempInt-1900);
+						} 
+					} catch (std::invalid_argument& e){
+					}
+				}
+			}
 		}
 	} catch (std::invalid_argument &e){
 		if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
