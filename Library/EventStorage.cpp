@@ -132,12 +132,7 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 		returnToLogicVector = showDates(newEvent);
 	}
 	writeToCurrentFile();
-	if(returnToLogicVector.size() != 0 ){
-		temp = returnToLogicVector[1].getName();
-	} else{
-		temp = "Nothing";
-	}
-	logger.logStorageStringData("leaving storage... first item: ",temp);
+	logger.logStorageIntData("leaving storage... size: ",returnToLogicVector.size());
 	return returnToLogicVector; 
 }
 
@@ -229,7 +224,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 			(currentContent[indexOfEventID]).setDescription(editedEvent.getDescription());
 		}
 		logger.logStoragePosition("edited normal");
-		returnToLogicVector = showDates(editedEvent);
+		returnToLogicVector = showDates(currentContent[indexOfEventID]);
 	}
 	else{ //Floating Case
 		logger.logStorageStringData("editFloating",eventToBeEdited.getName());
