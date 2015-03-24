@@ -82,13 +82,13 @@ public:
 
 	//setter
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
+	void setFeedbackStrings(string newFeedback);
 
 private:
 	//private setters
 	void setNormalEvents(vector<Event> events,vector<tm> label);
-	void setFeedbackStrings(string newFeedback);
+	
 	void setFloatingEvents(vector<Event> events);
-	void setFeedbackEvents(vector<Event> events);
 	void setMainDisplayLabel (vector<tm> label);
 
 	//private methods
@@ -105,6 +105,8 @@ private:
 
 	string intToTime (int);
 
+	//Currently not in use
+	void setFeedbackEvents(vector<Event> events);
 
 	//void setNewestEvent(int id);
 };

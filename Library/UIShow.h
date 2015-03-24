@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <vector>
+
+#include "Conversion.h"
 
 class UIShow
 {
@@ -38,7 +41,7 @@ public:
 	//e.g. It takes in 10 Feb. It will return 11 Feb
 	//e.g. It takes in 10 Feb - 20 Feb. It will return 20 Feb - 2 Mar (Next 10 days)
 	//e.g. It takes in Mar. It will return Apr
-	std::string displayNext(std::string);
+	std::string displayNext(std::string, std::vector<tm>);
 
 
 	//Pre-condition : Non
@@ -48,12 +51,14 @@ public:
 	//e.g. It takes in 10 Feb. It will return 09 Feb
 	//e.g. It takes in 10 Feb - 20 Feb. It will return 31 Jan - 9 Feb (Previous 10 days)
 	//e.g. It takes in Mar. It will return Feb
-	std::string displayBack(std::string);
+	std::string displayBack(std::string, std::vector<tm>);
 
+	std::string convertFromTmToStr(tm);
 
-	bool checkIsSingleDate(std::string);
+	bool checkIsSingleDate(std::vector<tm>);
 
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
+	// Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
 
 
