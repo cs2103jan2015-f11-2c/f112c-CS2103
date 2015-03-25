@@ -92,6 +92,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	Event marker;
 	marker.setName(MARKER_CODE);
 	marker.setID(UNIQUE_ID);
+	marker.setIsFloating(false);
 
 	sortResults = sortEventVectorByDate(eventsToFilter);
 	eventsToFilter = sortResults;
