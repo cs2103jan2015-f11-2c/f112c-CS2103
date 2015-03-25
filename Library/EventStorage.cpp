@@ -141,16 +141,18 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	logger.logStoragePosition("checkMultipleResults");
 	
 	vector<Event> eventVector, floatingEventVector;
-	Search search;
 	Event eventWithStartEndDates;
 
 	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
 	eventVector = search.searchForEventWithEventName(eventName, currentContent);
+
 	eventWithStartEndDates = eventOrganiser.dateRange(eventVector);
 	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
 	logger.logStoragePosition("checked");
 	floatingEventVector.insert( floatingEventVector.end(), eventVector.begin(), eventVector.end() );
 	
+
+
 	logger.logStoragePosition("leaving check multiple");
 
 	return floatingEventVector;
@@ -160,12 +162,11 @@ vector<Event> EventStorage::checkExactString(string eventName){
 	logger.logStoragePosition("checkExactString");
 	
 	vector<Event> eventVector, floatingEventVector;
-	Search search;
 	Event eventWithStartEndDates;
 
 	floatingEventVector = search.searchExactEventName(eventName, currentFloatingContent);
 	eventVector = search.searchExactEventName(eventName, currentContent);
-	eventWithStartEndDates = eventOrganiser.dateRange(eventVector);
+	eventWithStartEndDates = eventOrganiser.dateRange(eventVector); //refracter
 	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
 
 	floatingEventVector.insert( floatingEventVector.end(), eventVector.begin(), eventVector.end() );
