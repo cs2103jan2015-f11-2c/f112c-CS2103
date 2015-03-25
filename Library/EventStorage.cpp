@@ -136,20 +136,46 @@ vector<Event> EventStorage::addEvent(Event newEvent){  //return eventvector with
 	return returnToLogicVector; 
 }
 
-//delete method
+//checking mths
 vector<Event> EventStorage::checkMultipleResults(string eventName){
 	logger.logStoragePosition("checkMultipleResults");
 	
 	vector<Event> eventVector, floatingEventVector;
 	Search search;
-	
-	eventVector = search.searchForEventWithEventName(eventName, currentContent);
-	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
-	eventVector.insert( eventVector.end(), floatingEventVector.begin(), floatingEventVector.end() );
+	Event eventWithStartEndDates;
 
-	logger.logStoragePosition("leaving checkMultipleResults");
-	return eventVector;
+	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
+	eventVector = search.searchForEventWithEventName(eventName, currentContent);
+	eventWithStartEndDates = eventOrganiser.dateRange(eventVector);
+	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
+	logger.logStoragePosition("checked");
+	floatingEventVector.insert( floatingEventVector.end(), eventVector.begin(), eventVector.end() );
+	
+	logger.logStoragePosition("leaving check multiple");
+
+	return floatingEventVector;
 }
+
+vector<Event> EventStorage::checkExactString(string eventName){
+	logger.logStoragePosition("checkExactString");
+	
+	vector<Event> eventVector, floatingEventVector;
+	Search search;
+	Event eventWithStartEndDates;
+
+	floatingEventVector = search.searchExactEventName(eventName, currentFloatingContent);
+	eventVector = search.searchExactEventName(eventName, currentContent);
+	eventWithStartEndDates = eventOrganiser.dateRange(eventVector);
+	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
+
+	floatingEventVector.insert( floatingEventVector.end(), eventVector.begin(), eventVector.end() );
+	
+	logger.logStoragePosition("leaving checkExactString");
+
+	return floatingEventVector;
+}
+
+//delete method
 vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	logger.logStoragePosition("deleteEvent");
 	
@@ -269,10 +295,13 @@ vector<Event> EventStorage::showDates(Event eventWithStartEndTimes){
 	return eventOrganiser.showDateRange(eventWithStartEndTimes,currentContent);
 }
 
-
 //getters
 vector<Event> EventStorage::getAllNormalEvents(){
-	return eventOrganiser.showAllNormalEvent(currentContent);
+	Event eventWithStartEndTime;
+	vector<Event> returnVector;
+	eventWithStartEndTime = eventOrganiser.dateRange(currentContent);
+	returnVector = eventOrganiser.showDateRange(eventWithStartEndTime,currentContent);
+	return returnVector;
 }
 vector<Event> EventStorage::getAllFloatingEvents(){
 	return eventOrganiser.showAllFloatingEvent(currentFloatingContent);

@@ -51,6 +51,7 @@ public:
 
 	//Support Methods
 	vector<Event> checkMultipleResults(string eventName);
+	vector<Event> checkExactString(string eventName);
 
 	//Delete Methods
 	vector<Event> deleteEvent(int eventID, Event eventToBeDeleted);

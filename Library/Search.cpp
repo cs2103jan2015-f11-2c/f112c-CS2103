@@ -22,7 +22,7 @@ int Search::searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSe
 	return NOT_FOUND;
 }
 vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch){
-	logger.logStorageStringData("searching For this EventName", eventName);
+	logger.logStorageStringData("searching For similar EventName", eventName);
 	vector<Event> returnVector;
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
@@ -30,6 +30,19 @@ vector<Event> Search::searchForEventWithEventName(string eventName, vector<Event
 		logger.logStorageIntData("searching vector... found at: ",position);
 		if(position > NOT_FOUND){
 			logger.logStoragePosition("pushed");
+			returnVector.push_back(eventVectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+vector<Event> Search::searchExactEventName(string eventName, vector<Event> eventVectorToSearch){
+	logger.logStorageStringData("searching For Exact EventName", eventName);
+	vector<Event> returnVector;
+
+	for(auto i=0;i<eventVectorToSearch.size();i++){
+		if(eventName == eventVectorToSearch[i].getName()){
+			logger.logStorageIntData("searching.. exact::",i);
 			returnVector.push_back(eventVectorToSearch[i]);
 		}
 	}

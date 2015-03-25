@@ -24,6 +24,7 @@ public:
 	int searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSearch);
 	vector<Event> searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchAllComponentsOfEvent(string informationToSearch, vector<Event> contentToSearch);
+	vector<Event> searchExactEventName(string eventName, vector<Event> eventVectorToSearch);
 
 //	vector<int> searchForIdWithEventName(string eventName, vector<Event> eventVectorToSearch);
 
