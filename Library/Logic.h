@@ -63,6 +63,7 @@ public:
 	bool executeUserInput(string input);
 	ICommand* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
 	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
+	void setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void deleteParserPtr();
 	//void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 

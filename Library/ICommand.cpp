@@ -53,20 +53,34 @@ void DeleteCommand::execute() {
 	}
 	
 
-	vector<Event> tempEvents = eventStore->checkMultipleResults(userEvent.getName());
+	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
 
 	switch (tempEvents.size()) {
-	case 0: {
-		Event invalidEvent;
-		invalidEvent.setFeedback(userEvent.getFeedback());
-		invalidEvent.setID(INVALID_NUMBER);
-		deletedEvents.push_back(invalidEvent);
-		isComplete = true;
-		return;
+	case 0: { //no exact match
+		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
+		switch (tempEvents.size()) {
+		case 0: { //no partial match
+			Event invalidEvent;
+			invalidEvent.setFeedback(userEvent.getFeedback());
+			invalidEvent.setID(INVALID_NUMBER);
+			deletedEvents.push_back(invalidEvent);
+			isComplete = true;
+			return;
+			break;
+				}
+
+		default: { //at least 1 partial match
+			deletedEvents = tempEvents;
+			isComplete = false;
+			return;
+			break;
+				 }
+		}
+		
 		break;
 			}
 
-	case 1: {
+	case 1: { //1 exact match
 		isFloating = tempEvents[0].getIsFloating();
 		userEvent = tempEvents[0];
 		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
@@ -75,7 +89,7 @@ void DeleteCommand::execute() {
 		break;
 			}
 
-	default: {
+	default: { //more than 1 exact match
 		deletedEvents = tempEvents;
 		isComplete = false;
 		return;

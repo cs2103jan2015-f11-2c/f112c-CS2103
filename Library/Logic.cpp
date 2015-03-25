@@ -173,16 +173,46 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	case Parser::DELETE_: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
-		//more than one event found case
 		if (!commandPtr->getIsComplete()) {
-			normalEvents = commandPtr->getEventVector();
-			floatingEvents = display.getFloatingEvents();
-			vector<tm> tmVec = display.getTempMainDisplayLabel();
-			display.setAllEvents(normalEvents, floatingEvents, Display::CHOOSE_EVENT_MESSAGE, tmVec, Display::GARBAGE_INT);
-			return;
+			setEventVector(normalEvents, floatingEvents, tempEvents);
+			
+			//more than 1 exact match
+			if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
+				(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
+				vector<tm> tmVec;
+				tmVec.push_back(normalEvents[1].getStartDate());
+				tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
+				mktime(&tmVec[0]);
+				mktime(&tmVec[1]);
+				
+				display.setAllEvents(normalEvents, floatingEvents, Display::CHOOSE_EVENT_MESSAGE, tmVec, Display::GARBAGE_INT);
+				return;
+			}
+			
+			//at least 1 partial match
+			if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
+				string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
+				
+				vector<tm> tmVec;
+				if (normalEvents.empty()) { //no normal events to show
+					tmVec = display.getTempMainDisplayLabel();
+				} else { //at least 1 normal event to show (1st will always be marker)
+					tmVec.push_back(normalEvents[1].getStartDate());
+					if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
+						tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
+					} else {
+						tmVec.push_back(normalEvents[1].getEndDate());
+					}
+				}
+				mktime(&tmVec[0]);
+				mktime(&tmVec[1]);
+				
+				display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+				return;
+			}
 		}
 
-		//no event found case
+		//no event found
 		if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 			isDone = false;
 			string feedback = nameOfEvent + Display::EVENT_NOT_FOUND_MESSAGE;
@@ -190,7 +220,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			return;
 		}
 
-		//normal case
+		//successful deletion
 		if (commandPtr->getIsFloating()) {
 			normalEvents = display.getNormalEvents();
 			floatingEvents = commandPtr->getEventVector();
@@ -288,6 +318,22 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	}
 }
 
+void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original) {
+	int i = 0;
+	
+	while (original[i].getName() != Display::NEW_DAY_MESSAGE) {
+		floating.push_back(original[i]);
+		i++;
+		if (i == original.size()) {
+			return;
+		}
+	}
+	
+	for (; i < original.size() ; i++) {
+		normal.push_back(original[i]);
+	}
+}
+
 void Logic::deleteParserPtr() {
 	delete parserPtr;
 	parserPtr = NULL;
@@ -306,11 +352,15 @@ bool Logic::isNumber(string s) {
 
 int Logic::convertNameToID(string name) {
 	if (isNumber(name)) {
-			int index = std::stoi(name);
-			return display.getIDFromIndex(index);
+		int index = std::stoi(name);
+		if (index > display.getTotalNumEvents()) {
+			return INVALID_NUMBER;
 		} else {
-			return display.getIDFromName(name);
+			return display.getIDFromIndex(index);
 		}
+	} else {
+		return INVALID_NUMBER;
+	}
 }
 
 string Logic::commandToString(Parser::commandType command) {
