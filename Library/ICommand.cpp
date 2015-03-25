@@ -76,12 +76,11 @@ void DeleteCommand::execute() {
 			break;
 				 }
 		}
-		
 		break;
 			}
 
-	case 1: { //1 exact match
-		isFloating = tempEvents[0].getIsFloating();
+	case 1: { //1 exact floating match
+		isFloating = true;
 		userEvent = tempEvents[0];
 		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
 		isComplete = true;
@@ -89,12 +88,27 @@ void DeleteCommand::execute() {
 		break;
 			}
 
-	default: { //more than 1 exact match
-		deletedEvents = tempEvents;
+	case 2: { //1 exact normal match or 2 exact floating match
+		if (tempEvents[0].getIsFloating()) {
+			isFloating = true;
+			goto Many_Exact_Match;
+		}
+
+		isFloating = false;
+		userEvent = tempEvents[1];
+		deletedEvents = eventStore->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
+		isComplete = true;
+		return;
+		break;
+			}
+
+	default:
+Many_Exact_Match: { //more than 1 exact match
+		deletedEvents = eventStore->checkMultipleResults(userEvent.getName());
 		isComplete = false;
 		return;
 		break;
-			 };
+				  };
 	};
 }
 
@@ -124,20 +138,34 @@ void EditCommand::execute() {
 		return;
 	}
 
-	vector<Event> tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
+	vector<Event> tempEvents = eventStore->checkExactString(eventToEdit.getName());
 
 	switch (tempEvents.size()) {
-	case 0: {
-		Event invalidEvent;
-		invalidEvent.setID(INVALID_NUMBER);
-		editedResults.push_back(invalidEvent);
-		isComplete = true;
-		return;
+	case 0: { //no exact match
+		tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
+		switch (tempEvents.size()) {
+		case 0: { //no partial match
+			Event invalidEvent;
+			invalidEvent.setFeedback(eventToEdit.getFeedback());
+			invalidEvent.setID(INVALID_NUMBER);
+			editedResults.push_back(invalidEvent);
+			isComplete = true;
+			return;
+			break;
+				}
+
+		default: { //at least 1 partial match
+			editedResults = tempEvents;
+			isComplete = false;
+			return;
+			break;
+				 }
+		}
 		break;
 			}
 
-	case 1: {
-		isFloating = tempEvents[0].getIsFloating();
+	case 1: { //1 exact floating match
+		isFloating = true;
 		eventToEdit = tempEvents[0];
 		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
 		isComplete = true;
@@ -145,12 +173,27 @@ void EditCommand::execute() {
 		break;
 			}
 
-	default: {
-		editedResults = tempEvents;
+	case 2: { //1 exact normal match or 2 exact floating match
+		if (tempEvents[0].getIsFloating()) {
+			isFloating = true;
+			goto Many_Exact_Match;
+		}
+
+		isFloating = false;
+		eventToEdit = tempEvents[1];
+		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+		isComplete = true;
+		return;
+		break;
+			}
+
+	default:
+Many_Exact_Match: { //more than 1 exact match
+		editedResults = eventStore->checkMultipleResults(eventToEdit.getName());
 		isComplete = false;
 		return;
 		break;
-			 }
+				  }
 	}
 
 }

@@ -65,14 +65,12 @@ public:
 	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
 	void setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void deleteParserPtr();
-	//void executeCommand(Parser::commandType command, Event userEvent, bool& isDone);
 
 
 	//others
 	bool isNumber(string s);
 	int convertNameToID(string name);
 	void setDisplay(bool isFloat, vector<Event> eventsToSet, int id);
-	string commandToString(Parser::commandType command);
 
 	//log
 	void log(string logString);
