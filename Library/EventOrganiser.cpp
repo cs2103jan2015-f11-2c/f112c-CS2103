@@ -22,6 +22,23 @@ vector<Event> EventOrganiser::showAllFloatingEvent(vector<Event> currentFloating
 	return currentFloatingContent;
 }
 /*
+vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
+	
+	Event temp;
+
+	for(int i=0;i<eventsToSort.size()-1;i++){
+		for(int j=i+1;j<eventsToSort.size();j++){
+			int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
+			if(difference >= 0 ){ 
+				temp = eventsToSort[i];
+				eventsToSort[i] = eventsToSort[j];
+				eventsToSort[j] = temp;
+			}
+		}
+	}
+	return eventsToSort;
+}
+
 vector<Event> EventOrganiser::showDay(int dayToShow, int monthToShow, int yearToShow, vector<Event> currentContent){
 	
 	vector<Event> showDayResults;
@@ -330,43 +347,54 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 	return returnEvent;
 }
 vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
-
+	logger.logStoragePosition("entered sortbyENDdate");
 	Event temp;
-
-	for(int i=0;i<eventsToSort.size()-1;i++){
-		for(int j=i+1;j<eventsToSort.size();j++){
-			int difference = findTimeDiff(eventsToSort[j].getEndDate(),eventsToSort[i].getEndDate());
-			if(difference >= 0 ){ 
-				temp = eventsToSort[i];
-				eventsToSort[i] = eventsToSort[j];
-				eventsToSort[j] = temp;
+	
+	if(eventsToSort.size()<=1){
+		return eventsToSort;
+	} else{
+		for(auto i=0;i<(eventsToSort.size()-1);i++){
+			for(int j=i+1;j<eventsToSort.size();j++){
+				int difference = findTimeDiff(eventsToSort[j].getEndDate(),eventsToSort[i].getEndDate());
+				if(difference >= 0 ){ 
+					temp = eventsToSort[i];
+					eventsToSort[i] = eventsToSort[j];
+					eventsToSort[j] = temp;
+				}
 			}
 		}
 	}
+	logger.logStoragePosition("leaving sortbyENDdate");
 	return eventsToSort;
 }
 int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
-
+	logger.logStoragePosition("entered findtimediff");
 	time_t start = mktime(&startDay);
 	time_t end = mktime(&endDay);
 
 	int difference = difftime(end,start);
+	logger.logStorageIntData("leaving find time fidd: ", difference);
 
 	return difference;
 }
-vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
-	
+vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
+	logger.logStoragePosition("entered new sortbydate");
 	Event temp;
-
-	for(int i=0;i<eventsToSort.size()-1;i++){
-		for(int j=i+1;j<eventsToSort.size();j++){
-			int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
-			if(difference >= 0 ){ 
-				temp = eventsToSort[i];
-				eventsToSort[i] = eventsToSort[j];
-				eventsToSort[j] = temp;
+	
+	if(eventsToSort.size()<=1){
+		return eventsToSort;
+	} else{
+		for(auto i=0;i<(eventsToSort.size()-1);i++){
+			for(int j=i+1;j<eventsToSort.size();j++){
+				int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
+				if(difference >= 0 ){ 
+					temp = eventsToSort[i];
+					eventsToSort[i] = eventsToSort[j];
+					eventsToSort[j] = temp;
+				}
 			}
 		}
 	}
+	logger.logStoragePosition("leaving new sortbydate");
 	return eventsToSort;
 }

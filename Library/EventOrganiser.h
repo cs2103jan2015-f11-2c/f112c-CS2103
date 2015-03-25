@@ -25,14 +25,14 @@ public:
 	//vector<Event> showWeek(int dayToShow, int monthToShow, int yearToShow, vector<Event> eventsToFilter);
 	//vector<Event> showMonth(int monthToShow, int yearToShow, vector<Event> eventsToFilter);
 
-	vector<Event> sortEventVectorByDate(vector<Event> eventVectorToSort);
-	bool isLatterTimeSmaller(const Event eventTime1,const Event EventTime2);
+	vector<Event> sortEventVectorByDate(vector<Event> eventsToSort);
+	/*bool isLatterTimeSmaller(const Event eventTime1,const Event EventTime2);
 	bool isLatterYearSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMonthSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterDaySmaller(Event eventTime1, Event EventTime2);
 	bool isLatterHourSmaller(Event eventTime1, Event EventTime2);
 	bool isLatterMinSmaller(Event eventTime1, Event EventTime2);
-
+*/
 	vector<struct tm> eventDateToVector(Event showEventDates);
 	vector<Event> showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter);
 	vector<Event> sortMarker(vector<Event> showResult);
