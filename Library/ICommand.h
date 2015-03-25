@@ -106,6 +106,20 @@ public:
 
 
 
+class ShowAllCommand : public ICommand {
+private:
+	EventStorage* eventStore;
+	vector<Event> eventsToShow;
+public:
+	ShowAllCommand(EventStorage* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+};
+
+
+
+
 class ShowFloatCommand : public ICommand {
 private:
 	EventStorage* eventStore;

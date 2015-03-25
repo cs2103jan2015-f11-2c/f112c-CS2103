@@ -248,6 +248,31 @@ Event ShowCommand::getEvent() {
 
 
 
+ShowAllCommand::ShowAllCommand(EventStorage* eventStorage) {
+	eventStore = eventStorage;
+}
+
+void ShowAllCommand::execute() {
+	vector<Event> floating = eventStore->getAllFloatingEvents();
+	vector<Event> normal = eventStore->getAllNormalEvents();
+	floating.insert(floating.end(), normal.begin(), normal.end());
+
+	eventsToShow = floating;
+}
+
+vector<Event> ShowAllCommand::getEventVector() {
+	return eventsToShow;
+}
+
+Event ShowAllCommand::getEvent() {
+	Event e;
+	e.setID(INVALID_NUMBER);
+	return e;
+}
+
+
+
+
 ShowFloatCommand::ShowFloatCommand(EventStorage* eventStorage) {
 	eventStore = eventStorage;
 }

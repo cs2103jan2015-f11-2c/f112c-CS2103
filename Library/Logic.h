@@ -32,6 +32,7 @@ public:
 	static const string CREATING_DELETE;
 	static const string CREATING_EDIT;
 	static const string CREATING_SHOW;
+	static const string CREATING_SHOWALL;
 	static const string CREATING_SHOWFLOAT;
 	static const string CREATING_SEARCH;
 	static const string CASE_0;

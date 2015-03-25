@@ -6,6 +6,7 @@ const string Logic::CREATING_ADD = "creating add command";
 const string Logic::CREATING_DELETE = "creating delete command";
 const string Logic::CREATING_EDIT = "creating edit command";
 const string Logic::CREATING_SHOW = "creating show command";
+const string Logic::CREATING_SHOWALL = "creating show all command";
 const string Logic::CREATING_SHOWFLOAT = "creating showfloat command";
 const string Logic::CREATING_SEARCH = "creating search command";
 const string Logic::CASE_0 = "entered case 0";
@@ -125,6 +126,13 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 		return executor.execute(showCommand);
 		break;
 					   }
+
+	case Parser::SHOWALL: {
+		log(CREATING_SHOWALL);
+		ICommand* showAllCommand = new ShowAllCommand(&eventStore);
+		return executor.execute(showAllCommand);
+		break;
+						  }
 
 	case Parser::SHOWFLOAT: {
 		log(CREATING_SHOWFLOAT);
@@ -322,6 +330,29 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		break;
 					   }
 
+	case Parser::SHOWALL: {
+		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
+		setEventVector(normalEvents, floatingEvents, tempEvents);
+
+		string feedback = Display::SHOW_MESSAGE + nameOfEvent;
+		vector<tm> tmVec;
+		if (normalEvents.empty()) { //no normal events to show
+			tmVec = display.getTempMainDisplayLabel();
+		} else { //at least 1 normal event to show (1st will always be marker)
+			tmVec.push_back(normalEvents[1].getStartDate());
+			if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
+				tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
+			} else {
+				tmVec.push_back(normalEvents[1].getEndDate());
+			}
+		}
+		mktime(&tmVec[0]);
+		mktime(&tmVec[1]);
+
+		display.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, Display::GARBAGE_INT);
+		break;
+						  }
+
 	case Parser::SHOWFLOAT: {
 		vector<Event> normalEvents = display.getNormalEvents();
 		vector<Event> floatingEvents = commandPtr->getEventVector();
@@ -331,6 +362,11 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		display.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, Display::GARBAGE_INT);
 		break;
 							}
+
+	/*case Parser::UNDO: {
+		break;
+					   }
+	*/
 
 	case Parser::ERROR_: {
 		delete commandPtr;
