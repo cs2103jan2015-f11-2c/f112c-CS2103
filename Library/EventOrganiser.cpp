@@ -68,7 +68,7 @@ vector<Event> EventOrganiser::showWeek(int dayToShow, int monthToShow, int yearT
 	}
 	return showWeekResults;
 }
-*/
+
 vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventVectorToSort){
 
 	Event tempEvent;
@@ -175,7 +175,7 @@ bool EventOrganiser::isLatterMinSmaller(Event eventTime1, Event eventTime2) //re
 
 	return isMinBigger;
 }
-
+*/
 vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	
 	struct tm tempStartDate = showEventDates.getStartDate();
@@ -330,22 +330,43 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 	return returnEvent;
 }
 vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
-	time_t t = time(0);
-	struct tm* firstTime = localtime(&t);
-	struct tm* secondTime = localtime(&t);
+
 	Event temp;
 
 	for(int i=0;i<eventsToSort.size()-1;i++){
 		for(int j=i+1;j<eventsToSort.size();j++){
-			firstTime = &(eventsToSort[i].getEndDate());
-			secondTime = &(eventsToSort[j].getEndDate());
-			if((difftime(mktime(secondTime),(mktime(firstTime)))) >= 0 ){ //if firsttime is later than secondtime, swap
+			int difference = findTimeDiff(eventsToSort[j].getEndDate(),eventsToSort[i].getEndDate());
+			if(difference >= 0 ){ 
 				temp = eventsToSort[i];
 				eventsToSort[i] = eventsToSort[j];
 				eventsToSort[j] = temp;
 			}
 		}
 	}
+	return eventsToSort;
+}
+int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
+
+	time_t start = mktime(&startDay);
+	time_t end = mktime(&endDay);
+
+	int difference = difftime(end,start);
+
+	return difference;
+}
+vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
 	
+	Event temp;
+
+	for(int i=0;i<eventsToSort.size()-1;i++){
+		for(int j=i+1;j<eventsToSort.size();j++){
+			int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
+			if(difference >= 0 ){ 
+				temp = eventsToSort[i];
+				eventsToSort[i] = eventsToSort[j];
+				eventsToSort[j] = temp;
+			}
+		}
+	}
 	return eventsToSort;
 }

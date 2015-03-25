@@ -38,6 +38,8 @@ public:
 	vector<Event> sortMarker(vector<Event> showResult);
 	vector<Event> sortEventVectorByEndDate(vector<Event> eventsToSort);
 	Event dateRange(vector<Event> eventsToFilter);
+	int findTimeDiff(tm startDay, tm endDay);
+
 };
 
 #endif
