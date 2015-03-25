@@ -245,7 +245,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 			}
 			if(editedEvent.getDescription() != ""){
 				(currentFloatingContent[indexOfEventID]).setDescription(editedEvent.getDescription());
-			}
+			} 
 			if(editedEvent.getStartDate().tm_mday != 100){
 				(currentFloatingContent[indexOfEventID]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
 				(currentFloatingContent[indexOfEventID]).setIsFloating(false);

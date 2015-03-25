@@ -311,3 +311,41 @@ vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 
 	return returnVector;	
 }
+
+Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
+	struct tm earliestDate , latestDate;
+	Event returnEvent;
+	
+	if(!eventsToFilter.empty()){
+		eventsToFilter = sortEventVectorByDate(eventsToFilter);
+		earliestDate = eventsToFilter[0].getStartDate();
+		eventsToFilter = sortEventVectorByEndDate(eventsToFilter);
+		int lastIndex = eventsToFilter.size()-1;
+		latestDate = eventsToFilter[lastIndex].getEndDate();
+	}
+	
+	returnEvent.setStartDate(earliestDate.tm_mday,earliestDate.tm_mon,earliestDate.tm_year);	
+	returnEvent.setEndDate(latestDate.tm_mday,latestDate.tm_mon,latestDate.tm_year);
+
+	return returnEvent;
+}
+vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
+	time_t t = time(0);
+	struct tm* firstTime = localtime(&t);
+	struct tm* secondTime = localtime(&t);
+	Event temp;
+
+	for(int i=0;i<eventsToSort.size()-1;i++){
+		for(int j=i+1;j<eventsToSort.size();j++){
+			firstTime = &(eventsToSort[i].getEndDate());
+			secondTime = &(eventsToSort[j].getEndDate());
+			if((difftime(mktime(secondTime),(mktime(firstTime)))) >= 0 ){ //if firsttime is later than secondtime, swap
+				temp = eventsToSort[i];
+				eventsToSort[i] = eventsToSort[j];
+				eventsToSort[j] = temp;
+			}
+		}
+	}
+	
+	return eventsToSort;
+}

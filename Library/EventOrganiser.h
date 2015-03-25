@@ -36,7 +36,8 @@ public:
 	vector<struct tm> eventDateToVector(Event showEventDates);
 	vector<Event> showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter);
 	vector<Event> sortMarker(vector<Event> showResult);
-
+	vector<Event> sortEventVectorByEndDate(vector<Event> eventsToSort);
+	Event dateRange(vector<Event> eventsToFilter);
 };
 
 #endif
