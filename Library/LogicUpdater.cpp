@@ -368,6 +368,7 @@ void LogicUpdater::normalEventsToString() {
 		//Generate header
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
 			toBePushed.isMarker = true;
+			toBePushed.isNew = false;
 			if (headCounter!=0){
 				out << "\n";
 			}
@@ -388,7 +389,8 @@ void LogicUpdater::normalEventsToString() {
 			out << ", ";
 
 			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
-			out << convert.intToDayOfWeek(dayOfWeekInt);
+			out << dayOfWeekInt;
+			//out << convert.intToDayOfWeek(dayOfWeekInt);
 
 			out << "]";
 			out << "===============================================";
@@ -397,6 +399,7 @@ void LogicUpdater::normalEventsToString() {
 		 //Generate event list
 		 else {
 			toBePushed.isMarker = false;
+			toBePushed.isNew = setIsNew(i);
 
 			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
@@ -429,8 +432,6 @@ void LogicUpdater::normalEventsToString() {
 			}
 		}
 		toBePushed.eventString = out.str();
-
-		toBePushed.isNew = setIsNew(i);
 
 		if (toBePushed.isNew == true){
 			newEventStartTime = getStartTime(normalEvents[i]);

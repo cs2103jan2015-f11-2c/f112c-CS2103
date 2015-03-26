@@ -64,10 +64,10 @@ namespace UI {
 	private: System::Windows::Forms::ContextMenuStrip^  editDropDown;
 	private: System::Windows::Forms::ToolStripMenuItem^  undoToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  redoToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  copyToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  pasteToolStripMenuItem;
+
+
 	private: System::Windows::Forms::Timer^  timer1;
-	private: System::Windows::Forms::ToolStripMenuItem^  emailToolStripMenuItem;
+
 
 
 
@@ -205,13 +205,10 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->emailToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editButton = (gcnew System::Windows::Forms::Button());
 			this->editDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->redoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
@@ -471,8 +468,8 @@ namespace UI {
 			// 
 			this->helpDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->helpDropDown, L"helpDropDown");
-			this->helpDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->introductionToolStripMenuItem, 
-				this->commandsToolStripMenuItem, this->shortcutsToolStripMenuItem, this->emailToolStripMenuItem});
+			this->helpDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->introductionToolStripMenuItem, 
+				this->commandsToolStripMenuItem, this->shortcutsToolStripMenuItem});
 			this->helpDropDown->Name = L"helpDropDown";
 			// 
 			// introductionToolStripMenuItem
@@ -492,12 +489,6 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
 			// 
-			// emailToolStripMenuItem
-			// 
-			this->emailToolStripMenuItem->Name = L"emailToolStripMenuItem";
-			resources->ApplyResources(this->emailToolStripMenuItem, L"emailToolStripMenuItem");
-			this->emailToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::emailToolStripMenuItem_Click);
-			// 
 			// editButton
 			// 
 			this->editButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -512,8 +503,8 @@ namespace UI {
 			// 
 			this->editDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->editDropDown, L"editDropDown");
-			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->undoToolStripMenuItem, 
-				this->redoToolStripMenuItem, this->copyToolStripMenuItem, this->pasteToolStripMenuItem});
+			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->undoToolStripMenuItem, 
+				this->redoToolStripMenuItem});
 			this->editDropDown->Name = L"editDropDown";
 			// 
 			// undoToolStripMenuItem
@@ -525,16 +516,6 @@ namespace UI {
 			// 
 			resources->ApplyResources(this->redoToolStripMenuItem, L"redoToolStripMenuItem");
 			this->redoToolStripMenuItem->Name = L"redoToolStripMenuItem";
-			// 
-			// copyToolStripMenuItem
-			// 
-			this->copyToolStripMenuItem->Name = L"copyToolStripMenuItem";
-			resources->ApplyResources(this->copyToolStripMenuItem, L"copyToolStripMenuItem");
-			// 
-			// pasteToolStripMenuItem
-			// 
-			this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
-			resources->ApplyResources(this->pasteToolStripMenuItem, L"pasteToolStripMenuItem");
 			// 
 			// MapleSyrup
 			// 
