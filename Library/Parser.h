@@ -30,7 +30,9 @@ public:
 		SHOWFLOAT,
 		SHOWALL,
 		SHOWDUE,
-		SHOWALLIMPORTANT
+		SHOWALLIMPORTANT,
+		UNDO,
+		REDO
 	};
 
 	static const std::string TOKENISE_ORIGINAL_STRING;

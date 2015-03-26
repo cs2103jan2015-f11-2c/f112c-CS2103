@@ -91,6 +91,17 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 			matchFound = false;
 		}
 
+		if(!nameFound && !startDayFound && !startTimeFound){
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+		}
+		if(nameFound && !startDayFound && !startTimeFound){
+			if(fragmentedWords.size() > 1){
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			}
+		}
+
 		for(i = 0; i < fragmentedWords.size(); i++){
 			try {
 				auto tempInt = std::stoi(fragmentedWords[i]);
@@ -256,6 +267,7 @@ bool ParserProcessor::identifyDate(int index){
 				tempEventStore.setStartDate(tempInt,month,year);
 				endDayFound = true;
 				tempEventStore.setEndDate(day,month,year);
+				toFound = false;
 			} else if(!startDayFound){
 				startDayFound = true;
 				tempEventStore.setStartDate(day,month,year);
@@ -307,6 +319,7 @@ bool ParserProcessor::identifyTime(int index){
 			
 			//Registering hour and minute
 			if(tempInt >= 100){
+				tempIndex--;
 				minute = tempInt%100;
 				if(minute > 60){
 					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
@@ -338,22 +351,25 @@ bool ParserProcessor::identifyTime(int index){
 						hour = tempInt;
 						minute = 0;
 					}
-					if(minute > 60){
-						logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
-						throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+				} else {
+					hour = tempInt;
+					minute = 0;
+				}
+				if(minute > 60){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+				}
+				if(hour > 12){
+					logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+					throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+				}
+				if(afterTwelve){
+					if(hour < 12){
+						hour = hour + 12;
 					}
-					if(hour > 12){
-						logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
-						throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
-					}
-					if(afterTwelve){
-						if(hour < 12){
-							hour = hour + 12;
-						}
-					} else {
-						if(hour == 12){
-							hour = 0;
-						}
+				} else {
+					if(hour == 12){
+						hour = 0;
 					}
 				}
 			}
@@ -400,22 +416,25 @@ bool ParserProcessor::identifyTime(int index){
 										toHour = tempInt;
 										toMinute = 0;
 									}
-									if(toMinute > 60){
-										logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
-										throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+								} else {
+									toHour = tempInt;
+									toMinute = 0;
+								}
+								if(toMinute > 60){
+									logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+									throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
+								}
+								if(toHour > 12){
+									logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
+									throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
+								}
+								if(afterTwelve){
+									if(toHour < 12){
+										toHour = toHour + 12;
 									}
-									if(toHour > 12){
-										logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
-										throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
-									}
-									if(afterTwelve){
-										if(toHour < 12){
-											toHour = toHour + 12;
-										}
-									} else {
-										if(toHour == 12){
-											toHour = 0;
-										}
+								} else {
+									if(toHour == 12){
+										toHour = 0;
 									}
 								}
 							}
@@ -432,6 +451,7 @@ bool ParserProcessor::identifyTime(int index){
 				tempEventStore.setStartTime(toHour,toMinute);
 				endTimeFound = true;
 				tempEventStore.setEndTime(hour,minute);
+				toFound = false;
 			} else if(!startTimeFound){
 				startTimeFound = true;
 				tempEventStore.setStartTime(hour,minute);
@@ -524,16 +544,20 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 	
 	try {
 		unsigned int i = 0;
-		identifyEventName(i);
-		if(nameFound){
+		if(identifyEventName(i)){
 			i++;
 		}
-
+		
 		for(; i < fragmentedWords.size(); i++){
 			matchFound = identifyDay(i);
 			matchFound = identifyDate(i);
 			matchFound = identifyTime(i);
 			matchFound = false;
+		}
+
+		if(!nameFound && !startDayFound && !startTimeFound){
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
 		}
 
 		for(i = 0; i < fragmentedWords.size(); i++){

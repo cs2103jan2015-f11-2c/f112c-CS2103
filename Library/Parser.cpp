@@ -82,6 +82,10 @@ void Parser::tokenizeOriginalString(){
 			}
 		} else if(command == "search"){
 			typeOfCommand = Parser::SEARCH;
+		} else if(command == "undo"){
+			typeOfCommand = Parser::UNDO;
+		} else if(command == "redo"){
+			typeOfCommand = Parser::REDO;
 		} else {
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_COMMAND);
 		}
