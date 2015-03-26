@@ -9,10 +9,12 @@ Executor::Executor() {
 
 ICommand* Executor::execute(ICommand* command) {
 	command->execute();
+
 	if (command->getIsUndoable()) {
 		undoStack.push(command);
 	}
-	return undoStack.top();
+
+	return command;
 }
 
 ICommand* Executor::undo() {

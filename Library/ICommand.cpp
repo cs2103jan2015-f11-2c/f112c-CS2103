@@ -256,6 +256,7 @@ void EditCommand::undo() {
 SearchCommand::SearchCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	userSearchEvent = e;
+	isUndoable = false;
 }
 
 void SearchCommand::execute() {
@@ -278,6 +279,7 @@ void SearchCommand::undo() {
 ShowCommand::ShowCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	eventRangeToShow = e;
+	isUndoable = false;
 }
 
 void ShowCommand::execute() {
@@ -300,6 +302,7 @@ void ShowCommand::undo() {
 
 ShowAllCommand::ShowAllCommand(EventStorage* eventStorage) {
 	eventStore = eventStorage;
+	isUndoable = false;
 }
 
 void ShowAllCommand::execute() {
@@ -328,6 +331,7 @@ void ShowAllCommand::undo() {
 
 ShowFloatCommand::ShowFloatCommand(EventStorage* eventStorage) {
 	eventStore = eventStorage;
+	isUndoable = false;
 }
 
 void ShowFloatCommand::execute() {
@@ -346,3 +350,28 @@ Event ShowFloatCommand::getEvent() {
 
 void ShowFloatCommand::undo() {
 }
+
+
+
+
+/*
+NullCommand::NullCommand() {
+	isComplete = false;
+	isUndoable = false;
+}
+
+void NullCommand::execute() {
+}
+
+vector<Event> NullCommand::getEventVector() {
+	vector<Event> emptyVec;
+	return emptyVec;
+}
+
+Event NullCommand::getEvent() {
+	Event e;
+	return e;
+}
+
+void NullCommand::undo() {
+}*/

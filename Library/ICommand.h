@@ -149,4 +149,20 @@ public:
 	void undo();
 };
 
+
+
+
+/*
+class NullCommand : public ICommand {
+private:
+
+public:
+	NullCommand();
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+*/
+
 #endif
