@@ -4,9 +4,16 @@ const std::string Parser::TOKENISE_ORIGINAL_STRING = "tokeniseOriginalString";
 
 Parser::Parser(std::string input)
 {
+	keywordCommands[0] = "add";
+	keywordCommands[1] = "del";
+	keywordCommands[2] = "delete";
+	keywordCommands[3] = "show";
+	keywordCommands[4] = "search";
+	keywordCommands[5] = "undo";
+	keywordCommands[6] = "redo";
+
 	logger.logParserStart(input);
 	original = input;
-	//this->retrieveCategories();
 	this->tokenizeOriginalString();
 }
 
@@ -45,7 +52,12 @@ void Parser::tokenizeOriginalString(){
 
 	try {
 		command = splitter.extractFirstWord(original);
-		details = splitter.extractDetails(original);
+		if(checkCommandExist()){
+			details = splitter.extractDetails(original);
+		} else {
+			details = original;
+			command = "add";
+		}
 	
 		std::vector<std::string> fragmentedWords;
 		if(command == "add"){
@@ -98,14 +110,13 @@ void Parser::tokenizeOriginalString(){
 	return;
 }
 
-/*void Parser::retrieveCategories(){
-	std::string category;
-	std::ifstream readCategories;
-	readCategories.open("categories.txt");
-	while(std::getline(readCategories,category)){
-		categories.push_back(category);
-	}
-	readCategories.close();
+bool Parser::checkCommandExist(){
+	bool commandExist = false;
 
-	return;
-}*/
+	for(int j = 0; j < NUMBER_OF_KEYWORDS_COMMANDS; j++){
+		if(command == keywordCommands[j]){
+			commandExist = true;
+		}
+	}
+	return commandExist;
+}

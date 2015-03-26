@@ -48,7 +48,9 @@ private:
 	std::string original;
 	Event tempEventStore;
 	std::string nameOfEvent;
-	std::vector<std::string> categories;
+
+	static const int NUMBER_OF_KEYWORDS_COMMANDS = 7;
+	std::string keywordCommands[NUMBER_OF_KEYWORDS_COMMANDS];
 
 public:
 	//getters
@@ -61,7 +63,7 @@ public:
 
 	//main methods
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
-	//void retrieveCategories();	//retrieve all categories created from storage txt file 
+	bool checkCommandExist();
 };		
 
 #endif

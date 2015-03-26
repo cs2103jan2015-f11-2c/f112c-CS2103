@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Parser">
       <UniqueIdentifier>{288b4bdd-cea5-4bb7-8347-4183baac7bb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Storage">
+      <UniqueIdentifier>{fd27dfa2-635a-46f4-bbe1-80109b58c8b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EventArchive.cpp">
@@ -83,12 +86,6 @@
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventArchive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventStorage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -98,13 +95,7 @@
     <ClInclude Include="Display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Search.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CommandSuggestion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventOrganiser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Parser.h">
@@ -122,9 +113,6 @@
     <ClInclude Include="ParserExceptions.h">
       <Filter>Header Files\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="EventLog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UIHelp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -136,6 +124,21 @@
     </ClInclude>
     <ClInclude Include="Executor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventArchive.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="EventLog.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="EventOrganiser.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="EventStorage.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="Search.h">
+      <Filter>Header Files\Storage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
