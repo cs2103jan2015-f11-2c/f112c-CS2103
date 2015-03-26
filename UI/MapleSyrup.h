@@ -205,6 +205,7 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->emailToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->editButton = (gcnew System::Windows::Forms::Button());
 			this->editDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -212,7 +213,6 @@ namespace UI {
 			this->copyToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pasteToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->emailToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -492,6 +492,12 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
 			// 
+			// emailToolStripMenuItem
+			// 
+			this->emailToolStripMenuItem->Name = L"emailToolStripMenuItem";
+			resources->ApplyResources(this->emailToolStripMenuItem, L"emailToolStripMenuItem");
+			this->emailToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::emailToolStripMenuItem_Click);
+			// 
 			// editButton
 			// 
 			this->editButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -529,12 +535,6 @@ namespace UI {
 			// 
 			this->pasteToolStripMenuItem->Name = L"pasteToolStripMenuItem";
 			resources->ApplyResources(this->pasteToolStripMenuItem, L"pasteToolStripMenuItem");
-			// 
-			// emailToolStripMenuItem
-			// 
-			this->emailToolStripMenuItem->Name = L"emailToolStripMenuItem";
-			resources->ApplyResources(this->emailToolStripMenuItem, L"emailToolStripMenuItem");
-			this->emailToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::emailToolStripMenuItem_Click);
 			// 
 			// MapleSyrup
 			// 

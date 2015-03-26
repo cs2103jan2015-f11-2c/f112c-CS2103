@@ -145,7 +145,7 @@
     <value>help</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
-    <value>done</value>
+    <value>complete</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource10" xml:space="preserve">
     <value>commands</value>
@@ -3689,7 +3689,7 @@
     <value>Email</value>
   </data>
   <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>193, 114</value>
+    <value>193, 92</value>
   </data>
   <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
     <value>helpDropDown</value>
@@ -3953,6 +3953,12 @@
   <data name="&gt;&gt;shortcutsToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;emailToolStripMenuItem.Name" xml:space="preserve">
+    <value>emailToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;emailToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;undoToolStripMenuItem.Name" xml:space="preserve">
     <value>undoToolStripMenuItem</value>
   </data>
@@ -3982,12 +3988,6 @@
   </data>
   <data name="&gt;&gt;timer1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;emailToolStripMenuItem.Name" xml:space="preserve">
-    <value>emailToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;emailToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MapleSyrup</value>
