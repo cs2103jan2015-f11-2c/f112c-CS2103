@@ -28,17 +28,88 @@ namespace UnitTest
 			std::string samepleCommandShowDay1= "show today";
 			Assert::AreEqual(samepleCommandShowDay1,testCommandShowDay1);
 
-			//Incorrect string
+			//Expected failing test: Incorrect string
 			std::string testCommandShowDay2 = show.getShowDay();
-			std::string samepleCommandShowDay2= "show today ";
+			std::string samepleCommandShowDay2= "show today 12345";
 			Assert::AreNotEqual(samepleCommandShowDay2,testCommandShowDay2);
-
 		}
 
+
+		TEST_METHOD(isSingleDay_Test){
+			tm front;
+			tm back;
+			vector<tm> testVector;
+			bool testResult;
+			bool expectedResult;
+			
+			//Same day, expected true
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 1;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = true;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Different day, expected false
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
+
+			back.tm_mday = 10;
+			back.tm_mon = 2;
+			back.tm_year = 1;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = false;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Expected failing test
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
+
+			back.tm_mday = 10;
+			back.tm_mon = 2;
+			back.tm_year = 1;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = true;
+
+			Assert::AreNotEqual(expectedResult,testResult);
+			testVector.clear();
+		}
 	};
 
 	//Unit test for UIHelp class
 	TEST_CLASS(UIHelpTest)
+	{
+	public:
+
+
+
+
+	};
+
+	//Unit test for commandSuggest class
+	TEST_CLASS(commandSuggestTest)
 	{
 	public:
 
