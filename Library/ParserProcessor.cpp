@@ -694,79 +694,23 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	Conversion convertor;
 	std::string strMonth;
 	int tempInt = 0;
-	int day = 0, month = 0, year = 0, weekday = 0;
-
-	//check for system based Show (e.g. Today, Week, Month)
 	int daysToEndWeek = 0;
+	int day = 0, month = 0, year = 0, weekday = 0;
 	day = now->tm_mday;
 	month = now->tm_mon;
 	year = now->tm_year;
-	
+
+	//check for system based Show (e.g. Today, Week, Month)
 	std::string firstWord = fragmentedWords[0];
-	try {
-		auto tempStoi = std::stoi(firstWord);
-		tempInt = tempStoi;
-		if(tempInt > 2000){
-			if(year == tempInt-1900){
-				tempEventStore.setStartDate(day,month,year);
-				tempEventStore.setEndDate(31,11,year);
-			} else {
-				year = tempInt-1900;
-				tempEventStore.setStartDate(1,0,year);
-				tempEventStore.setEndDate(31,11,year);
-			}
-			systemShowYear = true;
-			fragmentedWords[0] = LOCKUP_USED_INFORMATION;
-			if(fragmentedWords.size() > 2){
-				if(fragmentedWords[1] == "to"){
-					try {
-						auto tempStoi = std::stoi(fragmentedWords[2]);
-						tempInt = tempStoi;
-						fragmentedWords[2] = LOCKUP_USED_INFORMATION;
-						if(tempInt > 2000){
-							tempEventStore.setEndDate(31,11,tempInt-1900);
-						} 
-					} catch (std::invalid_argument& e){
-					}
-				}
-			}
-		}
-	} catch (std::invalid_argument &e){
-		if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
-			tempEventStore.setStartDate(day,month,year);
-			tempEventStore.setEndDate(day,month,year);
-			systemShowDay = true;
-		} else if (firstWord == "tomorrow" || firstWord == "tmr"){
-			tempEventStore.setStartDate(day+1,month,year);
-			tempEventStore.setEndDate(day+1,month,year);
-			systemShowDay = true;
-		} else if (firstWord == "week" || firstWord == "wk"){
-			weekday = now->tm_wday;
-			daysToEndWeek = 6 - weekday;
-			tempEventStore.setStartDate(day,month,year);
-			tempEventStore.setEndDate(day+daysToEndWeek,month,year);
-			systemShowWeek = true;
-		} else if(firstWord == "month" || firstWord == "mth"){
-			tempEventStore.setStartDate(day,month,year);
-			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
-			systemShowMonth = true;
-		} else if(firstWord == "year" || firstWord == "yr"){
-			tempEventStore.setStartDate(day,month,year);
-			tempEventStore.setEndDate(31,11,year);
-			systemShowYear = true;
-		} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord[0] == '!' || firstWord == "important" || firstWord == "impt"){
-			tempEventStore.setName(firstWord);
-			systemShowOthers = true;
-		}
+	checkShowFirstWord(firstWord);
+	int tempi = 0; 
+	if(checkShowFirstWord(firstWord)){
+		tempi++;
 	}
 
 	//check if it is user based Show (e.g. 14 apr, april, month/ april, week/ 14apr, 17 apr to 18 apr, apr to may)
 	unsigned int i = 0;
-	int tempi = 0; 
 	int j = 0;
-	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowYear || systemShowOthers){
-		tempi++;
-	}
 	for(i = tempi; i < fragmentedWords.size(); i++){
 		//finding any string of a month within the fragmentedWords vector
 		//record number of matches found, if two matches are found, a range of days/range of months is requested to be shown
@@ -916,4 +860,91 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	eventMktimeCorrector();
 
 	return tempEventStore;
+}
+
+bool ParserProcessor::checkShowFirstWord(std::string firstWord){
+	bool firstWordVerified = false;
+	Conversion convertor;
+	std::string strMonth;
+	int tempInt = 0;
+	int day = 0, month = 0, year = 0, weekday = 0;
+
+	int daysToEndWeek = 0;
+	day = now->tm_mday;
+	month = now->tm_mon;
+	year = now->tm_year;
+	
+	try {
+		auto tempStoi = std::stoi(firstWord);
+		tempInt = tempStoi;
+		if(tempInt > 2000){
+			if(year == tempInt-1900){
+				tempEventStore.setStartDate(day,month,year);
+				tempEventStore.setEndDate(31,11,year);
+			} else {
+				year = tempInt-1900;
+				tempEventStore.setStartDate(1,0,year);
+				tempEventStore.setEndDate(31,11,year);
+			}
+			systemShowYear = true;
+			fragmentedWords[0] = LOCKUP_USED_INFORMATION;
+			if(fragmentedWords.size() > 2){
+				if(fragmentedWords[1] == "to"){
+					try {
+						auto tempStoi = std::stoi(fragmentedWords[2]);
+						tempInt = tempStoi;
+						fragmentedWords[2] = LOCKUP_USED_INFORMATION;
+						if(tempInt > 2000){
+							tempEventStore.setEndDate(31,11,tempInt-1900);
+						} 
+					} catch (std::invalid_argument& e){
+					}
+				}
+			}
+		}
+	} catch (std::invalid_argument &e){
+		if (firstWord == "today" || firstWord == "day" || firstWord == "tdy"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day,month,year);
+			systemShowDay = true;
+		} else if (firstWord == "tomorrow" || firstWord == "tmr"){
+			tempEventStore.setStartDate(day+1,month,year);
+			tempEventStore.setEndDate(day+1,month,year);
+			systemShowDay = true;
+		} else if (firstWord == "week" || firstWord == "wk"){
+			weekday = now->tm_wday;
+			daysToEndWeek = 6 - weekday;
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day+daysToEndWeek,month,year);
+			systemShowWeek = true;
+		} else if(firstWord == "month" || firstWord == "mth"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+			systemShowMonth = true;
+		} else if(firstWord == "year" || firstWord == "yr"){
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(31,11,year);
+			systemShowYear = true;
+		} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord == "important" || firstWord == "impt"){
+			tempEventStore.setName(firstWord);
+			systemShowOthers = true;
+		} else if(firstWord[0] == '!'){
+			int levelImportance = 0;
+			for(unsigned int i = 0; i < firstWord.size(); i++){
+				if(firstWord[i] == '!'){
+					levelImportance++;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
+					throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				}
+			}
+			tempEventStore.setImportanceLevel(levelImportance);
+			tempEventStore.setName("specificimportance");
+		}
+	}
+
+	if(systemShowDay || systemShowWeek || systemShowMonth || systemShowYear || systemShowOthers){
+		firstWordVerified = true;
+	}
+	return firstWordVerified;
 }

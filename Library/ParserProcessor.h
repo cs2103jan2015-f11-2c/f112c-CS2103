@@ -84,6 +84,7 @@ public:
 	void eventMktimeCorrector();
 
 	Event processShowEvent(std::vector<std::string>);
+	bool checkShowFirstWord(std::string);
 };
 
 #endif

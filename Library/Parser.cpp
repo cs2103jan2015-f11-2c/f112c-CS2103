@@ -90,6 +90,8 @@ void Parser::tokenizeOriginalString(){
 				typeOfCommand = Parser::SHOWALL;
 			} else if(tempEventStore.getName() == "due"){
 				typeOfCommand = Parser::SHOWDUE;
+			} else if(tempEventStore.getName() == "specificimportance"){
+				typeOfCommand = Parser::SHOWIMPORTANT;
 			} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
 				typeOfCommand = Parser::SHOWALLIMPORTANT;
 			} else {

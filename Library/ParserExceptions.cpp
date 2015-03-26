@@ -23,10 +23,10 @@ ParserExceptions::ParserExceptions(std::string errorCode){
 		feedback = "Error: No event name found. Please type ';' after an event name.";
 	}
 	if(errorCode == ERROR_TOO_MANY_DATES){
-		feedback = "Error: Detected more than two date inputs. Maximum of 2 date inputs.";
+		feedback = "Error: Too many date inputs detected.";
 	}
 	if(errorCode == ERROR_TOO_MANY_TIMES){
-		feedback = "Error: Detected more than two time inputs. Maximum of 2 time inputs.";
+		feedback = "Error: Too many time inputs detected.";
 	}
 	if(errorCode == ERROR_MISSING_DAY){
 		feedback = "Error: No day input found before month.";
