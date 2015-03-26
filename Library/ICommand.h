@@ -12,6 +12,7 @@ public:
 	virtual void execute() = 0;
 	virtual vector<Event> getEventVector() = 0;
 	virtual Event getEvent() = 0;
+	virtual void undo() = 0;
 
 	bool getIsFloating();
 	bool getIsComplete();
@@ -35,6 +36,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -52,6 +54,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -69,6 +72,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -85,6 +89,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -101,6 +106,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -115,6 +121,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 
@@ -130,6 +137,7 @@ public:
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
+	void undo();
 };
 
 #endif

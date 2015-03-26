@@ -34,6 +34,10 @@ Event AddCommand::getEvent() {
 	return userEvent;
 }
 
+void AddCommand::undo() {
+	addedEvents = eventStore->deleteEvent(userEvent.getID(), userEvent);
+}
+
 
 
 
@@ -118,6 +122,9 @@ vector<Event> DeleteCommand::getEventVector() {
 
 Event DeleteCommand::getEvent() {
 	return userEvent;
+}
+
+void DeleteCommand::undo() {
 }
 
 
@@ -206,6 +213,9 @@ Event EditCommand::getEvent() {
 	return eventToEdit;
 }
 
+void EditCommand::undo() {
+}
+
 
 
 
@@ -223,6 +233,9 @@ vector<Event> SearchCommand::getEventVector() {
 
 Event SearchCommand::getEvent() {
 	return userSearchEvent;
+}
+
+void SearchCommand::undo() {
 }
 
 
@@ -243,6 +256,9 @@ vector<Event> ShowCommand::getEventVector() {
 
 Event ShowCommand::getEvent() {
 	return eventRangeToShow;
+}
+
+void ShowCommand::undo() {
 }
 
 
@@ -270,6 +286,9 @@ Event ShowAllCommand::getEvent() {
 	return e;
 }
 
+void ShowAllCommand::undo() {
+}
+
 
 
 
@@ -289,4 +308,7 @@ vector<Event> ShowFloatCommand::getEventVector() {
 Event ShowFloatCommand::getEvent() {
 	Event e;
 	return e;
+}
+
+void ShowFloatCommand::undo() {
 }
