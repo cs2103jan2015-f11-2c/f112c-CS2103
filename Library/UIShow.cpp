@@ -61,9 +61,9 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
 	} else {
-		int numDays = countNumDays (mainDisplayDate[0], mainDisplayDate[1]);
-		tm newStartDate = shiftDate(mainDisplayDate[0], numDays);
-		tm newEndDate = shiftDate(mainDisplayDate[1], numDays);
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1] + 1);
+		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 	}
 	return newShowCommand;
@@ -90,9 +90,9 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		tm newDateToShow = shiftDate(mainDisplayDate[0],-1);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
 	} else {
-		int numDays = countNumDays (mainDisplayDate[0], mainDisplayDate[1]);
-		tm newStartDate = shiftDate(mainDisplayDate[0], -numDays);
-		tm newEndDate = shiftDate(mainDisplayDate[1], -numDays);
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
+		tm newStartDate = shiftDate(mainDisplayDate[0], -numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], -numDaysToShift);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 	}
 	return newShowCommand;
@@ -106,7 +106,7 @@ int UIShow::countNumDays(tm startDay, tm endDay){
 
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
-	return dayDifference + 1;
+	return dayDifference;
 }
 
 void UIShow::initializeTime(tm date){

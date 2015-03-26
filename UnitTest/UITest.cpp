@@ -19,7 +19,6 @@ namespace UnitTest
 		UIShow show;
 		
 		// As a convention, put [name of function] + [_Test]
-		// Include & label each test cases used for this function 
 
 		TEST_METHOD(getShowDay_Test)
 		{
@@ -34,6 +33,29 @@ namespace UnitTest
 			Assert::AreNotEqual(samepleCommandShowDay2,testCommandShowDay2);
 		}
 
+		TEST_METHOD(countNumDays_Test){
+			tm front;
+			tm back;
+			int expectedResult;
+			int testResult;
+
+			//stub
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 1;
+
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 5;
+
+			Assert::AreEqual(expectedResult,testResult);
+
+
+		}
 
 		TEST_METHOD(isSingleDay_Test){
 			tm front;
