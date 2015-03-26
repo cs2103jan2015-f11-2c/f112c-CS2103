@@ -14,9 +14,6 @@ const string Logic::CREATING_REDO = "creating redo";
 const string Logic::CASE_0 = "entered case 0";
 const string Logic::CASE_1 = "entered case 1";
 
-//for exceptions
-const string Logic::EXCEPTION_WRONG_ISFLOATING = "exception: isFloating set wrong";
-
 const int Logic::INVALID_NUMBER = -1;
 
 

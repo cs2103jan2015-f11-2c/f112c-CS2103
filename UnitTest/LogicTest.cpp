@@ -10,11 +10,11 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(ExecuteUserInput)
+		TEST_METHOD(Logic_isNumber_Test)
 		{
 			Logic logic;
-			Assert::AreEqual(logic.executeUserInput("add float;"), true);
-			Assert::AreEqual(logic.executeUserInput("add float"), false);
+			Assert::AreEqual(logic.isNumber("3"), true);
+			Assert::AreEqual(logic.isNumber("3a"), false);
 		}
 
 	};

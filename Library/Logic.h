@@ -40,9 +40,6 @@ public:
 	static const string CASE_0;
 	static const string CASE_1;
 
-	//for exceptions
-	static const string EXCEPTION_WRONG_ISFLOATING;
-
 	static const int INVALID_NUMBER;
 
 
