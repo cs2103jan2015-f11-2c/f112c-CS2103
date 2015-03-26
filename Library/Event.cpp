@@ -4,10 +4,15 @@
 
 //constructors
 Event::Event() {
-	isFloating = false;
-	ID = time(0);
+	name = "";
+	startDateTime.tm_mday = 0;
+	startDateTime.tm_mon = 0;
+	startDateTime.tm_year = 0;
 	startDateTime.tm_sec = 0;
 	endDateTime.tm_sec = 0;
+	isFloating = false;
+	feedback = "";
+	ID = time(0);
 }
 
 
