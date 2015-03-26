@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Library", "Library\Library.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "UI\UI.vcxproj", "{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{2276DC93-F2D9-422E-8A62-C9F665BA046C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Debug|Win32.Build.0 = Debug|Win32
 		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Release|Win32.ActiveCfg = Release|Win32
 		{0BC0419F-FB66-4EE4-95E0-AC507574BCAF}.Release|Win32.Build.0 = Release|Win32
+		{2276DC93-F2D9-422E-8A62-C9F665BA046C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2276DC93-F2D9-422E-8A62-C9F665BA046C}.Debug|Win32.Build.0 = Debug|Win32
+		{2276DC93-F2D9-422E-8A62-C9F665BA046C}.Release|Win32.ActiveCfg = Release|Win32
+		{2276DC93-F2D9-422E-8A62-C9F665BA046C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -133,22 +133,22 @@
     <value>exit</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource5" xml:space="preserve">
-    <value>search</value>
-  </data>
-  <data name="commandBox.AutoCompleteCustomSource6" xml:space="preserve">
-    <value>undo</value>
-  </data>
-  <data name="commandBox.AutoCompleteCustomSource7" xml:space="preserve">
-    <value>redo</value>
-  </data>
-  <data name="commandBox.AutoCompleteCustomSource8" xml:space="preserve">
     <value>help</value>
   </data>
-  <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
+  <data name="commandBox.AutoCompleteCustomSource6" xml:space="preserve">
+    <value>commands</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource7" xml:space="preserve">
     <value>complete</value>
   </data>
+  <data name="commandBox.AutoCompleteCustomSource8" xml:space="preserve">
+    <value>search</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
+    <value>undo</value>
+  </data>
   <data name="commandBox.AutoCompleteCustomSource10" xml:space="preserve">
-    <value>commands</value>
+    <value>redo</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="commandBox.Font" type="System.Drawing.Font, System.Drawing">
