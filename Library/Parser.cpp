@@ -54,7 +54,9 @@ void Parser::tokenizeOriginalString(){
 	try {
 		command = splitter.extractFirstWord(original);
 		if(checkCommandExist()){
-			details = splitter.extractDetails(original);
+			if(!checkCommandUndoRedo()){
+				details = splitter.extractDetails(original);
+			}
 		} else {
 			details = original;
 			command = "add";
@@ -120,4 +122,12 @@ bool Parser::checkCommandExist(){
 		}
 	}
 	return commandExist;
+}
+
+bool Parser::checkCommandUndoRedo(){
+	bool isUndoRedo = false;
+	if(command == "undo" || command == "redo"){
+		isUndoRedo = true;
+	}
+	return isUndoRedo;
 }

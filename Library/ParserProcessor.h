@@ -73,10 +73,11 @@ public:
 	Event processAddEvent(std::vector<std::string>);
 	Event processEditEvent(std::vector<std::string>);
 	bool identifyEventName(int);
-	//bool identifyAtDue(std::vector<std::string>, int);
+	bool identifyDeadline(int);
 	bool identifyDay(int);
 	bool identifyDate(int);
 	bool identifyTime(int);
+	bool identifyImportance(int);
 	void addEventCorrector();
 	void editEventCorrector();
 	void eventMktimeCorrector();

@@ -64,6 +64,7 @@ public:
 	//main methods
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
 	bool checkCommandExist();
+	bool checkCommandUndoRedo();
 };		
 
 #endif

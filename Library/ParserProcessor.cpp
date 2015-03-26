@@ -88,6 +88,7 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 			matchFound = identifyDay(i);
 			matchFound = identifyDate(i);
 			matchFound = identifyTime(i);
+			//matchFound = identifyImportance(i);
 			matchFound = false;
 		}
 
@@ -467,6 +468,19 @@ bool ParserProcessor::identifyTime(int index){
 			}
 		}
 	}
+	return matchFound;
+}
+
+bool ParserProcessor::identifyDeadline(int index){
+	if(fragmentedWords[index] == "due"){
+		tempEventStore.setIsDeadline(true);
+		matchFound = true;
+	}
+	return matchFound;
+}
+
+bool ParserProcessor::identifyImportance(int index){
+	
 	return matchFound;
 }
 
