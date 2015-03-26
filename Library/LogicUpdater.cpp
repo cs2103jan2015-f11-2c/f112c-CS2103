@@ -389,8 +389,7 @@ void LogicUpdater::normalEventsToString() {
 			out << ", ";
 
 			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
-			out << dayOfWeekInt;
-			//out << convert.intToDayOfWeek(dayOfWeekInt);
+			out << convert.intToDayOfWeek(dayOfWeekInt);
 
 			out << "]";
 			out << "===============================================";
