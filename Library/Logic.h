@@ -9,7 +9,7 @@
 #include <sstream>
 #include "Parser.h"
 #include "EventStorage.h"
-#include "Display.h"
+#include "LogicUpdater.h"
 #include "ICommand.h"
 #include "Executor.h"
 

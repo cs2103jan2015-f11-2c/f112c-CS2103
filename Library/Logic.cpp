@@ -164,7 +164,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	case Parser::ADD: {
 		vector<Event> normalEvents = commandPtr->getEventVector();
 		vector<Event> floatingEvents = updater.getFloatingEvents();
-		string feedback = userEvent.getName() + LogicUpdater:ADDED_MESSAGE;
+		string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 		vector<tm> tmVec;
 		tmVec.push_back(userEvent.getStartDate());
 		tmVec.push_back(userEvent.getEndDate());

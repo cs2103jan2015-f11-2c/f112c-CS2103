@@ -1,4 +1,4 @@
-#include "Display.h"
+#include "LogicUpdater.h"
 
 
 const int LogicUpdater::GARBAGE_INT = -12345;

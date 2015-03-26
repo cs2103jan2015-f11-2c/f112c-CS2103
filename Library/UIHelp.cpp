@@ -86,11 +86,11 @@ const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tAdd"
 																	};
 
 
-std::vector<Display::EVENT_STRING> UIHelp::getHelpIntroduction(){
-	std::vector<Display::EVENT_STRING> vectOfHelp;
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpIntroduction(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfHelp;
 
 	std::string tempHelpString; 
-	Display::EVENT_STRING helpString;
+	LogicUpdater::EVENT_STRING helpString;
 
 	//Welcome Message
 	tempHelpString = getHelpWelcomeMessage();
@@ -147,11 +147,11 @@ std::vector<Display::EVENT_STRING> UIHelp::getHelpIntroduction(){
 	return vectOfHelp;
 }
 
-std::vector<Display::EVENT_STRING> UIHelp::getHelpCommands(){
-	std::vector<Display::EVENT_STRING> vectOfComds;
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpCommands(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfComds;
 
 	for (int i=0; i< UIHelp::NUM_COMMANDS; i++){
-		Display::EVENT_STRING temp;
+		LogicUpdater::EVENT_STRING temp;
 		temp = convertToEventString(HELP_GUIDE_COMMANDS[i]);
 		vectOfComds.push_back(temp);
 	}
@@ -161,8 +161,8 @@ std::vector<Display::EVENT_STRING> UIHelp::getHelpCommands(){
 	return vectOfComds;
 }
 
-Display::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
-	Display::EVENT_STRING temp;
+LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
+	LogicUpdater::EVENT_STRING temp;
 
 	temp.eventString = stdString;
 	temp.isClash = false;
