@@ -595,6 +595,7 @@ void ParserProcessor::eventMktimeCorrector(){
 	mktime(temptmPtr);
 	tempEventStore.setStartDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
 	tempEventStore.setStartTime(temptmPtr->tm_hour,temptmPtr->tm_min);
+	tempEventStore.setStartWeekday(temptmPtr->tm_wday);
 	temptmPtr = &tempEventStore.getEndDate();
 	mktime(temptmPtr);
 	tempEventStore.setEndDate(temptmPtr->tm_mday,temptmPtr->tm_mon,temptmPtr->tm_year);
