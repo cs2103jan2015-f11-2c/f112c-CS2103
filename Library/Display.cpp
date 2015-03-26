@@ -1,19 +1,19 @@
 #include "Display.h"
 
 
-const int Display::GARBAGE_INT = -12345;
-const int Display::INVALID_NUMBER = -1;
-const string Display::NO_EVENTS_MESSAGE = "Currently no task";
-const string Display::ADDED_MESSAGE = " added";
-const string Display::EDITED_MESSAGE = " edited";
-const string Display::DELETED_MESSAGE = " deleted";
-const string Display::SHOW_MESSAGE = "showing ";
-const string Display::EVENT_NOT_FOUND_MESSAGE = " not found, showing partial matches";
-const string Display::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select one from above via index.";
-const string Display::NEW_DAY_MESSAGE = "-MSmsgjyw-";
+const int LogicUpdater::GARBAGE_INT = -12345;
+const int LogicUpdater::INVALID_NUMBER = -1;
+const string LogicUpdater::NO_EVENTS_MESSAGE = "Currently no task";
+const string LogicUpdater::ADDED_MESSAGE = " added";
+const string LogicUpdater::EDITED_MESSAGE = " edited";
+const string LogicUpdater::DELETED_MESSAGE = " deleted";
+const string LogicUpdater::SHOW_MESSAGE = "showing ";
+const string LogicUpdater::EVENT_NOT_FOUND_MESSAGE = " not found, showing partial matches";
+const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select one from above via index.";
+const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 
 //constructor
-Display::Display() {
+LogicUpdater::LogicUpdater() {
 	normalEvents.clear();
 	floatingEvents.clear();
 	feedbackEvents.clear();
@@ -32,55 +32,55 @@ Display::Display() {
 
 
 //getters
-vector<Event> Display::getNormalEvents() {
+vector<Event> LogicUpdater::getNormalEvents() {
 	return normalEvents;
 }
 
-vector<Event> Display::getFloatingEvents() {
+vector<Event> LogicUpdater::getFloatingEvents() {
 	return floatingEvents;
 }
 
-vector<Event> Display::getFeedbackEvents() {
+vector<Event> LogicUpdater::getFeedbackEvents() {
 	return feedbackEvents;
 }
 
-vector<tm> Display::getTempMainDisplayLabel() {
+vector<tm> LogicUpdater::getTempMainDisplayLabel() {
 	return tempMainDisplayLabel;
 }
 
-vector<Display::EVENT_STRING> Display::getMainDisplayStrings() {
+vector<LogicUpdater::EVENT_STRING> LogicUpdater::getMainDisplayStrings() {
 	return mainDisplayStrings;
 }
 
-vector<Display::EVENT_STRING> Display::getFloatingDisplayStrings() {
+vector<LogicUpdater::EVENT_STRING> LogicUpdater::getFloatingDisplayStrings() {
 	return floatingDisplayStrings;
 }
 
-vector<string> Display::getFeedbackDisplayStrings() {
+vector<string> LogicUpdater::getFeedbackDisplayStrings() {
 	return feedbackDisplayStrings;
 }
 
-vector<string> Display::getErrorStrings() {
+vector<string> LogicUpdater::getErrorStrings() {
 	return errorStrings;
 }
 
-string Display::getMainDisplayLabel() {
+string LogicUpdater::getMainDisplayLabel() {
 	return mainDisplayLabel;
 }
 
-int Display::getTotalNumEvents() {
+int LogicUpdater::getTotalNumEvents() {
 	return floatingEvents.size() + normalEvents.size();
 }
 
-int Display::getTotalFloatingEvents() {
+int LogicUpdater::getTotalFloatingEvents() {
 	return floatingEvents.size();
 }
 
-int Display::getTotalNormalEvents() {
+int LogicUpdater::getTotalNormalEvents() {
 	return normalEvents.size();
 }
 
-int Display::getIDFromIndex(int index) {
+int LogicUpdater::getIDFromIndex(int index) {
 	if (index > getTotalNumEvents()) {
 		return INVALID_NUMBER;
 	} else {
@@ -103,7 +103,7 @@ int Display::getIDFromIndex(int index) {
 	}
 }
 
-int Display::getIDFromName(string name) {
+int LogicUpdater::getIDFromName(string name) {
 	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
 		if (floatingEvents[i].getName() == name) {
 			return floatingEvents[i].getID();
@@ -118,12 +118,12 @@ int Display::getIDFromName(string name) {
 	return INVALID_NUMBER;
 }
 
-int Display::getNewID() {
+int LogicUpdater::getNewID() {
 	return newID;
 }
 
 
-bool Display::getIsFloatingFromID(int id) {
+bool LogicUpdater::getIsFloatingFromID(int id) {
 	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
 		if (floatingEvents[i].getID() == id) {
 			return floatingEvents[i].getIsFloating();
@@ -137,7 +137,7 @@ bool Display::getIsFloatingFromID(int id) {
 	}
 }
 
-Event Display::getEventFromID(int id) {
+Event LogicUpdater::getEventFromID(int id) {
 	for (int i = 0 ; i < getTotalFloatingEvents(); i++) {
 		if (floatingEvents[i].getID() == id) {
 			return floatingEvents[i];
@@ -153,14 +153,14 @@ Event Display::getEventFromID(int id) {
 
 
 //setters
-void Display::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
+void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
 	newID = id;
 	setFeedbackStrings(feedback);
 	setFloatingEvents(floatingEvents);
 	setNormalEvents(normalEvents, label);
 }
 
-void Display::setFeedbackStrings(string newFeedback) {
+void LogicUpdater::setFeedbackStrings(string newFeedback) {
 	feedbackDisplayStrings.push_back(newFeedback);
 	
 	while (feedbackDisplayStrings.size()>3){
@@ -170,12 +170,12 @@ void Display::setFeedbackStrings(string newFeedback) {
 	assert (feedbackDisplayStrings.size()<=3);
 }
 
-void Display::setFloatingEvents(vector<Event> events) {
+void LogicUpdater::setFloatingEvents(vector<Event> events) {
 	floatingEvents = events;
 	floatingEventsToString();
 }
 
-void Display::floatingEventsToString() {
+void LogicUpdater::floatingEventsToString() {
 	floatingDisplayStrings.clear();
 
 	if (floatingEvents.empty()) {
@@ -204,14 +204,14 @@ void Display::floatingEventsToString() {
 	assert(floatingDisplayStrings.size()>=1);
 }
 
-void Display::setNormalEvents(vector<Event> events,vector<tm> label) {
+void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEvents = events;
 	tempMainDisplayLabel = label;
 	setMainDisplayLabel(label);
 	normalEventsToString();
 }
 
-void Display::setMainDisplayLabel (vector<tm> label){
+void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 	assert(label.size()==2);
 
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
@@ -249,7 +249,7 @@ void Display::setMainDisplayLabel (vector<tm> label){
 	}
 }
 
-bool Display::setIsNew(int vectorIndex){
+bool LogicUpdater::setIsNew(int vectorIndex){
 	bool isNew;
 	if (newID == normalEvents[vectorIndex].getID()){
 		isNew = true;
@@ -260,7 +260,7 @@ bool Display::setIsNew(int vectorIndex){
 }
 
 
-void Display:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex){
+void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex){
 	
 	//If there is a clash, this variable will become true
 	bool setNewItemClash = false;
@@ -299,15 +299,15 @@ void Display:: setIsClash(int newEventStartTime, int newEventEndTime, int newEve
 	}
 }
 
-int Display:: getStartTime(Event toGet){
+int LogicUpdater:: getStartTime(Event toGet){
 	return toGet.getStartDate().tm_hour*100 + toGet.getStartDate().tm_min;
 }
 
-int Display:: getEndTime(Event toGet){
+int LogicUpdater:: getEndTime(Event toGet){
 	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
 }
 
-std::string Display::intToTime (int timeInInt){
+std::string LogicUpdater::intToTime (int timeInInt){
 	int hours;
 	int minutes;
 	bool afterTwelve = false;
@@ -343,7 +343,7 @@ std::string Display::intToTime (int timeInInt){
 	return oss.str();
 }
 
-void Display::normalEventsToString() {
+void LogicUpdater::normalEventsToString() {
 	mainDisplayStrings.clear();
 
 	if (normalEvents.empty()) {
@@ -453,7 +453,7 @@ void Display::normalEventsToString() {
 	assert(mainDisplayStrings.size()>=1);
 }
 
-void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
+void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	EVENT_STRING noEvent;
 	noEvent.eventString = NO_EVENTS_MESSAGE;
 	noEvent.isClash= false;
@@ -472,7 +472,7 @@ void Display::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 //========================================================================================================================
 
 // Not in use for now
-void Display::setFeedbackEvents(vector<Event> events) {
+void LogicUpdater::setFeedbackEvents(vector<Event> events) {
 	//Maximum only 3
 	feedbackEvents.clear();
 

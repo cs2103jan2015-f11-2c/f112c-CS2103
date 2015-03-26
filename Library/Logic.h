@@ -21,7 +21,7 @@ class Logic {
 private:
 	Parser* parserPtr;
 	EventStorage eventStore;
-	Display display;
+	LogicUpdater updater;
 	Executor executor;
 	vector<string> logStrings;
 
@@ -53,8 +53,8 @@ public:
 	//getters
 	EventStorage getEventStorage();
 
-	vector<Display::EVENT_STRING> getFloatingStrings();
-	vector<Display::EVENT_STRING> getMainStrings();
+	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
+	vector<LogicUpdater::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 	string getMainDisplayLabel();
