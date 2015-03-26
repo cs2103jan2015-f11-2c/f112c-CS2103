@@ -211,6 +211,57 @@ void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEventsToString();
 }
 
+std::string LogicUpdater::intToMonth (int monthInNum){
+	if(monthInNum == 0){
+		return "January";
+	} else if(monthInNum  == 1){
+		return "Feburary";
+	} else if(monthInNum  == 2){
+		return "March";
+	} else if(monthInNum  == 3){
+		return "April";
+	} else if(monthInNum  == 4){
+		return "May";
+	} else if(monthInNum  == 5){
+		return "June";
+	} else if(monthInNum  == 6){
+		return "July";
+	} else if(monthInNum  == 7){
+		return "August";
+	} else if(monthInNum  == 8){
+		return "September";
+	} else if(monthInNum  == 9){
+		return "October";
+	} else if(monthInNum  == 10){
+		return "November";
+	} else if(monthInNum  == 11){
+		return "December";
+	} else {
+		return "Invalid month";
+	}
+}
+
+
+
+std::string LogicUpdater::intToDayOfWeek (int dayInNum){
+	if(dayInNum == 0){
+		return "Sunday";
+	} else if (dayInNum == 1){
+		return "Monday";
+	} else if (dayInNum == 2){
+		return "Tuesday";
+	} else if (dayInNum == 3){
+		return "Wednesday";
+	} else if (dayInNum == 4){
+		return "Thursday";
+	} else if (dayInNum == 5){
+		return "Friday";
+	} else if (dayInNum == 6){
+		return "Saturday";
+	} else{
+		return "Invalid day";
+	}
+}
 void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 	assert(label.size()==2);
 
@@ -219,16 +270,16 @@ void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 		Conversion convert;
 		string dayOfMonth = convert.intToString(label[0].tm_mday);
 
-		string month = convert.intToMonth(label[0].tm_mon);
+		string month = intToMonth(label[0].tm_mon);
 
-		string dayOfWeek = convert.intToDayOfWeek(label[0].tm_wday);
+		string dayOfWeek = intToDayOfWeek(label[0].tm_wday);
 
 		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
 	} else {
 		//More than 1 day
 		Conversion convert;
 		string startDayOfMonth = convert.intToString(label[0].tm_mday);
-		string startMonth = convert.intToMonth(label[0].tm_mon);
+		string startMonth = intToMonth(label[0].tm_mon);
 
 		mainDisplayLabel = startDayOfMonth + " " + startMonth;
 
@@ -240,7 +291,7 @@ void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 		mainDisplayLabel += " - ";
 
 		string endDayOfMonth = convert.intToString(label[1].tm_mday);
-		string endMonth = convert.intToMonth(label[1].tm_mon);
+		string endMonth = intToMonth(label[1].tm_mon);
 
 		mainDisplayLabel += endDayOfMonth + " " + endMonth;
 
@@ -381,7 +432,7 @@ void LogicUpdater::normalEventsToString() {
 
 			Conversion convert;
 			int monthInt = normalEvents[i].getStartDate().tm_mon;
-			out << convert.intToMonth(monthInt);
+			out << intToMonth(monthInt);
 
 			out << " ";
 			out << normalEvents[i].getStartDate().tm_year + 1900;
@@ -389,7 +440,7 @@ void LogicUpdater::normalEventsToString() {
 			out << ", ";
 
 			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
-			out << convert.intToDayOfWeek(dayOfWeekInt);
+			out << intToDayOfWeek(dayOfWeekInt);
 
 			out << "]";
 			out << "===============================================";

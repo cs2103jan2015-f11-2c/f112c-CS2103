@@ -100,6 +100,9 @@ private:
 	bool setIsNew(int);
 	void setIsClash(int,int,int);
 
+	std::string intToDayOfWeek (int);
+	std::string intToMonth (int);
+
 	int getStartTime(Event);
 	int getEndTime(Event); 
 
