@@ -3,12 +3,15 @@
 #ifndef ICOMMAND_H
 #define ICOMMAND_H
 
+#include <fstream>
 #include "EventStorage.h"
-
+using std::ofstream;
 
 class ICommand {
 public:
 	static const int INVALID_NUMBER;
+	static const string LOG_FILE_NAME;
+
 	virtual void execute() = 0;
 	virtual vector<Event> getEventVector() = 0;
 	virtual Event getEvent() = 0;
@@ -16,10 +19,14 @@ public:
 
 	bool getIsFloating();
 	bool getIsComplete();
+	int getNumEvents(vector<Event> eventVec);
+
+	void log(string logString);
 
 protected:
 	bool isFloating;
-	bool isComplete;	
+	bool isComplete;
+	vector<string> logStrings;
 };
 
 

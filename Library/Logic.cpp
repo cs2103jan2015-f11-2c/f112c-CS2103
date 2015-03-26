@@ -180,6 +180,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 
 	case Parser::DELETE_: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
+		int numResults = commandPtr->getNumEvents(tempEvents);
 
 		if (!commandPtr->getIsComplete()) {
 			setEventVector(normalEvents, floatingEvents, tempEvents);
@@ -436,8 +437,5 @@ void Logic::log(string logString) {
 	for (int i = 0 ; i < logStrings.size() ; i++) {
 		outFile << logStrings[i] << endl;
 	}
-
 	outFile.close();
-
-	return;
 }

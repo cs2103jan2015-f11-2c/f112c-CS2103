@@ -2,6 +2,7 @@
 
 
 const int ICommand::INVALID_NUMBER = -1;
+const string ICommand::LOG_FILE_NAME = "CommandLog.txt";
 
 bool ICommand::getIsFloating() {
 	return isFloating;
@@ -11,6 +12,39 @@ bool ICommand::getIsComplete() {
 	return isComplete;
 }
 
+int ICommand::getNumEvents(vector<Event> eventVec) {
+	if(eventVec.empty()) {
+		return 0;
+	}
+	
+	int i = 0, count = 1;
+	vector<int> idVec;
+
+	while (eventVec[i].getID() > 0) {
+		i++;
+	}
+	idVec.push_back(eventVec[i].getID());
+
+	for (; i < eventVec.size() ; i++) {
+		if (eventVec[i].getID() > 0) {
+			if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) != idVec.end()) {
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+void ICommand::log(string logString) {
+	ofstream outFile(LOG_FILE_NAME);
+	
+	logStrings.push_back(logString);
+	for (int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+	outFile.close();
+
+}
 
 
 
@@ -56,13 +90,14 @@ void DeleteCommand::execute() {
 		return;
 	}
 	
-
 	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
-
-	switch (tempEvents.size()) {
+	int numResults = getNumEvents(tempEvents);
+	
+	switch (numResults) {
 	case 0: { //no exact match
 		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
-		switch (tempEvents.size()) {
+		numResults = getNumEvents(tempEvents);
+		switch (numResults) {
 		case 0: { //no partial match
 			Event invalidEvent;
 			invalidEvent.setFeedback(userEvent.getFeedback());
@@ -83,24 +118,16 @@ void DeleteCommand::execute() {
 		break;
 			}
 
-	case 1: { //1 exact floating match
-		isFloating = true;
-		userEvent = tempEvents[0];
-		deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
-		isComplete = true;
-		return;
-		break;
-			}
-
-	case 2: { //1 exact normal match or 2 exact floating match
-		if (tempEvents[0].getIsFloating()) {
+	case 1: { //1 exact match
+		if (tempEvents.size() == 1) {
 			isFloating = true;
-			goto Many_Exact_Match;
+			userEvent = tempEvents[0];
+			deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
+		} else {
+			isFloating = false;
+			userEvent = tempEvents[1];
+			deletedEvents = eventStore->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
 		}
-
-		isFloating = false;
-		userEvent = tempEvents[1];
-		deletedEvents = eventStore->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
 		isComplete = true;
 		return;
 		break;
