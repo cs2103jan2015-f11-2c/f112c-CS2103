@@ -19,6 +19,7 @@ public:
 
 	bool getIsFloating();
 	bool getIsComplete();
+	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
 
 	void log(string logString);
@@ -26,6 +27,7 @@ public:
 protected:
 	bool isFloating;
 	bool isComplete;
+	bool isUndoable;
 	vector<string> logStrings;
 };
 

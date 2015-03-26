@@ -18,6 +18,7 @@ public:
 
 	ICommand* execute(ICommand* command);
 	ICommand* undo();
+	ICommand* redo();
 };
 
 #endif

@@ -9,7 +9,9 @@ Executor::Executor() {
 
 ICommand* Executor::execute(ICommand* command) {
 	command->execute();
-	undoStack.push(command);
+	if (command->getIsUndoable()) {
+		undoStack.push(command);
+	}
 	return undoStack.top();
 }
 
@@ -18,5 +20,13 @@ ICommand* Executor::undo() {
 	redoStack.push(commandPtr);
 	commandPtr->undo();
 	undoStack.pop();
+	return commandPtr;
+}
+
+ICommand* Executor::redo() {
+	ICommand* commandPtr = redoStack.top();
+	undoStack.push(commandPtr);
+	commandPtr->execute();
+	redoStack.pop();
 	return commandPtr;
 }

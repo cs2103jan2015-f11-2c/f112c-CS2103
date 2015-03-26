@@ -10,6 +10,7 @@ const string Logic::CREATING_SHOWALL = "creating show all command";
 const string Logic::CREATING_SHOWFLOAT = "creating showfloat command";
 const string Logic::CREATING_SEARCH = "creating search command";
 const string Logic::CREATING_UNDO = "creating undo";
+const string Logic::CREATING_REDO = "creating redo";
 const string Logic::CASE_0 = "entered case 0";
 const string Logic::CASE_1 = "entered case 1";
 
@@ -145,6 +146,12 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 	case Parser::UNDO: {
 		log(CREATING_UNDO);
 		return executor.undo();
+		break;
+					   }
+
+	case Parser::REDO: {
+		log(CREATING_REDO);
+		return executor.redo();
 		break;
 					   }
 
@@ -370,7 +377,8 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		break;
 							}
 
-	case Parser::UNDO: {
+	case Parser::UNDO:
+	case Parser::REDO: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
 		setEventVector(normalEvents, floatingEvents, tempEvents);
 

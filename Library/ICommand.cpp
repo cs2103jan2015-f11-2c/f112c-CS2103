@@ -12,6 +12,10 @@ bool ICommand::getIsComplete() {
 	return isComplete;
 }
 
+bool ICommand::getIsUndoable() {
+	return isUndoable;
+}
+
 int ICommand::getNumEvents(vector<Event> eventVec) {
 	if(eventVec.empty()) {
 		return 0;
@@ -52,6 +56,7 @@ AddCommand::AddCommand(EventStorage* eventStorage, Event e) {
 	eventStore = eventStorage;
 	userEvent = e;
 	isComplete = false;
+	isUndoable = true;
 }
 
 void AddCommand::execute() {
@@ -80,6 +85,7 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 	id = eventID;
 	userEvent = e;
 	isComplete = false;
+	isUndoable = true;
 }
 
 void DeleteCommand::execute() {
@@ -152,6 +158,7 @@ Event DeleteCommand::getEvent() {
 }
 
 void DeleteCommand::undo() {
+	deletedEvents = eventStore->addEvent(userEvent);
 }
 
 
@@ -162,6 +169,8 @@ EditCommand::EditCommand(EventStorage* eventStorage, int eventID, Event toEdit, 
 	id = eventID;
 	eventToEdit = toEdit;
 	editedEvent = edited;
+	isComplete = false;
+	isUndoable = true;
 }
 
 void EditCommand::execute() {
@@ -235,6 +244,10 @@ Event EditCommand::getEvent() {
 }
 
 void EditCommand::undo() {
+	Event tempEvent = eventToEdit;
+	eventToEdit = editedResults[0];
+	editedResults.clear();
+	editedResults.push_back(tempEvent);
 }
 
 
