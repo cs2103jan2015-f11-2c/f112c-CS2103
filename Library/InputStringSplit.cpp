@@ -126,12 +126,16 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 	}
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find(eventName);
-	if(strCutIndex == std::string::npos || strCutIndex+eventName.size() == input.size()){
+	if(strCutIndex == std::string::npos){
 		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 	}
-	//if(strCutIndex+eventName.size() == input.size())
-	std::string tempStr = input.substr(input.find_first_not_of(" ;",strCutIndex+eventName.size()));
+	strCutIndex = input.find_first_not_of(" ;",strCutIndex+eventName.size());
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	}
+	std::string tempStr = input.substr(strCutIndex);
 	//assert not empty string
 	return tempStr;
 }

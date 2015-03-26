@@ -49,7 +49,7 @@ private:
 	Event tempEventStore;
 	std::string nameOfEvent;
 
-	static const int NUMBER_OF_KEYWORDS_COMMANDS = 7;
+	static const int NUMBER_OF_KEYWORDS_COMMANDS = 8;
 	std::string keywordCommands[NUMBER_OF_KEYWORDS_COMMANDS];
 
 public:

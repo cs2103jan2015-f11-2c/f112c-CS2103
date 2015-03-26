@@ -147,14 +147,10 @@ bool ParserProcessor::identifyDay(int index){
 		
 			if(strDay == "today" || strDay == "tdy"){
 				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
-				tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
 				startDayFound = true;
-				endDayFound = true;
 			} else if(strDay == "tomorrow" || strDay == "tmr"){
 				tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
-				tempEventStore.setEndDate(now->tm_mday+1,now->tm_mon,now->tm_year);
 				startDayFound = true;
-				endDayFound = true;
 			} else {
 				nowweekday = now->tm_wday;
 				weekday = convertor.dayOfWeekToInt(strDay);
@@ -165,9 +161,7 @@ bool ParserProcessor::identifyDay(int index){
 				}
 				tempIndex--;
 				if(fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt"){
-					if(weekday < nowweekday){
-						numWdaysApart = numWdaysApart + 7;
-					}
+					numWdaysApart = numWdaysApart + 7;
 				}
 				if(!startDayFound){
 					startDayFound = true;

@@ -7,10 +7,11 @@ Parser::Parser(std::string input)
 	keywordCommands[0] = "add";
 	keywordCommands[1] = "del";
 	keywordCommands[2] = "delete";
-	keywordCommands[3] = "show";
-	keywordCommands[4] = "search";
-	keywordCommands[5] = "undo";
-	keywordCommands[6] = "redo";
+	keywordCommands[3] = "edit";
+	keywordCommands[4] = "show";
+	keywordCommands[5] = "search";
+	keywordCommands[6] = "undo";
+	keywordCommands[7] = "redo";
 
 	logger.logParserStart(input);
 	original = input;
