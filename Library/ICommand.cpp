@@ -173,11 +173,13 @@ void EditCommand::execute() {
 	}
 
 	vector<Event> tempEvents = eventStore->checkExactString(eventToEdit.getName());
+	int numResults = getNumEvents(tempEvents);
 
-	switch (tempEvents.size()) {
+	switch (numResults) {
 	case 0: { //no exact match
 		tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
-		switch (tempEvents.size()) {
+		numResults = tempEvents.size();
+		switch (numResults) {
 		case 0: { //no partial match
 			Event invalidEvent;
 			invalidEvent.setFeedback(eventToEdit.getFeedback());
@@ -198,24 +200,16 @@ void EditCommand::execute() {
 		break;
 			}
 
-	case 1: { //1 exact floating match
+	case 1: { //1 exact match
+		if (tempEvents.size() == 1) {
 		isFloating = true;
 		eventToEdit = tempEvents[0];
 		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
-		isComplete = true;
-		return;
-		break;
-			}
-
-	case 2: { //1 exact normal match or 2 exact floating match
-		if (tempEvents[0].getIsFloating()) {
-			isFloating = true;
-			goto Many_Exact_Match;
+		} else {
+			isFloating = false;
+			eventToEdit = tempEvents[1];
+			editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
 		}
-
-		isFloating = false;
-		eventToEdit = tempEvents[1];
-		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
 		isComplete = true;
 		return;
 		break;
