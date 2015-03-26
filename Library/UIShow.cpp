@@ -156,16 +156,56 @@ bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
 	return isSingleDate;
 }
 
-std::string  UIShow::generateDisplayFromCalender(std::string currentMainDisplayLabel, std::string chosenDate){
-	if (currentMainDisplayLabel == "Commands"){
-		return "Commands";
-	}
+std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
+	 int i=0;
+	 Conversion convert;
+	
+	 std::string startDateDay = "";
+	 for (;std::isdigit(startDate[i]);i++){
+			startDateDay += startDate[i];
+	 }
 
-	if (currentMainDisplayLabel == "Help Introduction"){
-		return "help";
-	}
-	//Generate new command
+	 i++;
 
+	 std::string startDateMonth = "";
+	 for (; std::isdigit(startDate[i]);i++){
+		startDateMonth += startDate[i];
+	 }
+	 int startDateMonthNum = convert.stringToInt(startDateMonth);
+	 std::string startDateMonthString = convert.intToMonth(startDateMonthNum-1);
 
+	 i++;
+
+	 std::string startDateYear = "";
+	 for (; std::isdigit(startDate[i]);i++){
+		startDateYear += startDate[i];
+	 }
+
+	 i=0;
+	 std::string endDateDay = "";
+	  
+	 for (; std::isdigit(endDate[i]);i++){
+		 endDateDay += endDate[i];
+	 }
+
+	 i++;
+
+	 std::string endDateMonth = "";
+	 for (; std::isdigit(endDate[i]);i++){
+		 endDateMonth += endDate[i];
+	 }
+	 int endDateMonthNum = convert.stringToInt(endDateMonth);
+	 std::string endDateMonthString = convert.intToMonth(endDateMonthNum-1);
+
+	 i++;
+
+	 std::string endDateYear = "";
+	 for (; std::isdigit(endDate[i]);i++){
+		 endDateYear += endDate[i];
+	 }
+
+	 std::string command = COMMAND_SHOW + " " + startDateDay + startDateMonthString + " " + startDateYear + " to " + endDateDay + endDateMonthString + " " + endDateYear;
+	 
+	 return command;
 }
 

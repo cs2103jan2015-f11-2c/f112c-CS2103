@@ -73,9 +73,8 @@ public:
 	//This function takes in a string that contains that date(s) that is being displayed in the main display currently
 	//and the date selected in string form
 	//It returns the string which contain the command to display based on that it has received
-	//e.g. It takes in 10 Feb (first string) & 20 Feb (second string) It will return 20 Feb
-	//e.g. It takes in 10 Feb - 20 Feb (first string) & 1 Mar (second string), it will return 1 Mar - 10 Mar
-	//e.g. It takes in Mar(first string) & 10 Apr (second string); it will return month apr
+	//e.g. It takes in 10 Feb (first string) & 20 Feb (second string), it will return show 10feb to 20feb 2015
+
 	std::string generateDisplayFromCalender(std::string,std::string);
 
 };

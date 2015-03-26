@@ -19,9 +19,9 @@ namespace UnitTest
 
 		UIShow show;
 		
-		// As a convention, put [name of function] + [_Test]
+		// As a convention, put [name of class] + [_name of function] + [_Test]
 
-		TEST_METHOD(getShowDay_Test)
+		TEST_METHOD(UIShow_getShowDay_Test)
 		{
 			//Correct string	
 			std::string testCommandShowDay1 = show.getShowDay();
@@ -34,7 +34,7 @@ namespace UnitTest
 			Assert::AreNotEqual(samepleCommandShowDay2,testCommandShowDay2);
 		}
 
-		TEST_METHOD(countNumDays_Test){
+		TEST_METHOD(UIShow_countNumDays_Test){
 			time_t now;
 			struct tm front;
 			struct tm back;
@@ -53,7 +53,7 @@ namespace UnitTest
 			back.tm_mday = 10;
 			back.tm_year = 115;
 			testResult = show.countNumDays(front,back);
-
+			
 			//Case 1 : Correct number of days - 9
 			expectedResult = 9;
 			Assert::AreEqual(expectedResult,testResult);
@@ -61,7 +61,7 @@ namespace UnitTest
 			// Expected failing test
 			// Case 2: more than 9
 			expectedResult = 10;
-			Assert::AreNotEqual(expectedResult,testResult);
+			Assert::AreEqual(expectedResult,testResult);
 
 			// Expected failing test
 			// Case 3: less than 9
@@ -70,7 +70,7 @@ namespace UnitTest
 
 		}
 
-		TEST_METHOD(isSingleDay_Test){
+		TEST_METHOD(UIShow_isSingleDay_Test){
 			tm front;
 			tm back;
 			vector<tm> testVector;
@@ -131,6 +131,136 @@ namespace UnitTest
 			Assert::AreNotEqual(expectedResult,testResult);
 			testVector.clear();
 		}
+
+
+		TEST_METHOD(UIShow_convertFromTmToString_Test){
+			time_t now;
+			struct tm date;
+			std::string testResult;
+			std::string expectedResult;
+			
+
+			time(&now);
+			date = *localtime(&now);
+
+			//Correct case
+			date.tm_mon = 1; 
+			date.tm_mday = 1;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong dayofmonth
+			date.tm_mon = 2; 
+			date.tm_mday = 1;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong month
+			date.tm_mon = 2; 
+			date.tm_mday = 6;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong year
+			date.tm_mon = 2; 
+			date.tm_mday = 1;
+			date.tm_year = 118;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(UIShow_shiftDate_Test){
+			time_t now;
+			struct tm date;
+			tm testResult;
+			int expectedDay;
+			int expectedMonth;
+			int expectedYear;
+			
+			time(&now);
+			date = *localtime(&now);
+
+			date.tm_mday = 1;
+			date.tm_mon = 1; 
+			date.tm_year = 115;
+
+			//correct case : shifts dayOfMonth only
+			testResult = show.shiftDate(date,5);
+			expectedDay = 6;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+
+			//correct case : shifts dayOfMonth and Month
+			testResult = show.shiftDate(date,40);
+			expectedDay = 13;
+			expectedMonth = 2;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//correct case : shifts dayOfMonth and Month and Year
+			testResult = show.shiftDate(date,400);
+			expectedDay = 7;
+			expectedMonth = 2;
+			expectedYear = 116;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong dayOfMonth
+			testResult = show.shiftDate(date,5);
+			expectedDay = 2;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreNotEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong Month
+			testResult = show.shiftDate(date,40);
+			expectedDay = 13;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreNotEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong Year
+			testResult = show.shiftDate(date,400);
+			expectedDay = 7;
+			expectedMonth = 2;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreNotEqual(expectedYear, testResult.tm_year);
+
+		}
+
+		TEST_METHOD(UIShow_displayNext_Test){
+		
+		
+		
+		}
+
+		TEST_METHOD(UIShow_displayBack_Test){
+
+
+
+		}
+
+
 	};
 
 	//Unit test for UIHelp class

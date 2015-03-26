@@ -1166,54 +1166,23 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 //===================================================================================================================================================================
 
 
-private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {
-			 
+/*
+* =================================================================================================================================================================== 
+* Calender + front and back display buttons
+* ===================================================================================================================================================================
+*/
+private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
 			 //Start
 			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
-			 std::string startDate = convertTostd( tempStartDate );
-
-			 std::string startDateDay = "";
-			 int i=0;
-			 for (; std::isdigit(startDate[i]);i++){
-				 startDateDay += startDate[i];
-			 }
-
-			 i++;
-
-			 std::string startDateMonth = "";
-			 for (; std::isdigit(startDate[i]);i++){
-				 startDateMonth += startDate[i];
-			 }
-
-			 int startDateMonthNum = cVPtr->stringToInt(startDateMonth);
-			 std::string startDateMonthString = cVPtr->toLowerCase(cVPtr->intToMonth(startDateMonthNum-1));
+			 std::string startDate = convertTostd(tempStartDate);
 
 			 //end
 			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
-			 std::string endDate = convertTostd( tempEndDate );
+			 std::string endDate = convertTostd(tempEndDate);
 
-			 std::string endDateDay = "";
-			 i=0;
-			 for (; std::isdigit(endDate[i]);i++){
-				 endDateDay += endDate[i];
-			 }
-
-			 i++;
-
-			 std::string endDateMonth = "";
-			 for (; std::isdigit(endDate[i]);i++){
-				 endDateMonth += endDate[i];
-			 }
-
-			 int endDateMonthNum = cVPtr->stringToInt(endDateMonth);
-			 std::string endDateMonthString = cVPtr->toLowerCase(cVPtr->intToMonth(endDateMonthNum-1));
-
-
-			 std::string command = "show " + startDateDay + startDateMonthString + " to " + endDateDay + endDateMonthString;
-
+			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 
 			 executeUserInput(command);
-
 		 }
 
 private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -1236,6 +1205,16 @@ private: System::Void nextButton_Click(System::Object^  sender, System::EventArg
 			 
 			 executeUserInput(newShowCommand);
 		 }
+
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* My own test function
+* ===================================================================================================================================================================
+*/
+
 private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 
 			 std::string emails[4] = { "kangter@gmail.com","joshua.chejy@gmail.com","owj_88@hotmail.com" };
@@ -1259,5 +1238,7 @@ private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, Syst
 			 }
 
 		 }
+
+//===================================================================================================================================================================
 };
 }
