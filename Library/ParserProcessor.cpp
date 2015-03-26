@@ -149,8 +149,16 @@ bool ParserProcessor::identifyDay(int index){
 				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
 				startDayFound = true;
 			} else if(strDay == "tomorrow" || strDay == "tmr"){
-				tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
-				startDayFound = true;
+				if(!startDayFound){
+					tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
+					startDayFound = true;
+				} else if(!endDayFound){
+					tempEventStore.setEndDate(now->tm_mday+1,now->tm_mon,now->tm_year);
+					endDayFound = true;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+				}
 			} else {
 				nowweekday = now->tm_wday;
 				weekday = convertor.dayOfWeekToInt(strDay);
@@ -170,6 +178,7 @@ bool ParserProcessor::identifyDay(int index){
 					endDayFound = true;
 					tempEventStore.setEndDate(now->tm_mday+numWdaysApart,now->tm_mon,now->tm_year);
 				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
 					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 				}
 			}
