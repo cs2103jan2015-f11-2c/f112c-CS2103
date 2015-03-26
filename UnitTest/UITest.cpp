@@ -59,12 +59,12 @@ namespace UnitTest
 			Assert::AreEqual(expectedResult,testResult);
 
 			// Expected failing test
-			// Case 2: more than 9
+			// Case 2: boundary testing - more than 9
 			expectedResult = 10;
 			Assert::AreEqual(expectedResult,testResult);
 
 			// Expected failing test
-			// Case 3: less than 9
+			// Case 3: boundary testing - less than 9
 			expectedResult = 8;
 			Assert::AreNotEqual(expectedResult,testResult);
 
