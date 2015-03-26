@@ -61,7 +61,7 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
 	} else {
-		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1] + 1);
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
 		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
 		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);

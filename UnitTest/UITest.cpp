@@ -48,7 +48,7 @@ namespace UnitTest
 			back.tm_mon = 1;
 			back.tm_year = 1;
 
-			testResult = show.countNumDays(front,back);
+			testResult = show.countNumDays(back,front);
 
 			expectedResult = 5;
 
