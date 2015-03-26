@@ -147,6 +147,9 @@ void Event::setIsDeadline(bool deadline) {
 }
 
 void Event::setImportanceLevel(int importance) {
+	if(importance > 5){
+		importance = 5;
+	}
 	importanceLevel = importance;
 }
 

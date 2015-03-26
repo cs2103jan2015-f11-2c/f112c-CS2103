@@ -46,6 +46,7 @@ private:
 	bool afterTwelve;
 	bool nameFound;
 	bool toFound;
+	bool deadlineFound;
 
 	//boolean variables for Show command
 	//to check if Show is a range of days 
