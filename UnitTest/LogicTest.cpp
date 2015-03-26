@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "Logic.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -9,9 +10,11 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestMethod1)
+		TEST_METHOD(ExecuteUserInput)
 		{
-			// TODO: Your test code here
+			Logic logic;
+			Assert::AreEqual(logic.executeUserInput("add float;"), true);
+			Assert::AreEqual(logic.executeUserInput("add float"), false);
 		}
 
 	};

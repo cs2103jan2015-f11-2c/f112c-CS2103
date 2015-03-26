@@ -244,10 +244,17 @@ Event EditCommand::getEvent() {
 }
 
 void EditCommand::undo() {
-	Event tempEvent = eventToEdit;
-	eventToEdit = editedResults[0];
-	editedResults.clear();
-	editedResults.push_back(tempEvent);
+	int numEvents = getNumEvents(editedResults);
+
+	if (numEvents == 1) {
+		if (isFloating) {
+			eventStore->deleteEvent(editedResults[0].getID(), editedResults[0]);
+			editedResults = eventStore->addEvent(eventToEdit);
+		} else {
+			eventStore->deleteEvent(editedResults[1].getID(), editedResults[1]);
+			editedResults = eventStore->addEvent(eventToEdit);
+		}
+	}
 }
 
 
