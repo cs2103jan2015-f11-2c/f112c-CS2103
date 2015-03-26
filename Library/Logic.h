@@ -35,6 +35,7 @@ public:
 	static const string CREATING_SHOWALL;
 	static const string CREATING_SHOWFLOAT;
 	static const string CREATING_SEARCH;
+	static const string CREATING_UNDO;
 	static const string CASE_0;
 	static const string CASE_1;
 
