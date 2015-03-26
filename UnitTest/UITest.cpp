@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <ctime>
 
 // Please include the .cpp of the file you are testing, else there will be error
 #include "UIShow.cpp"
@@ -34,26 +35,38 @@ namespace UnitTest
 		}
 
 		TEST_METHOD(countNumDays_Test){
-			tm front;
-			tm back;
-			int expectedResult;
+			time_t now;
+			struct tm front;
+			struct tm back;
 			int testResult;
+			int expectedResult;
 
-			//stub
-			front.tm_mday = 10;
-			front.tm_mon = 1;
-			front.tm_year = 1;
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
 
-			back.tm_mday = 16;
-			back.tm_mon = 1;
-			back.tm_year = 1;
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
 
-			testResult = show.countNumDays(back,front);
-
-			expectedResult = 5;
-
+			//Case 1 : Correct number of days - 9
+			expectedResult = 9;
 			Assert::AreEqual(expectedResult,testResult);
 
+			// Expected failing test
+			// Case 2: more than 9
+			expectedResult = 10;
+			Assert::AreNotEqual(expectedResult,testResult);
+
+			// Expected failing test
+			// Case 3: less than 9
+			expectedResult = 8;
+			Assert::AreNotEqual(expectedResult,testResult);
 
 		}
 
