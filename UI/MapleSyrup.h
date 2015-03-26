@@ -743,8 +743,8 @@ private: void displayErrorString(){
 //Get the display vectors from Logic.h when invoked by function executeUserInput(). 
 //It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
 private:void displayToAllDisplays(){
-			vector<Display::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
-			vector<Display::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
+			vector<LogicUpdater::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
+			vector<LogicUpdater::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
 			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
 			std::string displayToMainLabel = lGPtr->getMainDisplayLabel();
 
@@ -779,7 +779,7 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 
 //Pre-condition : vector displayToMain to be correctly updated
 //Display information to main display
-private: void displayToMainDisplay( vector<Display::EVENT_STRING> displayToMain){
+private: void displayToMainDisplay( vector<LogicUpdater::EVENT_STRING> displayToMain){
 			display->Text = "";
 
 			for (int i=0; i< displayToMain.size(); i++){
@@ -823,7 +823,7 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
-private: void displayToFloatingDisplay(vector<Display::EVENT_STRING> displayToFloating){
+private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
 			floatingTasksDisplay->Text = "";
 
 				for (int i=0; i< displayToFloating.size(); i++){
@@ -967,7 +967,7 @@ private: void displayHelpIntroduction(){
 			 std::string toMainDisplayLabel = "Help Introduction";
 			 displayToMainDisplayLabel(toMainDisplayLabel);
 
-			 vector<Display::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
+			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
 			 displayToMainDisplay(helpIntroduction);
 		 }
 
@@ -976,7 +976,7 @@ private: void displayHelpCommands(){
 			 std::string toMainDisplayLabel = "Commands";
 			 displayToMainDisplayLabel(toMainDisplayLabel);
 
-			 vector<Display::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
+			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
 			 displayToMainDisplay(helpCommands);
 		 }
 

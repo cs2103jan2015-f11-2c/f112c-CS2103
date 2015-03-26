@@ -9,7 +9,7 @@
 #include <sstream>
 #include "Parser.h"
 #include "EventStorage.h"
-#include "Display.h"
+#include "LogicUpdater.h"
 #include "ICommand.h"
 #include "Executor.h"
 
@@ -21,7 +21,7 @@ class Logic {
 private:
 	Parser* parserPtr;
 	EventStorage eventStore;
-	Display display;
+	LogicUpdater updater;
 	Executor executor;
 	vector<string> logStrings;
 
@@ -35,6 +35,7 @@ public:
 	static const string CREATING_SHOWALL;
 	static const string CREATING_SHOWFLOAT;
 	static const string CREATING_SEARCH;
+	static const string CREATING_UNDO;
 	static const string CASE_0;
 	static const string CASE_1;
 
@@ -52,8 +53,8 @@ public:
 	//getters
 	EventStorage getEventStorage();
 
-	vector<Display::EVENT_STRING> getFloatingStrings();
-	vector<Display::EVENT_STRING> getMainStrings();
+	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
+	vector<LogicUpdater::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
 	vector<string> getErrorString();
 	string getMainDisplayLabel();

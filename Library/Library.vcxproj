@@ -64,7 +64,7 @@
   <ItemGroup>
     <ClCompile Include="CommandSuggestion.cpp" />
     <ClCompile Include="Conversion.cpp" />
-    <ClCompile Include="Display.cpp" />
+    <ClCompile Include="LogicUpdater.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventArchive.cpp" />
     <ClCompile Include="EventLog.cpp" />
@@ -85,7 +85,7 @@
   <ItemGroup>
     <ClInclude Include="CommandSuggestion.h" />
     <ClInclude Include="Conversion.h" />
-    <ClInclude Include="Display.h" />
+    <ClInclude Include="LogicUpdater.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventArchive.h" />
     <ClInclude Include="EventLog.h" />

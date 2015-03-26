@@ -21,6 +21,8 @@ private:
 	tm startDateTime;
 	tm endDateTime;
 	bool isFloating;
+	bool isDeadline;
+	int importanceLevel;
 
 	vector<string> tags;
 	string description;
@@ -41,6 +43,8 @@ public:
 	struct tm getStartDate();
 	struct tm getEndDate();
 	bool getIsFloating();
+	bool getIsDeadline();
+	int getImportanceLevel();
 	vector<string> getTags();
 	string getDescription();
 	string getFeedback();
@@ -55,6 +59,8 @@ public:
 	void setEndTime(int hour, int minute);
 	void setStartWeekday(int weekday);
 	void setIsFloating(bool floating);
+	void setIsDeadline(bool deadline);
+	void setImportanceLevel(int importance);
 	void setTags(vector<string> userTags);
 	void setDescription(string desc);
 	void setFeedback(string feedbackToUser);

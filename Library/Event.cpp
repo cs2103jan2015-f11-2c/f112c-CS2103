@@ -11,6 +11,8 @@ Event::Event() {
 	startDateTime.tm_sec = 0;
 	endDateTime.tm_sec = 0;
 	isFloating = false;
+	isDeadline = false;
+	importanceLevel = 0;
 	feedback = "";
 	ID = time(0);
 }
@@ -80,6 +82,14 @@ bool Event::getIsFloating() {
 	return isFloating;
 }
 
+bool Event::getIsDeadline() {
+	return isDeadline;
+}
+
+int Event::getImportanceLevel() {
+	return importanceLevel;
+}
+
 vector<string> Event::getTags() {
 	return tags;
 }
@@ -130,6 +140,14 @@ void Event::setStartWeekday(int weekday){
 
 void Event::setIsFloating(bool floating) {
 	isFloating = floating;
+}
+
+void Event::setIsDeadline(bool deadline) {
+	isDeadline = deadline;
+}
+
+void Event::setImportanceLevel(int importance) {
+	importanceLevel = importance;
 }
 
 void Event::setTags(vector<string> userTags){

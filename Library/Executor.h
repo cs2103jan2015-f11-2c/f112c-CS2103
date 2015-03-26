@@ -17,7 +17,7 @@ public:
 	Executor();
 
 	ICommand* execute(ICommand* command);
-
+	ICommand* undo();
 };
 
 #endif

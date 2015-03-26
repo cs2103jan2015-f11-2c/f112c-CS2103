@@ -5,8 +5,8 @@
 
 #pragma once
 
-#ifndef DISPLAY_H
-#define DISPLAY_H
+#ifndef LOGIC_UPDATER
+#define LOGIC_UPDATER
 
 #include <assert.h>
 #include <sstream>
@@ -17,7 +17,7 @@
 using std::ostringstream;
 
 
-class Display {
+class LogicUpdater {
 public:
 	struct EVENT_STRING {
 		string eventString;
@@ -54,7 +54,7 @@ public:
 	static const string NEW_DAY_MESSAGE;
 
 	//constructor, destructor
-	Display();
+	LogicUpdater();
 	//~Display();
 
 public: 

@@ -8,7 +8,7 @@
 
 #include <assert.h>
 
-#include "Display.h"
+#include "LogicUpdater.h"
 
 class UIHelp
 {
@@ -41,10 +41,10 @@ public:
 	//public getter
 
 	//Return a short introduction/teaching guide to user
-	std::vector<Display::EVENT_STRING> getHelpIntroduction();
+	std::vector<LogicUpdater::EVENT_STRING> getHelpIntroduction();
 	
 	//Return a list of commands to user
-	std::vector<Display::EVENT_STRING> getHelpCommands();
+	std::vector<LogicUpdater::EVENT_STRING> getHelpCommands();
 
 	
 private:
@@ -59,7 +59,7 @@ private:
 	std::string getHelpRedo();
 	std::string getHelpExit();
 
-	Display::EVENT_STRING convertToEventString(std::string);
+	LogicUpdater::EVENT_STRING convertToEventString(std::string);
 
 };
 

@@ -33,7 +33,11 @@
     <ClCompile Include="Conversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Display.cpp">
+=======
+    <ClCompile Include="Search.cpp">
+>>>>>>> 9ba3a5859ad35306e52c5be8d2304587ec48e1c5
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommandSuggestion.cpp">
@@ -69,6 +73,7 @@
     <ClCompile Include="Executor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="EventArchive.cpp">
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
@@ -83,6 +88,10 @@
     </ClCompile>
     <ClCompile Include="Search.cpp">
       <Filter>Source Files\Storage</Filter>
+=======
+    <ClCompile Include="LogicUpdater.cpp">
+      <Filter>Source Files</Filter>
+>>>>>>> 9ba3a5859ad35306e52c5be8d2304587ec48e1c5
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +102,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Conversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommandSuggestion.h">
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Search.h">
       <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicUpdater.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -53,21 +53,20 @@ public:
 	//e.g. It takes in Mar. It will return Feb
 	std::string displayBack(std::string, std::vector<tm>);
 
-	int countNumDays(tm, tm);
 
-	void initializeTime(tm);
-
-	std::string convertFromTmToStr(tm);
-
-	bool checkIsSingleDate(std::vector<tm>);
+	//Private:
 
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
 	// Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
 
+	std::string convertFromTmToStr(tm);
 
+	int countNumDays(tm, tm);
 
-
+	void initializeTime(tm);
+	
+	bool checkIsSingleDate(std::vector<tm>);
 //===================================================================================================================================================================
 	//Pre-condition : Non
 	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
