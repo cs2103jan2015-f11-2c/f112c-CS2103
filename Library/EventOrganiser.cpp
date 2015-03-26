@@ -128,9 +128,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			temp->tm_mon = wantedEventDates[i].tm_mon;
 			temp->tm_year = wantedEventDates[i].tm_year;
 			mktime(temp);
-
 			marker.setStartDate(temp->tm_mday, temp->tm_mon, temp->tm_year);
-			marker.setStartWeekday(temp->tm_wday);
 			
 			returnVector.push_back(marker);
 			isPushed = false;  //reset bool

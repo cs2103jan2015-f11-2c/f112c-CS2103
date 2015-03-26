@@ -57,7 +57,6 @@ public:
 	void setEndDate(int day, int month, int year);
 	void setStartTime(int hour, int minute);
 	void setEndTime(int hour, int minute);
-	void setStartWeekday(int weekday);
 	void setIsFloating(bool floating);
 	void setIsDeadline(bool deadline);
 	void setImportanceLevel(int importance);

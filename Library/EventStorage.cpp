@@ -143,8 +143,8 @@ vector<Event> EventStorage::checkMultipleResults(string eventName){
 	vector<Event> eventVector, floatingEventVector;
 	Event eventWithStartEndDates;
 
-	floatingEventVector = search.searchForEventWithEventName(eventName, currentFloatingContent);
-	eventVector = search.searchForEventWithEventName(eventName, currentContent);
+	floatingEventVector = search.searchEventWithName(eventName, currentFloatingContent);
+	eventVector = search.searchEventWithName(eventName, currentContent);
 
 	eventWithStartEndDates = eventOrganiser.dateRange(eventVector);
 	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
@@ -164,8 +164,8 @@ vector<Event> EventStorage::checkExactString(string eventName){
 	vector<Event> eventVector, floatingEventVector;
 	Event eventWithStartEndDates;
 
-	floatingEventVector = search.searchExactEventName(eventName, currentFloatingContent);
-	eventVector = search.searchExactEventName(eventName, currentContent);
+	floatingEventVector = search.searchExactName(eventName, currentFloatingContent);
+	eventVector = search.searchExactName(eventName, currentContent);
 	eventWithStartEndDates = eventOrganiser.dateRange(eventVector); //refracter
 	eventVector = eventOrganiser.showDateRange(eventWithStartEndDates,eventVector);
 
@@ -190,7 +190,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 	//assert(eventID != INVALID);
 	//Normal Case
 	logger.logStoragePosition("entering search");
-	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent);
+	indexOfEventID = search.searchIndexWithID(eventID,currentContent);
 	logger.logStorageIntData("getting index from currentContent",indexOfEventID);
 	if(indexOfEventID > INVALID){ 
 		eventToBeDeleted = currentContent[indexOfEventID];
@@ -198,7 +198,7 @@ vector<Event> EventStorage::deleteEvent(int eventID, Event eventToBeDeleted){
 		currentContent.erase(currentContent.begin() + indexOfEventID);
 		returnToLogicVector = showDates(eventToBeDeleted);	
 	} else{ //Floating Case
-		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
+		indexOfEventID = search.searchIndexWithID(eventID,currentFloatingContent);
 		if(indexOfEventID > INVALID){
 			logger.logStorageStringData("deleteFloat",eventToBeDeleted.getName());
 			eventToBeDeleted = currentFloatingContent[indexOfEventID];
@@ -229,7 +229,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	}
 	assert(eventID != INVALID);
 	//Normal Case
-	indexOfEventID = search.searchForIndexWithEventID(eventID,currentContent); //how to change to floating?
+	indexOfEventID = search.searchIndexWithID(eventID,currentContent); //how to change to floating?
 	if(indexOfEventID > INVALID){ 
 		logger.logStorageStringData("editNormal",eventToBeEdited.getName());
 		if(editedEvent.getName() != ""){
@@ -255,7 +255,7 @@ vector<Event> EventStorage::editEvent(int eventID, Event eventToBeEdited, Event 
 	}
 	else{ //Floating Case
 		logger.logStorageStringData("editFloating",eventToBeEdited.getName());
-		indexOfEventID = search.searchForIndexWithEventID(eventID,currentFloatingContent);
+		indexOfEventID = search.searchIndexWithID(eventID,currentFloatingContent);
 		if(indexOfEventID > INVALID){
 			if(editedEvent.getName() != ""){
 				(currentFloatingContent[indexOfEventID]).setName(editedEvent.getName());		

@@ -21,10 +21,10 @@ public:
 	~Search(void);
 
 	//Methods
-	int searchForIndexWithEventID(int eventID, vector<Event> eventVectorToSearch);
-	vector<Event> searchForEventWithEventName(string eventName, vector<Event> eventVectorToSearch);
+	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
+	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchAllComponentsOfEvent(string informationToSearch, vector<Event> contentToSearch);
-	vector<Event> searchExactEventName(string eventName, vector<Event> eventVectorToSearch);
+	vector<Event> searchExactName(string eventName, vector<Event> eventVectorToSearch);
 
 //	vector<int> searchForIdWithEventName(string eventName, vector<Event> eventVectorToSearch);
 
