@@ -94,7 +94,7 @@ namespace UnitTest
 			testEvent3.setIsFloating(false);
 			testEvent3.setID(1426225532);
 
-			testEvent4.setName("event4");
+			testEvent4.setName("event3");
 			testEvent4.setStartDate(11,3,15);
 			testEvent4.setEndDate(12,3,15);
 			testEvent4.setStartTime(2,30);
@@ -110,11 +110,12 @@ namespace UnitTest
 			vector<Event> result, expected;
 			/*Successful search returns vector of events*/
 			expected.push_back(testEvent3);
+			expected.push_back(testEvent4);
 			result = search.searchEventWithName("event3",testCurrentContent);
 			Assert::AreEqual(expected,result);
 			/* Unsuccessful search returns empty vector */
 			expected.clear();
-			result = search.searchIndexWithID(000,testCurrentContent);
+			result = search.searchEventWithName("inexistentEvent",testCurrentContent);
 			Assert::AreEqual(expected,result);
 		}
 	};
