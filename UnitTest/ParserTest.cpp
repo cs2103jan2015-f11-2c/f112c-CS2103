@@ -3,6 +3,7 @@
 #include "Parser.cpp"
 #include "InputStringSplit.cpp"
 #include "ParserProcessor.cpp"
+#include "ParserExceptions.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
