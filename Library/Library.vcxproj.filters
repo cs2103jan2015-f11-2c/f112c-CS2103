@@ -60,16 +60,25 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandSuggestion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Conversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EventLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="EventArchive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventLog.h">
+    <ClInclude Include="Executor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventOrganiser.h">
@@ -78,16 +87,10 @@
     <ClInclude Include="EventStorage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Executor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ICommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputStringSplit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Logic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogicUpdater.h">
@@ -96,16 +99,16 @@
     <ClInclude Include="Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParserExceptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ParserLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParserProcessor.h">
+    <ClInclude Include="ParserExceptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Search.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParserProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIHelp.h">
@@ -114,16 +117,13 @@
     <ClInclude Include="UIShow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandSuggestion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{f71ea326-f854-41a1-9616-961aa2017bf1}</UniqueIdentifier>
+      <UniqueIdentifier>{36e04dae-f0f1-4127-921f-c4fd9b150eab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{0b4b645d-c3c6-4795-92cf-f6a8f867ca78}</UniqueIdentifier>
+      <UniqueIdentifier>{712338d2-63f9-4bb1-839b-f2de14d58179}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
