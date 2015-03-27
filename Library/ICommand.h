@@ -27,6 +27,7 @@ public:
 	bool getIsComplete();
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
+	Event createInvalidEvent();
 
 	void log(string logString);
 	void log(int logInt);

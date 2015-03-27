@@ -37,6 +37,12 @@ int ICommand::getNumEvents(vector<Event> eventVec) {
 	return count;
 }
 
+Event ICommand::createInvalidEvent() {
+	Event invalidEvent;
+	invalidEvent.setID(INVALID_NUMBER);
+	return invalidEvent;
+}
+
 void ICommand::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 	
