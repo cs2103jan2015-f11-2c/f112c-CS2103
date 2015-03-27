@@ -12,8 +12,6 @@
 
 class ParserProcessor {
 private:
-	ParserLog logger;
-
 	static const std::string PROCESS_ADD_EVENT;
 	static const std::string PROCESS_EDIT_EVENT;
 	static const std::string IDENTIFY_EVENT_NAME;
@@ -64,31 +62,48 @@ private:
 	bool userShowRangeOfMonths;
 
 	Event tempEventStore;
+	ParserLog logger;
+	std::vector<std::string> fragmentedWords;
 	struct tm* now;
 
-	std::vector<std::string> fragmentedWords;
-
 public:
+	struct timeSet {
+		int hour;
+		int minute;
+	};
+
 	ParserProcessor();
 
 	Event processAddEvent(std::vector<std::string>);
 	Event processEditEvent(std::vector<std::string>);
+	
 	bool identifyEventName(int);
-	bool identifyDeadline(int);
 	bool identifyDay(int);
+
 	bool identifyDate(int);
-	bool identifyTime(int);
-	bool identifyImportance(int);
 	int checkYear(int,int*);
 	int checkDay(int,int*);
 	int checkDayTo(int,int*);
 	void assignDate(int,int,int,int);
+
+	bool identifyTime(int);
+	int extractFirstTimeInteger(int,int*);
+	timeSet extractHourMin(int,int,int*);
+	timeSet extractHourMinTo(int,int*);
+	void assignTime(timeSet,timeSet);
+
+	bool identifyDeadline(int);
+	bool identifyImportance(int);
+
 	void addEventCorrector();
 	void editEventCorrector();
 	void eventMktimeCorrector();
 
 	Event processShowEvent(std::vector<std::string>);
-	bool checkShowFirstWord(std::string);
+	bool checkSystemBasedShow(std::string);
+	bool identifyShowDate(int);
+	int checkShowDay(int,int*);
+	void assignShowDate(int,int,int);
 };
 
 #endif
