@@ -389,6 +389,7 @@ vector<Event> NullCommand::getEventVector() {
 
 Event NullCommand::getEvent() {
 	Event e;
+	e.setID(INVALID_NUMBER);
 	return e;
 }
 
