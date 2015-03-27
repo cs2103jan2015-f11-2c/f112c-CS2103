@@ -1250,11 +1250,17 @@ private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, Syst
 */
 
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+			 displayToMainDisplayLabel("Search Mode");
 		 
-		 
-		 
-		 
-		 
+			 String^ tempToBeSearched = searchBox->Text;
+			 std::string toBeSearched = convertTostd(tempToBeSearched);
+
+			 std::string COMMAND_SEARCH = "search";
+
+			 std::string searchCommand = COMMAND_SEARCH + " " + toBeSearched;
+
+			 executeUserInput(searchCommand);
+
 		 }
 
 

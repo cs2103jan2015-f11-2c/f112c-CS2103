@@ -46,11 +46,15 @@ std::string UIShow::getShowFloat(){
 
 std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
 	if (currentMainDisplayLabel == "Commands"){
-		return "Commands";
+		return "";
 	}
 
 	if (currentMainDisplayLabel == "Help Introduction"){
-		return "help";
+		return "";
+	}
+
+	if (currentMainDisplayLabel == "Search Mode"){
+		return "";
 	}
 
 	std::string newShowCommand = "";
@@ -75,13 +79,18 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
 	//show back the same stuffs
 	if (currentMainDisplayLabel == "Commands"){
-		return "Commands";
+		return "";
 	}
 
 	if (currentMainDisplayLabel == "Help Introduction"){
-		return "help";
+		return "";
+	}
+
+	if (currentMainDisplayLabel == "Search Mode"){
+		return "";
 	}
 	
+
 	std::string newShowCommand = "";
 
 	//function to check whether it is single or multiple day
