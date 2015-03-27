@@ -90,7 +90,6 @@ AddCommand::AddCommand(EventStorage* eventStorage, Event e) {
 }
 
 void AddCommand::execute() {
-	int newID = userEvent.getID();
 	addedEvents = eventStore->addEvent(userEvent);
 	isExecuted = true;
 }
@@ -177,10 +176,7 @@ void DeleteCommand::execute() {
 		numResults = getNumEvents(tempEvents);
 		switch (numResults) {
 		case 0: { //no partial match
-			Event invalidEvent;
-			invalidEvent.setFeedback(userEvent.getFeedback());
-			invalidEvent.setID(INVALID_NUMBER);
-			deletedEvents.push_back(invalidEvent);
+			deletedEvents.push_back(createInvalidEvent());
 			isExecuted = true;
 			return;
 			break;
@@ -262,10 +258,7 @@ void EditCommand::execute() {
 		numResults = tempEvents.size();
 		switch (numResults) {
 		case 0: { //no partial match
-			Event invalidEvent;
-			invalidEvent.setFeedback(eventToEdit.getFeedback());
-			invalidEvent.setID(INVALID_NUMBER);
-			editedResults.push_back(invalidEvent);
+			editedResults.push_back(createInvalidEvent());
 			isExecuted = true;
 			return;
 			break;
@@ -432,7 +425,6 @@ Event ShowFloatCommand::getEvent() {
 
 void ShowFloatCommand::undo() {
 }
-
 
 
 
