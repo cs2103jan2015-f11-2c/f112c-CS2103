@@ -318,7 +318,7 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			floatingEvents = updater.getFloatingEvents();
 			tmVec.push_back(normalEvents[0].getStartDate());
 			tmVec.push_back(normalEvents[0].getEndDate());
-			id = normalEvents[1].getID();
+			id = normalEvents[0].getID();
 		}
 		Event oldEvent = commandPtr->getEvent();
 		string feedback = oldEvent.getName() + LogicUpdater::EDITED_MESSAGE;
