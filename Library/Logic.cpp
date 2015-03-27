@@ -89,6 +89,10 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		break;
 						   }
 
+	/*case Parser::COMPLETE: {
+		break;
+						   }*/
+
 	case Parser::DELETE_: {
 		log(CREATING_DELETE);
 		int id = convertNameToID(nameOfEvent);
@@ -173,29 +177,32 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent, bool& isDone) {
 	switch (command) {
-	case Parser::ADD: {
-		vector<Event> normalEvents = commandPtr->getEventVector();
-		vector<Event> floatingEvents = updater.getFloatingEvents();
-		string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
-		vector<tm> tmVec;
-		tmVec.push_back(userEvent.getStartDate());
-		tmVec.push_back(userEvent.getEndDate());
-		int id = userEvent.getID();
-
-		updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
-		break;
-					  }
-
+	case Parser::ADD: 
 	case Parser::ADDFLOAT: {		
-		vector<Event> normalEvents = updater.getNormalEvents();
-		vector<Event> floatingEvents = commandPtr->getEventVector();
+		vector<Event> normalEvents, floatingEvents;
+		vector<tm> tmVec;
+
+		if (commandPtr->getIsFloating()) {
+			normalEvents = updater.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+			tmVec = updater.getTempMainDisplayLabel();
+		} else {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = updater.getFloatingEvents();
+			tmVec.push_back(userEvent.getStartDate());
+			tmVec.push_back(userEvent.getEndDate());
+		}
+
 		string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
-		vector<tm> tmVec = updater.getTempMainDisplayLabel();
 		int id = userEvent.getID();
 
 		updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
 						   }
+
+	/*case Parser::COMPLETE: {
+		break;
+						   }*/
 
 	case Parser::DELETE_: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
@@ -397,11 +404,19 @@ void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event u
 	case Parser::REDO: {
 		if (commandPtr->getEvent().getID() == INVALID_NUMBER) {
 			isDone = false;
+			delete commandPtr;
+			commandPtr = NULL;
 			return;
 		}
 
-		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-		setEventVector(normalEvents, floatingEvents, tempEvents);
+		vector<Event> normalEvents, floatingEvents;
+		if (commandPtr->getIsFloating()) {
+			normalEvents = updater.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+		} else {
+			normalEvents = commandPtr->getEventVector();
+			floatingEvents = updater.getFloatingEvents();
+		}
 
 		string feedback;
 		if (command == Parser::UNDO) {
@@ -450,7 +465,7 @@ void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vecto
 	}
 
 	unsigned int i = 0;
-
+	//push all floating events from original into floating vector
 	while (original[i].getName() != LogicUpdater::NEW_DAY_MESSAGE) {
 		floating.push_back(original[i]);
 		i++;
@@ -458,7 +473,7 @@ void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vecto
 			return;
 		}
 	}
-
+	//remaining events are normal, push them into normal vector
 	for (; i < original.size() ; i++) {
 		normal.push_back(original[i]);
 	}

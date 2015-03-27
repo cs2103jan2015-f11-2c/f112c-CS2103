@@ -16,19 +16,25 @@ using std::ostringstream;
 class Command {
 public:
 	static const int INVALID_NUMBER;
+	static const int EMPTY;
+	static const int SIZE_ONE;
+
 	static const string LOG_FILE_NAME;
 
+	//virtual methods
 	virtual void execute() = 0;
 	virtual vector<Event> getEventVector() = 0;
 	virtual Event getEvent() = 0;
 	virtual void undo() = 0;
 
+	//common methods
 	bool getIsFloating();
 	bool getIsExecuted();
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
 	Event createInvalidEvent();
 
+	//logging methods
 	void log(string logString);
 	void log(int logInt);
 	void log(string logString, int logInt);
@@ -60,7 +66,6 @@ public:
 
 
 
-/*
 class CompleteCommand : public Command {
 private:
 	EventStorage* eventStore;
@@ -75,7 +80,6 @@ public:
 	Event getEvent();
 	void undo();
 };
-*/
 
 
 
@@ -93,6 +97,8 @@ public:
 	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
+
+	void deleteImmediately();
 };
 
 
@@ -111,6 +117,8 @@ public:
 	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
+
+	void editImmediately();
 };
 
 
@@ -172,6 +180,22 @@ private:
 
 public:
 	ShowFloatCommand(EventStorage* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+class ShowImportanceCommand : public Command {
+private:
+	EventStorage* eventStore;
+	vector<Event> eventsToShow;
+
+public:
+	ShowImportanceCommand(EventStorage* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
