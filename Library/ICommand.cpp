@@ -17,6 +17,7 @@ bool ICommand::getIsUndoable() {
 }
 
 int ICommand::getNumEvents(vector<Event> eventVec) {
+	//remove marker events
 	for (int i = 0 ; i < eventVec.size() ; i++) {
 		if (eventVec[i].getID() < 0) {
 			eventVec.erase(eventVec.begin() + i);
@@ -26,13 +27,13 @@ int ICommand::getNumEvents(vector<Event> eventVec) {
 	int count = 0;
 	vector<int> idVec;
 
+	//only count events with different ID
 	for (int i = 0 ; i < eventVec.size() ; i++) {
 		if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) == idVec.end() ) {
 			idVec.push_back(eventVec[i].getID());
 			count++;
 		}
 	}
-
 	return count;
 }
 
@@ -59,6 +60,18 @@ void ICommand::log(int logInt) {
 	outFile.close();
 }
 
+void ICommand::log(string logString, int logInt) {
+	ostringstream outString;
+	outString << " " << logInt;
+
+	ofstream outFile(LOG_FILE_NAME);
+	
+	logStrings.push_back(logString + outString.str());
+	for (int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+	outFile.close();
+}
 
 
 
@@ -99,6 +112,7 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 }
 
 void DeleteCommand::execute() {
+	//if id found in current display, delete immediately
 	if (id > 0) {
 		isFloating = userEvent.getIsFloating();
 		deletedEvents = eventStore->deleteEvent(id, userEvent);
@@ -135,11 +149,11 @@ void DeleteCommand::execute() {
 			}
 
 	case 1: { //1 exact match
-		if (tempEvents.size() == 1) {
+		if (tempEvents.size() == 1) { //1 floating match
 			isFloating = true;
 			userEvent = tempEvents[0];
 			deletedEvents = eventStore->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
-		} else {
+		} else { //1 normal match
 			isFloating = false;
 			userEvent = tempEvents[1];
 			deletedEvents = eventStore->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
@@ -220,11 +234,11 @@ void EditCommand::execute() {
 			}
 
 	case 1: { //1 exact match
-		if (tempEvents.size() == 1) {
+		if (tempEvents.size() == 1) { //1 floating match
 		isFloating = true;
 		eventToEdit = tempEvents[0];
 		editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
-		} else {
+		} else { //1 normal match
 			isFloating = false;
 			eventToEdit = tempEvents[1];
 			editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
@@ -256,11 +270,12 @@ Event EditCommand::getEvent() {
 void EditCommand::undo() {
 	int numEvents = getNumEvents(editedResults);
 
+	//numEvents = 1, means event successfully edited, stored in vector
 	if (numEvents == 1) {
-		if (isFloating) {
+		if (isFloating) { //delete edited floating event, add original floating event
 			eventStore->deleteEvent(editedResults[0].getID(), editedResults[0]);
 			editedResults = eventStore->addEvent(eventToEdit);
-		} else {
+		} else { //delete edited normal event, add original normal event
 			eventStore->deleteEvent(editedResults[1].getID(), editedResults[1]);
 			editedResults = eventStore->addEvent(eventToEdit);
 		}

@@ -30,6 +30,7 @@ public:
 
 	void log(string logString);
 	void log(int logInt);
+	void log(string logString, int logInt);
 
 protected:
 	bool isFloating;

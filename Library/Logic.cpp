@@ -315,17 +315,17 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 			return;
 		}
 
-		//normal 
-		if (commandPtr->getIsFloating()) {
+		//successful edit 
+		if (commandPtr->getIsFloating()) { //floating event edited
 			normalEvents = updater.getNormalEvents();
 			floatingEvents = commandPtr->getEventVector();
 			tmVec = updater.getTempMainDisplayLabel();
 			id = floatingEvents[0].getID();
-		} else {
+		} else { //normal event edited
 			normalEvents = commandPtr->getEventVector();
 			floatingEvents = updater.getFloatingEvents();
-			tmVec.push_back(normalEvents[0].getStartDate());
-			tmVec.push_back(normalEvents[0].getEndDate());
+			tmVec.push_back(normalEvents[1].getStartDate());
+			tmVec.push_back(normalEvents[1].getEndDate());
 			id = normalEvents[1].getID();
 		}
 		Event oldEvent = commandPtr->getEvent();
