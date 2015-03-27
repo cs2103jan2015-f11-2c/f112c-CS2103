@@ -336,7 +336,23 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 			}
 		}
 
-		//Case 3 exactly same timeslot
+		//Case 3
+		if (newEventStartTime < checkEventStartTime  && checkEventStartTime < newEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+
+		//Case 4
+		if (newEventStartTime < checkEventEndTime && checkEventEndTime < newEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+
+		//Case 5 exactly same timeslot
 		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime){
 			if (normalEvents[i].getID() != newID){
 				mainDisplayStrings[i].isClash = true;
