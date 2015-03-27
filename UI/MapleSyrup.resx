@@ -247,13 +247,13 @@
     <value>On</value>
   </data>
   <data name="display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 61</value>
+    <value>240, 95</value>
   </data>
   <data name="display.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
     <value>ForcedVertical</value>
   </data>
   <data name="display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>692, 462</value>
+    <value>692, 428</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
     <value>999</value>
@@ -263,6 +263,9 @@
   </data>
   <data name="display.ToolTip" xml:space="preserve">
     <value>Main Display</value>
+  </data>
+  <data name="display.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;display.Name" xml:space="preserve">
     <value>display</value>
@@ -277,7 +280,7 @@
     <value>22</value>
   </data>
   <data name="floatingTasksDisplay.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Arial, 9.75pt</value>
+    <value>Arial, 12pt</value>
   </data>
   <data name="floatingTasksDisplay.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 95</value>
@@ -337,13 +340,13 @@
     <value>18</value>
   </data>
   <data name="mainDisplayLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 12pt, style=Bold</value>
+    <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="mainDisplayLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 12</value>
+    <value>243, 61</value>
   </data>
   <data name="mainDisplayLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>281, 22</value>
+    <value>404, 26</value>
   </data>
   <data name="mainDisplayLabel.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>

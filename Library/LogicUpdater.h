@@ -52,6 +52,15 @@ public:
 	static const string EVENT_NOT_FOUND_MESSAGE;
 	static const string CHOOSE_EVENT_MESSAGE;
 	static const string NEW_DAY_MESSAGE;
+	static const string UNDO_MESSAGE;
+	static const string REDO_MESSAGE;
+
+	static const string WORD_TODAY;
+	static const string WORD_YESTERDAY;
+	static const string WORD_TOMORROW;
+
+	static const string WORD_ALLDAY;
+
 
 	//constructor, destructor
 	LogicUpdater();
@@ -107,6 +116,13 @@ private:
 	int getEndTime(Event); 
 
 	string intToTime (int);
+
+	bool isToday(tm);
+
+	bool isTomorrow(tm);
+
+	bool isAllDay(Event);
+
 
 	//Currently not in use
 	void setFeedbackEvents(vector<Event> events);

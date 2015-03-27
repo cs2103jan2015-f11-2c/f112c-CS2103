@@ -266,6 +266,7 @@ namespace UI {
 			this->searchBox->ForeColor = System::Drawing::SystemColors::InfoText;
 			this->searchBox->Name = L"searchBox";
 			this->toolTip1->SetToolTip(this->searchBox, resources->GetString(L"searchBox.ToolTip"));
+			this->searchBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::searchBox_TextChanged);
 			// 
 			// display
 			// 
@@ -1240,5 +1241,24 @@ private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, Syst
 		 }
 
 //===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Search function and related functions that will be used in Search Mode
+* ===================================================================================================================================================================
+*/
+
+private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		 
+		 
+		 
+		 
+		 
+		 }
+
+
+//===================================================================================================================================================================
+
 };
 }

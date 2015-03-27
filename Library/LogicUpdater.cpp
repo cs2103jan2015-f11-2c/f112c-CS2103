@@ -11,6 +11,15 @@ const string LogicUpdater::SHOW_MESSAGE = "showing ";
 const string LogicUpdater::EVENT_NOT_FOUND_MESSAGE = " not found, showing partial matches";
 const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select one from above via index.";
 const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";
+const string LogicUpdater::UNDO_MESSAGE = " undo";
+const string LogicUpdater::REDO_MESSAGE = " redo";
+
+
+const string LogicUpdater::WORD_TODAY = "Today";
+const string LogicUpdater::WORD_YESTERDAY = "Yesterday";
+const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
+
+const string LogicUpdater::WORD_ALLDAY = "All Day";
 
 //constructor
 LogicUpdater::LogicUpdater() {
@@ -262,19 +271,63 @@ std::string LogicUpdater::intToDayOfWeek (int dayInNum){
 		return "Invalid day";
 	}
 }
+
+bool LogicUpdater::isToday(tm date){
+	bool isDateToday = false;
+
+	//Initialize date & time to today according to system
+	time_t now = time(0);
+	struct tm today = *localtime(&now);
+
+	if (today.tm_mday == date.tm_mday && today.tm_mon == date.tm_mon && today.tm_year == date.tm_year){
+		isDateToday = true;
+	}
+
+	return isDateToday;
+}
+
+bool LogicUpdater::isTomorrow(tm date){
+	bool isDateTomorrow = false;
+
+	//Initialize date to tomorrow
+	time_t now = time(0);
+	struct tm tomorrow = *localtime(&now);
+	tomorrow.tm_mday ++;
+
+	mktime(&tomorrow);
+
+	if (tomorrow.tm_mday == date.tm_mday && tomorrow.tm_mon == date.tm_mon && tomorrow.tm_year == date.tm_year){
+		isDateTomorrow = true;
+	}
+
+	return isDateTomorrow;
+}
+
 void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 	assert(label.size()==2);
 
+	//Clear past data
+	mainDisplayLabel = "";
+
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
 		//1 day only
+		if (isToday (label[0])){
+			string commandToday = "[" + WORD_TODAY + "] ";
+			mainDisplayLabel += commandToday;
+		}
+
+		if (isTomorrow (label[0])){
+			string commandTomorrow = "[" + WORD_TOMORROW + "] ";
+			mainDisplayLabel += commandTomorrow;
+		}
+
 		Conversion convert;
 		string dayOfMonth = convert.intToString(label[0].tm_mday);
-
 		string month = intToMonth(label[0].tm_mon);
-
 		string dayOfWeek = intToDayOfWeek(label[0].tm_wday);
-
-		mainDisplayLabel = dayOfMonth + " " + month + ", " + dayOfWeek;
+		string dateInString = dayOfMonth + " " + month + ", " + dayOfWeek;
+		
+		mainDisplayLabel += dateInString;
 	} else {
 		//More than 1 day
 		Conversion convert;
@@ -410,6 +463,22 @@ std::string LogicUpdater::intToTime (int timeInInt){
 	return oss.str();
 }
 
+bool LogicUpdater::isAllDay(Event eventToDisplay){
+	bool isAllDayEvent = false;
+	
+	int startTime = getStartTime(eventToDisplay);
+	string startTimeInString = intToTime(startTime);
+
+	int endTime = getEndTime(eventToDisplay);
+	string endTimeInString = intToTime(endTime);
+
+	if (startTimeInString == "0am"  && endTimeInString == "11:59pm"){
+		isAllDayEvent = true;
+	}
+
+	return isAllDayEvent;
+}
+
 void LogicUpdater::normalEventsToString() {
 	mainDisplayStrings.clear();
 
@@ -459,7 +528,7 @@ void LogicUpdater::normalEventsToString() {
 			out << intToDayOfWeek(dayOfWeekInt);
 
 			out << "]";
-			out << "===============================================";
+			out << "==============================================================";
 			out << "\n";
 		} 
 		 //Generate event list
@@ -469,14 +538,22 @@ void LogicUpdater::normalEventsToString() {
 
 			out << (++indexForNormalEvents) << "." ;
 			out << "\t" ;
-			out << "[" ;
-			int startTime = getStartTime(normalEvents[i]);
-			out << intToTime(startTime);
-			out << "-" ;
-			int endTime = getEndTime(normalEvents[i]);
-			out << intToTime(endTime);
+
+			out << "[";
+			if (isAllDay(normalEvents[i])){
+				out << "          ";
+				out << WORD_ALLDAY;
+				out << "          ";
+			} else{
+				int startTime = getStartTime(normalEvents[i]);
+				out << intToTime(startTime);
+				out << "-" ;
+				int endTime = getEndTime(normalEvents[i]);
+				out << intToTime(endTime);
+			}
 			out << "]" ;
-			out << "\t";
+			
+			out << "    ";
 			out << normalEvents[i].getName();
 		
 			if (normalEvents[i].getDescription() != ""){
