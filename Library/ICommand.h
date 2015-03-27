@@ -3,9 +3,15 @@
 #ifndef ICOMMAND_H
 #define ICOMMAND_H
 
+#include <algorithm>
 #include <fstream>
+#include <sstream>
 #include "EventStorage.h"
+
+using std::find;
 using std::ofstream;
+using std::ostringstream;
+
 
 class ICommand {
 public:
@@ -23,6 +29,7 @@ public:
 	int getNumEvents(vector<Event> eventVec);
 
 	void log(string logString);
+	void log(int logInt);
 
 protected:
 	bool isFloating;
@@ -90,11 +97,11 @@ public:
 class SearchCommand : public ICommand {
 private:
 	EventStorage* eventStore;
-	Event userSearchEvent;
+	string searchString;
 	vector<Event> searchResults;
 
 public:
-	SearchCommand(EventStorage* eventStorage, Event e);
+	SearchCommand(EventStorage* eventStorage, string s);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -152,7 +159,7 @@ public:
 
 
 
-/*
+
 class NullCommand : public ICommand {
 private:
 
@@ -163,6 +170,6 @@ public:
 	Event getEvent();
 	void undo();
 };
-*/
+
 
 #endif

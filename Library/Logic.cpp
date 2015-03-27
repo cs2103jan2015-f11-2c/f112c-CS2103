@@ -119,6 +119,14 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 		break;
 					   }
 
+	case Parser::SEARCH: {
+		log(CREATING_SEARCH);
+
+		ICommand* searchCommand = new SearchCommand(&eventStore, nameOfEvent);
+		return executor.execute(searchCommand);
+		break;
+						 }
+
 	case Parser::SHOW: {
 		log(CREATING_SHOW);
 		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
@@ -326,6 +334,17 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 		updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
 		break;
 					   }
+
+	case Parser::SEARCH: {
+		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
+		setEventVector(normalEvents, floatingEvents, tempEvents);
+		
+		string feedback = "";
+		vector<tm> tmVec = updater.getTempMainDisplayLabel();
+
+		updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
+		break;
+						 }
 
 	case Parser::SHOW: {
 		vector<Event> normalEvents = commandPtr->getEventVector();

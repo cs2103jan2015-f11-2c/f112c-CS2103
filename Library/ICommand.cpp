@@ -17,25 +17,22 @@ bool ICommand::getIsUndoable() {
 }
 
 int ICommand::getNumEvents(vector<Event> eventVec) {
-	if(eventVec.empty()) {
-		return 0;
-	}
-	
-	int i = 0, count = 1;
-	vector<int> idVec;
-
-	while (eventVec[i].getID() > 0) {
-		i++;
-	}
-	idVec.push_back(eventVec[i].getID());
-
-	for (; i < eventVec.size() ; i++) {
-		if (eventVec[i].getID() > 0) {
-			if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) != idVec.end()) {
-				count++;
-			}
+	for (int i = 0 ; i < eventVec.size() ; i++) {
+		if (eventVec[i].getID() < 0) {
+			eventVec.erase(eventVec.begin() + i);
 		}
 	}
+
+	int count = 0;
+	vector<int> idVec;
+
+	for (int i = 0 ; i < eventVec.size() ; i++) {
+		if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) == idVec.end() ) {
+			idVec.push_back(eventVec[i].getID());
+			count++;
+		}
+	}
+
 	return count;
 }
 
@@ -47,8 +44,21 @@ void ICommand::log(string logString) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
-
 }
+
+void ICommand::log(int logInt) {
+	ostringstream outString;
+	outString << logInt;
+
+	ofstream outFile(LOG_FILE_NAME);
+	
+	logStrings.push_back(outString.str());
+	for (int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+	outFile.close();
+}
+
 
 
 
@@ -98,7 +108,7 @@ void DeleteCommand::execute() {
 	
 	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
 	int numResults = getNumEvents(tempEvents);
-	
+
 	switch (numResults) {
 	case 0: { //no exact match
 		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
@@ -260,13 +270,14 @@ void EditCommand::undo() {
 
 
 
-SearchCommand::SearchCommand(EventStorage* eventStorage, Event e) {
+SearchCommand::SearchCommand(EventStorage* eventStorage, string s) {
 	eventStore = eventStorage;
-	userSearchEvent = e;
+	searchString = s;
 	isUndoable = false;
 }
 
 void SearchCommand::execute() {
+	searchResults = eventStore->checkMultipleResults(searchString);
 }
 
 vector<Event> SearchCommand::getEventVector() {
@@ -274,7 +285,8 @@ vector<Event> SearchCommand::getEventVector() {
 }
 
 Event SearchCommand::getEvent() {
-	return userSearchEvent;
+	Event emptyEvent;
+	return emptyEvent;
 }
 
 void SearchCommand::undo() {
@@ -361,7 +373,7 @@ void ShowFloatCommand::undo() {
 
 
 
-/*
+
 NullCommand::NullCommand() {
 	isComplete = false;
 	isUndoable = false;
@@ -381,4 +393,4 @@ Event NullCommand::getEvent() {
 }
 
 void NullCommand::undo() {
-}*/
+}

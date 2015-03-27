@@ -18,6 +18,10 @@ ICommand* Executor::execute(ICommand* command) {
 }
 
 ICommand* Executor::undo() {
+	if(undoStack.empty()) {
+		return new NullCommand;
+	}
+	
 	ICommand* commandPtr = undoStack.top();
 	redoStack.push(commandPtr);
 	commandPtr->undo();
@@ -26,6 +30,10 @@ ICommand* Executor::undo() {
 }
 
 ICommand* Executor::redo() {
+	if(redoStack.empty()) {
+		return new NullCommand;
+	}
+
 	ICommand* commandPtr = redoStack.top();
 	undoStack.push(commandPtr);
 	commandPtr->execute();
