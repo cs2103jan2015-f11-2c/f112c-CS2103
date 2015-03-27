@@ -397,15 +397,19 @@ void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event 
 	case Parser::REDO: {
 		if (commandPtr->getEvent().getID() == INVALID_NUMBER) {
 			isDone = false;
-			//string feedback = ???
-			//updater.setFeedbackStrings(feedback);
-			//return;
+			return;
 		}
-		
+
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
 		setEventVector(normalEvents, floatingEvents, tempEvents);
 
-		string feedback = "";
+		string feedback;
+		if (command == Parser::UNDO) {
+			feedback = LogicUpdater::UNDO_MESSAGE;
+		} else {
+			feedback = LogicUpdater::REDO_MESSAGE;
+		}
+
 		vector<tm> tmVec;
 		if (normalEvents.empty()) { //no normal events to show
 			tmVec = updater.getTempMainDisplayLabel();
