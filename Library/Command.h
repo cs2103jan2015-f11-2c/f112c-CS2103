@@ -24,7 +24,7 @@ public:
 	virtual void undo() = 0;
 
 	bool getIsFloating();
-	bool getIsComplete();
+	bool getIsExecuted();
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
 	Event createInvalidEvent();
@@ -35,7 +35,7 @@ public:
 
 protected:
 	bool isFloating;
-	bool isComplete;
+	bool isExecuted;
 	bool isUndoable;
 	vector<string> logStrings;
 };
@@ -56,6 +56,26 @@ public:
 	Event getEvent();
 	void undo();
 };
+
+
+
+
+/*
+class CompleteCommand : public Command {
+private:
+	EventStorage* eventStore;
+	int id;
+	Event userEvent;
+	vector<Event> completedEvents;
+
+public:
+	CompleteCommand(EventStorage* eventStorage, int eventID, Event userEvent);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+*/
 
 
 

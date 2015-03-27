@@ -200,7 +200,7 @@ void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event u
 	case Parser::DELETE_: {
 		vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
-		if (!commandPtr->getIsComplete()) {
+		if (!commandPtr->getIsExecuted()) {
 			setEventVector(normalEvents, floatingEvents, tempEvents);
 
 			//more than 1 exact match
@@ -218,7 +218,7 @@ void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event u
 
 			//at least 1 partial match
 			if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
-				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+				string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 
 				vector<tm> tmVec;
 				if (normalEvents.empty()) { //no normal events to show
@@ -268,7 +268,7 @@ void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event u
 		vector<tm> tmVec;
 		int id;
 
-		if (!commandPtr->getIsComplete()) {
+		if (!commandPtr->getIsExecuted()) {
 			setEventVector(normalEvents, floatingEvents, tempEvents);
 
 			//more than 1 exact match
@@ -449,7 +449,7 @@ void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vecto
 		return;
 	}
 
-	int i = 0;
+	unsigned int i = 0;
 
 	while (original[i].getName() != LogicUpdater::NEW_DAY_MESSAGE) {
 		floating.push_back(original[i]);
@@ -472,7 +472,7 @@ void Logic::deleteParserPtr() {
 
 //OTHERS
 bool Logic::isNumber(string s) {
-	for (int i = 0 ; i < s.size() ; i++) {
+	for (unsigned int i = 0 ; i < s.size() ; i++) {
 		if (!isdigit(s[i])) {
 			return false;
 		}
@@ -497,7 +497,7 @@ void Logic::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString);
-	for (int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();

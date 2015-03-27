@@ -50,6 +50,7 @@ public:
 	static const string DELETED_MESSAGE;
 	static const string SHOW_MESSAGE;
 	static const string EVENT_NOT_FOUND_MESSAGE;
+	static const string PARTIAL_EVENT_FOUND_MESSAGE;
 	static const string CHOOSE_EVENT_MESSAGE;
 	static const string NEW_DAY_MESSAGE;
 	static const string UNDO_MESSAGE;
