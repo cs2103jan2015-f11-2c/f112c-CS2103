@@ -22,20 +22,25 @@ private:
 	tm endDateTime;
 	bool isFloating;
 	bool isDeadline;
+	bool isCompleted;
 	int importanceLevel;
-
-	vector<string> tags;
-	string description;
 	string feedback;
 	int ID; //based on system time
+
+
+	//unused
+	vector<string> tags;
+	string description;
 
 public:
 	//constructors
 	Event();
+	/*
 	Event(string name);
 	Event(string eventName, int day, int month, int year);
 	Event(string eventName, int day, int month, int year, int startTime);
 	Event(string eventName, int day, int month, int year, int startTime, int endTime);
+	*/
 
 
 	//getters
@@ -44,6 +49,7 @@ public:
 	struct tm getEndDate();
 	bool getIsFloating();
 	bool getIsDeadline();
+	bool getIsCompleted();
 	int getImportanceLevel();
 	vector<string> getTags();
 	string getDescription();
@@ -61,12 +67,13 @@ public:
 	void setIsFloating(bool floating);
 	void setIsDeadline(bool deadline);
 	void setImportanceLevel(int importance);
-	void setTags(vector<string> userTags);
-	void setDescription(string desc);
 	void setFeedback(string feedbackToUser);
 	void setID(int number);
 
-	void editEvent(int startTime, int endTime);
+
+	//unused
+	void setTags(vector<string> userTags);
+	void setDescription(string desc);
 	
 
 };

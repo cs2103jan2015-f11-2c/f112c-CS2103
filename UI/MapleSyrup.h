@@ -751,7 +751,7 @@ public: bool isOdd (int num){
 //Display feedback to feedbackBox
 private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 			feedbackBox->Text = "";
-			for (int i=0; i< displayToFeedback.size(); i++){
+			for (unsigned int i = 0; i< displayToFeedback.size(); i++){
 					String^ temp = convertToSys(displayToFeedback[i]);
 					feedbackBox->Text += temp + "\n" ;
 				}
@@ -764,7 +764,7 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 private: void displayToMainDisplay( vector<LogicUpdater::EVENT_STRING> displayToMain){
 			display->Text = "";
 
-			for (int i=0; i< displayToMain.size(); i++){
+			for (unsigned int i = 0; i < displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
 
 				if(displayToMain[i].isNew && displayToMain[i].isClash){
@@ -808,7 +808,7 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
 			floatingTasksDisplay->Text = "";
 
-				for (int i=0; i< displayToFloating.size(); i++){
+				for (unsigned int i = 0; i < displayToFloating.size(); i++){
 					String^ temp = convertToSys(displayToFloating[i].eventString);
 					if (displayToFloating[i].isNew){
 						floatingTasksDisplay->SelectionColor = Color::Green;
@@ -978,7 +978,7 @@ private: void displaySuggestion(std::vector<std::string> suggestion){
 			suggestBar->Visible = true;
 			suggestBar->Items->Clear();
 
-			for (int i=0; i< suggestion.size();i++){
+			for (unsigned int i = 0; i < suggestion.size();i++){
 					std::string temp = suggestion[i];
 					String^ toAdd = convertToSys(temp);
 					

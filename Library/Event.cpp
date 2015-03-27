@@ -12,6 +12,7 @@ Event::Event() {
 	endDateTime.tm_sec = 0;
 	isFloating = false;
 	isDeadline = false;
+	isCompleted = false;
 	importanceLevel = 0;
 	feedback = "";
 	ID = time(0);
@@ -19,6 +20,7 @@ Event::Event() {
 
 
 //useless constructors
+/*
 Event::Event(string eventName) : name(eventName) {
 }
 
@@ -63,6 +65,7 @@ Event::Event(string eventName, int day, int month, int year, int startTime, int 
 	endDateTime.tm_hour = endTime;
 	mktime(&endDateTime);
 }
+*/
 
 
 //getters
@@ -84,6 +87,10 @@ bool Event::getIsFloating() {
 
 bool Event::getIsDeadline() {
 	return isDeadline;
+}
+
+bool Event::getIsCompleted() {
+	return isCompleted;
 }
 
 int Event::getImportanceLevel() {
@@ -167,9 +174,4 @@ void Event::setFeedback(string feedbackToUser) {
 
 void Event::setID(int number) {
 	ID = number;
-}
-
-void Event::editEvent(int startTime, int endTime) {
-	startDateTime.tm_hour = startTime;
-	endDateTime.tm_hour = endTime;
 }
