@@ -195,7 +195,7 @@ void LogicUpdater::floatingEventsToString() {
 	
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		ostringstream out;
-		out << (i + 1) << "." << " " << floatingEvents[i].getName();
+		out << (i + 1) << "." << floatingEvents[i].getName();
 		
 		EVENT_STRING temp;
 		temp.eventString = out.str();
@@ -440,24 +440,26 @@ std::string LogicUpdater::intToTime (int timeInInt){
 		hours = hours - 12;
 		afterTwelve = true;
 	}
-	
-	if(afterTwelve){
-		oss << hours;
 
-		if (minutes >0){
-		oss << ":";
+	if(hours >= 10){
+		oss << hours;
+	} else{
+		oss << "0";
+		oss << hours;
+	}
+
+	oss << ":";
+
+	if(minutes >= 10){
 		oss << minutes;
-		}
-			
+	} else{
+		oss << "0";
+		oss << minutes;
+	}
+
+	if(afterTwelve){		
 		oss << "pm";
 	} else {
-		oss << hours;
-
-		if (minutes >0){
-		oss << ":";
-		oss << minutes;
-		}
-		
 		oss << "am";
 	}
 	
@@ -554,9 +556,22 @@ void LogicUpdater::normalEventsToString() {
 			}
 			out << "]" ;
 			
-			out << "    ";
-			out << normalEvents[i].getName();
+			out << "\t";
+
+			std::string nameOfEvent = normalEvents[i].getName();
+
+			while( nameOfEvent.size() > 35 ){
+				out << nameOfEvent.substr(0,35);
+				out << "\n";
+				out << "\t\t\t\t";
+				nameOfEvent = nameOfEvent.substr(35);
+			}
+
+			out << nameOfEvent;
+
+			
 		
+			/*
 			if (normalEvents[i].getDescription() != ""){
 				out << " ";
 				out << "(";
@@ -574,6 +589,7 @@ void LogicUpdater::normalEventsToString() {
 					out << " "; 
 				}	
 			}
+			*/
 		}
 		toBePushed.eventString = out.str();
 

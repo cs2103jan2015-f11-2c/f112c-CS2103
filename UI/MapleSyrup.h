@@ -74,6 +74,12 @@ namespace UI {
 
 
 
+
+
+
+
+
+
 	private: System::Windows::Forms::Button^  nextButton;
 
 	public:
@@ -590,6 +596,12 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			initializeShortcut();
 
 			loadData();
+			/*
+			listView1->Items->Add ("hello1");
+			listView1->Items[0]->SubItems->Add ("hello1212sdfghjnbggfhfdsertyhgbgdfsertybvdfertyjnhgbfdvsefrtynhgsdfferygfsdewr4te5rhgfdewrtyjbgdfewrt5ryyhdsferthdgfdtrbyjydrduumtubyddrftg \t yrtdbytrbytrnytdnytrdyndtrnytrnyr123456");
+			listView1->Items->Add ("hello11");
+			listView1->Items[1]->SubItems->Add ("hello123");
+			*/
 }
 
 private: void loadData(){
@@ -1285,7 +1297,10 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 searchBox->Text = "";
 			 displayToMainDisplayLabel("Search Mode exited");
+
+			 
 		 }
 //===================================================================================================================================================================			 
+
 };
 }
