@@ -108,7 +108,7 @@ void Parser::tokenizeOriginalString(){
 		}
 		logger.logParserSuccess(original);
 	} catch (ParserExceptions& e){
-		tempEventStore.setFeedback(e.getfeedback());
+		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
 		typeOfCommand = Parser::ERROR_;
 		logger.logParserFailure(original);
 	}
@@ -132,4 +132,49 @@ bool Parser::checkCommandUndoRedo(){
 		isUndoRedo = true;
 	}
 	return isUndoRedo;
+}
+
+std::string Parser::createFeedback(std::string errorCode){
+	if(errorCode == ParserExceptions::ERROR_MISSING_INPUT){
+		return "Error: Missing input.";
+	}
+	if(errorCode == ParserExceptions::ERROR_NO_NAME){
+		return "Error: No event name found. Please type ';' after an event name.";
+	}
+	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DATES){
+		return "Error: Too many date inputs detected.";
+	}
+	if(errorCode == ParserExceptions::ERROR_TOO_MANY_TIMES){
+		return "Error: Too many time inputs detected.";
+	}
+	if(errorCode == ParserExceptions::ERROR_MISSING_DAY){
+		return "Error: No day input found before month.";
+	}
+	if(errorCode == ParserExceptions::ERROR_UNUSED_INTEGERS){
+		return "Error: Wrong formatting, not all information has been successfully recorded.";
+	}
+	if(errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN){
+		return "Error: No hour/minute input before am/pm.";
+	}
+	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DEL){
+		return "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
+	}
+	if(errorCode == ParserExceptions::ERROR_MISSING_INDEX){
+		return "Error: No event index or event name found. Please type ';' after the event name.";
+	}
+	if(errorCode == ParserExceptions::ERROR_INSUFFICIENT_INFO){
+		return "Error: Not enough information to execute command.";
+	}
+	if(errorCode == ParserExceptions::ERROR_UNKNOWN_COMMAND){
+		return "Error: Unknown command.";
+	}
+	if(errorCode == ParserExceptions::ERROR_UNKNOWN_DATE){
+		return "Error: Unknown date input.";
+	}
+	if(errorCode == ParserExceptions::ERROR_UNKNOWN_HOUR){
+		return "Error: Invalid hour input for time.";
+	}
+	if(errorCode == ParserExceptions::ERROR_UNKNOWN_MINUTE){
+		return "Error: Invalid minutes input for time.";
+	}
 }

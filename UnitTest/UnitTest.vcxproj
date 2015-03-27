@@ -87,7 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LogicTest.cpp" />
-    <ClCompile Include="ParserTest.cpp" />
+    <ClCompile Include="InputStringSplitTest.cpp" />
+    <ClCompile Include="ParserProcessorTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

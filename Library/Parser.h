@@ -66,6 +66,7 @@ public:
 	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
 	bool checkCommandExist();
 	bool checkCommandUndoRedo();
+	std::string createFeedback(std::string);
 };		
 
 #endif

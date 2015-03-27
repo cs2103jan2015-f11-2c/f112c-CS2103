@@ -8,7 +8,7 @@
 
 class ParserExceptions {
 private:
-	std::string feedback;
+	std::string exceptionCode;
 
 public:
 	static const std::string ERROR_MISSING_INPUT;
@@ -28,7 +28,7 @@ public:
 	
 	ParserExceptions(std::string);
 
-	std::string getfeedback();
+	std::string getExceptionCode();
 };
 
 #endif
