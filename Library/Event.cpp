@@ -153,6 +153,10 @@ void Event::setIsDeadline(bool deadline) {
 	isDeadline = deadline;
 }
 
+void Event::setIsCompleted(bool completed) {
+	isCompleted = completed;
+}
+
 void Event::setImportanceLevel(int importance) {
 	if(importance > 5){
 		importance = 5;

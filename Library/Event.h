@@ -66,6 +66,7 @@ public:
 	void setStartWeekday(int weekday);
 	void setIsFloating(bool floating);
 	void setIsDeadline(bool deadline);
+	void setIsCompleted(bool completed);
 	void setImportanceLevel(int importance);
 	void setFeedback(string feedbackToUser);
 	void setID(int number);
