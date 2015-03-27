@@ -10,12 +10,13 @@ namespace UnitTest
 	{
 	public:
 		
+		//equivalence partitions: empty string, string comprising only digits, string comprising digits and nondigits
 		TEST_METHOD(Logic_isNumber_Test)
 		{
 			Logic logic;
-			//
+			//only digits partition
 			Assert::AreEqual(logic.isNumber("3"), true);
-			//
+			//both digits and nondigits partition
 			Assert::AreEqual(logic.isNumber("3a"), false);
 		}
 
