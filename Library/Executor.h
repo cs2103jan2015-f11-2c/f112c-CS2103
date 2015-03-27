@@ -4,21 +4,21 @@
 #define EXECUTOR_H
 
 #include <stack>
-#include "ICommand.h"
+#include "Command.h"
 
 using std::stack;
 
 
 class Executor {
 private:
-	stack<ICommand*> undoStack, redoStack;
+	stack<Command*> undoStack, redoStack;
 
 public:
 	Executor();
 
-	ICommand* execute(ICommand* command);
-	ICommand* undo();
-	ICommand* redo();
+	Command* execute(Command* command);
+	Command* undo();
+	Command* redo();
 };
 
 #endif

@@ -7,7 +7,7 @@ Executor::Executor() {
 	}
 }
 
-ICommand* Executor::execute(ICommand* command) {
+Command* Executor::execute(Command* command) {
 	command->execute();
 
 	if (command->getIsUndoable()) {
@@ -17,24 +17,24 @@ ICommand* Executor::execute(ICommand* command) {
 	return command;
 }
 
-ICommand* Executor::undo() {
+Command* Executor::undo() {
 	if(undoStack.empty()) {
 		return new NullCommand;
 	}
 	
-	ICommand* commandPtr = undoStack.top();
+	Command* commandPtr = undoStack.top();
 	redoStack.push(commandPtr);
 	commandPtr->undo();
 	undoStack.pop();
 	return commandPtr;
 }
 
-ICommand* Executor::redo() {
+Command* Executor::redo() {
 	if(redoStack.empty()) {
 		return new NullCommand;
 	}
 
-	ICommand* commandPtr = redoStack.top();
+	Command* commandPtr = redoStack.top();
 	undoStack.push(commandPtr);
 	commandPtr->execute();
 	redoStack.pop();

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef ICOMMAND_H
-#define ICOMMAND_H
+#ifndef COMMAND_H
+#define COMMAND_H
 
 #include <algorithm>
 #include <fstream>
@@ -13,7 +13,7 @@ using std::ofstream;
 using std::ostringstream;
 
 
-class ICommand {
+class Command {
 public:
 	static const int INVALID_NUMBER;
 	static const string LOG_FILE_NAME;
@@ -43,7 +43,7 @@ protected:
 
 
 
-class AddCommand : public ICommand {
+class AddCommand : public Command {
 private:
 	EventStorage* eventStore;
 	Event userEvent;
@@ -60,7 +60,7 @@ public:
 
 
 
-class DeleteCommand : public ICommand {
+class DeleteCommand : public Command {
 private:
 	EventStorage* eventStore;
 	int id;
@@ -78,7 +78,7 @@ public:
 
 
 
-class EditCommand : public ICommand {
+class EditCommand : public Command {
 private:
 	EventStorage* eventStore;
 	int id;
@@ -96,7 +96,7 @@ public:
 
 
 
-class SearchCommand : public ICommand {
+class SearchCommand : public Command {
 private:
 	EventStorage* eventStore;
 	string searchString;
@@ -113,7 +113,7 @@ public:
 
 
 
-class ShowCommand : public ICommand {
+class ShowCommand : public Command {
 private:
 	EventStorage* eventStore;
 	Event eventRangeToShow;
@@ -130,7 +130,7 @@ public:
 
 
 
-class ShowAllCommand : public ICommand {
+class ShowAllCommand : public Command {
 private:
 	EventStorage* eventStore;
 	vector<Event> eventsToShow;
@@ -145,7 +145,7 @@ public:
 
 
 
-class ShowFloatCommand : public ICommand {
+class ShowFloatCommand : public Command {
 private:
 	EventStorage* eventStore;
 	vector<Event> eventsToShow;
@@ -162,7 +162,7 @@ public:
 
 
 
-class NullCommand : public ICommand {
+class NullCommand : public Command {
 private:
 
 public:

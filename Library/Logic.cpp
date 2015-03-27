@@ -71,7 +71,7 @@ bool Logic::executeUserInput(string input) {
 	string nameOfEvent = parserPtr->getNameOfEvent();
 	bool isDone = true;
 
-	ICommand* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
+	Command* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
 	setDisplay(commandPtr, commandType, userEvent, nameOfEvent, isDone);
 
 	deleteParserPtr();
@@ -79,12 +79,12 @@ bool Logic::executeUserInput(string input) {
 	return isDone;
 }
 
-ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
+Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
 		log(CREATING_ADD);
-		ICommand* addCommand = new AddCommand(&eventStore, userEvent);
+		Command* addCommand = new AddCommand(&eventStore, userEvent);
 		return executor.execute(addCommand);
 		break;
 						   }
@@ -99,7 +99,7 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 			eventToDelete = updater.getEventFromID(id);
 		}
 
-		ICommand* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
+		Command* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
 		return executor.execute(deleteCommand);
 		break;
 						  }
@@ -114,7 +114,7 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 			eventToEdit = updater.getEventFromID(id);
 		}
 
-		ICommand* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
+		Command* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
 		return executor.execute(editCommand);
 		break;
 					   }
@@ -122,28 +122,28 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 	case Parser::SEARCH: {
 		log(CREATING_SEARCH);
 
-		ICommand* searchCommand = new SearchCommand(&eventStore, nameOfEvent);
+		Command* searchCommand = new SearchCommand(&eventStore, nameOfEvent);
 		return executor.execute(searchCommand);
 		break;
 						 }
 
 	case Parser::SHOW: {
 		log(CREATING_SHOW);
-		ICommand* showCommand = new ShowCommand(&eventStore, userEvent);
+		Command* showCommand = new ShowCommand(&eventStore, userEvent);
 		return executor.execute(showCommand);
 		break;
 					   }
 
 	case Parser::SHOWALL: {
 		log(CREATING_SHOWALL);
-		ICommand* showAllCommand = new ShowAllCommand(&eventStore);
+		Command* showAllCommand = new ShowAllCommand(&eventStore);
 		return executor.execute(showAllCommand);
 		break;
 						  }
 
 	case Parser::SHOWFLOAT: {
 		log(CREATING_SHOWFLOAT);
-		ICommand* showFloatCommand = new ShowFloatCommand(&eventStore);
+		Command* showFloatCommand = new ShowFloatCommand(&eventStore);
 		return executor.execute(showFloatCommand);
 		break;
 							}
@@ -171,7 +171,7 @@ ICommand* Logic::queueCommand(Executor& executor, Parser::commandType command, E
 	}
 }
 
-void Logic::setDisplay(ICommand* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent, bool& isDone) {
+void Logic::setDisplay(Command* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent, bool& isDone) {
 	switch (command) {
 	case Parser::ADD: {
 		vector<Event> normalEvents = commandPtr->getEventVector();

@@ -1,22 +1,22 @@
-#include "ICommand.h"
+#include "Command.h"
 
 
-const int ICommand::INVALID_NUMBER = -1;
-const string ICommand::LOG_FILE_NAME = "CommandLog.txt";
+const int Command::INVALID_NUMBER = -1;
+const string Command::LOG_FILE_NAME = "CommandLog.txt";
 
-bool ICommand::getIsFloating() {
+bool Command::getIsFloating() {
 	return isFloating;
 }
 
-bool ICommand::getIsComplete() {
+bool Command::getIsComplete() {
 	return isComplete;
 }
 
-bool ICommand::getIsUndoable() {
+bool Command::getIsUndoable() {
 	return isUndoable;
 }
 
-int ICommand::getNumEvents(vector<Event> eventVec) {
+int Command::getNumEvents(vector<Event> eventVec) {
 	//remove marker events
 	for (int i = 0 ; i < eventVec.size() ; i++) {
 		if (eventVec[i].getID() < 0) {
@@ -37,13 +37,13 @@ int ICommand::getNumEvents(vector<Event> eventVec) {
 	return count;
 }
 
-Event ICommand::createInvalidEvent() {
+Event Command::createInvalidEvent() {
 	Event invalidEvent;
 	invalidEvent.setID(INVALID_NUMBER);
 	return invalidEvent;
 }
 
-void ICommand::log(string logString) {
+void Command::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 	
 	logStrings.push_back(logString);
@@ -53,7 +53,7 @@ void ICommand::log(string logString) {
 	outFile.close();
 }
 
-void ICommand::log(int logInt) {
+void Command::log(int logInt) {
 	ostringstream outString;
 	outString << logInt;
 
@@ -66,7 +66,7 @@ void ICommand::log(int logInt) {
 	outFile.close();
 }
 
-void ICommand::log(string logString, int logInt) {
+void Command::log(string logString, int logInt) {
 	ostringstream outString;
 	outString << " " << logInt;
 

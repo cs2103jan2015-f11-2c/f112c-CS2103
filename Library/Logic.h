@@ -10,7 +10,7 @@
 #include "Parser.h"
 #include "EventStorage.h"
 #include "LogicUpdater.h"
-#include "ICommand.h"
+#include "Command.h"
 #include "Executor.h"
 
 using std::ifstream;
@@ -61,8 +61,8 @@ public:
 
 	//executors
 	bool executeUserInput(string input);
-	ICommand* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
-	void setDisplay(ICommand* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
+	Command* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
+	void setDisplay(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
 	void setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void deleteParserPtr();
 
