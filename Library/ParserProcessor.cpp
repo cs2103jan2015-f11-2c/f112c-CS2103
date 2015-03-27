@@ -150,18 +150,18 @@ bool ParserProcessor::identifyDay(int index){
 	logger.logParserEnterFunc(IDENTIFY_DAY);
 
 	Conversion convertor;
-	int tempIndex = 0, tempInt = 0;
-	int nowday = 0, nowweekday = 0, numWdaysApart = 0;
-	int day = 0, month = 0, year = 0, weekday = 0;
+	int tempIndex = 0;
+	int currentDay = 0, currentWeekDay = 0, inputWeekDay = 0, numWdaysApart = 0;
 	std::string strDay;
 
-	//Find the presence of keyword in days
+	//Find the presence of keywords based on weekdays (tdy,tmr,mon,tues....)
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS && !matchFound; j++){
 		if(fragmentedWords[index].find(keywordDay[j]) != std::string::npos){
 			tempIndex = index;
 			strDay = keywordDay[j];
 			matchFound = true;
-		
+			
+			//assigning start and end date according to what keyword was found
 			if(strDay == "today" || strDay == "tdy"){
 				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
 				startDayFound = true;
@@ -177,16 +177,18 @@ bool ParserProcessor::identifyDay(int index){
 					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 				}
 			} else {
-				nowweekday = now->tm_wday;
-				weekday = convertor.dayOfWeekToInt(strDay);
-				if(weekday > nowweekday){
-					numWdaysApart = weekday - nowweekday;
-				} else if(weekday <= nowweekday){
-					numWdaysApart = weekday -(nowweekday - NUMBER_OF_DAYSINAWEEK);
+				currentWeekDay = now->tm_wday;
+				inputWeekDay = convertor.dayOfWeekToInt(strDay);
+				//finding number of days from current day to the input week day
+				if(inputWeekDay > currentWeekDay){
+					numWdaysApart = inputWeekDay - currentWeekDay;
+				} else if(inputWeekDay <= currentWeekDay){
+					numWdaysApart = inputWeekDay -(currentWeekDay - NUMBER_OF_DAYSINAWEEK);
 				}
 				tempIndex--;
+				//checking for next which will add one extra week
 				if(fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt"){
-					numWdaysApart = numWdaysApart + 7;
+					numWdaysApart = numWdaysApart + NUMBER_OF_DAYSINAWEEK;
 				}
 				if(!startDayFound){
 					startDayFound = true;
@@ -208,8 +210,8 @@ bool ParserProcessor::identifyDate(int index){
 	logger.logParserEnterFunc(IDENTIFY_DATE);
 
 	Conversion convertor;
-	int tempIndex = 0, tempInt = 0;
-	int day = 0, month = 0, year = 0;
+	int indexShift = 0, tempIndex = 0;
+	int tempInt = 0, day = 0, month = 0, year = 0, dayTo = 0;
 	std::string strMonth;
 	
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++){
@@ -218,94 +220,125 @@ bool ParserProcessor::identifyDate(int index){
 			strMonth = keywordMonths[j];
 			matchFound = true;
 			
-			//Checking for and extracting year integer. If not found, current year is used instead
-			if(tempIndex + 1 < fragmentedWords.size()){
-				try {
-					auto tempStoi = std::stoi(fragmentedWords[tempIndex+1]);
-					tempInt = tempStoi;
-					if(tempInt > 2000){
-						year = tempInt - 1900;
-						fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
-					} else {
-						year = now->tm_year;
-					}
-				} catch (std::invalid_argument& e){
-					year = now->tm_year;
-				}
-			}
+			//Retrieving one set of day, month, year from input data
+			year = checkYear(tempIndex,&indexShift);
+			tempIndex += indexShift;
+			day = checkDay(tempIndex,&indexShift);
+			tempIndex += indexShift;
+			month = convertor.monthToInt(strMonth);
 
-			//Extracting day integer
+			//Confirming and registering the set of day, month, year
+			if((day > convertor.determineLastDayOfMth(month,year)) || (day < 1)){
+				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
+				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
+			}
+			
+			//Retrieve second set of day, month, year if 'to' is found, using previous month n year
+			dayTo = checkDayTo(tempIndex,&indexShift);
+			tempIndex += indexShift;
+
+			//Assigning the values retrieved into start day or end day of event
+			assignDate(day,month,year,dayTo);
+		}
+	}
+	return matchFound;
+}
+
+//Checking for and extracting year integer. If not found, current year is used instead
+int ParserProcessor::checkYear(int tempIndex, int* indexShift){			
+	int year = now->tm_year;
+	*indexShift = tempIndex;
+	int tempInt = 0;
+
+	if(tempIndex + 1 < fragmentedWords.size()){
+		try {
+			auto tempStoi = std::stoi(fragmentedWords[tempIndex+1]);
+			tempInt = tempStoi;
+			if(tempInt > 2000){
+				year = tempInt - 1900;
+				fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
+			}
+		} catch (std::invalid_argument& e){
+		}
+	}
+	*indexShift = tempIndex - *indexShift;
+	return year;
+}
+
+//Extracting day integer
+int ParserProcessor::checkDay(int tempIndex, int* indexShift){
+	Conversion convertor;
+	int tempInt = 0;
+	*indexShift = tempIndex;
+	
+	try {
+		auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+		tempInt = tempStoi;
+	} catch (const std::invalid_argument& e){
+		tempIndex--;
+		if(tempIndex >= 0){
 			try {
 				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
 				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempInt = tempStoi;
-			} catch (const std::invalid_argument& e){
-				tempIndex--;
-				if(tempIndex >= 0){
-					try {
-						auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-						fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-						tempInt = tempStoi;
-					} catch (std::invalid_argument& e){
-						logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
-						throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
-					}
-				}
-			} 
-			
-			//Registering day, month, year
-			if (year == 0){
-				year = now->tm_year;
-			}
-			month = convertor.monthToInt(strMonth);
-			if((tempInt > convertor.determineLastDayOfMth(month,year)) || (tempInt < 1)){
-				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
-				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
-			}
-			day = tempInt;
-			
-			//Check for 'to'
-			tempIndex--;
-			if(tempIndex >= 0){
-				if(fragmentedWords[tempIndex] == "to"){
-					tempIndex--;
-					if(tempIndex >= 0){
-						try {
-							auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-							fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-							tempInt = tempStoi;
-							toFound = true;
-						} catch (std::invalid_argument& e){
-						}
-					}
-				}
-			}
-			
-			//Creating start and end date in Event
-			if(toFound){
-				if(!startDayFound && !endDayFound){
-					startDayFound = true;
-					tempEventStore.setStartDate(tempInt,month,year);
-					endDayFound = true;
-					tempEventStore.setEndDate(day,month,year);
-					toFound = false;
-				} else {
-					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
-					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
-				}
-			} else if(!startDayFound){
-				startDayFound = true;
-				tempEventStore.setStartDate(day,month,year);
-			} else if(!endDayFound){
-				endDayFound = true;
-				tempEventStore.setEndDate(day,month,year);
-			} else {
-				logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
-				throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+			} catch (std::invalid_argument& e){
+				logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
+				throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
 			}
 		}
 	}
-	return matchFound;
+	*indexShift = tempIndex - *indexShift;
+	return tempInt;
+}
+
+//Check for 'to'
+int ParserProcessor::checkDayTo(int tempIndex, int* indexShift){
+	int tempInt = 0;
+	*indexShift = tempIndex; 
+
+	tempIndex--;
+	if(tempIndex >= 0){
+		if(fragmentedWords[tempIndex] == "to"){
+			tempIndex--;
+			if(tempIndex >= 0){
+				try {
+					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+					tempInt = tempStoi;
+					toFound = true;
+				} catch (std::invalid_argument& e){
+				}
+			}
+		}
+	}
+	*indexShift = tempIndex - *indexShift;
+	return tempInt;
+}
+
+//Creating start and end date in Event
+void ParserProcessor::assignDate(int day, int month, int year, int dayTo){
+	if(toFound){
+		if(!startDayFound && !endDayFound){
+			startDayFound = true;
+			tempEventStore.setStartDate(dayTo,month,year);
+			endDayFound = true;
+			tempEventStore.setEndDate(day,month,year);
+			toFound = false;
+		} else {
+			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+		}
+	} else if(!startDayFound){
+		startDayFound = true;
+		tempEventStore.setStartDate(day,month,year);
+	} else if(!endDayFound){
+		endDayFound = true;
+		tempEventStore.setEndDate(day,month,year);
+	} else {
+		logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+		throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+	}
 }
 
 bool ParserProcessor::identifyTime(int index){

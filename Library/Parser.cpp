@@ -98,6 +98,7 @@ void Parser::tokenizeOriginalString(){
 				typeOfCommand = Parser::SHOW;
 			}
 		} else if(command == "search"){
+			nameOfEvent = details;
 			typeOfCommand = Parser::SEARCH;
 		} else if(command == "undo"){
 			typeOfCommand = Parser::UNDO;

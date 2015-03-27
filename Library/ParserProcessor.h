@@ -79,6 +79,10 @@ public:
 	bool identifyDate(int);
 	bool identifyTime(int);
 	bool identifyImportance(int);
+	int checkYear(int,int*);
+	int checkDay(int,int*);
+	int checkDayTo(int,int*);
+	void assignDate(int,int,int,int);
 	void addEventCorrector();
 	void editEventCorrector();
 	void eventMktimeCorrector();
