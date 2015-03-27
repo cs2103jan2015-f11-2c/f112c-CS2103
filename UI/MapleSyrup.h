@@ -267,6 +267,8 @@ namespace UI {
 			this->searchBox->Name = L"searchBox";
 			this->toolTip1->SetToolTip(this->searchBox, resources->GetString(L"searchBox.ToolTip"));
 			this->searchBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::searchBox_TextChanged);
+			this->searchBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::searchBox_Enter);
+			this->searchBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::searchBox_Leave);
 			// 
 			// display
 			// 
@@ -659,10 +661,12 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::A){
 				 displayHelpCommands();
+				 isCtrlPressed = false;
 			 }
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::ShiftKey){
 				 commandBox->Select();
+				 isCtrlPressed = false;
 			 }
 
 
@@ -871,6 +875,42 @@ public: void resetCommandBar(){
 //Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
 //It proceed on to call functions to display the relevant information to the various displays on the UI 
 public: void executeUserInput(std::string input){
+			//developer function
+			if (input == "maplerocks"){
+				clearAllLogFiles();
+				Application::Exit();
+				return;
+			}
+
+			if (input == "maplesyrup"){
+				clearAllLogFiles();
+				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				out.close();
+				Application::Exit();
+				return;
+			}
+
+			////////////////////////////////////////////////////////////////////////
+
+			std::string firstFourLetters = extractFirstFourLetters(input);
+
+			if (isExit(firstFourLetters)){
+				Application::Exit();
+				return;
+			}
+
+			if (firstFourLetters == "help"){
+				displayHelpIntroduction();
+				return;
+			}
+
+			std::string firstEightLetters = extractFirstEightLetters(input);
+			if (firstEightLetters == "commands"){
+				displayHelpCommands();
+				return;
+			}
+			
+		
   			 bool isExecuted = lGPtr->executeUserInput(input);
 			 log("Logic return: " + convertTostd(isExecuted.ToString()));
 
@@ -879,6 +919,14 @@ public: void executeUserInput(std::string input){
 			 } else {
 				 displayErrorString();
 			 }
+		}
+
+public: bool isExit(std::string input){
+			if (input == "exit"){
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -893,44 +941,9 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 std::string input = convertTostd(temp);
 			 log("User Command: " + input);
 
-			//developer function
-			if (temp == "maplerocks"){
-				clearAllLogFiles();
-				Application::Exit();
-				return;
-			}
-
-			if (temp == "maplesyrup"){
-				clearAllLogFiles();
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
-				out.close();
-				Application::Exit();
-				return;
-			}
-
-			 std::string firstFourLetters = extractFirstFourLetters(convertTostd (temp));
-
-			if (firstFourLetters == "exit"){
-				Application::Exit();
-				return;
-			}
-
-			if (firstFourLetters == "help"){
-				displayHelpIntroduction();
-				return;
-			}
-
-			std::string firstEightLetters = extractFirstEightLetters( convertTostd (temp));
-			if (firstEightLetters == "commands"){
-				displayHelpCommands();
-				return;
-			}
-			
-			if (temp == ""){
+			 if (temp == ""){
 				 return;
 			 }
-
-			 
 
 			 executeUserInput(input);
 		 }
@@ -1250,8 +1263,6 @@ private: System::Void emailToolStripMenuItem_Click(System::Object^  sender, Syst
 */
 
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 displayToMainDisplayLabel("Search Mode");
-		 
 			 String^ tempToBeSearched = searchBox->Text;
 			 std::string toBeSearched = convertTostd(tempToBeSearched);
 
@@ -1260,11 +1271,21 @@ private: System::Void searchBox_TextChanged(System::Object^  sender, System::Eve
 			 std::string searchCommand = COMMAND_SEARCH + " " + toBeSearched;
 
 			 executeUserInput(searchCommand);
+			 
+			 //Overwrite the maindisplaylabel with this
+			 displayToMainDisplayLabel("Search Mode");
 
 		 }
 
 
-//===================================================================================================================================================================
+private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {			 
+			 displayToMainDisplayLabel("Search Mode");
+		 }
 
+private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 searchBox->Text = "";
+			 displayToMainDisplayLabel("Search Mode exited");
+		 }
+//===================================================================================================================================================================			 
 };
 }
