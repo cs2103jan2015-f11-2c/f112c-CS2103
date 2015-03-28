@@ -60,6 +60,8 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  introductionToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
+	private: System::Windows::Forms::Button^  redoButton;
+	private: System::Windows::Forms::Button^  undoButton;
 
 
 
@@ -212,6 +214,8 @@ namespace UI {
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->redoButton = (gcnew System::Windows::Forms::Button());
+			this->undoButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -466,6 +470,24 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
 			// 
+			// redoButton
+			// 
+			this->redoButton->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->redoButton, L"redoButton");
+			this->redoButton->Name = L"redoButton";
+			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
+			this->redoButton->UseVisualStyleBackColor = false;
+			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
+			// 
+			// undoButton
+			// 
+			this->undoButton->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->undoButton, L"undoButton");
+			this->undoButton->Name = L"undoButton";
+			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
+			this->undoButton->UseVisualStyleBackColor = false;
+			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -473,6 +495,8 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->redoButton);
+			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->showButton);
 			this->Controls->Add(this->floatingTasksDisplay);
@@ -588,19 +612,6 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 if (e->KeyCode == Keys::Escape){
 				display->Select();
 			 }
-
-			 
-
-
-
-
-
-
-
-
-
-
-
 
 			 ///////////////////////Shortcuts that uses control key///////////////////////////
 			 if (e->KeyCode == Keys::ControlKey){
@@ -1267,6 +1278,13 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 		 
 		 
 		 
+		 }
+private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 executeUserInput("redo");
+
+		 }
+private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 executeUserInput("undo");
 		 }
 };
 }
