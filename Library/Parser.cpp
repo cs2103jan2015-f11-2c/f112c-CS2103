@@ -48,6 +48,10 @@ std::string Parser::getNameOfEvent(){
 }
 
 //MAIN METHODS
+//Function takes in the input from the user and determines the command type and organises the information provided into an Event form. Throws exception if the command is unknown.
+//These are done by calling InputStringSplit object to separate the input string into its components, and then calling the ParserProcessor object to retrieve the information 
+//and organise them into the Event format. 
+//Receives any thrown exceptions from the InputStringSplit and ParserProcessor objects and sets the feedback to the user, to be returned to Logic.
 void Parser::tokenizeOriginalString(){
 	logger.logParserEnterFunc(TOKENISE_ORIGINAL_STRING);
 
@@ -116,6 +120,7 @@ void Parser::tokenizeOriginalString(){
 	return;
 }
 
+//Checks with a list of commands that Parser recognises to confirm whether the command is supported.
 bool Parser::checkCommandExist(){
 	bool commandExist = false;
 
@@ -127,6 +132,7 @@ bool Parser::checkCommandExist(){
 	return commandExist;
 }
 
+//Checks whether the command is an undo or redo command
 bool Parser::checkCommandUndoRedo(){
 	bool isUndoRedo = false;
 	if(command == "undo" || command == "redo"){
@@ -135,6 +141,7 @@ bool Parser::checkCommandUndoRedo(){
 	return isUndoRedo;
 }
 
+//Sets the feedback based on what exception code was thrown to be returned to Logic and displayed to the user.
 std::string Parser::createFeedback(std::string errorCode){
 	if(errorCode == ParserExceptions::ERROR_MISSING_INPUT){
 		return "Error: Missing input.";
