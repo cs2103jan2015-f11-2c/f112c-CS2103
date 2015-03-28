@@ -96,6 +96,7 @@ public:
 	bool identifyImportance(int);
 
 	void addEventCorrector();
+	void checkStartBeforeEnd();
 	void editEventCorrector();
 	void eventMktimeCorrector();
 

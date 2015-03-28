@@ -185,4 +185,7 @@ std::string Parser::createFeedback(std::string errorCode){
 	if(errorCode == ParserExceptions::ERROR_UNKNOWN_MINUTE){
 		return "Error: Invalid minutes input for time.";
 	}
+	if(errorCode == ParserExceptions::ERROR_START_AFTER_END){
+		return "Error: Start day/time is later than End day/time";
+	}
 }

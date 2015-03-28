@@ -25,6 +25,7 @@ public:
 	static const std::string ERROR_UNKNOWN_DATE;
 	static const std::string ERROR_UNKNOWN_HOUR;
 	static const std::string ERROR_UNKNOWN_MINUTE;
+	static const std::string ERROR_START_AFTER_END;
 	
 	ParserExceptions(std::string);
 

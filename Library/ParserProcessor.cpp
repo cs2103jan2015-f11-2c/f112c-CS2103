@@ -135,6 +135,11 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 	//System-based correction to the input data to complete and confirm the event before returning it
 	addEventCorrector();
 	eventMktimeCorrector();
+	try {
+		checkStartBeforeEnd();
+	} catch (ParserExceptions& e){
+		throw e;
+	}
 			
 	return tempEventStore;
 }
@@ -184,7 +189,11 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 	}
 
 	//System-based correction to the input data to confirm the details to be editted in the Event before returning it
-	editEventCorrector();
+	try {
+		editEventCorrector();
+	} catch (ParserExceptions& e){
+		throw e;
+	}
 
 	return tempEventStore;
 }
@@ -764,6 +773,38 @@ void ParserProcessor::addEventCorrector(){
 	}
 }
 
+void ParserProcessor::checkStartBeforeEnd(){
+	struct tm tempEventStartDate = tempEventStore.getStartDate();
+	struct tm tempEventEndDate = tempEventStore.getEndDate();
+	
+	//Exception case 1: Start day is later than End day
+	if(tempEventStartDate.tm_year > tempEventEndDate.tm_year){
+		throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+	} 
+	if(tempEventStartDate.tm_year == tempEventEndDate.tm_year){
+		if(tempEventStartDate.tm_mon > tempEventEndDate.tm_mon){
+			throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+		}
+	}
+	if(tempEventStartDate.tm_year == tempEventEndDate.tm_year){
+		if(tempEventStartDate.tm_mon == tempEventEndDate.tm_mon){
+			if(tempEventStartDate.tm_mday > tempEventEndDate.tm_mday){
+				throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+			}
+		}
+	}
+
+	//Exception case 2: Start time is later than End time
+	if(tempEventStartDate.tm_hour > tempEventEndDate.tm_hour){
+		throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+	} 
+	if(tempEventStartDate.tm_hour == tempEventEndDate.tm_hour){
+		if(tempEventStartDate.tm_min > tempEventEndDate.tm_min){
+			throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+		}
+	}
+}
+
 //Function ensures only the details entered in the input will be editted while the other data will be left untouched by creating dummy values 
 //to signal which detail should not be touched. Performs correction to the details that are to be editted, by completing and correcting their values.
 void ParserProcessor::editEventCorrector(){
@@ -795,7 +836,13 @@ void ParserProcessor::editEventCorrector(){
 				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
 			}
 	}
-	//Only calls mktime after Start day/Start time/End day/End time has been completed
+	
+	//Only calls correctors after Start day/Start time/End day/End time has been completed
+	try {
+		checkStartBeforeEnd();
+	} catch (ParserExceptions& e){
+		throw e;
+	}
 	eventMktimeCorrector();
 
 	//Set dummy values to details that should not be touched

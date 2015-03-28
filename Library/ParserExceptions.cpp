@@ -14,6 +14,7 @@ const std::string ParserExceptions::ERROR_UNKNOWN_COMMAND = "PS010";
 const std::string ParserExceptions::ERROR_UNKNOWN_DATE = "PS011";
 const std::string ParserExceptions::ERROR_UNKNOWN_HOUR = "PS012";
 const std::string ParserExceptions::ERROR_UNKNOWN_MINUTE = "PS013";
+const std::string ParserExceptions::ERROR_START_AFTER_END = "PS014";
 
 ParserExceptions::ParserExceptions(std::string errorCode){
 	exceptionCode = errorCode;
