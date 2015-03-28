@@ -60,10 +60,10 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  introductionToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
-	private: System::Windows::Forms::Button^  editButton;
-	private: System::Windows::Forms::ContextMenuStrip^  editDropDown;
-	private: System::Windows::Forms::ToolStripMenuItem^  undoToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  redoToolStripMenuItem;
+
+
+
+
 
 
 	private: System::Windows::Forms::Timer^  timer1;
@@ -211,10 +211,6 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->editButton = (gcnew System::Windows::Forms::Button());
-			this->editDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
-			this->undoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->redoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
@@ -225,7 +221,6 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->BeginInit();
 			this->showDropDown->SuspendLayout();
 			this->helpDropDown->SuspendLayout();
-			this->editDropDown->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -309,7 +304,6 @@ namespace UI {
 			this->mainDisplayLabel->Name = L"mainDisplayLabel";
 			this->mainDisplayLabel->ReadOnly = true;
 			this->mainDisplayLabel->TabStop = false;
-			this->toolTip1->SetToolTip(this->mainDisplayLabel, resources->GetString(L"mainDisplayLabel.ToolTip"));
 			// 
 			// pictureBox2
 			// 
@@ -472,34 +466,6 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
 			// 
-			// editButton
-			// 
-			this->editButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->editButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			resources->ApplyResources(this->editButton, L"editButton");
-			this->editButton->ForeColor = System::Drawing::Color::Black;
-			this->editButton->Name = L"editButton";
-			this->editButton->UseVisualStyleBackColor = false;
-			this->editButton->Click += gcnew System::EventHandler(this, &MapleSyrup::editButton_Click);
-			// 
-			// editDropDown
-			// 
-			this->editDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			resources->ApplyResources(this->editDropDown, L"editDropDown");
-			this->editDropDown->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {this->undoToolStripMenuItem, 
-				this->redoToolStripMenuItem});
-			this->editDropDown->Name = L"editDropDown";
-			// 
-			// undoToolStripMenuItem
-			// 
-			resources->ApplyResources(this->undoToolStripMenuItem, L"undoToolStripMenuItem");
-			this->undoToolStripMenuItem->Name = L"undoToolStripMenuItem";
-			// 
-			// redoToolStripMenuItem
-			// 
-			resources->ApplyResources(this->redoToolStripMenuItem, L"redoToolStripMenuItem");
-			this->redoToolStripMenuItem->Name = L"redoToolStripMenuItem";
-			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -507,7 +473,6 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->Controls->Add(this->editButton);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->showButton);
 			this->Controls->Add(this->floatingTasksDisplay);
@@ -542,7 +507,6 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->EndInit();
 			this->showDropDown->ResumeLayout(false);
 			this->helpDropDown->ResumeLayout(false);
-			this->editDropDown->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -621,14 +585,29 @@ private: void initializeShortcut(){
 
 
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode == Keys::ControlKey){
-				 isCtrlPressed = true;
-			 }
-			 
 			 if (e->KeyCode == Keys::Escape){
 				display->Select();
 			 }
 
+			 
+
+
+
+
+
+
+
+
+
+
+
+
+			 ///////////////////////Shortcuts that uses control key///////////////////////////
+			 if (e->KeyCode == Keys::ControlKey){
+				 isCtrlPressed = true;
+			 }
+			 
+			 
 			 if ( isCtrlPressed && e->KeyCode == Keys::F){
 				 searchBox->Select();
 				 isCtrlPressed = false;
@@ -658,6 +637,14 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 if ( isCtrlPressed && e->KeyCode == Keys::ShiftKey){
 				 commandBox->Select();
 				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::Z){
+				  executeUserInput("undo");
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::X){
+				  executeUserInput("redo");
 			 }
 
 		 }
@@ -1059,12 +1046,6 @@ private: bool topCalenderDisplayed;
 private: void initializeAndUndisplayAll(){
 			topCalenderDisplayed = false;
 		}
-
-
-
-private: System::Void editButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 editDropDown->Show(editButton,0,editButton->Height);
-		 }
 
 // To display & undisplay the Show column when clicked
 private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {		
