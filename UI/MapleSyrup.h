@@ -199,6 +199,8 @@ namespace UI {
 			this->toolTip1 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->searchIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
+			this->redoButton = (gcnew System::Windows::Forms::Button());
+			this->undoButton = (gcnew System::Windows::Forms::Button());
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
@@ -214,8 +216,6 @@ namespace UI {
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->redoButton = (gcnew System::Windows::Forms::Button());
-			this->undoButton = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -232,12 +232,15 @@ namespace UI {
 			this->commandBox->AcceptsReturn = true;
 			this->commandBox->AcceptsTab = true;
 			this->commandBox->AllowDrop = true;
-			this->commandBox->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(11) {resources->GetString(L"commandBox.AutoCompleteCustomSource"), 
+			this->commandBox->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(16) {resources->GetString(L"commandBox.AutoCompleteCustomSource"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource1"), resources->GetString(L"commandBox.AutoCompleteCustomSource2"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource3"), resources->GetString(L"commandBox.AutoCompleteCustomSource4"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource5"), resources->GetString(L"commandBox.AutoCompleteCustomSource6"), 
 				resources->GetString(L"commandBox.AutoCompleteCustomSource7"), resources->GetString(L"commandBox.AutoCompleteCustomSource8"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource9"), resources->GetString(L"commandBox.AutoCompleteCustomSource10")});
+				resources->GetString(L"commandBox.AutoCompleteCustomSource9"), resources->GetString(L"commandBox.AutoCompleteCustomSource10"), 
+				resources->GetString(L"commandBox.AutoCompleteCustomSource11"), resources->GetString(L"commandBox.AutoCompleteCustomSource12"), 
+				resources->GetString(L"commandBox.AutoCompleteCustomSource13"), resources->GetString(L"commandBox.AutoCompleteCustomSource14"), 
+				resources->GetString(L"commandBox.AutoCompleteCustomSource15")});
 			this->commandBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->commandBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->commandBox->BackColor = System::Drawing::Color::White;
@@ -378,6 +381,24 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->calenderTop, resources->GetString(L"calenderTop.ToolTip"));
 			this->calenderTop->DateSelected += gcnew System::Windows::Forms::DateRangeEventHandler(this, &MapleSyrup::calenderTop_DateSelected);
 			// 
+			// redoButton
+			// 
+			this->redoButton->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->redoButton, L"redoButton");
+			this->redoButton->Name = L"redoButton";
+			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
+			this->redoButton->UseVisualStyleBackColor = false;
+			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
+			// 
+			// undoButton
+			// 
+			this->undoButton->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->undoButton, L"undoButton");
+			this->undoButton->Name = L"undoButton";
+			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
+			this->undoButton->UseVisualStyleBackColor = false;
+			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
+			// 
 			// showButton
 			// 
 			this->showButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -469,24 +490,6 @@ namespace UI {
 			// 
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
-			// 
-			// redoButton
-			// 
-			this->redoButton->BackColor = System::Drawing::Color::White;
-			resources->ApplyResources(this->redoButton, L"redoButton");
-			this->redoButton->Name = L"redoButton";
-			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
-			this->redoButton->UseVisualStyleBackColor = false;
-			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
-			// 
-			// undoButton
-			// 
-			this->undoButton->BackColor = System::Drawing::Color::White;
-			resources->ApplyResources(this->undoButton, L"undoButton");
-			this->undoButton->Name = L"undoButton";
-			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
-			this->undoButton->UseVisualStyleBackColor = false;
-			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
 			// 
 			// MapleSyrup
 			// 
@@ -890,6 +893,24 @@ public: void executeUserInput(std::string input){
 			}
 
 			if (input == "calendar"){
+				executeCalendarShortcut();
+				return;
+			}
+
+			if (input == "search mode"){
+				searchBox->Select();
+				return;
+			}
+
+			if (input == "next"){
+				executeNextKey();
+				return;
+			}
+
+			if (input == "back"){
+				executeBackKey();
+				return;
+
 			}
 
 			///////////////////////////////////////////////////////////////////////
@@ -1264,30 +1285,30 @@ private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs
 
 //===================================================================================================================================================================	
 
-private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		  if (e->KeyCode == Keys::Left ){
-				 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-				 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
-				 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+private: void executeBackKey(){
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+				executeUserInput(newShowCommand);
+		 }
 
-			 
-				 executeUserInput(newShowCommand);
-			 }
-
-			 if (e->KeyCode == Keys::Right ){
+private: void executeNextKey(){
 				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 				std::string mainLabel = convertTostd(mainDisplayLabel->Text);
 				std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
-
-			 
 				executeUserInput(newShowCommand);
+		 }
+
+private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		  if (e->KeyCode == Keys::Left ){
+				 executeBackKey();
 			 }
 
-		 
-		 
-		 
-		 
+			 if (e->KeyCode == Keys::Right ){
+				executeNextKey();
+			 } 
 		 }
+
 private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 executeUserInput("redo");
 

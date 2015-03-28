@@ -139,15 +139,30 @@
     <value>commands</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource7" xml:space="preserve">
-    <value>complete</value>
+    <value>shortcuts</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource8" xml:space="preserve">
-    <value>search</value>
+    <value>complete</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
-    <value>undo</value>
+    <value>search</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource10" xml:space="preserve">
+    <value>search mode</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource11" xml:space="preserve">
+    <value>calendar</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource12" xml:space="preserve">
+    <value>next</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource13" xml:space="preserve">
+    <value>back</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource14" xml:space="preserve">
+    <value>undo</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource15" xml:space="preserve">
     <value>redo</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
@@ -3400,219 +3415,6 @@
   <data name="&gt;&gt;calenderTop.ZOrder" xml:space="preserve">
     <value>20</value>
   </data>
-  <data name="showButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="showButton.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 11.25pt, style=Bold</value>
-  </data>
-  <data name="showButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="showButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 5</value>
-  </data>
-  <data name="showButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 30</value>
-  </data>
-  <data name="showButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="showButton.Text" xml:space="preserve">
-    <value>SHOW</value>
-  </data>
-  <data name="&gt;&gt;showButton.Name" xml:space="preserve">
-    <value>showButton</value>
-  </data>
-  <data name="&gt;&gt;showButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;showButton.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;showButton.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="helpButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="helpButton.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 11.25pt, style=Bold</value>
-  </data>
-  <data name="helpButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="helpButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 5</value>
-  </data>
-  <data name="helpButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 30</value>
-  </data>
-  <data name="helpButton.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="helpButton.Text" xml:space="preserve">
-    <value>HELP</value>
-  </data>
-  <data name="&gt;&gt;helpButton.Name" xml:space="preserve">
-    <value>helpButton</value>
-  </data>
-  <data name="&gt;&gt;helpButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;helpButton.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;helpButton.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="suggestBar.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
-  </data>
-  <data name="suggestBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 558</value>
-  </data>
-  <data name="suggestBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>662, 54</value>
-  </data>
-  <data name="suggestBar.TabIndex" type="System.Int32, mscorlib">
-    <value>43</value>
-  </data>
-  <data name="suggestBar.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;suggestBar.Name" xml:space="preserve">
-    <value>suggestBar</value>
-  </data>
-  <data name="&gt;&gt;suggestBar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;suggestBar.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;suggestBar.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>201, 17</value>
-  </metadata>
-  <metadata name="showDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>317, 17</value>
-  </metadata>
-  <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
-  </data>
-  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 114</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
-    <value>showDropDown</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
-  </data>
-  <data name="dayToolStripMenuItem.Text" xml:space="preserve">
-    <value>Day</value>
-  </data>
-  <data name="dayToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Show Today</value>
-  </data>
-  <data name="weekToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="weekToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
-  </data>
-  <data name="weekToolStripMenuItem.Text" xml:space="preserve">
-    <value>Week</value>
-  </data>
-  <data name="weekToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Show This Week</value>
-  </data>
-  <data name="monthToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="monthToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
-  </data>
-  <data name="monthToolStripMenuItem.Text" xml:space="preserve">
-    <value>Month</value>
-  </data>
-  <data name="monthToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Show This Month</value>
-  </data>
-  <data name="allToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="allToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="allToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
-  </data>
-  <data name="allToolStripMenuItem.Text" xml:space="preserve">
-    <value>All</value>
-  </data>
-  <data name="archiveToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="archiveToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="archiveToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
-  </data>
-  <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
-    <value>Archive</value>
-  </data>
-  <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>456, 17</value>
-  </metadata>
-  <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
-  </data>
-  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>193, 70</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
-    <value>helpDropDown</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="introductionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="introductionToolStripMenuItem.Text" xml:space="preserve">
-    <value>Introduction</value>
-  </data>
-  <data name="commandsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Ctrl+A</value>
-  </data>
-  <data name="commandsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="commandsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Commands</value>
-  </data>
-  <data name="shortcutsToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="shortcutsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
-    <value>Ctrl+S</value>
-  </data>
-  <data name="shortcutsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 22</value>
-  </data>
-  <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Shortcuts</value>
-  </data>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>114, 17</value>
-  </metadata>
   <data name="redoButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAABGdBTUEAALGPC/xhBQAAABl0RVh0U29m
@@ -3766,7 +3568,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;redoButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="undoButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -4400,8 +4202,221 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;undoButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
+  <data name="showButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="showButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 11.25pt, style=Bold</value>
+  </data>
+  <data name="showButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="showButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 5</value>
+  </data>
+  <data name="showButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 30</value>
+  </data>
+  <data name="showButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="showButton.Text" xml:space="preserve">
+    <value>SHOW</value>
+  </data>
+  <data name="&gt;&gt;showButton.Name" xml:space="preserve">
+    <value>showButton</value>
+  </data>
+  <data name="&gt;&gt;showButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;showButton.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="helpButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="helpButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 11.25pt, style=Bold</value>
+  </data>
+  <data name="helpButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="helpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>74, 5</value>
+  </data>
+  <data name="helpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 30</value>
+  </data>
+  <data name="helpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="helpButton.Text" xml:space="preserve">
+    <value>HELP</value>
+  </data>
+  <data name="&gt;&gt;helpButton.Name" xml:space="preserve">
+    <value>helpButton</value>
+  </data>
+  <data name="&gt;&gt;helpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;helpButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;helpButton.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="suggestBar.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt</value>
+  </data>
+  <data name="suggestBar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>271, 558</value>
+  </data>
+  <data name="suggestBar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>662, 54</value>
+  </data>
+  <data name="suggestBar.TabIndex" type="System.Int32, mscorlib">
+    <value>43</value>
+  </data>
+  <data name="suggestBar.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;suggestBar.Name" xml:space="preserve">
+    <value>suggestBar</value>
+  </data>
+  <data name="&gt;&gt;suggestBar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;suggestBar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;suggestBar.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <metadata name="fontDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>201, 17</value>
+  </metadata>
+  <metadata name="showDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>317, 17</value>
+  </metadata>
+  <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="dayToolStripMenuItem.Text" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="dayToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show Today</value>
+  </data>
+  <data name="weekToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="weekToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="weekToolStripMenuItem.Text" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="weekToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show This Week</value>
+  </data>
+  <data name="monthToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="monthToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="monthToolStripMenuItem.Text" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="monthToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Show This Month</value>
+  </data>
+  <data name="allToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="allToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="allToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="allToolStripMenuItem.Text" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="archiveToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="archiveToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="archiveToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 114</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
+    <value>showDropDown</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>456, 17</value>
+  </metadata>
+  <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="introductionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="introductionToolStripMenuItem.Text" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="commandsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+A</value>
+  </data>
+  <data name="commandsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="commandsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Commands</value>
+  </data>
+  <data name="shortcutsToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="shortcutsToolStripMenuItem.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+    <value>Ctrl+S</value>
+  </data>
+  <data name="shortcutsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 22</value>
+  </data>
+  <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>193, 70</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
+    <value>helpDropDown</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>114, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
