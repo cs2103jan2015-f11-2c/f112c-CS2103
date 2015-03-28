@@ -475,7 +475,7 @@ bool LogicUpdater::isAllDay(Event eventToDisplay){
 	int endTime = getEndTime(eventToDisplay);
 	string endTimeInString = intToTime(endTime);
 
-	if (startTimeInString == "0am"  && endTimeInString == "11:59pm"){
+	if (startTimeInString == "00:00am"  && endTimeInString == "11:59pm"){
 		isAllDayEvent = true;
 	}
 

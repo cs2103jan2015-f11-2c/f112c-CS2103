@@ -625,19 +625,8 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 			 }
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::D){
-				 if (topCalenderDisplayed == false){
-					calenderTop->BringToFront();
-					calenderTop->Visible = true;
-					topCalenderDisplayed = true;
-					calenderTop->Select();
-					isCtrlPressed = false;
-				 }
-				 else {
-					calenderTop->Visible = false;
-					topCalenderDisplayed = false;
-					isCtrlPressed = false;
-				 }
-
+				 executeCalendarShortcut();
+				 isCtrlPressed = false;
 			 }
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::A){
@@ -863,6 +852,8 @@ public: void resetCommandBar(){
 //Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
 //It proceed on to call functions to display the relevant information to the various displays on the UI 
 public: void executeUserInput(std::string input){
+			
+			//Create swtich case
 			//developer function
 			if (input == "maplerocks"){
 				clearAllLogFiles();
@@ -897,8 +888,12 @@ public: void executeUserInput(std::string input){
 				displayHelpCommands();
 				return;
 			}
-			
-		
+
+			if (input == "calendar"){
+			}
+
+			///////////////////////////////////////////////////////////////////////
+
   			 bool isExecuted = lGPtr->executeUserInput(input);
 			 log("Logic return: " + convertTostd(isExecuted.ToString()));
 
@@ -1048,15 +1043,7 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 * ===================================================================================================================================================================
 */
 
-//Attributes to to monitor the various displays
-private: bool topCalenderDisplayed;
 
-
-//Pre-condition : None
-//All user opened displays will be make invisible
-private: void initializeAndUndisplayAll(){
-			topCalenderDisplayed = false;
-		}
 
 // To display & undisplay the Show column when clicked
 private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {		
@@ -1073,18 +1060,7 @@ private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Win
 			initializeAndUndisplayAll(); 
 		 }
 
-private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) {
-			 
-			 if(topCalenderDisplayed == true){
-				 calenderTop->Visible = false;
-				 topCalenderDisplayed = false;
-			 } else{
-				 calenderTop->Visible = true;
-				 calenderTop->BringToFront();
-				 topCalenderDisplayed = true;
-			 }
-			 
-		 }
+
 
 
 //===================================================================================================================================================================
@@ -1154,9 +1130,20 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 
 /*
 * =================================================================================================================================================================== 
-* Calender + front and back display buttons
+* Calendar 
 * ===================================================================================================================================================================
 */
+
+//Attributes to to monitor the various displays
+private: bool topCalenderDisplayed;
+
+
+//Pre-condition : None
+//All user opened displays will be make invisible
+private: void initializeAndUndisplayAll(){
+			topCalenderDisplayed = false;
+		}
+
 private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
 			 //Start
 			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
@@ -1174,6 +1161,28 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System::EventArgs^  e) {
 			 calenderTop->Visible=false;
 		 }
+
+private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) { 
+			 if(topCalenderDisplayed == true){
+				 calenderTop->Visible = false;
+				 topCalenderDisplayed = false;
+				 calenderTop->SendToBack();
+			 } else{
+				 calenderTop->Visible = true;
+				 calenderTop->BringToFront();
+				 calenderTop->Select();
+				 topCalenderDisplayed = true;
+			 }
+			 
+		 }
+
+private: void executeCalendarShortcut(){
+			 System::Object^  dummy1; 
+			 System::EventArgs^  dummy2;
+
+			 calenderIcon_Click(dummy1,dummy2);
+		 }
+
 
 //===================================================================================================================================================================
 
