@@ -145,6 +145,10 @@ void Event::setStartWeekday(int weekday){
 	startDateTime.tm_wday = weekday;
 }
 
+void Event::setEndWeekday(int weekday){
+	endDateTime.tm_wday = weekday;
+}
+
 void Event::setIsFloating(bool floating) {
 	isFloating = floating;
 }

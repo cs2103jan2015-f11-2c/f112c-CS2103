@@ -64,6 +64,7 @@ public:
 	void setStartTime(int hour, int minute);
 	void setEndTime(int hour, int minute);
 	void setStartWeekday(int weekday);
+	void setEndWeekday(int weekday);
 	void setIsFloating(bool floating);
 	void setIsDeadline(bool deadline);
 	void setIsCompleted(bool completed);

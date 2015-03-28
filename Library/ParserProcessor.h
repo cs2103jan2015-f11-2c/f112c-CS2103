@@ -100,10 +100,14 @@ public:
 	void eventMktimeCorrector();
 
 	Event processShowEvent(std::vector<std::string>);
-	bool checkSystemBasedShow(std::string);
+	bool checkShowByYear(int);
+	bool checkSystemBasedShow(int);
+	bool identifyShowDay(int);
 	bool identifyShowDate(int);
 	int checkShowDay(int,int*);
-	void assignShowDate(int,int,int);
+	int checkShowDayTo(int,int*);
+	void assignShowDate(int,int,int,int);
+	void showEventCorrector();
 };
 
 #endif
