@@ -839,11 +839,10 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 
 	fragmentedWords = fragmentedWords_;
 	int tempInt = 0;
-	int daysToEndWeek = 0;
-	int day = 0, month = 0, year = 0, weekday = 0;
-	day = now->tm_mday;
-	month = now->tm_mon;
-	year = now->tm_year;
+	int daysToEndWeek = 0, weekday = 0;
+	int day = now->tm_mday;
+	int month = now->tm_mon;
+	int year = now->tm_year;
 	
 	unsigned int i = 0; 
 	//Check for show by year. E.g. show year/yr   show 2015   show 2015-2016
@@ -1257,4 +1256,6 @@ void ParserProcessor::showEventCorrector(){
 			tempEventStore.setEndDate(tempDate.tm_mday,tempDate.tm_mon,tempDate.tm_year);
 		}
 	}
+	tempEventStore.setStartTime(0,0);
+	tempEventStore.setEndTime(0,0);
 }
