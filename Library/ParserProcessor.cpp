@@ -794,14 +794,18 @@ void ParserProcessor::checkStartBeforeEnd(){
 		}
 	}
 
-	//Exception case 2: Start time is later than End time
-	if(tempEventStartDate.tm_hour > tempEventEndDate.tm_hour){
-		throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
-	} 
-	if(tempEventStartDate.tm_hour == tempEventEndDate.tm_hour){
-		if(tempEventStartDate.tm_min > tempEventEndDate.tm_min){
-			throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
-		}
+	//Exception case 2: Start time is later than End time if day is the same
+	if(tempEventStartDate.tm_year == tempEventEndDate.tm_year &&
+		tempEventStartDate.tm_mon == tempEventEndDate.tm_mon &&
+		tempEventStartDate.tm_mday == tempEventEndDate.tm_mday){
+			if(tempEventStartDate.tm_hour > tempEventEndDate.tm_hour){
+				throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+			} 
+			if(tempEventStartDate.tm_hour == tempEventEndDate.tm_hour){
+				if(tempEventStartDate.tm_min > tempEventEndDate.tm_min){
+					throw ParserExceptions(ParserExceptions::ERROR_START_AFTER_END);
+				}
+			}
 	}
 }
 
