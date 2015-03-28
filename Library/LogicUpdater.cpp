@@ -544,9 +544,9 @@ void LogicUpdater::normalEventsToString() {
 
 			out << "[";
 			if (isAllDay(normalEvents[i])){
-				out << "          ";
+				out << "    ";
 				out << WORD_ALLDAY;
-				out << "          ";
+				out << "    ";
 			} else{
 				int startTime = getStartTime(normalEvents[i]);
 				out << intToTime(startTime);
@@ -560,11 +560,11 @@ void LogicUpdater::normalEventsToString() {
 
 			std::string nameOfEvent = normalEvents[i].getName();
 
-			while( nameOfEvent.size() > 35 ){
-				out << nameOfEvent.substr(0,35);
+			while( nameOfEvent.size() > 43 ){
+				out << nameOfEvent.substr(0,43);
 				out << "\n";
-				out << "\t\t\t\t";
-				nameOfEvent = nameOfEvent.substr(35);
+				out << "\t\t\t\t\t";
+				nameOfEvent = nameOfEvent.substr(43);
 			}
 
 			out << nameOfEvent;

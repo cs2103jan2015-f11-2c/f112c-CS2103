@@ -198,7 +198,7 @@
     <value>18</value>
   </data>
   <data name="feedbackBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9.75pt</value>
+    <value>Courier New, 9.75pt</value>
   </data>
   <data name="feedbackBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>271, 583</value>
@@ -231,7 +231,7 @@
     <value>Microsoft Sans Serif, 12pt</value>
   </data>
   <data name="searchBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>648, 9</value>
+    <value>648, 7</value>
   </data>
   <data name="searchBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>254, 26</value>
@@ -255,20 +255,20 @@
     <value>16</value>
   </data>
   <data name="display.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Arial, 12pt</value>
+    <value>Courier New, 12pt</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="display.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>On</value>
   </data>
   <data name="display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 95</value>
+    <value>240, 83</value>
   </data>
   <data name="display.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
     <value>Vertical</value>
   </data>
   <data name="display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>692, 428</value>
+    <value>692, 440</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
     <value>999</value>
@@ -295,13 +295,13 @@
     <value>19</value>
   </data>
   <data name="floatingTasksDisplay.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Arial, 12pt</value>
+    <value>Courier New, 12pt</value>
   </data>
   <data name="floatingTasksDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 95</value>
+    <value>5, 83</value>
   </data>
   <data name="floatingTasksDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 428</value>
+    <value>229, 440</value>
   </data>
   <data name="floatingTasksDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -328,7 +328,7 @@
     <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="mainDisplayLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>243, 61</value>
+    <value>243, 48</value>
   </data>
   <data name="mainDisplayLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>404, 26</value>
@@ -367,7 +367,7 @@
 </value>
   </data>
   <data name="pictureBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>-7, 41</value>
+    <value>-7, 34</value>
   </data>
   <data name="pictureBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>938, 10</value>
@@ -1494,7 +1494,7 @@
     <value>Stretch</value>
   </data>
   <data name="calenderIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>611, 5</value>
+    <value>611, 3</value>
   </data>
   <data name="calenderIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>33, 33</value>
@@ -2077,7 +2077,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 61</value>
+    <value>53, 47</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2663,7 +2663,7 @@
     <value>NoControl</value>
   </data>
   <data name="floatingIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>102, 61</value>
+    <value>102, 47</value>
   </data>
   <data name="floatingIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3249,7 +3249,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>152, 61</value>
+    <value>152, 47</value>
   </data>
   <data name="pictureBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3368,7 +3368,7 @@
     <value>Stretch</value>
   </data>
   <data name="searchIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>901, 9</value>
+    <value>901, 7</value>
   </data>
   <data name="searchIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>30, 25</value>
@@ -3547,7 +3547,7 @@
     <value>NoControl</value>
   </data>
   <data name="redoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>526, 5</value>
+    <value>526, 4</value>
   </data>
   <data name="redoButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>32, 30</value>
@@ -4181,7 +4181,7 @@
     <value>NoControl</value>
   </data>
   <data name="undoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>564, 5</value>
+    <value>564, 4</value>
   </data>
   <data name="undoButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>32, 30</value>

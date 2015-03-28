@@ -68,6 +68,15 @@ namespace UI {
 
 
 
+
+
+
+
+
+
+
+
+
 	private: System::Windows::Forms::Timer^  timer1;
 
 
@@ -524,6 +533,7 @@ namespace UI {
 			this->ShowIcon = false;
 			this->Load += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyDown);
+			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyUp);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::MapleSyrup_MouseClick);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
@@ -652,6 +662,11 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 
 		 }
 
+private: System::Void MapleSyrup_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::ControlKey){
+				 isCtrlPressed = false;
+			 }
+		 }
 
 
 //===================================================================================================================================================================
@@ -747,6 +762,11 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 //Display information to main display
 private: void displayToMainDisplay( vector<LogicUpdater::EVENT_STRING> displayToMain){
 			display->Text = "";
+
+
+
+
+
 
 			for (unsigned int i = 0; i < displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
@@ -1304,7 +1324,7 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 				 executeBackKey();
 			 }
 
-			 if (e->KeyCode == Keys::Right ){
+		  if (e->KeyCode == Keys::Right ){
 				executeNextKey();
 			 } 
 		 }
@@ -1316,5 +1336,6 @@ private: System::Void redoButton_Click(System::Object^  sender, System::EventArg
 private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 executeUserInput("undo");
 		 }
+
 };
 }
