@@ -49,7 +49,7 @@ namespace UI {
 
 
 	private: System::Windows::Forms::MonthCalendar^  calenderTop;
-	private: System::Windows::Forms::Button^  backButton;
+
 	private: System::Windows::Forms::ContextMenuStrip^  showDropDown;
 	private: System::Windows::Forms::ToolStripMenuItem^  dayToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  weekToolStripMenuItem;
@@ -83,7 +83,7 @@ namespace UI {
 
 
 
-	private: System::Windows::Forms::Button^  nextButton;
+
 
 	public:
 		MapleSyrup(void)
@@ -123,7 +123,7 @@ namespace UI {
 	private: System::Windows::Forms::TextBox^  searchBox;
 	private: System::Windows::Forms::RichTextBox^  display;
 	private: System::Windows::Forms::RichTextBox^  floatingTasksDisplay;
-	private: System::Windows::Forms::RichTextBox^  richTextBox1;
+
 	private: System::Windows::Forms::TextBox^  mainDisplayLabel;
 
 
@@ -187,7 +187,6 @@ namespace UI {
 			this->searchBox = (gcnew System::Windows::Forms::TextBox());
 			this->display = (gcnew System::Windows::Forms::RichTextBox());
 			this->floatingTasksDisplay = (gcnew System::Windows::Forms::RichTextBox());
-			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
 			this->mainDisplayLabel = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
@@ -202,8 +201,6 @@ namespace UI {
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
-			this->backButton = (gcnew System::Windows::Forms::Button());
-			this->nextButton = (gcnew System::Windows::Forms::Button());
 			this->showDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->dayToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->weekToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -281,16 +278,15 @@ namespace UI {
 			// 
 			// display
 			// 
-			this->display->AcceptsTab = true;
 			this->display->AutoWordSelection = true;
 			this->display->BackColor = System::Drawing::SystemColors::ControlLightLight;
 			this->display->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			resources->ApplyResources(this->display, L"display");
 			this->display->Name = L"display";
 			this->display->ReadOnly = true;
-			this->display->ShowSelectionMargin = true;
 			this->display->TabStop = false;
 			this->toolTip1->SetToolTip(this->display, resources->GetString(L"display.ToolTip"));
+			this->display->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::display_KeyDown);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -302,17 +298,6 @@ namespace UI {
 			this->floatingTasksDisplay->ShortcutsEnabled = false;
 			this->floatingTasksDisplay->TabStop = false;
 			this->toolTip1->SetToolTip(this->floatingTasksDisplay, resources->GetString(L"floatingTasksDisplay.ToolTip"));
-			// 
-			// richTextBox1
-			// 
-			this->richTextBox1->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->richTextBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->richTextBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
-			resources->ApplyResources(this->richTextBox1, L"richTextBox1");
-			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->ReadOnly = true;
-			this->richTextBox1->TabStop = false;
-			this->toolTip1->SetToolTip(this->richTextBox1, resources->GetString(L"richTextBox1.ToolTip"));
 			// 
 			// mainDisplayLabel
 			// 
@@ -423,20 +408,6 @@ namespace UI {
 			this->suggestBar->Name = L"suggestBar";
 			this->suggestBar->TabStop = false;
 			// 
-			// backButton
-			// 
-			resources->ApplyResources(this->backButton, L"backButton");
-			this->backButton->Name = L"backButton";
-			this->backButton->UseVisualStyleBackColor = true;
-			this->backButton->Click += gcnew System::EventHandler(this, &MapleSyrup::backButton_Click);
-			// 
-			// nextButton
-			// 
-			resources->ApplyResources(this->nextButton, L"nextButton");
-			this->nextButton->Name = L"nextButton";
-			this->nextButton->UseVisualStyleBackColor = true;
-			this->nextButton->Click += gcnew System::EventHandler(this, &MapleSyrup::nextButton_Click);
-			// 
 			// showDropDown
 			// 
 			this->showDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -537,8 +508,6 @@ namespace UI {
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			this->Controls->Add(this->editButton);
-			this->Controls->Add(this->nextButton);
-			this->Controls->Add(this->backButton);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->showButton);
 			this->Controls->Add(this->floatingTasksDisplay);
@@ -551,7 +520,6 @@ namespace UI {
 			this->Controls->Add(this->calenderIcon);
 			this->Controls->Add(this->comdIcon);
 			this->Controls->Add(this->mainDisplayLabel);
-			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->searchBox);
 			this->Controls->Add(this->feedbackBox);
 			this->Controls->Add(this->commandBox);
@@ -618,6 +586,8 @@ private: void loadData(){
 
 			 std::string loadCommand2 = showPtr->getShowDay();
 			 executeUserInput(loadCommand2); 
+
+			 commandBox->Select();
 		 }
 
 
@@ -648,11 +618,17 @@ private: void initializeShortcut(){
 			 isCtrlPressed = false;
 		 }
 
+
+
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::ControlKey){
 				 isCtrlPressed = true;
 			 }
 			 
+			 if (e->KeyCode == Keys::Escape){
+				display->Select();
+			 }
+
 			 if ( isCtrlPressed && e->KeyCode == Keys::F){
 				 searchBox->Select();
 				 isCtrlPressed = false;
@@ -683,7 +659,6 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 				 commandBox->Select();
 				 isCtrlPressed = false;
 			 }
-
 
 		 }
 
@@ -1076,22 +1051,14 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 */
 
 //Attributes to to monitor the various displays
-private: bool showDisplayed;
-private: bool helpDisplayed;
 private: bool topCalenderDisplayed;
 
 
 //Pre-condition : None
 //All user opened displays will be make invisible
 private: void initializeAndUndisplayAll(){
-			showDisplayed = false;
-			helpDisplayed = false;
 			topCalenderDisplayed = false;
 		}
-
-
-
-
 
 
 
@@ -1100,10 +1067,8 @@ private: System::Void editButton_Click(System::Object^  sender, System::EventArg
 		 }
 
 // To display & undisplay the Show column when clicked
-private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			
-			 showDropDown->Show(showButton,0,showButton->Height);	
-			 
+private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {		
+			 showDropDown->Show(showButton,0,showButton->Height);		 
 		 }
 
 // To display & undisplay the Help column when mouse click
@@ -1218,23 +1183,6 @@ private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System
 			 calenderTop->Visible=false;
 		 }
 
-private: System::Void backButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
-
-			 
-			 executeUserInput(newShowCommand);
-		 }
-private: System::Void nextButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
-
-			 
-			 executeUserInput(newShowCommand);
-		 }
-
 //===================================================================================================================================================================
 
 
@@ -1305,5 +1253,39 @@ private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs
 		 }
 //===================================================================================================================================================================			 
 
+
+/*
+* =================================================================================================================================================================== 
+* Command Box
+* ===================================================================================================================================================================
+*/
+
+
+//===================================================================================================================================================================	
+
+private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		  if (e->KeyCode == Keys::Left ){
+				 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+				 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+
+			 
+				 executeUserInput(newShowCommand);
+			 }
+
+			 if (e->KeyCode == Keys::Right ){
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+
+			 
+				executeUserInput(newShowCommand);
+			 }
+
+		 
+		 
+		 
+		 
+		 }
 };
 }
