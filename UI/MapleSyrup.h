@@ -80,6 +80,9 @@ namespace UI {
 
 
 
+
+
+
 	private: System::Windows::Forms::Button^  nextButton;
 
 	public:
