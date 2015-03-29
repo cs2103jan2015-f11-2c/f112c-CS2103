@@ -505,8 +505,9 @@ namespace UI {
 			// 
 			// shortcutsToolStripMenuItem
 			// 
-			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
+			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
+			this->shortcutsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::shortcutsToolStripMenuItem_Click);
 			// 
 			// MapleSyrup
 			// 
@@ -648,6 +649,11 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::D){
 				 executeCalendarShortcut();
+				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::S){
+				 displayShortCuts();
 				 isCtrlPressed = false;
 			 }
 
@@ -1181,6 +1187,13 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 			 displayHelpCommands();
 		 }
 
+private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayShortCuts();
+		 }
+
+public: void displayShortCuts(){
+			Process::Start("Shortcuts for MapleSyrup.docx");
+		}
 
 //===================================================================================================================================================================
 
@@ -1405,6 +1418,7 @@ private: System::Void display_SelectionChanged(System::Object^  sender, System::
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 display->SelectionStart = 0;
 		 }
+
 
 };
 }
