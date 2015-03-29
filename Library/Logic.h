@@ -65,21 +65,25 @@ public:
 	vector<tm> getTempMainDisplayLabel();
 
 
-	//executors
+	//main executors
 	bool executeUserInput(string input);
 	Command* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
 	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
-	void setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
+	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
+	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, LogicUpdater updater);
+	vector<tm> getTmVecFromEvents(vector<Event> normalEvents, LogicUpdater updater);
 	void deleteParserPtr();
 
 
 	//others
 	bool isNumber(string s);
 	int convertNameToID(string name);
-	void setTMForManyEvents(vector<tm>& tmVec, vector<Event> eventVec);
+	
 
 	//log
 	void log(string logString);
+	void log(int logInt);
+	void log(string logString, int logInt);
 };
 
 #endif

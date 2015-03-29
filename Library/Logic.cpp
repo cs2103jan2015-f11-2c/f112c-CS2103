@@ -177,8 +177,11 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 	case Parser::ERROR_: {
 		return new NullCommand;
-		break;
 						 }
+
+	default: {
+		return new NullCommand;
+			 }
 	}
 
 }
@@ -186,23 +189,15 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 //update new information for UI to display
 void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent) {
 	try {
+		bool isDone = true;
+
 		switch (command) {
 		case Parser::ADD: 
 		case Parser::ADDFLOAT: {		
 			vector<Event> normalEvents, floatingEvents;
-			vector<tm> tmVec;
 
-			if (commandPtr->getIsFloating()) {
-				normalEvents = updater.getNormalEvents();
-				floatingEvents = commandPtr->getEventVector();
-				tmVec = updater.getTempMainDisplayLabel();
-			} else {
-				normalEvents = commandPtr->getEventVector();
-				floatingEvents = updater.getFloatingEvents();
-				tmVec.push_back(userEvent.getStartDate());
-				tmVec.push_back(userEvent.getEndDate());
-			}
-
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 			int id = userEvent.getID();
 
@@ -218,13 +213,12 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
 
 			if (!commandPtr->getIsExecuted()) {
-				setEventVector(normalEvents, floatingEvents, tempEvents);
+				setEventVectors(normalEvents, floatingEvents, tempEvents);
 
 				//more than 1 exact match
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
-						vector<tm> tmVec;
-						setTMForManyEvents(tmVec, normalEvents);
+						vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -232,20 +226,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				//at least 1 partial match
 				if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
 					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
-
-					vector<tm> tmVec;
-					if (normalEvents.empty()) { //no normal events to show
-						tmVec = updater.getTempMainDisplayLabel();
-					} else { //at least 1 normal event to show (1st will always be marker)
-						tmVec.push_back(normalEvents[1].getStartDate());
-						if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
-							tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-						} else {
-							tmVec.push_back(normalEvents[1].getEndDate());
-						}
-					}
-					mktime(&tmVec[0]);
-					mktime(&tmVec[1]);
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 					return;
@@ -256,17 +237,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
 				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
 				updater.setFeedbackStrings(feedback);
-				throw false;
+				throw !isDone;
 			}
 
 			//successful deletion
-			if (commandPtr->getIsFloating()) {
-				normalEvents = updater.getNormalEvents();
-				floatingEvents = commandPtr->getEventVector();
-			} else {
-				normalEvents = commandPtr->getEventVector();
-				floatingEvents = updater.getFloatingEvents();
-			}
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 			Event deletedEvent = commandPtr->getEvent();
 			string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
 			vector<tm> tmVec = updater.getTempMainDisplayLabel();
@@ -277,17 +252,15 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::EDIT: {
 			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			vector<tm> tmVec;
 			int id;
 
 			if (!commandPtr->getIsExecuted()) {
-				setEventVector(normalEvents, floatingEvents, tempEvents);
+				setEventVectors(normalEvents, floatingEvents, tempEvents);
 
 				//more than 1 exact match
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
-						vector<tm> tmVec;
-						setTMForManyEvents(tmVec, normalEvents);
+						vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -295,20 +268,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				//at least 1 partial match
 				if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
 					string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
-
-					vector<tm> tmVec;
-					if (normalEvents.empty()) { //no normal events to show
-						tmVec = updater.getTempMainDisplayLabel();
-					} else { //at least 1 normal event to show (1st will always be marker)
-						tmVec.push_back(normalEvents[1].getStartDate());
-						if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
-							tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-						} else {
-							tmVec.push_back(normalEvents[1].getEndDate());
-						}
-					}
-					mktime(&tmVec[0]);
-					mktime(&tmVec[1]);
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 					return;
@@ -323,18 +283,13 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			//successful edit 
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 			if (commandPtr->getIsFloating()) { //floating event edited
-				normalEvents = updater.getNormalEvents();
-				floatingEvents = commandPtr->getEventVector();
-				tmVec = updater.getTempMainDisplayLabel();
 				id = floatingEvents[0].getID();
 			} else { //normal event edited
-				normalEvents = commandPtr->getEventVector();
-				floatingEvents = updater.getFloatingEvents();
-				tmVec.push_back(normalEvents[1].getStartDate());
-				tmVec.push_back(normalEvents[1].getEndDate());
 				id = normalEvents[1].getID();
 			}
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			Event oldEvent = commandPtr->getEvent();
 			string feedback = oldEvent.getName() + LogicUpdater::EDITED_MESSAGE;
 
@@ -344,10 +299,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::SEARCH: {
 			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			setEventVector(normalEvents, floatingEvents, tempEvents);
-
+			
+			setEventVectors(normalEvents, floatingEvents, tempEvents);
 			string feedback = "";
-			vector<tm> tmVec = updater.getTempMainDisplayLabel();
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
@@ -369,22 +324,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::SHOWALL: {
 			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			setEventVector(normalEvents, floatingEvents, tempEvents);
-
+			
+			setEventVectors(normalEvents, floatingEvents, tempEvents);
 			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
-			vector<tm> tmVec;
-			if (normalEvents.empty()) { //no normal events to show
-				tmVec = updater.getTempMainDisplayLabel();
-			} else { //at least 1 normal event to show (1st will always be marker)
-				tmVec.push_back(normalEvents[1].getStartDate());
-				if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
-					tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-				} else {
-					tmVec.push_back(normalEvents[1].getEndDate());
-				}
-			}
-			mktime(&tmVec[0]);
-			mktime(&tmVec[1]);
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
@@ -407,13 +350,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			vector<Event> normalEvents, floatingEvents;
-			if (commandPtr->getIsFloating()) {
-				normalEvents = updater.getNormalEvents();
-				floatingEvents = commandPtr->getEventVector();
-			} else {
-				normalEvents = commandPtr->getEventVector();
-				floatingEvents = updater.getFloatingEvents();
-			}
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 
 			string feedback;
 			if (command == Parser::UNDO) {
@@ -422,19 +359,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				feedback = LogicUpdater::REDO_MESSAGE;
 			}
 
-			vector<tm> tmVec;
-			if (normalEvents.empty()) { //no normal events to show
-				tmVec = updater.getTempMainDisplayLabel();
-			} else { //at least 1 normal event to show (1st will always be marker)
-				tmVec.push_back(normalEvents[1].getStartDate());
-				if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
-					tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-				} else {
-					tmVec.push_back(normalEvents[1].getEndDate());
-				}
-			}
-			mktime(&tmVec[0]);
-			mktime(&tmVec[1]);
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
@@ -456,7 +381,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 	}
 }
 
-void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original) {
+void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original) {
 	if (original.empty()) {
 		return;
 	}
@@ -474,6 +399,35 @@ void Logic::setEventVector(vector<Event>& normal, vector<Event>& floating, vecto
 	for (; i < original.size() ; i++) {
 		normal.push_back(original[i]);
 	}
+}
+
+void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, LogicUpdater updater) {
+	if (commandPtr->getIsFloating()) {
+		normal = updater.getNormalEvents();
+		floating = commandPtr->getEventVector();
+	} else {
+		normal = commandPtr->getEventVector();
+		floating = updater.getFloatingEvents();
+	}
+}
+
+vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents, LogicUpdater updater) {
+	vector<tm> tmVec;
+
+	if (normalEvents.empty()) { //no normal events to show
+		tmVec = updater.getTempMainDisplayLabel();
+	} else { //at least 1 normal event to show (1st will always be marker)
+		tmVec.push_back(normalEvents[1].getStartDate());
+		if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
+			tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
+		} else {
+			tmVec.push_back(normalEvents[1].getEndDate());
+		}
+	}
+	mktime(&tmVec[0]);
+	mktime(&tmVec[1]);
+
+	return tmVec;
 }
 
 void Logic::deleteParserPtr() {
@@ -505,20 +459,38 @@ int Logic::convertNameToID(string name) {
 	}
 }
 
-void Logic::setTMForManyEvents(vector<tm>& tmVec, vector<Event> eventVec) {
-	tmVec.push_back(eventVec[1].getStartDate());
-	tmVec.push_back(eventVec[eventVec.size() - 1].getEndDate());
-	mktime(&tmVec[0]);
-	mktime(&tmVec[1]);
-	return;
-}
-
 
 //LOG
 void Logic::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString);
+	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+	outFile.close();
+}
+
+void Logic::log(int logInt) {
+	ostringstream outString;
+	outString << logInt;
+
+	ofstream outFile(LOG_FILE_NAME);
+
+	logStrings.push_back(outString.str());
+	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+		outFile << logStrings[i] << endl;
+	}
+	outFile.close();
+}
+
+void Logic::log(string logString, int logInt) {
+	ostringstream outString;
+	outString << " " << logInt;
+
+	ofstream outFile(LOG_FILE_NAME);
+
+	logStrings.push_back(logString + outString.str());
 	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
 		outFile << logStrings[i] << endl;
 	}

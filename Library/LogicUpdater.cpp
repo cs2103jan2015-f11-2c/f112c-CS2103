@@ -12,8 +12,8 @@ const string LogicUpdater::EVENT_NOT_FOUND_MESSAGE = " not found";
 const string LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE = " not found, showing partial matches";
 const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "More than 1 result found, please select one from above via index.";
 const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";
-const string LogicUpdater::UNDO_MESSAGE = " undo";
-const string LogicUpdater::REDO_MESSAGE = " redo";
+const string LogicUpdater::UNDO_MESSAGE = "undo";
+const string LogicUpdater::REDO_MESSAGE = "redo";
 
 
 const string LogicUpdater::WORD_TODAY = "Today";
