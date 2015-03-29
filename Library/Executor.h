@@ -16,10 +16,6 @@ private:
 public:
 	Executor();
 
-	//getters
-	stack<Command*> getUndoStack();
-	stack<Command*> getRedoStack();
-
 	//methods for executing commands
 	Command* execute(Command* command);
 	Command* undo();
