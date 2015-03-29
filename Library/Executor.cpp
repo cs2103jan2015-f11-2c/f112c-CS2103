@@ -11,10 +11,23 @@ Executor::Executor() {
 	}
 }
 
+
+//GETTERS
+stack<Command*> Executor::getUndoStack() {
+	return undoStack;
+}
+
+stack<Command*> Executor::getRedoStack() {
+	return redoStack;
+}
+
+
+//FOR EXECUTING COMMANDS
 Command* Executor::execute(Command* command) {
 	command->execute();
 
-	if (command->getIsUndoable()) {
+	//only push command into undoStack if it is undoable and it has been executed thoroughly
+	if (command->getIsUndoable() && command->getEvent().getID() != Command::INVALID_NUMBER) {
 		undoStack.push(command);
 	}
 

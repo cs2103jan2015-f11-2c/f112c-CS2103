@@ -178,14 +178,16 @@ void DeleteCommand::execute() {
 		deleteImmediately();
 		return;
 	}
-
+	
 	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
 	int numResults = getNumEvents(tempEvents);
-
+	
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
+		userEvent = createInvalidEvent();
 		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
+		
 		switch (numResults) {
 		case 0: { //no partial match
 			deletedEvents.push_back(createInvalidEvent());
