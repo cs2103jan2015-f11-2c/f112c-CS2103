@@ -5,6 +5,10 @@ Executor::Executor() {
 	while (!undoStack.empty()) {
 		undoStack.pop();
 	}
+
+	while (!redoStack.empty()) {
+		redoStack.pop();
+	}
 }
 
 Command* Executor::execute(Command* command) {
@@ -22,6 +26,7 @@ Command* Executor::undo() {
 		return new NullCommand;
 	}
 	
+	//push most recently executed command from undo stack to redo stack, undo that command
 	Command* commandPtr = undoStack.top();
 	redoStack.push(commandPtr);
 	commandPtr->undo();
@@ -34,6 +39,7 @@ Command* Executor::redo() {
 		return new NullCommand;
 	}
 
+	//push most recently undone command from redo stack to undo stack, execute that command
 	Command* commandPtr = redoStack.top();
 	undoStack.push(commandPtr);
 	commandPtr->execute();

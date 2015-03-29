@@ -29,14 +29,21 @@ public:
 	//for logging
 	static const string LOG_FILE_NAME;
 	static const string CREATING_ADD;
+	static const string CREATED_ADD;
 	static const string CREATING_DELETE;
+	static const string CREATED_DELETE;
 	static const string CREATING_EDIT;
+	static const string CREATED_EDIT;
 	static const string CREATING_SHOW;
+	static const string CREATED_SHOW;
 	static const string CREATING_SHOWALL;
+	static const string CREATED_SHOWALL;
 	static const string CREATING_SHOWFLOAT;
+	static const string CREATED_SHOWFLOAT;
 	static const string CREATING_SEARCH;
-	static const string CREATING_UNDO;
-	static const string CREATING_REDO;
+	static const string CREATED_SEARCH;
+	static const string QUEUEING_UNDO;
+	static const string QUEUEING_REDO;
 	static const string CASE_0;
 	static const string CASE_1;
 
@@ -50,7 +57,6 @@ public:
 
 	//getters
 	EventStorage getEventStorage();
-
 	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
 	vector<LogicUpdater::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
@@ -62,7 +68,7 @@ public:
 	//executors
 	bool executeUserInput(string input);
 	Command* queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent);
-	void setDisplay(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent, bool& isDone);
+	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
 	void setEventVector(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void deleteParserPtr();
 
