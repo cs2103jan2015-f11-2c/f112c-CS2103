@@ -842,10 +842,12 @@ void ParserProcessor::editEventCorrector(){
 	}
 	
 	//Only calls correctors after Start day/Start time/End day/End time has been completed
-	try {
-		checkStartBeforeEnd();
-	} catch (ParserExceptions& e){
-		throw e;
+	if(startDayFound || startTimeFound){
+		try {
+			checkStartBeforeEnd();
+		} catch (ParserExceptions& e){
+			throw e;
+		}
 	}
 	eventMktimeCorrector();
 
@@ -919,7 +921,7 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 
 	//Exception Cases:
 	//Case 1: no show is found
-	if (!systemShowOthers && !systemShowYear && !userShowDay && !userShowMonth && !userShowRangeOfDays && !userShowRangeOfMonths){
+	if (!systemShowOthers && !systemShowYear && !userShowDay && !userShowMonth && !userShowRangeOfDays && !userShowRangeOfMonths && !systemShowWeek && !systemShowMonth){
 		logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
 		throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
 	}
@@ -936,6 +938,13 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 
 	//Correcting dates
 	showEventCorrector();
+	if(!systemShowOthers){
+		try {
+			checkStartBeforeEnd();
+		} catch (ParserExceptions& e){
+			throw e;
+		}
+	}
 	eventMktimeCorrector();
 
 	return tempEventStore;
@@ -948,6 +957,7 @@ bool ParserProcessor::checkShowByYear(int tempIndex){
 	int day = now->tm_mday;
 	int month = now->tm_mon;
 	int year = now->tm_year;
+	bool nextFound = false;
 	std::string firstWord = fragmentedWords[tempIndex];
 
 	try {      //Check if first word is a year integer. E.g. 2015
@@ -983,9 +993,19 @@ bool ParserProcessor::checkShowByYear(int tempIndex){
 			}
 		}
 	} catch (std::invalid_argument &e){  //Check if it is system show year, which shows current year
+		if (firstWord == "next" || firstWord == "nxt"){
+			tempIndex++;
+			nextFound = true;
+			firstWord = fragmentedWords[tempIndex];
+		}
 		if(firstWord == "year" || firstWord == "yr"){
-			tempEventStore.setStartDate(day,month,year);
-			tempEventStore.setEndDate(31,11,year);
+			if(nextFound){
+				tempEventStore.setStartDate(1,0,year+1);
+				tempEventStore.setEndDate(31,11,year+1);
+			} else {
+				tempEventStore.setStartDate(day,month,year);
+				tempEventStore.setEndDate(31,11,year);
+			}
 			systemShowYear = true;
 		}
 	}
@@ -1001,21 +1021,35 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 	int day = now->tm_mday;
 	int month = now->tm_mon;
 	int year = now->tm_year;
+	bool nextFound = false;
 	std::string firstWord = fragmentedWords[tempIndex];
 	
-	//Check all system show commands and assign Start and End date accordingly if required.
+	//Check all system show commands and assign Start and End date accordingly if required
+	if (firstWord == "next" || firstWord == "nxt"){
+		tempIndex++;
+		nextFound = true;
+		firstWord = fragmentedWords[tempIndex];
+	}
 	if (firstWord == "week" || firstWord == "wk"){
 		weekday = now->tm_wday;
 		daysToEndWeek = 6 - weekday;
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(day+daysToEndWeek,month,year);
+		if(nextFound){
+			tempEventStore.setStartDate(day + daysToEndWeek + 1,month,year);
+			tempEventStore.setEndDate(day + daysToEndWeek + 1 + NUMBER_OF_DAYSINAWEEK,month,year);
+		} else {
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day + daysToEndWeek,month,year);
+		}
 		systemShowWeek = true;
-		systemShowOthers = true;
 	} else if(firstWord == "month" || firstWord == "mth"){
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+		if(nextFound){
+			tempEventStore.setStartDate(1,month+1,year);
+			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month+1,year);
+		} else {
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+		}
 		systemShowMonth = true;
-		systemShowOthers = true;
 	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord == "important" || firstWord == "impt"){
 		tempEventStore.setName(firstWord);
 		systemShowOthers = true;
@@ -1033,7 +1067,7 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 		tempEventStore.setName("specificimportance");
 		systemShowOthers = true;
 	}
-	return systemShowOthers;
+	return (systemShowOthers || systemShowWeek || systemShowMonth);
 }
 	
 //Checks the string at the current index of the fragmented string vector for the presence of any keywords of days. If found, further operations are 
