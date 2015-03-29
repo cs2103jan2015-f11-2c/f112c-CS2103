@@ -16,7 +16,7 @@ using std::ostringstream;
 class Command {
 public:
 	static const int INVALID_NUMBER;
-	static const int EMPTY;
+	static const int SIZE_ZERO;
 	static const int SIZE_ONE;
 
 	static const string LOG_FILE_NAME;

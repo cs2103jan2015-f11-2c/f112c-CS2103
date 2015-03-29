@@ -224,11 +224,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec;
-						tmVec.push_back(normalEvents[1].getStartDate());
-						tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-						mktime(&tmVec[0]);
-						mktime(&tmVec[1]);
-
+						setTMForManyEvents(tmVec, normalEvents);
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -291,11 +287,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec;
-						tmVec.push_back(normalEvents[1].getStartDate());
-						tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
-						mktime(&tmVec[0]);
-						mktime(&tmVec[1]);
-
+						setTMForManyEvents(tmVec, normalEvents);
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -513,6 +505,16 @@ int Logic::convertNameToID(string name) {
 	}
 }
 
+void Logic::setTMForManyEvents(vector<tm>& tmVec, vector<Event> eventVec) {
+	tmVec.push_back(eventVec[1].getStartDate());
+	tmVec.push_back(eventVec[eventVec.size() - 1].getEndDate());
+	mktime(&tmVec[0]);
+	mktime(&tmVec[1]);
+	return;
+}
+
+
+//LOG
 void Logic::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 

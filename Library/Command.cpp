@@ -2,7 +2,7 @@
 
 
 const int Command::INVALID_NUMBER = -1;
-const int Command::EMPTY = 0;
+const int Command::SIZE_ZERO = 0;
 const int Command::SIZE_ONE = 1;
 
 const string Command::LOG_FILE_NAME = "CommandLog.txt";
@@ -28,7 +28,7 @@ int Command::getNumEvents(vector<Event> eventVec) {
 		}
 	}
 
-	int count = EMPTY;
+	int count = SIZE_ZERO;
 	vector<int> idVec;
 
 	//only count events with different ID
@@ -174,7 +174,7 @@ DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
 
 void DeleteCommand::execute() {
 	//if id found in current display, delete immediately
-	if (id > EMPTY) {
+	if (id > SIZE_ZERO) {
 		deleteImmediately();
 		return;
 	}
@@ -183,7 +183,7 @@ void DeleteCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case EMPTY: { //no exact match
+	case SIZE_ZERO: { //no exact match
 		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
 		switch (numResults) {
@@ -273,11 +273,11 @@ void EditCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case EMPTY: { //no exact match
+	case SIZE_ZERO: { //no exact match
 		tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
 		numResults = tempEvents.size();
 		switch (numResults) {
-		case EMPTY: { //no partial match
+		case SIZE_ZERO: { //no partial match
 			editedResults.push_back(createInvalidEvent());
 			isExecuted = true;
 			return;
