@@ -297,6 +297,8 @@ namespace UI {
 			this->display->ReadOnly = true;
 			this->display->TabStop = false;
 			this->toolTip1->SetToolTip(this->display, resources->GetString(L"display.ToolTip"));
+			this->display->SelectionChanged += gcnew System::EventHandler(this, &MapleSyrup::display_SelectionChanged);
+			this->display->Enter += gcnew System::EventHandler(this, &MapleSyrup::display_Enter);
 			this->display->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::display_KeyDown);
 			// 
 			// floatingTasksDisplay
@@ -309,6 +311,7 @@ namespace UI {
 			this->floatingTasksDisplay->ShortcutsEnabled = false;
 			this->floatingTasksDisplay->TabStop = false;
 			this->toolTip1->SetToolTip(this->floatingTasksDisplay, resources->GetString(L"floatingTasksDisplay.ToolTip"));
+			this->floatingTasksDisplay->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::floatingTasksDisplay_KeyDown);
 			// 
 			// mainDisplayLabel
 			// 
@@ -389,12 +392,14 @@ namespace UI {
 			this->calenderTop->ScrollChange = 1;
 			this->toolTip1->SetToolTip(this->calenderTop, resources->GetString(L"calenderTop.ToolTip"));
 			this->calenderTop->DateSelected += gcnew System::Windows::Forms::DateRangeEventHandler(this, &MapleSyrup::calenderTop_DateSelected);
+			this->calenderTop->Leave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_Leave);
 			// 
 			// redoButton
 			// 
 			this->redoButton->BackColor = System::Drawing::Color::White;
 			resources->ApplyResources(this->redoButton, L"redoButton");
 			this->redoButton->Name = L"redoButton";
+			this->redoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
 			this->redoButton->UseVisualStyleBackColor = false;
 			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
@@ -404,6 +409,7 @@ namespace UI {
 			this->undoButton->BackColor = System::Drawing::Color::White;
 			resources->ApplyResources(this->undoButton, L"undoButton");
 			this->undoButton->Name = L"undoButton";
+			this->undoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
 			this->undoButton->UseVisualStyleBackColor = false;
 			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
@@ -415,6 +421,7 @@ namespace UI {
 			resources->ApplyResources(this->showButton, L"showButton");
 			this->showButton->ForeColor = System::Drawing::Color::Black;
 			this->showButton->Name = L"showButton";
+			this->showButton->TabStop = false;
 			this->showButton->UseVisualStyleBackColor = false;
 			this->showButton->Click += gcnew System::EventHandler(this, &MapleSyrup::showButton_Click);
 			// 
@@ -425,6 +432,7 @@ namespace UI {
 			resources->ApplyResources(this->helpButton, L"helpButton");
 			this->helpButton->ForeColor = System::Drawing::Color::Black;
 			this->helpButton->Name = L"helpButton";
+			this->helpButton->TabStop = false;
 			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
 			// 
@@ -624,6 +632,7 @@ private: void initializeShortcut(){
 private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Escape){
 				display->Select();
+				
 			 }
 
 			 ///////////////////////Shortcuts that uses control key///////////////////////////
@@ -1098,7 +1107,7 @@ private: System::Void helpButton_Click(System::Object^  sender, System::EventArg
 
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			initializeAndUndisplayAll(); 
+			executeCalendarShortcut();
 		 }
 
 
@@ -1224,7 +1233,9 @@ private: void executeCalendarShortcut(){
 			 calenderIcon_Click(dummy1,dummy2);
 		 }
 
-
+private: System::Void calenderTop_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 executeCalendarShortcut();
+		 }
 //===================================================================================================================================================================
 
 
@@ -1306,28 +1317,69 @@ private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs
 //===================================================================================================================================================================	
 
 private: void executeBackKey(){
-				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-				std::string mainLabel = convertTostd(mainDisplayLabel->Text);
-				std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
-				executeUserInput(newShowCommand);
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+			 executeUserInput(newShowCommand);
 		 }
 
 private: void executeNextKey(){
-				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-				std::string mainLabel = convertTostd(mainDisplayLabel->Text);
-				std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
-				executeUserInput(newShowCommand);
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertTostd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+			 executeUserInput(newShowCommand);
+		 }
+
+private: int stringToInt(std::string input){
+			 int positionOfLastInt = 0;
+			 
+			 for (int i=0; isdigit(input[i]);i++ ){
+				positionOfLastInt = i; 
+			 }
+
+			 int outNum;
+			 std::istringstream in(input.substr(0,positionOfLastInt+1));
+			 in >> outNum;
+			 return outNum;
+		 }
+
+
+
+private: void shiftLineFocusUp(){
+			 display->ScrollToCaret();
+
 		 }
 
 private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		  if (e->KeyCode == Keys::Left ){
+		  if (e->KeyCode == Keys::Left){
 				 executeBackKey();
+				 display->SelectionStart = 0;
 			 }
 
-		  if (e->KeyCode == Keys::Right ){
+		  if (e->KeyCode == Keys::Right){
 				executeNextKey();
-			 } 
+				display->SelectionStart = 0;
+			 }
+
+		  if (e->KeyCode == Keys::Escape){
+			    floatingTasksDisplay->Select();
+				floatingTasksDisplay->SelectionStart = 0;
+			 }
+
+
 		 }
+
+private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::Escape){
+			    commandBox->Select();
+			 }
+
+		 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 executeUserInput("redo");
@@ -1335,6 +1387,18 @@ private: System::Void redoButton_Click(System::Object^  sender, System::EventArg
 		 }
 private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 executeUserInput("undo");
+		 }
+
+
+
+private: System::Void display_SelectionChanged(System::Object^  sender, System::EventArgs^  e) {
+			 int startIndex = display->GetFirstCharIndexOfCurrentLine();
+			 
+			 
+			 //display->SelectionLength = length;
+		 }
+private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 display->SelectionStart = 0;
 		 }
 
 };

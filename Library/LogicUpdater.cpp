@@ -171,8 +171,10 @@ void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatin
 }
 
 void LogicUpdater::setFeedbackStrings(string newFeedback) {
-	feedbackDisplayStrings.push_back(newFeedback);
-	
+	if (newFeedback != ""){
+		feedbackDisplayStrings.push_back(newFeedback);
+	}
+
 	while (feedbackDisplayStrings.size()>3){
 		feedbackDisplayStrings.erase(feedbackDisplayStrings.begin());
 	}
@@ -560,11 +562,11 @@ void LogicUpdater::normalEventsToString() {
 
 			std::string nameOfEvent = normalEvents[i].getName();
 
-			while( nameOfEvent.size() > 43 ){
-				out << nameOfEvent.substr(0,43);
+			while( nameOfEvent.size() > 42 ){
+				out << nameOfEvent.substr(0,42);
 				out << "\n";
 				out << "\t\t\t\t\t";
-				nameOfEvent = nameOfEvent.substr(43);
+				nameOfEvent = nameOfEvent.substr(42);
 			}
 
 			out << nameOfEvent;
