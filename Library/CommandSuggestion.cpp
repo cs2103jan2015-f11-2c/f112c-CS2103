@@ -33,7 +33,7 @@ const std::string CommandSuggestion::COMMAND_SEARC = "searc";
 const std::string CommandSuggestion::COMMAND_SHO = "sho";
 
 const std::string CommandSuggestion::SUGGESTION_ADD_1 = " add CS2103 finals; 8feb 8am to 1015am (1 day event)";
-const std::string CommandSuggestion::SUGGESTION_ADD_2 = " add Holidays; 17-19apr 9.30-11.45pm (event over serveral days)";
+const std::string CommandSuggestion::SUGGESTION_ADD_2 = " add Holidays; 17-19apr 9.30-11.45pm (event over several days)";
 const std::string CommandSuggestion::SUGGESTION_ADD_3 = " add Go for a run; 9am (Today)";
 
 const std::string CommandSuggestion::SUGGESTION_DELETE_1 = " delete 2";

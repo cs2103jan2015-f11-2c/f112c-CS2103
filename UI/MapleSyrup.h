@@ -942,6 +942,10 @@ public: void executeUserInput(std::string input){
 
 			}
 
+			if (input == "shortcuts"){
+				return;
+			}
+
 			///////////////////////////////////////////////////////////////////////
 
   			 bool isExecuted = lGPtr->executeUserInput(input);
@@ -1107,7 +1111,10 @@ private: System::Void helpButton_Click(System::Object^  sender, System::EventArg
 
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			executeCalendarShortcut();
+			//close everything
+			calenderTop->Visible = false;
+			topCalenderDisplayed = false;
+			calenderTop->SendToBack();
 		 }
 
 
@@ -1393,8 +1400,6 @@ private: System::Void undoButton_Click(System::Object^  sender, System::EventArg
 
 private: System::Void display_SelectionChanged(System::Object^  sender, System::EventArgs^  e) {
 			 int startIndex = display->GetFirstCharIndexOfCurrentLine();
-			 
-			 
 			 //display->SelectionLength = length;
 		 }
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
