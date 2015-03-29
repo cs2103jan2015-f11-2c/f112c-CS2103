@@ -33,7 +33,8 @@ public:
 		SHOWIMPORTANT,
 		SHOWALLIMPORTANT,
 		UNDO,
-		REDO
+		REDO,
+		COMPLETE
 	};
 
 	static const std::string TOKENISE_ORIGINAL_STRING;
@@ -50,7 +51,7 @@ private:
 	Event tempEventStore;
 	std::string nameOfEvent;
 
-	static const int NUMBER_OF_KEYWORDS_COMMANDS = 8;
+	static const int NUMBER_OF_KEYWORDS_COMMANDS = 10;
 	std::string keywordCommands[NUMBER_OF_KEYWORDS_COMMANDS];
 
 public:
@@ -63,7 +64,15 @@ public:
 	std::string getNameOfEvent();
 
 	//main methods
-	void tokenizeOriginalString();	//identify first command and call corresponding function to further identify
+	void processInput();
+	void tokenizeOriginalString();
+	void determineCommandType();
+	void determineAddCommand();
+	void determineDelCommand();
+	void determineEditCommand();
+	void determineShowCommand();
+	void determineCompleteCommand();
+	void determineOtherCommand();
 	bool checkCommandExist();
 	bool checkCommandUndoRedo();
 	std::string createFeedback(std::string);

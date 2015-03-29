@@ -17,7 +17,7 @@ private:
 public:
 	static const std::string EXTRACT_FIRST_WORD;
 	static const std::string EXTRACT_DETAILS;
-	static const std::string EXTRACT_DEL_EVENT_NAME;
+	static const std::string EXTRACT_DEL_DONE_EVENT_NAME;
 	static const std::string EXTRACT_EDIT_EVENT_NAME;
 	static const std::string REMOVE_EDIT_EVENT_NAME;
 	static const std::string FRAGMENT_ADD_STRING;
@@ -28,7 +28,7 @@ public:
 
 	std::string extractFirstWord(std::string);
 	std::string extractDetails(std::string);
-	std::string extractDelEventName(std::string);
+	std::string extractDelDoneEventName(std::string);
 	std::string extractEditEventName(std::string);
 	std::string removeEditEventName(std::string, std::string);
 	std::vector<std::string> fragmentAddString(std::string);

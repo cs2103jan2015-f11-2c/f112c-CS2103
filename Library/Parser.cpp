@@ -12,10 +12,12 @@ Parser::Parser(std::string input)
 	keywordCommands[5] = "search";
 	keywordCommands[6] = "undo";
 	keywordCommands[7] = "redo";
+	keywordCommands[8] = "done";
+	keywordCommands[9] = "completed";
 
 	logger.logParserStart(input);
 	original = input;
-	this->tokenizeOriginalString();
+	this->processInput();
 }
 
 Parser::~Parser(void)
@@ -52,6 +54,19 @@ std::string Parser::getNameOfEvent(){
 //These are done by calling InputStringSplit object to separate the input string into its components, and then calling the ParserProcessor object to retrieve the information 
 //and organise them into the Event format. 
 //Receives any thrown exceptions from the InputStringSplit and ParserProcessor objects and sets the feedback to the user, to be returned to Logic.
+void Parser::processInput(){
+	try {
+		tokenizeOriginalString();
+		determineCommandType();
+		logger.logParserSuccess(original);
+	} catch (ParserExceptions& e){
+		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
+		typeOfCommand = Parser::ERROR_;
+		logger.logParserFailure(original);
+	}
+}
+
+//Function splits the input string into command and details.
 void Parser::tokenizeOriginalString(){
 	logger.logParserEnterFunc(TOKENISE_ORIGINAL_STRING);
 
@@ -65,59 +80,118 @@ void Parser::tokenizeOriginalString(){
 			details = original;
 			command = "add";
 		}
-	
-		std::vector<std::string> fragmentedWords;
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineCommandType(){
+	try {
 		if(command == "add"){
-			fragmentedWords = splitter.fragmentAddString(details);
-			tempEventStore = processor.processAddEvent(fragmentedWords);
-			if(tempEventStore.getIsFloating() == true){
-				typeOfCommand = Parser::ADDFLOAT;
-			} else {
-				typeOfCommand = Parser::ADD;
-			}
+			determineAddCommand();
 		} else if(command == "delete" || command == "del"){
-			nameOfEvent = splitter.extractDelEventName(details);
-			typeOfCommand = Parser::DELETE_;
+			determineDelCommand();
 		} else if(command == "edit"){
-			nameOfEvent = splitter.extractEditEventName(details);
-			details = splitter.removeEditEventName(details,nameOfEvent);
-			fragmentedWords = splitter.fragmentEditString(details);
-			tempEventStore = processor.processEditEvent(fragmentedWords);
-			typeOfCommand = Parser::EDIT;
+			determineEditCommand();
 		} else if(command == "show"){
-			nameOfEvent = details;
-			fragmentedWords = splitter.fragmentShowString(details);
-			tempEventStore = processor.processShowEvent(fragmentedWords);
-			if(tempEventStore.getName() == "floating" || tempEventStore.getName() == "float"){
-				typeOfCommand = Parser::SHOWFLOAT;
-			} else if(tempEventStore.getName() == "all"){
-				typeOfCommand = Parser::SHOWALL;
-			} else if(tempEventStore.getName() == "due"){
-				typeOfCommand = Parser::SHOWDUE;
-			} else if(tempEventStore.getName() == "specificimportance"){
-				typeOfCommand = Parser::SHOWIMPORTANT;
-			} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
-				typeOfCommand = Parser::SHOWALLIMPORTANT;
-			} else {
-				typeOfCommand = Parser::SHOW;
-			}
-		} else if(command == "search"){
-			nameOfEvent = details;
-			typeOfCommand = Parser::SEARCH;
-		} else if(command == "undo"){
-			typeOfCommand = Parser::UNDO;
-		} else if(command == "redo"){
-			typeOfCommand = Parser::REDO;
+			determineShowCommand();
+		} else if(command == "done" || command == "completed"){
+			determineCompleteCommand();
+		} else if(command == "search" || command == "undo" || command == "redo"){
+			determineOtherCommand();
 		} else {
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_COMMAND);
 		}
-		logger.logParserSuccess(original);
 	} catch (ParserExceptions& e){
-		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
-		typeOfCommand = Parser::ERROR_;
-		logger.logParserFailure(original);
+		throw e;
 	}
 	return;
+}
+
+void Parser::determineAddCommand(){
+	std::vector<std::string> fragmentedWords;
+
+	try {
+		fragmentedWords = splitter.fragmentAddString(details);
+		tempEventStore = processor.processAddEvent(fragmentedWords);
+		if(tempEventStore.getIsFloating() == true){
+			typeOfCommand = Parser::ADDFLOAT;
+		} else {
+			typeOfCommand = Parser::ADD;
+		}
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineDelCommand(){
+	try {
+		nameOfEvent = splitter.extractDelDoneEventName(details);
+		typeOfCommand = Parser::DELETE_;
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineEditCommand(){
+	std::vector<std::string> fragmentedWords;
+	
+	try {
+		nameOfEvent = splitter.extractEditEventName(details);
+		details = splitter.removeEditEventName(details,nameOfEvent);
+		fragmentedWords = splitter.fragmentEditString(details);
+		tempEventStore = processor.processEditEvent(fragmentedWords);
+		typeOfCommand = Parser::EDIT;
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineShowCommand(){
+	std::vector<std::string> fragmentedWords;
+	
+	try {
+		nameOfEvent = details;
+		fragmentedWords = splitter.fragmentShowString(details);
+		tempEventStore = processor.processShowEvent(fragmentedWords);
+		if(tempEventStore.getName() == "floating" || tempEventStore.getName() == "float"){
+			typeOfCommand = Parser::SHOWFLOAT;
+		} else if(tempEventStore.getName() == "all"){
+			typeOfCommand = Parser::SHOWALL;
+		} else if(tempEventStore.getName() == "due"){
+				typeOfCommand = Parser::SHOWDUE;
+		} else if(tempEventStore.getName() == "specificimportance"){
+				typeOfCommand = Parser::SHOWIMPORTANT;
+		} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
+				typeOfCommand = Parser::SHOWALLIMPORTANT;
+		} else {
+				typeOfCommand = Parser::SHOW;
+		}
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineCompleteCommand(){
+	try {
+		nameOfEvent = splitter.extractDelDoneEventName(details);
+		typeOfCommand = Parser::COMPLETE;
+	} catch (ParserExceptions& e){
+		throw e;
+	}
+}
+
+void Parser::determineOtherCommand(){
+	if(command == "search"){
+		nameOfEvent = details;
+		typeOfCommand = Parser::SEARCH;
+	} else if(command == "done" || command == "completed"){
+		typeOfCommand = Parser::COMPLETE;
+	} else if(command == "undo"){
+		typeOfCommand = Parser::UNDO;
+	} else if(command == "redo"){
+		typeOfCommand = Parser::REDO;
+	}
 }
 
 //Checks with a list of commands that Parser recognises to confirm whether the command is supported.

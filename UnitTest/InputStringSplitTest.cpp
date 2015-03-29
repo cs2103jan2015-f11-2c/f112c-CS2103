@@ -106,13 +106,13 @@ namespace UnitTest
 		}
 		
 		//Extracts the name of event by finding the last ;, or the index if event name is not found
-		TEST_METHOD(extractDelEventName_Test)
+		TEST_METHOD(extractDelDoneEventName_Test)
 		{
 			//Case 1: Empty string
 			testInput = "";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
 			try {
-				testOutput = splitter.extractDelEventName(testInput);
+				testOutput = splitter.extractDelDoneEventName(testInput);
 			} catch (ParserExceptions& e){
 				testOutput = e.getExceptionCode();
 			}
@@ -120,19 +120,19 @@ namespace UnitTest
 
 			//Case 2: Index only
 			testInput = "13";
-			testOutput = splitter.extractDelEventName(testInput);
+			testOutput = splitter.extractDelDoneEventName(testInput);
 			expectedOutput = "13";
 			Assert::AreEqual(expectedOutput,testOutput);
 			
 			//Case 3: Event name only
 			testInput = "event name12345;";
-			testOutput = splitter.extractDelEventName(testInput);
+			testOutput = splitter.extractDelDoneEventName(testInput);
 			expectedOutput = "event name12345";
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 4: Event name and additional details
 			testInput = "21 jump street; 24-25apr 8pm";
-			testOutput = splitter.extractDelEventName(testInput);
+			testOutput = splitter.extractDelDoneEventName(testInput);
 			expectedOutput = "21 jump street";
 			Assert::AreEqual(expectedOutput,testOutput);
 
@@ -140,7 +140,7 @@ namespace UnitTest
 			testInput = "21 jump street";
 			expectedOutput = ParserExceptions::ERROR_TOO_MANY_DEL;
 			try {
-				testOutput = splitter.extractDelEventName(testInput);
+				testOutput = splitter.extractDelDoneEventName(testInput);
 			} catch (ParserExceptions& e){
 				testOutput = e.getExceptionCode();
 			}
@@ -150,7 +150,7 @@ namespace UnitTest
 			testInput = "jumpstreet";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INDEX;
 			try {
-				testOutput = splitter.extractDelEventName(testInput);
+				testOutput = splitter.extractDelDoneEventName(testInput);
 			} catch (ParserExceptions& e){
 				testOutput = e.getExceptionCode();
 			}

@@ -2,7 +2,7 @@
 
 const std::string InputStringSplit::EXTRACT_FIRST_WORD = "extractFirstWord";
 const std::string InputStringSplit::EXTRACT_DETAILS = "extractDetails";
-const std::string InputStringSplit::EXTRACT_DEL_EVENT_NAME = "extractDelEventName";
+const std::string InputStringSplit::EXTRACT_DEL_DONE_EVENT_NAME = "extractDelDoneEventName";
 const std::string InputStringSplit::EXTRACT_EDIT_EVENT_NAME = "extractEditEventName";
 const std::string InputStringSplit::REMOVE_EDIT_EVENT_NAME = "removeEditEventName";
 const std::string InputStringSplit::FRAGMENT_ADD_STRING = "fragmentAddString";
@@ -70,8 +70,8 @@ std::string InputStringSplit::extractDetails(std::string input){
 
 //Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
 //Throws exception if no event name/ event index is found or if too many information is provided. Returns the extracted event name/index in string format.
-std::string InputStringSplit::extractDelEventName(std::string input){
-	logger.logParserEnterFunc(EXTRACT_DEL_EVENT_NAME);
+std::string InputStringSplit::extractDelDoneEventName(std::string input){
+	logger.logParserEnterFunc(EXTRACT_DEL_DONE_EVENT_NAME);
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
