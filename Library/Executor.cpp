@@ -14,7 +14,7 @@ Executor::Executor() {
 Command* Executor::execute(Command* command) {
 	command->execute();
 
-	if (command->getIsUndoable()) {
+	if (command->getIsUndoable() && command->getEvent().getID() != Command::INVALID_NUMBER) {
 		undoStack.push(command);
 	}
 

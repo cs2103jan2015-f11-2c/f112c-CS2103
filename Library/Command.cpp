@@ -184,6 +184,7 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
+		userEvent = createInvalidEvent();
 		tempEvents = eventStore->findNameOccurrence(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
 		switch (numResults) {
@@ -274,6 +275,7 @@ void EditCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
+		eventToEdit = createInvalidEvent();
 		tempEvents = eventStore->findNameOccurrence(eventToEdit.getName());
 		numResults = tempEvents.size();
 		switch (numResults) {
@@ -310,6 +312,7 @@ void EditCommand::execute() {
 				   }
 
 	default:{ //more than 1 exact match
+		eventToEdit = createInvalidEvent();
 		editedResults = eventStore->findNameOccurrence(eventToEdit.getName());
 		isExecuted = false;
 		return;
