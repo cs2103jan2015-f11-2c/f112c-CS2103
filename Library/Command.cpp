@@ -41,6 +41,15 @@ int Command::getNumEvents(vector<Event> eventVec) {
 	return count;
 }
 
+Event Command::getEventFromID(vector<Event> eventVec, int id) {
+	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+		if (eventVec[i].getID() == id) {
+			return eventVec[i];
+		}
+	}
+	return createInvalidEvent();
+}
+
 Event Command::createInvalidEvent() {
 	Event invalidEvent;
 	invalidEvent.setID(INVALID_NUMBER);
@@ -306,6 +315,7 @@ void EditCommand::execute() {
 			eventToEdit = tempEvents[1];
 			editedResults = eventStore->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
 		}
+		editedEvent = getEventFromID(editedResults, eventToEdit.getID());
 		isExecuted = true;
 		return;
 		break;
@@ -331,17 +341,10 @@ Event EditCommand::getEvent() {
 }
 
 void EditCommand::undo() {
-	int numEvents = getNumEvents(editedResults);
-
-	//numEvents = 1 means event was successfully edited, stored in vector
-	if (numEvents == SIZE_ONE) {
-		if (isFloating) { //delete edited floating event, add original floating event
-			eventStore->deleteEvent(editedResults[0].getID(), editedResults[0]);
-			editedResults = eventStore->addEvent(eventToEdit);
-		} else { //delete edited normal event, add original normal event
-			eventStore->deleteEvent(editedResults[1].getID(), editedResults[1]);
-			editedResults = eventStore->addEvent(eventToEdit);
-		}
+	if (eventToEdit.getID() != INVALID_NUMBER) {
+		eventStore->deleteEvent(editedEvent.getID(), editedEvent);
+		editedResults = eventStore->addEvent(eventToEdit);
+		return;
 	}
 }
 

@@ -32,6 +32,7 @@ public:
 	bool getIsExecuted();
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
+	Event getEventFromID(vector<Event> eventVec, int id);
 	Event createInvalidEvent();
 
 	//logging methods
