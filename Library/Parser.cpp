@@ -164,6 +164,8 @@ void Parser::determineShowCommand(){
 				typeOfCommand = Parser::SHOWIMPORTANT;
 		} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
 				typeOfCommand = Parser::SHOWALLIMPORTANT;
+		} else if(tempEventStore.getName() == "completed" || tempEventStore.getName() == "done"){
+				typeOfCommand = Parser::SHOWCOMPLETE;
 		} else {
 				typeOfCommand = Parser::SHOW;
 		}

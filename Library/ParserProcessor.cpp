@@ -718,7 +718,7 @@ void ParserProcessor::addEventCorrector(){
 			tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
 		}
 		if(endDayFound && !endTimeFound){
-			tempEventStore.setStartTime(0,0);
+			tempEventStore.setStartTime(23,59);
 			tempEventStore.setEndTime(23,59);
 			tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
 			endTimeFound = true;
@@ -1064,7 +1064,8 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		}
 		systemShowMonth = true;
-	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || firstWord == "important" || firstWord == "impt"){
+	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || 
+				firstWord == "important" || firstWord == "impt" || firstWord == "done" || firstWord == "completed"){
 		tempEventStore.setName(firstWord);
 		systemShowOthers = true;
 	} else if(firstWord[0] == '!'){
