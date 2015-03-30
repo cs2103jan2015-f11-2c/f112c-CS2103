@@ -52,6 +52,8 @@ public:
 	void writeToCurrentFile();
 	void readToContent();
 
+	void export(std::ofstream& writeFile);
+
 	void createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed);
 	void createNormalEvent(Event* tempEvent, string name, string id, string deadline, string importance, string startHour, string startMin, string startDay, 
 								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed);
