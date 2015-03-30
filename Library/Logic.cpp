@@ -39,7 +39,7 @@ Logic::~Logic() {
 
 
 //GETTERS
-EventStorage Logic::getEventStorage() {
+EventFacade Logic::getEventStorage() {
 	return eventStore;
 }
 

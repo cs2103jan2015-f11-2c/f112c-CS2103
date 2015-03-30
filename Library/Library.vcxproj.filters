@@ -7,12 +7,6 @@
     <ClCompile Include="Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIHelp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UIShow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EventLog.cpp">
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
@@ -20,9 +14,6 @@
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
     <ClCompile Include="EventStorage.cpp">
-      <Filter>Source Files\Storage</Filter>
-    </ClCompile>
-    <ClCompile Include="Search.cpp">
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
     <ClCompile Include="EventArchive.cpp">
@@ -43,6 +34,9 @@
     <ClCompile Include="InputStringSplit.cpp">
       <Filter>Source Files\Parser</Filter>
     </ClCompile>
+    <ClCompile Include="CommandSuggestion.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
@@ -55,8 +49,20 @@
     <ClCompile Include="LogicUpdater.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="CommandSuggestion.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="UIShow.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIHelp.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSearch.cpp">
+      <Filter>Source Files\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="EventFacade.cpp">
+      <Filter>Source Files\Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="EventModifier.cpp">
+      <Filter>Source Files\Storage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,12 +70,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UIHelp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UIShow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EventArchive.h">
@@ -96,8 +96,8 @@
     <ClInclude Include="ParserProcessor.h">
       <Filter>Header Files\Parser</Filter>
     </ClInclude>
-    <ClInclude Include="Search.h">
-      <Filter>Header Files\Storage</Filter>
+    <ClInclude Include="CommandSuggestion.h">
+      <Filter>Header Files\Logic</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files\Logic</Filter>
@@ -114,8 +114,20 @@
     <ClInclude Include="Executor.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="CommandSuggestion.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="UIShow.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIHelp.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EventFacade.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="EventModifier.h">
+      <Filter>Header Files\Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSearch.h">
+      <Filter>Header Files\Storage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +154,12 @@
     </Filter>
     <Filter Include="Source Files\Logic">
       <UniqueIdentifier>{75da12cd-1a5e-4b46-ae7a-a8bd959dc568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{95c37c90-9dec-4a37-b48e-4c1e223b989d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{a8aeaa31-b6be-4539-8428-16cd6af51dfb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

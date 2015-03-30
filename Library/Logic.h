@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include "Parser.h"
-#include "EventStorage.h"
+#include "EventFacade.h"
 #include "LogicUpdater.h"
 #include "Command.h"
 #include "Executor.h"
@@ -20,7 +20,7 @@ using std::ostringstream;
 class Logic {
 private:
 	Parser* parserPtr;
-	EventStorage eventStore;
+	EventFacade eventStore;
 	LogicUpdater updater;
 	Executor executor;
 	vector<string> logStrings;
@@ -56,7 +56,7 @@ public:
 
 
 	//getters
-	EventStorage getEventStorage();
+	EventFacade getEventStorage();
 	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
 	vector<LogicUpdater::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();

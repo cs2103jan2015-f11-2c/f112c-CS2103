@@ -10,6 +10,17 @@
 
 #include "Event.h"
 
+const string LABEL_STARTYEAR = "Start Year: ";
+const string LABEL_STARTMONTH = "Start Month: ";
+const string LABEL_STARTDAY = "Start Day: ";
+const string LABEL_STARTHOUR = "Start Hour: ";
+const string LABEL_STARTMIN = "Start Min: ";
+const string LABEL_ENDYEAR = "End Year: ";
+const string LABEL_ENDMONTH = "End Month: ";
+const string LABEL_ENDDAY = "End Day: ";
+const string LABEL_ENDHOUR = "End Hour: ";
+const string LABEL_ENDMIN = "End Min: ";
+
 class Conversion
 {
 public:

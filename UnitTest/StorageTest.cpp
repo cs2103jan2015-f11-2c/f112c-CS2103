@@ -3,16 +3,16 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#include "EventStorage.h"
+#include "EventFacade.h"
 #include "EventOrganiser.h"
-#include "Search.h"
+#include "EventSearch.h"
 
 namespace UnitTest
 {
 	TEST_CLASS(SearchTest)
 	{
 	public:
-		Search search;
+		EventSearch search;
 		TEST_METHOD(searchIndexWithID_Test)
 		{
 			/*creating testing objects*/
@@ -165,12 +165,12 @@ namespace UnitTest
 			/*Successful search returns vector of events*/
 			expected.push_back(testEvent3);
 			expected.push_back(testEvent4);
-			result = search.searchExactName("event3",testCurrentContent);
+			result = search.searchExactString("event3",testCurrentContent);
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
 			/* Unsuccessful search returns empty vector */
 			expected.clear();
-			result = search.searchExactName("inexistentEvent",testCurrentContent);
+			result = search.searchExactString("inexistentEvent",testCurrentContent);
 			Assert::IsTrue(result.empty());
 		}
 	};

@@ -1,0 +1,8 @@
+Location: showAllFloatingEvents
+Location: showAllFloatingEvent
+At: getfloatingContent--Data: 0
+Location: showDates
+Location: showDatesFromNormalContent
+At: getNormalContent--Data: 0
+Location: showDateRange
+At: leaving showDateRange--Data: 0

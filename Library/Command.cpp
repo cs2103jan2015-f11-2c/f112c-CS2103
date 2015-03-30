@@ -86,7 +86,7 @@ void Command::log(string logString, int logInt) {
 
 
 
-AddCommand::AddCommand(EventStorage* eventStorage, Event e) {
+AddCommand::AddCommand(EventFacade* eventStorage, Event e) {
 	eventStore = eventStorage;
 	userEvent = e;
 	isExecuted = false;
@@ -115,7 +115,7 @@ void AddCommand::undo() {
 
 
 
-CompleteCommand::CompleteCommand(EventStorage* eventStorage, int eventID, Event e) {
+CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventStore = eventStorage;
 	id = eventID;
 	userEvent = e;
@@ -132,7 +132,7 @@ void CompleteCommand::execute() {
 		return;
 	}
 
-	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
+	vector<Event> tempEvents = eventStore->findNameExact(userEvent.getName());
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
@@ -164,7 +164,7 @@ void CompleteCommand::undo() {
 
 
 
-DeleteCommand::DeleteCommand(EventStorage* eventStorage, int eventID, Event e) {
+DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventStore = eventStorage;
 	id = eventID;
 	userEvent = e;
@@ -179,12 +179,12 @@ void DeleteCommand::execute() {
 		return;
 	}
 
-	vector<Event> tempEvents = eventStore->checkExactString(userEvent.getName());
+	vector<Event> tempEvents = eventStore->findNameExact(userEvent.getName());
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
-		tempEvents = eventStore->checkMultipleResults(userEvent.getName());
+		tempEvents = eventStore->findNameOccurrence(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
 		switch (numResults) {
 		case 0: { //no partial match
@@ -222,7 +222,7 @@ void DeleteCommand::execute() {
 				   }
 
 	default: { //more than 1 exact match
-		deletedEvents = eventStore->checkMultipleResults(userEvent.getName());
+		deletedEvents = eventStore->findNameOccurrence(userEvent.getName());
 		userEvent = createInvalidEvent();
 		isExecuted = false;
 		return;
@@ -254,7 +254,7 @@ void DeleteCommand::deleteImmediately() {
 
 
 
-EditCommand::EditCommand(EventStorage* eventStorage, int eventID, Event toEdit, Event edited) {
+EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited) {
 	eventStore = eventStorage;
 	id = eventID;
 	eventToEdit = toEdit;
@@ -269,12 +269,12 @@ void EditCommand::execute() {
 		return;
 	}
 
-	vector<Event> tempEvents = eventStore->checkExactString(eventToEdit.getName());
+	vector<Event> tempEvents = eventStore->findNameExact(eventToEdit.getName());
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
-		tempEvents = eventStore->checkMultipleResults(eventToEdit.getName());
+		tempEvents = eventStore->findNameOccurrence(eventToEdit.getName());
 		numResults = tempEvents.size();
 		switch (numResults) {
 		case SIZE_ZERO: { //no partial match
@@ -310,7 +310,7 @@ void EditCommand::execute() {
 				   }
 
 	default:{ //more than 1 exact match
-		editedResults = eventStore->checkMultipleResults(eventToEdit.getName());
+		editedResults = eventStore->findNameOccurrence(eventToEdit.getName());
 		isExecuted = false;
 		return;
 		break;
@@ -351,14 +351,14 @@ void EditCommand::editImmediately() {
 
 
 
-SearchCommand::SearchCommand(EventStorage* eventStorage, string s) {
+SearchCommand::SearchCommand(EventFacade* eventStorage, string s) {
 	eventStore = eventStorage;
 	searchString = s;
 	isUndoable = false;
 }
 
 void SearchCommand::execute() {
-	searchResults = eventStore->checkMultipleResults(searchString);
+	searchResults = eventStore->findNameOccurrence(searchString);
 }
 
 vector<Event> SearchCommand::getEventVector() {
@@ -375,7 +375,7 @@ void SearchCommand::undo() {
 
 
 
-ShowCommand::ShowCommand(EventStorage* eventStorage, Event e) {
+ShowCommand::ShowCommand(EventFacade* eventStorage, Event e) {
 	eventStore = eventStorage;
 	eventRangeToShow = e;
 	isUndoable = false;
@@ -399,14 +399,14 @@ void ShowCommand::undo() {
 
 
 
-ShowAllCommand::ShowAllCommand(EventStorage* eventStorage) {
+ShowAllCommand::ShowAllCommand(EventFacade* eventStorage) {
 	eventStore = eventStorage;
 	isUndoable = false;
 }
 
 void ShowAllCommand::execute() {
-	vector<Event> floating = eventStore->getAllFloatingEvents();
-	vector<Event> normal = eventStore->getAllNormalEvents();
+	vector<Event> floating = eventStore->showAllFloatingEvents();
+	vector<Event> normal = eventStore->showAllNormalEvents();
 	floating.insert(floating.end(), normal.begin(), normal.end());
 
 	eventsToShow = floating;
@@ -426,13 +426,13 @@ void ShowAllCommand::undo() {
 
 
 
-ShowFloatCommand::ShowFloatCommand(EventStorage* eventStorage) {
+ShowFloatCommand::ShowFloatCommand(EventFacade* eventStorage) {
 	eventStore = eventStorage;
 	isUndoable = false;
 }
 
 void ShowFloatCommand::execute() {
-	eventsToShow = eventStore->getAllFloatingEvents();
+	eventsToShow = eventStore->showAllFloatingEvents();
 	isFloating = true;
 }
 
@@ -450,7 +450,7 @@ void ShowFloatCommand::undo() {
 
 
 
-ShowImportanceCommand::ShowImportanceCommand(EventStorage* eventStorage) {
+ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage) {
 	eventStore = eventStorage;
 	isUndoable = false;
 }

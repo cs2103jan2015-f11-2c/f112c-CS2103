@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include "EventStorage.h"
+#include "EventFacade.h"
 
 using std::find;
 using std::ofstream;
@@ -51,12 +51,12 @@ protected:
 
 class AddCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	Event userEvent;
 	vector<Event> addedEvents;
 
 public:
-	AddCommand(EventStorage* eventStorage, Event e);
+	AddCommand(EventFacade* eventStorage, Event e);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -68,13 +68,13 @@ public:
 
 class CompleteCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	int id;
 	Event userEvent;
 	vector<Event> completedEvents;
 
 public:
-	CompleteCommand(EventStorage* eventStorage, int eventID, Event userEvent);
+	CompleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -86,13 +86,13 @@ public:
 
 class DeleteCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	int id;
 	Event userEvent;
 	vector<Event> deletedEvents;
 
 public:
-	DeleteCommand(EventStorage* eventStorage, int eventID, Event userEvent);
+	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -106,13 +106,13 @@ public:
 
 class EditCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	int id;
 	Event eventToEdit, editedEvent;
 	vector<Event> editedResults;
 
 public:
-	EditCommand(EventStorage* eventStorage, int eventID, Event toEdit, Event edited);
+	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -126,12 +126,12 @@ public:
 
 class SearchCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	string searchString;
 	vector<Event> searchResults;
 
 public:
-	SearchCommand(EventStorage* eventStorage, string s);
+	SearchCommand(EventFacade* eventStorage, string s);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -143,12 +143,12 @@ public:
 
 class ShowCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	Event eventRangeToShow;
 	vector<Event> eventsToShow;
 
 public:
-	ShowCommand(EventStorage* eventStorage, Event e);
+	ShowCommand(EventFacade* eventStorage, Event e);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -160,10 +160,10 @@ public:
 
 class ShowAllCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	vector<Event> eventsToShow;
 public:
-	ShowAllCommand(EventStorage* eventStorage);
+	ShowAllCommand(EventFacade* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -175,11 +175,11 @@ public:
 
 class ShowFloatCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	vector<Event> eventsToShow;
 
 public:
-	ShowFloatCommand(EventStorage* eventStorage);
+	ShowFloatCommand(EventFacade* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -191,11 +191,11 @@ public:
 
 class ShowImportanceCommand : public Command {
 private:
-	EventStorage* eventStore;
+	EventFacade* eventStore;
 	vector<Event> eventsToShow;
 
 public:
-	ShowImportanceCommand(EventStorage* eventStorage);
+	ShowImportanceCommand(EventFacade* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
