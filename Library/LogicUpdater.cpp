@@ -368,7 +368,6 @@ bool LogicUpdater::setIsNew(int vectorIndex){
 
 
 void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex){
-	
 	//If there is a clash, this variable will become true
 	bool setNewItemClash = false;
 
@@ -383,7 +382,7 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 				setNewItemClash = true;
 			}
 		}
-
+		
 		//Case 2
 		if (checkEventStartTime < newEventEndTime && newEventEndTime < checkEventEndTime){
 			if (normalEvents[i].getID() != newID){
@@ -391,7 +390,7 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 				setNewItemClash = true;
 			}
 		}
-
+		
 		//Case 3
 		if (newEventStartTime < checkEventStartTime  && checkEventStartTime < newEventEndTime){
 			if (normalEvents[i].getID() != newID){
@@ -399,7 +398,7 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 				setNewItemClash = true;
 			}
 		}
-
+		
 		//Case 4
 		if (newEventStartTime < checkEventEndTime && checkEventEndTime < newEventEndTime){
 			if (normalEvents[i].getID() != newID){
@@ -407,7 +406,7 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 				setNewItemClash = true;
 			}
 		}
-
+		
 		//Case 5 exactly same timeslot
 		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime){
 			if (normalEvents[i].getID() != newID){
@@ -415,7 +414,7 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 				setNewItemClash = true;
 			}
 		}
-
+		
 		if (setNewItemClash){
 			mainDisplayStrings[newEventIndex].isClash = true;
 		}
@@ -492,6 +491,8 @@ void LogicUpdater::normalEventsToString() {
 		return;
 	}
 	
+	bool isAnyNew = false;
+
 	int headCounter =0;
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
@@ -515,7 +516,7 @@ void LogicUpdater::normalEventsToString() {
 			}
 			
 			headCounter++;
-
+			
 			out << "[";
 			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
@@ -535,6 +536,7 @@ void LogicUpdater::normalEventsToString() {
 			out << "]";
 			out << "==============================================================";
 			out << "\n";
+			
 		} 
 		 //Generate event list
 		 else {
@@ -545,17 +547,19 @@ void LogicUpdater::normalEventsToString() {
 			out << "\t" ;
 
 			out << "[";
+			
 			if (isAllDay(normalEvents[i])){
 				out << "    ";
 				out << WORD_ALLDAY;
 				out << "    ";
 			} else{
-				//int startTime = getStartTime(normalEvents[i]);
-				//out << intToTime(startTime);
+				int startTime = getStartTime(normalEvents[i]);
+				out << intToTime(startTime);
 				out << "-" ;
-				//int endTime = getEndTime(normalEvents[i]);
-				//out << intToTime(endTime);
+				int endTime = getEndTime(normalEvents[i]);
+				out << intToTime(endTime);
 			}
+			
 			out << "]" ;
 			
 			out << "\t";
@@ -573,7 +577,7 @@ void LogicUpdater::normalEventsToString() {
 
 			
 		
-			/*
+			
 			if (normalEvents[i].getDescription() != ""){
 				out << " ";
 				out << "(";
@@ -591,13 +595,14 @@ void LogicUpdater::normalEventsToString() {
 					out << " "; 
 				}	
 			}
-			*/
+			
 		}
 		toBePushed.eventString = out.str();
 
 
-		/*
+		
 		if (toBePushed.isNew == true){
+			isAnyNew = true;
 			newEventStartTime = getStartTime(normalEvents[i]);
 			newEventEndTime = getEndTime(normalEvents[i]);
 			newEventIndex = i;
@@ -605,9 +610,6 @@ void LogicUpdater::normalEventsToString() {
 			//Add in exception
 		}
 		
-		*/
-
-
 		//Set isClash is false first
 		toBePushed.isClash = false;
 
@@ -616,7 +618,9 @@ void LogicUpdater::normalEventsToString() {
 		out.clear();
 	}
 	
+	if (isAnyNew == true){
 	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
+	}
 
 	assert(mainDisplayStrings.size()>=1);
 }
