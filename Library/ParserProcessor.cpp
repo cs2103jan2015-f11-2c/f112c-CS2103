@@ -713,8 +713,22 @@ void ParserProcessor::addEventCorrector(){
 	//Deadline events, set Start date and Start time to be equal to the End date and End time read from input
 	if(tempEventStore.getIsDeadline()){
 		struct tm tempTime = tempEventStore.getEndDate();
-		tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
-		tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
+		if(endDayFound && endTimeFound){
+			tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
+			tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
+		}
+		if(endDayFound && !endTimeFound){
+			tempEventStore.setStartTime(0,0);
+			tempEventStore.setEndTime(23,59);
+			tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
+			endTimeFound = true;
+		}
+		if(!endDayFound && endTimeFound){
+			tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+			tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
+			tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
+			endDayFound = true;
+		}
 	}
 	//Floating events, set temporary Event isFloating to true
 	if(!startDayFound && !startTimeFound){
