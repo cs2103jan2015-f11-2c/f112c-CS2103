@@ -449,6 +449,11 @@ bool Logic::isNumber(string s) {
 int Logic::convertNameToID(string name) {
 	if (isNumber(name)) {
 		int index = std::stoi(name);
+		
+		if (index == Command::SIZE_ZERO) {
+			return INVALID_NUMBER;
+		}
+
 		if (index > updater.getTotalNumEvents()) {
 			return INVALID_NUMBER;
 		} else {
