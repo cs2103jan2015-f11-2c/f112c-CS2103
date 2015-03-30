@@ -778,23 +778,19 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 private: void displayToMainDisplay( vector<LogicUpdater::EVENT_STRING> displayToMain){
 			display->Text = "";
 
-
-
-
-
-
 			for (unsigned int i = 0; i < displayToMain.size(); i++){
 				String^ temp = convertToSys(displayToMain[i].eventString);
 
 				if(displayToMain[i].isNew && displayToMain[i].isClash){
 					display->SelectionColor = Color::Red;
-					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Italic);
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 					display->SelectedText = temp + "\n" ;
 				} else if ( displayToMain[i].isClash ){
 					display->SelectionColor = Color::Red;
 					display->SelectedText = temp + "\n" ;
 				} else if(displayToMain[i].isNew){
 						display->SelectionColor = Color::Green;
+						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 						display->SelectedText = temp + "\n" ;
 					} else{
 						if(displayToMain[i].isMarker){
