@@ -33,15 +33,20 @@ bool Conversion::stringToBool (std::string checkBool){
 string Conversion::tmToString(Event convertEvent){
 	std::ostringstream oss;
 
-	oss << convertEvent.getStartDate().tm_year << std::endl << convertEvent.getStartDate().tm_mon << std::endl << convertEvent.getStartDate().tm_mday
-		<< std::endl << convertEvent.getStartDate().tm_hour << std::endl << convertEvent.getStartDate().tm_min << std::endl;
+	oss << LABEL_STARTYEAR << convertEvent.getStartDate().tm_year << std::endl 
+		<< LABEL_STARTMONTH << convertEvent.getStartDate().tm_mon << std::endl 
+		<< LABEL_STARTDAY << convertEvent.getStartDate().tm_mday << std::endl 
+		<< LABEL_STARTHOUR << convertEvent.getStartDate().tm_hour << std::endl 
+		<< LABEL_STARTMIN << convertEvent.getStartDate().tm_min << std::endl;
 	
-	oss << convertEvent.getEndDate().tm_year << std::endl << convertEvent.getEndDate().tm_mon << std::endl << convertEvent.getEndDate().tm_mday
-		<< std::endl << convertEvent.getEndDate().tm_hour << std::endl << convertEvent.getEndDate().tm_min;
+	oss << LABEL_ENDYEAR << convertEvent.getEndDate().tm_year << std::endl 
+		<< LABEL_ENDMONTH << convertEvent.getEndDate().tm_mon << std::endl 
+		<< LABEL_ENDDAY << convertEvent.getEndDate().tm_mday << std::endl 
+		<< LABEL_ENDHOUR << convertEvent.getEndDate().tm_hour << std::endl 
+		<< LABEL_ENDMIN <<  convertEvent.getEndDate().tm_min;
 
 	return oss.str();
 }
-
 
 std::string Conversion::eventToString(Event eventToDisplay){
 					
