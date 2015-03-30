@@ -577,12 +577,6 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			initializeShortcut();
 
 			loadData();
-			/*
-			listView1->Items->Add ("hello1");
-			listView1->Items[0]->SubItems->Add ("hello1212sdfghjnbggfhfdsertyhgbgdfsertybvdfertyjnhgbfdvsefrtynhgsdfferygfsdewr4te5rhgfdewrtyjbgdfewrt5ryyhdsferthdgfdtrbyjydrduumtubyddrftg \t yrtdbytrbytrnytdnytrdyndtrnytrnyr123456");
-			listView1->Items->Add ("hello11");
-			listView1->Items[1]->SubItems->Add ("hello123");
-			*/
 }
 
 private: void loadData(){
@@ -649,16 +643,6 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 
 			 if ( isCtrlPressed && e->KeyCode == Keys::D){
 				 executeCalendarShortcut();
-				 isCtrlPressed = false;
-			 }
-
-			 if ( isCtrlPressed && e->KeyCode == Keys::S){
-				 displayShortCuts();
-				 isCtrlPressed = false;
-			 }
-
-			 if ( isCtrlPressed && e->KeyCode == Keys::A){
-				 displayHelpCommands();
 				 isCtrlPressed = false;
 			 }
 
@@ -801,7 +785,6 @@ private: void displayToMainDisplay( vector<LogicUpdater::EVENT_STRING> displayTo
 							display->SelectedText = temp + "\n" ;
 							}
 					}
-			
 			}
 
 			log ("Main displayed");
@@ -827,6 +810,7 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 					String^ temp = convertToSys(displayToFloating[i].eventString);
 					if (displayToFloating[i].isNew){
 						floatingTasksDisplay->SelectionColor = Color::Green;
+						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
 						floatingTasksDisplay->SelectedText = temp + "\n";
 					} else {
 						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
@@ -1363,7 +1347,6 @@ private: int stringToInt(std::string input){
 
 private: void shiftLineFocusUp(){
 			 display->ScrollToCaret();
-
 		 }
 
 private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {

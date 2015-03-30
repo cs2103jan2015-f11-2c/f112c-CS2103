@@ -550,11 +550,11 @@ void LogicUpdater::normalEventsToString() {
 				out << WORD_ALLDAY;
 				out << "    ";
 			} else{
-				int startTime = getStartTime(normalEvents[i]);
-				out << intToTime(startTime);
+				//int startTime = getStartTime(normalEvents[i]);
+				//out << intToTime(startTime);
 				out << "-" ;
-				int endTime = getEndTime(normalEvents[i]);
-				out << intToTime(endTime);
+				//int endTime = getEndTime(normalEvents[i]);
+				//out << intToTime(endTime);
 			}
 			out << "]" ;
 			
@@ -595,13 +595,18 @@ void LogicUpdater::normalEventsToString() {
 		}
 		toBePushed.eventString = out.str();
 
+
+		/*
 		if (toBePushed.isNew == true){
 			newEventStartTime = getStartTime(normalEvents[i]);
 			newEventEndTime = getEndTime(normalEvents[i]);
 			newEventIndex = i;
-
+			
 			//Add in exception
 		}
+		
+		*/
+
 
 		//Set isClash is false first
 		toBePushed.isClash = false;
