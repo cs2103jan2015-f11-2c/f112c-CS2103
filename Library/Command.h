@@ -52,7 +52,7 @@ protected:
 
 class AddCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	Event userEvent;
 	vector<Event> addedEvents;
 
@@ -69,7 +69,7 @@ public:
 
 class CompleteCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	int id;
 	Event userEvent;
 	vector<Event> completedEvents;
@@ -87,7 +87,7 @@ public:
 
 class DeleteCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	int id;
 	Event userEvent;
 	vector<Event> deletedEvents;
@@ -107,7 +107,7 @@ public:
 
 class EditCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	int id;
 	Event eventToEdit, editedEvent;
 	vector<Event> editedResults;
@@ -127,7 +127,7 @@ public:
 
 class SearchCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	string searchString;
 	vector<Event> searchResults;
 
@@ -144,7 +144,7 @@ public:
 
 class ShowCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	Event eventRangeToShow;
 	vector<Event> eventsToShow;
 
@@ -161,7 +161,7 @@ public:
 
 class ShowAllCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	vector<Event> eventsToShow;
 public:
 	ShowAllCommand(EventFacade* eventStorage);
@@ -174,9 +174,25 @@ public:
 
 
 
+class ShowDueCommand : public Command {
+private:
+	EventFacade* eventFacade;
+	vector<Event> eventsToShow;
+
+public:
+	ShowDueCommand(EventFacade* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
 class ShowFloatCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	vector<Event> eventsToShow;
 
 public:
@@ -192,7 +208,7 @@ public:
 
 class ShowImportanceCommand : public Command {
 private:
-	EventFacade* eventStore;
+	EventFacade* eventFacade;
 	vector<Event> eventsToShow;
 
 public:
@@ -206,10 +222,7 @@ public:
 
 
 
-
 class NullCommand : public Command {
-private:
-
 public:
 	NullCommand();
 	void execute();

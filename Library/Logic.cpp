@@ -159,12 +159,20 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		return executor.execute(showAllCommand);
 						  }
 
+						  /*case Parser::SHOWDUE: {
+						  break;
+						  }*/
+
 	case Parser::SHOWFLOAT: {
 		log(CREATING_SHOWFLOAT);
 		Command* showFloatCommand = new ShowFloatCommand(&eventStore);
 		log(CREATED_SHOWFLOAT);
 		return executor.execute(showFloatCommand);
 							}
+
+							/*case Parser::SHOWIMPORTANT: {
+							break;
+							}*/
 
 	case Parser::UNDO: {
 		log(QUEUEING_UNDO);
@@ -324,6 +332,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			break;
 							  }
 
+							  /*case Parser::SHOWDUE: {
+							  break;
+							  }*/
+
 		case Parser::SHOWFLOAT: {
 			vector<Event> normalEvents = updater.getNormalEvents();
 			vector<Event> floatingEvents = commandPtr->getEventVector();
@@ -332,6 +344,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
 								}
+
+								/*case Parser::SHOWIMPORTANT: {
+								break;
+								}*/
 
 		case Parser::UNDO:
 		case Parser::REDO: {
