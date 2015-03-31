@@ -442,6 +442,10 @@ std::string LogicUpdater::intToTime (int timeInInt){
 		afterTwelve = true;
 	}
 
+	if (hours == 12){
+		afterTwelve = true;
+	}
+
 	if(hours >= 10){
 		oss << hours;
 	} else{
