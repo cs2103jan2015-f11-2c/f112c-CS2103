@@ -315,7 +315,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			vector<Event> normalEvents = commandPtr->getEventVector();
 			vector<Event> floatingEvents = updater.getFloatingEvents();
 			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
-			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
+			vector<tm> tmVec;
+			tmVec.push_back(userEvent.getStartDate());
+			tmVec.push_back(userEvent.getEndDate());
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
