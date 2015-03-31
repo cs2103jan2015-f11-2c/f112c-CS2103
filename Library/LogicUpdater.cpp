@@ -3,6 +3,7 @@
 
 const int LogicUpdater::GARBAGE_INT = -12345;
 const int LogicUpdater::INVALID_NUMBER = -1;
+
 const string LogicUpdater::NO_EVENTS_MESSAGE = "Currently no task";
 const string LogicUpdater::ADDED_MESSAGE = " added";
 const string LogicUpdater::EDITED_MESSAGE = " edited";
@@ -17,9 +18,7 @@ const string LogicUpdater::REDO_MESSAGE = "redo";
 
 
 const string LogicUpdater::WORD_TODAY = "Today";
-const string LogicUpdater::WORD_YESTERDAY = "Yesterday";
 const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
-
 const string LogicUpdater::WORD_ALLDAY = "All Day";
 
 //constructor
@@ -39,7 +38,6 @@ LogicUpdater::LogicUpdater() {
 	tempMainDisplayLabel.push_back(*tmNow);
 
 }
-
 
 //getters
 vector<Event> LogicUpdater::getNormalEvents() {
@@ -196,12 +194,22 @@ void LogicUpdater::floatingEventsToString() {
 	}
 	
 	for (int i = 0; i < floatingEvents.size(); i++) {
-		ostringstream out;
-		out << (i + 1) << "." << floatingEvents[i].getName();
-		
 		EVENT_STRING temp;
-		temp.eventString = out.str();
+		
+		ostringstream outDate;
+		outDate << (i + 1) << ".";
+		temp.dateString = outDate.str();
+		outDate.clear();
+
+		ostringstream outEvent;
+		outEvent << floatingEvents[i].getName();
+		temp.eventString = outEvent.str();
+		outEvent.clear();
+		
+		temp.isClash = false;
 		temp.isMarker = false;
+		temp.isCompleted = floatingEvents[i].getIsCompleted();
+		temp.importanceLevel = floatingEvents[i].getImportanceLevel();
 
 		if (floatingEvents[i].getID() == newID){
 			temp.isNew = true;
@@ -210,8 +218,6 @@ void LogicUpdater::floatingEventsToString() {
 		}
 
 		floatingDisplayStrings.push_back(temp);
-
-		out.clear();
 	}
 	assert(floatingDisplayStrings.size()>=1);
 }
@@ -252,8 +258,6 @@ std::string LogicUpdater::intToMonth (int monthInNum){
 		return "Invalid month";
 	}
 }
-
-
 
 std::string LogicUpdater::intToDayOfWeek (int dayInNum){
 	if(dayInNum == 0){
@@ -509,23 +513,27 @@ void LogicUpdater::normalEventsToString() {
 		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;
 
-		ostringstream out;
-
 		//Generate header
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
+			ostringstream out;
+			//Initialization
 			toBePushed.isMarker = true;
+			toBePushed.isClash = false;
 			toBePushed.isNew = false;
+			toBePushed.importanceLevel = 0;
+			toBePushed.dateString = "";
+			toBePushed.isCompleted = false;
+
 			if (headCounter!=0){
 				out << "\n";
+			} else {
+				headCounter++;
 			}
-			
-			headCounter++;
-			
+
 			out << "[";
 			out << normalEvents[i].getStartDate().tm_mday;
 			out << " ";
 
-			Conversion convert;
 			int monthInt = normalEvents[i].getStartDate().tm_mon;
 			out << intToMonth(monthInt);
 
@@ -540,71 +548,76 @@ void LogicUpdater::normalEventsToString() {
 			out << "]";
 			out << "==============================================================";
 			out << "\n";
-			
+
+			toBePushed.eventString = out.str();
 		} 
 		 //Generate event list
 		 else {
+			//initialization
 			toBePushed.isMarker = false;
 			toBePushed.isNew = setIsNew(i);
+			toBePushed.isCompleted = normalEvents[i].getIsCompleted();
+			toBePushed.importanceLevel = normalEvents[i].getImportanceLevel();
 
-			out << (++indexForNormalEvents) << "." ;
-			out << "\t" ;
+			ostringstream outDate;
+			outDate << (++indexForNormalEvents) << "." ;
+			outDate << "\t" ;
 
-			out << "[";
-			
-			if (isAllDay(normalEvents[i])){
-				out << "    ";
-				out << WORD_ALLDAY;
-				out << "    ";
+			outDate << "[";
+			if (normalEvents[i].getIsDeadline()){
+				outDate << "*DUE*    ";
+				int endTime = getEndTime(normalEvents[i]);
+				outDate << intToTime(endTime);
+			}
+			else if (isAllDay(normalEvents[i])){
+				outDate << "    ";
+				outDate << WORD_ALLDAY;
+				outDate << "    ";
 			} else{
 				int startTime = getStartTime(normalEvents[i]);
-				out << intToTime(startTime);
-				out << "-" ;
+				outDate << intToTime(startTime);
+				outDate << "-" ;
 				int endTime = getEndTime(normalEvents[i]);
-				out << intToTime(endTime);
+				outDate << intToTime(endTime);
 			}
 			
-			out << "]" ;
-			
-			out << "\t";
+			outDate << "]" ;
+			outDate << "\t";
+			toBePushed.dateString = outDate.str();
+
+
+			ostringstream outEvent;
 
 			std::string nameOfEvent = normalEvents[i].getName();
-
 			while( nameOfEvent.size() > 42 ){
-				out << nameOfEvent.substr(0,42);
-				out << "\n";
-				out << "\t\t\t\t\t";
+				outEvent << nameOfEvent.substr(0,42);
+				outEvent << "\n";
+				outEvent << "\t\t\t\t\t";
 				nameOfEvent = nameOfEvent.substr(42);
 			}
 
-			out << nameOfEvent;
-
-			
-		
-			
+			outEvent << nameOfEvent;
+	
 			if (normalEvents[i].getDescription() != ""){
-				out << " ";
-				out << "(";
-				out << normalEvents[i].getDescription();
-				out << ")";
+				outEvent << " ";
+				outEvent << "(";
+				outEvent << normalEvents[i].getDescription();
+				outEvent << ")";
 			}
 
 			if (normalEvents[i].getTags().size() != 0){
-				out << "\n";
-				out << "\t\t\t\t";
+				outEvent << "\n";
+				outEvent << "\t\t\t\t";
 			
 				vector<string> tagVector = normalEvents[i].getTags();
 				for (int i=0; i<tagVector.size(); i++){
-					out << tagVector[i];
-					out << " "; 
+					outEvent << tagVector[i];
+					outEvent << " "; 
 				}	
 			}
-			
+			toBePushed.eventString = outEvent.str();	
 		}
-		toBePushed.eventString = out.str();
 
-
-		
 		if (toBePushed.isNew == true){
 			isAnyNew = true;
 			newEventStartTime = getStartTime(normalEvents[i]);
@@ -618,8 +631,6 @@ void LogicUpdater::normalEventsToString() {
 		toBePushed.isClash = false;
 
 		mainDisplayStrings.push_back(toBePushed);
-
-		out.clear();
 	}
 	
 	if (isAnyNew == true){
@@ -631,11 +642,13 @@ void LogicUpdater::normalEventsToString() {
 
 void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 	EVENT_STRING noEvent;
+	noEvent.dateString = "";
 	noEvent.eventString = NO_EVENTS_MESSAGE;
-	noEvent.isClash= false;
 	noEvent.isNew = false;
+	noEvent.isClash= false;
 	noEvent.isMarker = false;
-	
+	noEvent.isCompleted = false;
+	noEvent.importanceLevel= 0;
 	displayVec.push_back(noEvent);
 
 	assert(displayVec.size()==1);
@@ -643,34 +656,3 @@ void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 
 
 
-
-
-//========================================================================================================================
-
-// Not in use for now
-void LogicUpdater::setFeedbackEvents(vector<Event> events) {
-	//Maximum only 3
-	feedbackEvents.clear();
-
-	for (int i=0; i<3 || i< events.size();i++){
-		feedbackEvents.push_back(events[events.size()-i]);
-	}
-
-	std::reverse(feedbackEvents.begin(),feedbackEvents.end());
-
-	assert(feedbackEvents.size()<=3);
-}
-
-/*
-void Display::setNewestEvent(int id) {
-	int index;
-
-	for (int i = 0 ; i < normalEvents.size() ; i++) {
-		if (normalEvents[i].getID() == id) {
-			index = i;
-		}
-		break;
-	}
-
-}
-*/

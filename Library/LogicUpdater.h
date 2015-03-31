@@ -18,30 +18,18 @@ using std::ostringstream;
 
 
 class LogicUpdater {
+
 public:
 	struct EVENT_STRING {
+		string dateString;
 		string eventString;
 		bool isNew;
 		bool isClash;
 		bool isMarker;
+		bool isCompleted;
+		int importanceLevel;
 	};
 
-
-private:
-	vector<Event> normalEvents;
-	vector<Event> floatingEvents;
-	vector<Event> feedbackEvents;
-	vector<tm> tempMainDisplayLabel;
-
-	vector<EVENT_STRING> mainDisplayStrings;
-	string mainDisplayLabel;
-	vector<EVENT_STRING> floatingDisplayStrings;
-	vector<string> feedbackDisplayStrings;
-	vector<string> errorStrings;
-	
-	int newID;
-
-public:
 	static const int GARBAGE_INT;
 	static const int INVALID_NUMBER;
 	static const string NO_EVENTS_MESSAGE;
@@ -63,11 +51,28 @@ public:
 	static const string WORD_ALLDAY;
 
 
-	//constructor, destructor
-	LogicUpdater();
-	//~Display();
+	
 
-public: 
+private:
+	//Private attributes
+	vector<Event> normalEvents;
+	vector<Event> floatingEvents;
+	vector<Event> feedbackEvents;
+	vector<tm> tempMainDisplayLabel;
+
+	vector<EVENT_STRING> mainDisplayStrings;
+	string mainDisplayLabel;
+	vector<EVENT_STRING> floatingDisplayStrings;
+	vector<string> feedbackDisplayStrings;
+	vector<string> errorStrings;
+	
+	int newID;
+	
+
+public:
+	//constructor
+	LogicUpdater();
+	
 	//getters
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
@@ -119,16 +124,10 @@ private:
 	string intToTime (int);
 
 	bool isToday(tm);
-
 	bool isTomorrow(tm);
-
 	bool isAllDay(Event);
 
 
-	//Currently not in use
-	void setFeedbackEvents(vector<Event> events);
-
-	//void setNewestEvent(int id);
 };
 
 #endif

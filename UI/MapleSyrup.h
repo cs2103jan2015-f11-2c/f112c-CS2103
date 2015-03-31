@@ -758,31 +758,89 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 			display->Text = "";
 
 			for (unsigned int i = 0; i < displayToMain.size(); i++){
-				String^ temp = convertToSys(displayToMain[i].eventString);
+				if (displayToMain[i].isMarker){
+					std::string markerinStdString = displayToMain[i].eventString;
+					String^ marker = convertToSys(markerinStdString);
+					display->SelectionColor = Color::Gray;
+					display->SelectedText =  marker + "\n";
+				} else if(displayToMain[i].isNew && displayToMain[i].isClash){
+					String^ date = convertToSys(displayToMain[i].dateString);
+					
+					std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+					String^ importanceSymbolString = convertToSys (importanceSymbol);
 
-				if(displayToMain[i].isNew && displayToMain[i].isClash){
+					String^  eventName= convertToSys (displayToMain[i].eventString);
+
 					display->SelectionColor = Color::Red;
 					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
-					display->SelectedText = temp + "\n" ;
-				} else if ( displayToMain[i].isClash ){
+					display->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
+					String^ date = convertToSys(displayToMain[i].dateString);
+					
+					std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+					String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+					String^  eventName= convertToSys (displayToMain[i].eventString);
+
 					display->SelectionColor = Color::Red;
-					display->SelectedText = temp + "\n" ;
-				} else if(displayToMain[i].isNew){
+					display->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+				} else if(displayToMain[i].isNew && !displayToMain[i].isClash){
+						String^ date = convertToSys(displayToMain[i].dateString);
+					
+						std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+						String^  eventName= convertToSys (displayToMain[i].eventString);
+
 						display->SelectionColor = Color::Green;
 						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
-						display->SelectedText = temp + "\n" ;
-					} else{
-						if(displayToMain[i].isMarker){
-							display->SelectionColor = Color::Gray;
-							display->SelectedText = temp + "\n" ;
-						} else {
-							display->SelectionColor = Color::MidnightBlue;
-							display->SelectedText = temp + "\n" ;
-							}
+						display->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+				} else {
+							
+						displayNormalEventToMain(displayToMain[i]);
 					}
 			}
 
 			log ("Main displayed");
+		 }
+
+
+private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
+			 if( normalEvent.isCompleted ){
+				 String^ date = convertToSys (normalEvent.dateString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectedText = date;
+
+				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
+				 String^ importanceSymbolString = convertToSys (importanceSymbol);
+				 display->SelectionColor = Color::Red;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectedText = importanceSymbolString;
+						
+				 String^  eventName= convertToSys (normalEvent.eventString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectedText = eventName + "\n";
+				 
+			 } else {
+				 String^ date = convertToSys (normalEvent.dateString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectedText = date;
+
+				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
+				 String^ importanceSymbolString = convertToSys (importanceSymbol);
+				 display->SelectionColor = Color::Red;
+				 display->SelectedText = importanceSymbolString;
+						
+				 String^  eventName= convertToSys (normalEvent.eventString);
+				 display->SelectionColor = Color::MidnightBlue;	
+				 display->SelectedText = eventName + "\n";
+			 }
+
 		 }
 
 //Pre-condition : vector displayToMain to be correctly updated
@@ -794,28 +852,59 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 			 log ("Main label displayed");
 		}
 
-
-
 //Pre-condition : vector displayToFloating to be correctly updated
 //Display list of floating tasks to floating display
 private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
 			floatingTasksDisplay->Text = "";
 
 				for (unsigned int i = 0; i < displayToFloating.size(); i++){
-					String^ temp = convertToSys(displayToFloating[i].eventString);
 					if (displayToFloating[i].isNew){
+						String^ date = convertToSys (displayToFloating[i].dateString);
 						floatingTasksDisplay->SelectionColor = Color::Green;
-						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
-						floatingTasksDisplay->SelectedText = temp + "\n";
-					} else {
-						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
-						floatingTasksDisplay->SelectedText = temp + "\n";
-					  }
-				}
 
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+
+						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
+						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
+					} else {
+						String^ date = convertToSys (displayToFloating[i].dateString);
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						floatingTasksDisplay->SelectedText = date;
+
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+						floatingTasksDisplay->SelectionColor = Color::Red;
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectedText = importanceSymbolString;
+						
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectedText = eventName + "\n";
+					}
+				}
 				log ("Floating displayed");
 		}
 
+private: std::string setImportancesymbol(int importanceLevel){
+			 std::string importanceSymbol = "";
+
+			 for (unsigned int i=0; i<importanceLevel;i++){
+				 importanceSymbol += "!";
+			 }
+
+			 return importanceSymbol;
+		 }
 //===================================================================================================================================================================
 
 

@@ -66,8 +66,6 @@ public:
 
 	std::string generateDisplayFromCalender(std::string,std::string);
 
-private:
-
     //Pre-condition : Non
 	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
 	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 

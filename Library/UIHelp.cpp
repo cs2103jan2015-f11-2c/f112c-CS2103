@@ -187,13 +187,16 @@ std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpShortcuts(){
 	assert(vectOfComds.size() == NUM_SHORTCUTS);
 
 	return vectOfComds;
-
 }
 	
 LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
 	LogicUpdater::EVENT_STRING temp;
 
+	temp.dateString = "";
 	temp.eventString = stdString;
+	temp.importanceLevel = 0;
+	temp.isCompleted = false;
+	temp.isMarker = false;
 	temp.isClash = false;
 	temp.isNew = false;
 
