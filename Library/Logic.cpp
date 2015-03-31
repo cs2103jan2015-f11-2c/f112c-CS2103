@@ -22,6 +22,7 @@ const string Logic::CASE_0 = "entered case 0";
 const string Logic::CASE_1 = "entered case 1";
 
 const int Logic::INVALID_NUMBER = -1;
+const string Logic::EMPTY_STRING = "";
 
 
 //CONSTRUCTOR, DESTRUCTOR
@@ -240,7 +241,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				throw !isDone;
 			}
 
-			//successful deletion
+			//successful delete
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 			Event deletedEvent = commandPtr->getEvent();
 			string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
@@ -252,7 +253,6 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::EDIT: {
 			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			int id;
 
 			if (!commandPtr->getIsExecuted()) {
 				setEventVectors(normalEvents, floatingEvents, tempEvents);
@@ -284,13 +284,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			//successful edit 
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
-			if (commandPtr->getIsFloating()) { //floating event edited
-				id = floatingEvents[0].getID();
-			} else { //normal event edited
-				id = normalEvents[1].getID();
-			}
-			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			Event oldEvent = commandPtr->getEvent();
+			int id = oldEvent.getID();
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			string feedback = oldEvent.getName() + LogicUpdater::EDITED_MESSAGE;
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
@@ -298,13 +294,12 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 						   }
 
 		case Parser::SEARCH: {
-			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			
-			setEventVectors(normalEvents, floatingEvents, tempEvents);
-			string feedback = "";
+			vector<Event> normalEvents, floatingEvents;
+
+			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
 							 }
 
@@ -312,20 +307,16 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			vector<Event> normalEvents = commandPtr->getEventVector();
 			vector<Event> floatingEvents = updater.getFloatingEvents();
 			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
-			vector<tm> tmVec;
-			tmVec.push_back(userEvent.getStartDate());
-			tmVec.push_back(userEvent.getEndDate());
-			mktime(&tmVec[0]);
-			mktime(&tmVec[1]);
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
 						   }
 
 		case Parser::SHOWALL: {
-			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
-			
-			setEventVectors(normalEvents, floatingEvents, tempEvents);
+			vector<Event> normalEvents, floatingEvents;
+
+			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
 			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
@@ -336,10 +327,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser::SHOWFLOAT: {
 			vector<Event> normalEvents = updater.getNormalEvents();
 			vector<Event> floatingEvents = commandPtr->getEventVector();
-			string emptyFeedback;
 			vector<tm> tmVec = updater.getTempMainDisplayLabel();
 
-			updater.setAllEvents(normalEvents, floatingEvents, emptyFeedback, tmVec, LogicUpdater::GARBAGE_INT);
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
 								}
 
@@ -437,6 +427,8 @@ void Logic::deleteParserPtr() {
 
 
 //OTHERS
+
+//returns true if input string consists of only numeric digits
 bool Logic::isNumber(string s) {
 	for (unsigned int i = 0 ; i < s.size() ; i++) {
 		if (!isdigit(s[i])) {
@@ -446,10 +438,11 @@ bool Logic::isNumber(string s) {
 	return true;
 }
 
+//returns id of event if found in updater, -1 otherwise
 int Logic::convertNameToID(string name) {
 	if (isNumber(name)) {
 		int index = std::stoi(name);
-		
+
 		if (index == Command::SIZE_ZERO) {
 			return INVALID_NUMBER;
 		}

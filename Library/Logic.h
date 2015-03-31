@@ -48,6 +48,7 @@ public:
 	static const string CASE_1;
 
 	static const int INVALID_NUMBER;
+	static const string EMPTY_STRING;
 
 
 	//constructor, destructor
