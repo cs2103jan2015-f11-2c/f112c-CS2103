@@ -44,6 +44,11 @@ std::string UIShow::getShowFloat(){
 	return SHOW_FLOAT;
 }
 
+std::string UIShow::getCurrentCommand(){
+	return currentCommand;
+}
+
+
 std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
 	if (currentMainDisplayLabel == "Commands"){
 		return "";
@@ -54,6 +59,10 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 	}
 
 	if (currentMainDisplayLabel == "Search Mode"){
+		return "";
+	}
+
+	if (currentMainDisplayLabel == "Shortcuts"){
 		return "";
 	}
 
@@ -90,6 +99,9 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		return "";
 	}
 	
+	if (currentMainDisplayLabel == "Shortcuts"){
+		return "";
+	}
 
 	std::string newShowCommand = "";
 
@@ -105,6 +117,45 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 	}
 	return newShowCommand;
+}
+
+void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	currentCommand = generateCurrentCommand(currentMainDisplayLabel, mainDisplayDate);
+}
+
+std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	//show back the same stuffs
+	if (currentMainDisplayLabel == "Commands"){
+		return "Commands";
+	}
+
+	if (currentMainDisplayLabel == "Help Introduction"){
+		return "Help";
+	}
+
+	if (currentMainDisplayLabel == "Search Mode"){
+		return "Search";
+	}
+	
+	if (currentMainDisplayLabel == "Shortcuts"){
+		return "Shortcuts";
+	}
+
+	std::string newShowCommand = "";
+
+	//function to check whether it is single or multiple day
+	bool isSingleDate = checkIsSingleDate(mainDisplayDate);
+	if ( isSingleDate ){
+		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]);
+	} else {
+		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]) + " to " + convertFromTmToStr(mainDisplayDate[1]);
+	}
+	return newShowCommand;
+
+
+
+
+
 }
 
 int UIShow::countNumDays(tm startDay, tm endDay){
@@ -129,14 +180,59 @@ void UIShow::initializeTime(tm date){
 std::string UIShow::convertFromTmToStr(tm date){
 	std::string dateString = "";
 
-	Conversion convert;
-	dateString += convert.intToString(date.tm_mday);
-	dateString += convert.intToMonth(date.tm_mon);
+	dateString += intToString(date.tm_mday);
+	dateString += intToMonth(date.tm_mon);
 	dateString += " ";
-	dateString += convert.intToString(date.tm_year + 1900);
+	dateString += intToString(date.tm_year + 1900);
 
 	return dateString;
 }
+
+
+std::string UIShow::intToString (int num){
+	std::string outString;
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+int UIShow::stringToInt (std::string str){
+	int outNum;
+	std::istringstream in(str);
+	in >> outNum;
+	return outNum;
+}
+
+std::string UIShow::intToMonth (int monthInNum){
+	if(monthInNum == 0){
+		return "jan";
+	} else if(monthInNum  == 1){
+		return "feb";
+	} else if(monthInNum  == 2){
+		return "mar";
+	} else if(monthInNum  == 3){
+		return "apr";
+	} else if(monthInNum  == 4){
+		return "may";
+	} else if(monthInNum  == 5){
+		return "jun";
+	} else if(monthInNum  == 6){
+		return "jul";
+	} else if(monthInNum  == 7){
+		return "aug";
+	} else if(monthInNum  == 8){
+		return "sep";
+	} else if(monthInNum  == 9){
+		return "oct";
+	} else if(monthInNum  == 10){
+		return "nov";
+	} else if(monthInNum  == 11){
+		return "dec";
+	} else {
+		return "Invalid month";
+	}
+}
+
 
 tm UIShow::shiftDate(tm date, int numDaysToShift){
 	time_t t = time(0);
@@ -165,9 +261,10 @@ bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
 	return isSingleDate;
 }
 
+
+
 std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
 	 int i=0;
-	 Conversion convert;
 	
 	 std::string startDateDay = "";
 	 for (;std::isdigit(startDate[i]);i++){
@@ -180,8 +277,8 @@ std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::str
 	 for (; std::isdigit(startDate[i]);i++){
 		startDateMonth += startDate[i];
 	 }
-	 int startDateMonthNum = convert.stringToInt(startDateMonth);
-	 std::string startDateMonthString = convert.intToMonth(startDateMonthNum-1);
+	 int startDateMonthNum = stringToInt(startDateMonth);
+	 std::string startDateMonthString = intToMonth(startDateMonthNum-1);
 
 	 i++;
 
@@ -203,8 +300,8 @@ std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::str
 	 for (; std::isdigit(endDate[i]);i++){
 		 endDateMonth += endDate[i];
 	 }
-	 int endDateMonthNum = convert.stringToInt(endDateMonth);
-	 std::string endDateMonthString = convert.intToMonth(endDateMonthNum-1);
+	 int endDateMonthNum = stringToInt(endDateMonth);
+	 std::string endDateMonthString = intToMonth(endDateMonthNum-1);
 
 	 i++;
 

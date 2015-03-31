@@ -6,9 +6,9 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <cctype>
 #include <vector>
-
-#include "Conversion.h"
+#include <sstream>
 
 class UIShow
 {
@@ -24,6 +24,8 @@ public:
 	static const std::string SHOW_ARCHIVE;
 	static const std::string SHOW_FLOAT;
 
+	std::string currentCommand;
+
 	//getters
 	std::string getShowDay();
 	std::string getShowWeek();
@@ -32,29 +34,48 @@ public:
 	std::string getShowArchive();
 	std::string getShowFloat();
 
-	//functions
+	//Pre-condition : function setCurrentCommand must be executed first before this function is being called
+	std::string getCurrentCommand();
 
 	//Pre-condition : Non
-	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
-	//This function takes in a string that contains that date(s) that is being displayed in the main display currently
-	//It returns the string which contain the command to display the next date(s) based on that it has received
-	//e.g. It takes in 10 Feb. It will return 11 Feb
-	//e.g. It takes in 10 Feb - 20 Feb. It will return 20 Feb - 2 Mar (Next 10 days)
-	//e.g. It takes in Mar. It will return Apr
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display the next date(s)/labels based on what it has received
+	//e.g. It takes in 10 Feb. It will return show 11feb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 20feb - 2mar (Next 10 days)
+	//e.g. It takes in Mar. It will return show Apr
 	std::string displayNext(std::string, std::vector<tm>);
 
+	//Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display the previous date(s)/labels based on what it has received
+	//e.g. It takes in 10 Feb. It will return show 9beb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 31jan - 9feb (Previous 10 days)
+	//e.g. It takes in Mar. It will return show Feb
+	std::string displayBack(std::string, std::vector<tm>);
+
+	//Pre-condition : Non
+	//Use in conjuction with function generateCurrentCommand & store it in currentCommand
+	void setCurrentCommand(std::string, std::vector<tm>);
 
 	//Pre-condition : Non
 	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
 	//This function takes in a string that contains that date(s) that is being displayed in the main display currently
-	//It returns the string which contain the command to display the previous date(s) based on that it has received
-	//e.g. It takes in 10 Feb. It will return 09 Feb
-	//e.g. It takes in 10 Feb - 20 Feb. It will return 31 Jan - 9 Feb (Previous 10 days)
-	//e.g. It takes in Mar. It will return Feb
-	std::string displayBack(std::string, std::vector<tm>);
+	//and the date selected in string form
+	//It returns the string which contain the command to display based on that it has received
+	//e.g. It takes in 10 Feb (first string) & 20 Feb (second string), it will return show 10feb to 20feb 2015
 
+	std::string generateDisplayFromCalender(std::string,std::string);
 
-	//Private:
+private:
+
+    //Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
+	//e.g. It takes in 10 Feb. It will return 10 Feb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 10 Feb - 20 Feb.
+	//e.g. It takes in Mar. It will return show Feb
+	std::string generateCurrentCommand(std::string, std::vector<tm>);
+
 
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
 	// Can accept any int (positive and negative)
@@ -67,15 +88,12 @@ public:
 	void initializeTime(tm);
 	
 	bool checkIsSingleDate(std::vector<tm>);
-//===================================================================================================================================================================
-	//Pre-condition : Non
-	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
-	//This function takes in a string that contains that date(s) that is being displayed in the main display currently
-	//and the date selected in string form
-	//It returns the string which contain the command to display based on that it has received
-	//e.g. It takes in 10 Feb (first string) & 20 Feb (second string), it will return show 10feb to 20feb 2015
 
-	std::string generateDisplayFromCalender(std::string,std::string);
+	std::string intToString(int);
+
+	int stringToInt(std::string);
+
+	std::string intToMonth(int);
 
 };
 #endif

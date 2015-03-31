@@ -83,8 +83,23 @@ const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tAdd"
 																		"9.\tExit",
 																		"10.\tHelp",
 																		"11.\tCommands",
+																		"12.\tShortcuts",
+																		"13.\tCalendar",
+																		"14.\tBack",
+																		"15.\tNext",
 																	};
 
+const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tCtrl + D ------ display calendar",
+																		  "2.\tCtrl + F ------ search mode/bar",
+																		  "3.\tCtrl + Z ------ undo",
+																	      "4.\tCtrl + X ------ redo",
+																		  "5.\tCtrl + C ------ copy",
+																		  "6.\tCtrl + V ------ paste",
+																		  "7.\tEscape Key ---- Zoom to main display",
+																		  "8.\tLeft arrow ---- display back (only after pressing Escape Key)",
+																		  "9.\tRight arrow ----- display next (only after pressing Escape Key)",
+																		  "10.\tCtrl + Shift ----- Focus to command Box",
+																	};
 
 std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpIntroduction(){
 	std::vector<LogicUpdater::EVENT_STRING> vectOfHelp;
@@ -156,11 +171,25 @@ std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpCommands(){
 		vectOfComds.push_back(temp);
 	}
 
-	assert(vectOfComds.size() == 11);
+	assert(vectOfComds.size() == UIHelp::NUM_COMMANDS);
 
 	return vectOfComds;
 }
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpShortcuts(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfComds;
 
+	for (int i=0; i< UIHelp::NUM_SHORTCUTS; i++){
+		LogicUpdater::EVENT_STRING temp;
+		temp = convertToEventString(HELP_GUIDE_SHORTCUTS[i]);
+		vectOfComds.push_back(temp);
+	}
+
+	assert(vectOfComds.size() == NUM_SHORTCUTS);
+
+	return vectOfComds;
+
+}
+	
 LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
 	LogicUpdater::EVENT_STRING temp;
 

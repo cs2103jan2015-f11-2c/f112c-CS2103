@@ -23,7 +23,8 @@ private:
 	static const int NUM_DONE = 4;
 	static const int NUM_SEARCH = 8;
 	static const int NUM_SHOW = 7;
-	static const int NUM_COMMANDS = 11;
+	static const int NUM_COMMANDS = 15;
+	static const int NUM_SHORTCUTS = 10;
 	
 	static const std::string HELP_GUIDE_WELCOME_MESSAGE;
 	static const std::string HELP_GUIDE_ADD [NUM_ADD];
@@ -36,16 +37,19 @@ private:
 	static const std::string HELP_GUIDE_REDO;
 	static const std::string HELP_GUIDE_EXIT;
 	static const std::string HELP_GUIDE_COMMANDS [NUM_COMMANDS];
+	static const std::string HELP_GUIDE_SHORTCUTS [NUM_SHORTCUTS];
 
 public:
 	//public getter
 
-	//Return a short introduction/teaching guide to user
+	//Return a short introduction/teaching guide to caller
 	std::vector<LogicUpdater::EVENT_STRING> getHelpIntroduction();
 	
-	//Return a list of commands to user
+	//Return a list of commands to caller
 	std::vector<LogicUpdater::EVENT_STRING> getHelpCommands();
 
+	//Return a list of shortcuts to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpShortcuts();
 	
 private:
 	std::string getHelpWelcomeMessage();

@@ -4339,9 +4339,6 @@
   <data name="monthToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Show This Month</value>
   </data>
-  <data name="allToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="allToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -4350,9 +4347,6 @@
   </data>
   <data name="allToolStripMenuItem.Text" xml:space="preserve">
     <value>All</value>
-  </data>
-  <data name="archiveToolStripMenuItem.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="archiveToolStripMenuItem.ShowShortcutKeys" type="System.Boolean, mscorlib">
     <value>False</value>

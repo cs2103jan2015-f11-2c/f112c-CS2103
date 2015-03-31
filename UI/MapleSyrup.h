@@ -391,6 +391,7 @@ namespace UI {
 			this->calenderTop->ScrollChange = 1;
 			this->toolTip1->SetToolTip(this->calenderTop, resources->GetString(L"calenderTop.ToolTip"));
 			this->calenderTop->DateSelected += gcnew System::Windows::Forms::DateRangeEventHandler(this, &MapleSyrup::calenderTop_DateSelected);
+			this->calenderTop->Enter += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_Enter);
 			this->calenderTop->Leave += gcnew System::EventHandler(this, &MapleSyrup::calenderTop_Leave);
 			// 
 			// redoButton
@@ -474,14 +475,14 @@ namespace UI {
 			// 
 			// allToolStripMenuItem
 			// 
-			resources->ApplyResources(this->allToolStripMenuItem, L"allToolStripMenuItem");
 			this->allToolStripMenuItem->Name = L"allToolStripMenuItem";
+			resources->ApplyResources(this->allToolStripMenuItem, L"allToolStripMenuItem");
 			this->allToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::allToolStripMenuItem_Click);
 			// 
 			// archiveToolStripMenuItem
 			// 
-			resources->ApplyResources(this->archiveToolStripMenuItem, L"archiveToolStripMenuItem");
 			this->archiveToolStripMenuItem->Name = L"archiveToolStripMenuItem";
+			resources->ApplyResources(this->archiveToolStripMenuItem, L"archiveToolStripMenuItem");
 			this->archiveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::archiveToolStripMenuItem_Click);
 			// 
 			// helpDropDown
@@ -593,7 +594,6 @@ private: void loadData(){
 
 			 std::string loadCommand1 = showPtr->getShowFloat();
 			 executeUserInput(loadCommand1);
-
 
 			 std::string loadCommand2 = showPtr->getShowDay();
 			 executeUserInput(loadCommand2); 
@@ -855,84 +855,94 @@ public: void resetCommandBar(){
 * ===================================================================================================================================================================
 */
 
+//Pre-condition : Only for Developer to clear off data
+// This function takes in a std::string and check whether it is a developer command
+// If yes, it will proceed on to execute the command and return true
+// If no, it will return false
+public: bool checkAndExecuteDeveloperCommands(std::string input){
+			bool isDeveloperCommand;
+
+			std::string inputInLowerCase = toLowerCase(input);
+
+			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "mapleclearlogs"){
+				clearAllLogFiles();
+				Application::Exit();
+				isDeveloperCommand = true;
+			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "maplesyrup"){
+				clearAllLogFiles();
+				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				out.close();
+				Application::Exit();
+				isDeveloperCommand = true;
+			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
+				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				out.close();
+				Application::Exit();
+				isDeveloperCommand = true;
+			} else {
+				isDeveloperCommand = false;
+			}
+
+			return isDeveloperCommand;
+		}
+
+//Pre-condition : None
+// This function takes in a std::string and check whether it is a UI-handled command
+// If yes, it will proceed on to execute the command and return true
+// If no, it will return false
+private: bool checkAndExecuteUIHandledCommands(std::string input){
+			bool isUIHandledCommand;
+
+			std::string inputInLowerCase = toLowerCase(input);
+
+			if (inputInLowerCase.size() ==4 &&  inputInLowerCase.substr(0,4) == "exit"){
+				Application::Exit();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "help"){
+				displayHelpIntroduction();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "commands"){
+				displayHelpCommands();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "calendar"){
+				executeCalendarShortcut();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==6 && inputInLowerCase.substr(0,6) == "search"){
+				searchBox->Select();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "next"){
+				executeNextKey();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) =="back"){
+				executeBackKey();
+				isUIHandledCommand = true;
+			} else if (inputInLowerCase.size() ==9 && inputInLowerCase.substr(0,9) == "shortcuts"){
+				displayHelpShortCuts();
+				isUIHandledCommand = true;
+			} else{
+				isUIHandledCommand = false;
+
+			}
+			
+			return isUIHandledCommand;
+		 }
+
 //Pre-condition : Ensure command from user is passed into this function
 //This function centralises all the calls from the various parts/event handlers from the UI to Logic.h for execution
 //Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
 //It proceed on to call functions to display the relevant information to the various displays on the UI 
 public: void executeUserInput(std::string input){
+			if (checkAndExecuteDeveloperCommands(input)){
+				log("Logic return: developer commands executed" );
+				return;
+			}
 
-
-			//Commands that fall into UI execution
-
-			//Developer functions
-			std::string userCommandInSmallCaps = toLowerCase(input);
+			if (checkAndExecuteUIHandledCommands(input)){
+				log("Logic return: UI-handled commands executed" );
+				return;
+			}
 		
-			if (userCommandInSmallCaps.size() >=14 && userCommandInSmallCaps.substr(0,14) == "mapleclearlogs"){
-				clearAllLogFiles();
-				Application::Exit();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=10 && userCommandInSmallCaps.substr(0,10) == "maplesyrup"){
-				clearAllLogFiles();
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
-				out.close();
-				Application::Exit();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=13 && userCommandInSmallCaps.substr(0,13) == "mapleclearall"){
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
-				out.close();
-				Application::Exit();
-				return;
-			}
-
-
-			//Normal user functions
-			if (userCommandInSmallCaps.size() >=4 &&  userCommandInSmallCaps.substr(0,4) == "exit"){
-				Application::Exit();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=4 && userCommandInSmallCaps.substr(0,4) == "help"){
-				displayHelpIntroduction();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=8 && userCommandInSmallCaps.substr(0,8) == "commands"){
-				displayHelpCommands();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=8 && userCommandInSmallCaps.substr(0,8) == "calendar"){
-				executeCalendarShortcut();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=6 && userCommandInSmallCaps.substr(0,6) == "search"){
-				searchBox->Select();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=4 && userCommandInSmallCaps.substr(0,4) == "next"){
-				executeNextKey();
-				return;
-			}
-
-			if (userCommandInSmallCaps.size() >=4 && userCommandInSmallCaps.substr(0,4) =="back"){
-				executeBackKey();
-				return;
-
-			}
-
-			if (userCommandInSmallCaps.size() >=9 && userCommandInSmallCaps.substr(0,9) == "shortcuts"){
-				displayShortCuts();
-				return;
-			}
-
-			
-			//Pass userinput to logic when the command does not find into UI
+			//Pass userinput to logic when the command does not fit those handed by UI
   			 bool isExecuted = lGPtr->executeUserInput(input);
 			 log("Logic return: " + convertToStd(isExecuted.ToString()));
 
@@ -942,7 +952,6 @@ public: void executeUserInput(std::string input){
 				 displayErrorString();
 			 }
 		}
-
 
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode != Keys::Enter){
@@ -989,6 +998,13 @@ private: void displayHelpCommands(){
 			 displayToMainDisplay(helpCommands);
 		 }
 
+public: void displayHelpShortCuts(){
+			 std::string toMainDisplayLabel = "Shortcuts";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
+			 displayToMainDisplay(helpShortcuts);
+		}
 //===================================================================================================================================================================
 
 /*
@@ -1069,6 +1085,8 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 /*
 * =================================================================================================================================================================== 
 * Functions and attributes that control show and help column
+* Functions that are under the show column call UIShow.h directly to obtain the respective commands and pass them to function executeUserInput for execution
+* Functions that are under the help column call the respective help functions within this class
 * ===================================================================================================================================================================
 */
 
@@ -1093,9 +1111,13 @@ private: System::Void monthToolStripMenuItem_Click(System::Object^  sender, Syst
 		 }
 
 private: System::Void allToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowAll();
+			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowArchive();
+			 executeUserInput(loadCommand);
 		 }
 
 
@@ -1113,12 +1135,10 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 		 }
 
 private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 displayShortCuts();
+			 displayHelpShortCuts();
 		 }
 
-public: void displayShortCuts(){
-			Process::Start("Shortcuts for MapleSyrup.docx");
-		}
+
 
 //===================================================================================================================================================================
 
@@ -1134,6 +1154,9 @@ private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System
 			 calenderTop->Visible=false;
 		 }
 
+//Pre-condition : Only works when dates are chosen from the calendar
+//It receives the start and end date to be displayed from calendar and pass them to UIShow.h to generate a proper command
+//It moves on to pass this command to function executeUserInput for executition
 private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
 			 //Start date
 			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
@@ -1150,6 +1173,13 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 
 private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) { 
 			executeCalendarShortcut();
+		 }
+
+private: System::Void calenderTop_Leave(System::Object^  sender, System::EventArgs^  e) {
+			executeCalendarShortcut();
+		 }
+
+private: System::Void calenderTop_Enter(System::Object^  sender, System::EventArgs^  e) {
 		 }
 
 private: void executeCalendarShortcut(){
@@ -1173,10 +1203,6 @@ private: void closeCalendar(){
 			calenderTop->SendToBack();
 		 }
 
-private: System::Void calenderTop_Leave(System::Object^  sender, System::EventArgs^  e) {
-			 executeCalendarShortcut();
-		 }
-
 //===================================================================================================================================================================
 
 
@@ -1189,27 +1215,39 @@ private: System::Void calenderTop_Leave(System::Object^  sender, System::EventAr
 
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 String^ tempToBeSearched = searchBox->Text;
+
+			 /*
+			 if (tempToBeSearched == ""){
+				std::string loadCommandFloating = showPtr->getShowFloat();
+				executeUserInput(loadCommandFloating);
+			 }
+			 */
+
 			 std::string toBeSearched = convertToStd(tempToBeSearched);
-
 			 std::string COMMAND_SEARCH = "search";
-
 			 std::string searchCommand = COMMAND_SEARCH + " " + toBeSearched;
-
 			 executeUserInput(searchCommand);
 			 
 			 //Overwrite the maindisplaylabel with this
 			 displayToMainDisplayLabel("Search Mode");
 		 }
 
-
-private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {			 
+private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
 			 displayToMainDisplayLabel("Search Mode");
 		 }
 
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 searchBox->Text = "";
-			 displayToMainDisplayLabel("Search Mode exited");
+			 std::string currentShowCommand = showPtr->getCurrentCommand();
+			 //Reload main display before search mode
+			 executeUserInput(currentShowCommand);
 
+			 //Reload floating display before search mode
+			 std::string loadCommandFloating = showPtr->getShowFloat();
+			 executeUserInput(loadCommandFloating);
 		 }
 //===================================================================================================================================================================			 
 
@@ -1273,22 +1311,21 @@ private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, Syst
 * Undo and Redo Buttons and functions
 * ===================================================================================================================================================================
 */
+private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 undoLastCommand();
+		 }
 
 private: void undoLastCommand(){
 			executeUserInput("undo");
 		 }
 
-private: void redoLastCommand(){
-			executeUserInput("redo");
-		 }
 private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
 			 redoLastCommand();
 		 }
 
-private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
-			 undoLastCommand();
+private: void redoLastCommand(){
+			executeUserInput("redo");
 		 }
-
 //===================================================================================================================================================================	
 
 /*
@@ -1307,29 +1344,6 @@ private: Void log(std::string logString){
 
 
 //===================================================================================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
