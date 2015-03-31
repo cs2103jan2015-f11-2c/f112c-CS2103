@@ -87,9 +87,10 @@ void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, s
 								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed){
 
 	tempEvent->setIsFloating(false); //stringToBool
-	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));			
-	tempEvent->setIsDeadline(conversion.stringToBool(deadline));
-	tempEvent->setIsCompleted(conversion.stringToBool(completed));
+	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
+	
+	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
+	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size()));
 	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_ID.size())).c_str()));
 	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
 
