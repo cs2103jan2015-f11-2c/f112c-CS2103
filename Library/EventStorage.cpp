@@ -91,7 +91,7 @@ void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, s
 	
 	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
 	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
-	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_ID.size())).c_str()));
+	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
 	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
 
 	tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()),atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
@@ -114,7 +114,7 @@ void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id,
 	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));			
 	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
 	tempEvent->setIsCompleted(conversion.stringToBool((completed.substr(LABEL_ISCOMPLETED.size()))));
-	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_ID.size())).c_str()));
+	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
 	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
 
 	floatingContent.push_back(*tempEvent);
