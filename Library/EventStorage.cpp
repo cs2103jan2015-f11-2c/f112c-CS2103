@@ -90,7 +90,7 @@ void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, s
 	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
 	
 	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
-	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size()));
+	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
 	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_ID.size())).c_str()));
 	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
 
@@ -112,8 +112,8 @@ void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id,
 	
 	tempEvent->setIsFloating(true);
 	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));			
-	tempEvent->setIsDeadline(conversion.stringToBool(deadline));
-	tempEvent->setIsCompleted(conversion.stringToBool(completed));
+	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
+	tempEvent->setIsCompleted(conversion.stringToBool((completed.substr(LABEL_ISCOMPLETED.size()))));
 	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_ID.size())).c_str()));
 	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
 
