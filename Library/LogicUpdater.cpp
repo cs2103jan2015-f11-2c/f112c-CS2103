@@ -371,11 +371,11 @@ bool LogicUpdater::setIsNew(int vectorIndex){
 }
 
 
-void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex){
+void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex, std::vector<int> indexOfNewMarker){
 	//If there is a clash, this variable will become true
 	bool setNewItemClash = false;
 
-	for (int i=0; i < normalEvents.size(); i++){
+	for (int i=indexOfNewMarker[indexOfNewMarker.size()-2]+1; i < indexOfNewMarker[indexOfNewMarker.size()-1]; i++){
 		int checkEventStartTime = getStartTime (normalEvents[i]);
 		int checkEventEndTime = getEndTime (normalEvents[i]);
 
@@ -498,8 +498,8 @@ void LogicUpdater::normalEventsToString() {
 		setNoEventsMessage(mainDisplayStrings);
 		return;
 	}
-	
-	bool isAnyNew = false;
+
+	std::vector<int> indexOfMarker;
 
 	int headCounter =0;
 	int newEventStartTime = 0;
@@ -515,6 +515,8 @@ void LogicUpdater::normalEventsToString() {
 
 		//Generate header
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
+			indexOfMarker.push_back(i);
+
 			ostringstream out;
 			//Initialization
 			toBePushed.isMarker = true;
@@ -550,6 +552,12 @@ void LogicUpdater::normalEventsToString() {
 			out << "\n";
 
 			toBePushed.eventString = out.str();
+
+			//This is executed everytime a new marker is found
+			//It will set isClash for the whole previous day
+			if (indexOfMarker.size() >= 2){
+				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarker);
+			}
 		} 
 		 //Generate event list
 		 else {
@@ -565,7 +573,7 @@ void LogicUpdater::normalEventsToString() {
 
 			outDate << "[";
 			if (normalEvents[i].getIsDeadline()){
-				outDate << "*DUE*    ";
+				outDate << "*DUE*   ";
 				int endTime = getEndTime(normalEvents[i]);
 				outDate << intToTime(endTime);
 			}
@@ -619,7 +627,6 @@ void LogicUpdater::normalEventsToString() {
 		}
 
 		if (toBePushed.isNew == true){
-			isAnyNew = true;
 			newEventStartTime = getStartTime(normalEvents[i]);
 			newEventEndTime = getEndTime(normalEvents[i]);
 			newEventIndex = i;
@@ -632,10 +639,10 @@ void LogicUpdater::normalEventsToString() {
 
 		mainDisplayStrings.push_back(toBePushed);
 	}
-	
-	if (isAnyNew == true){
-	setIsClash(newEventStartTime, newEventEndTime, newEventIndex);
-	}
+
+	indexOfMarker.push_back(normalEvents.size());
+
+	setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarker);
 
 	assert(mainDisplayStrings.size()>=1);
 }

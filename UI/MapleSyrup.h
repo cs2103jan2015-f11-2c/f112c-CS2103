@@ -775,6 +775,8 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 					display->SelectedText = date + importanceSymbolString + eventName + "\n";
 
+					display->ScrollToCaret();
+
 				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
 					String^ date = convertToSys(displayToMain[i].dateString);
 					
@@ -797,6 +799,8 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 						display->SelectionColor = Color::Green;
 						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 						display->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+						int indexToBeScrolledTo = display->GetFirstCharIndexOfCurrentLine();
 
 				} else {
 							
@@ -869,6 +873,9 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 
 						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
 						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+						floatingTasksDisplay->ScrollToCaret();
+						
 					} else {
 						String^ date = convertToSys (displayToFloating[i].dateString);
 						if (displayToFloating[i].isCompleted){
@@ -891,8 +898,10 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
 						floatingTasksDisplay->SelectedText = eventName + "\n";
+						
 					}
 				}
+
 				log ("Floating displayed");
 		}
 

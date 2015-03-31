@@ -113,7 +113,7 @@ private:
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
 	bool setIsNew(int);
-	void setIsClash(int,int,int);
+	void setIsClash(int,int,int,std::vector<int>);
 
 	std::string intToDayOfWeek (int);
 	std::string intToMonth (int);
