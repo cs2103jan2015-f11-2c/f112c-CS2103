@@ -206,9 +206,10 @@ class ShowImportanceCommand : public Command {
 private:
 	EventFacade* eventFacade;
 	vector<Event> eventsToShow;
+	int importanceLevel;
 
 public:
-	ShowImportanceCommand(EventFacade* eventStorage);
+	ShowImportanceCommand(EventFacade* eventStorage, int importance);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();

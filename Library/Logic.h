@@ -40,6 +40,8 @@ public:
 	static const string CREATED_SHOWALL;
 	static const string CREATING_SHOWFLOAT;
 	static const string CREATED_SHOWFLOAT;
+	static const string CREATING_SHOWIMPORTANCE;
+	static const string CREATED_SHOWIMPORTANCE;
 	static const string CREATING_SEARCH;
 	static const string CREATED_SEARCH;
 	static const string QUEUEING_UNDO;

@@ -453,12 +453,14 @@ void ShowFloatCommand::undo() {
 
 
 
-ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage) {
+ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage, int importance) {
 	eventFacade = eventStorage;
+	importanceLevel = importance;
 	isUndoable = false;
 }
 
 void ShowImportanceCommand::execute() {
+	eventsToShow = eventFacade->findLevelImportance(importanceLevel);
 }
 
 vector<Event> ShowImportanceCommand::getEventVector() {

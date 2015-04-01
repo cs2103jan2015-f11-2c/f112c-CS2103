@@ -14,6 +14,8 @@ const string Logic::CREATING_SHOWALL = "creating show all command";
 const string Logic::CREATED_SHOWALL = "created show all command";
 const string Logic::CREATING_SHOWFLOAT = "creating showfloat command";
 const string Logic::CREATED_SHOWFLOAT = "created showfloat command";
+const string Logic::CREATING_SHOWIMPORTANCE = "creating show importance command";
+const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
 const string Logic::CREATING_SEARCH = "creating search command";
 const string Logic::CREATED_SEARCH = "created search command";
 const string Logic::QUEUEING_UNDO = "queueing undo";
@@ -165,9 +167,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		return executor.execute(showFloatCommand);
 							}
 
-							/*case Parser::SHOWIMPORTANT: {
-							break;
-							}*/
+	case Parser::SHOWIMPORTANT: {
+		log(CREATING_SHOWIMPORTANCE);
+		Command* showImportanceCommand = new ShowImportanceCommand(&eventStore, userEvent.getImportanceLevel());
+		log(CREATED_SHOWIMPORTANCE);
+		return executor.execute(showImportanceCommand);
+		break;
+								}
 
 	case Parser::UNDO: {
 		log(QUEUEING_UNDO);
@@ -325,7 +331,8 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			break;
 						   }
 
-		case Parser::SHOWALL: {
+		case Parser::SHOWALL:
+		case Parser::SHOWIMPORTANT: {
 			vector<Event> normalEvents, floatingEvents;
 
 			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
@@ -334,11 +341,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
-							  }
+									   }
 
-							  /*case Parser::SHOWDUE: {
-							  break;
-							  }*/
+									   /*case Parser::SHOWDUE: {
+									   break;
+									   }*/
 
 		case Parser::SHOWFLOAT: {
 			vector<Event> normalEvents = updater.getNormalEvents();
@@ -348,10 +355,6 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
 								}
-
-								/*case Parser::SHOWIMPORTANT: {
-								break;
-								}*/
 
 		case Parser::UNDO:
 		case Parser::REDO: {
