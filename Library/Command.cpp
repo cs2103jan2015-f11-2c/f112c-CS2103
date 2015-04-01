@@ -181,12 +181,6 @@ DeleteCommand::DeleteCommand(EventFacade* eventStorage, Event e) {
 }
 
 void DeleteCommand::execute() {
-	//if id found in current display, delete immediately
-	if (id > SIZE_ZERO) {
-		deleteImmediately();
-		return;
-	}
-
 	vector<Event> tempEvents = eventFacade->findNameExact(userEvent.getName());
 	int numResults = getNumEvents(tempEvents);
 
@@ -254,12 +248,6 @@ void DeleteCommand::undo() {
 	}
 }
 
-void DeleteCommand::deleteImmediately() {
-	isFloating = userEvent.getIsFloating();
-	deletedEvents = eventFacade->deleteEvent(id, userEvent);
-	isExecuted = true;
-}
-
 
 
 
@@ -272,11 +260,6 @@ EditCommand::EditCommand(EventFacade* eventStorage, Event toEdit, Event edited) 
 }
 
 void EditCommand::execute() {
-	if (id > 0) {
-		editImmediately();
-		return;
-	}
-
 	vector<Event> tempEvents = eventFacade->findNameExact(eventToEdit.getName());
 	int numResults = getNumEvents(tempEvents);
 
@@ -344,12 +327,6 @@ void EditCommand::undo() {
 		editedResults = eventFacade->addEvent(eventToEdit);
 		return;
 	}
-}
-
-void EditCommand::editImmediately() {
-	isFloating = eventToEdit.getIsFloating();
-	editedResults = eventFacade->editEvent(id, eventToEdit, editedEvent);
-	isExecuted = true;
 }
 
 

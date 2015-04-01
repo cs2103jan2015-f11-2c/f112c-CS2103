@@ -98,8 +98,6 @@ public:
 	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
-
-	void deleteImmediately();
 };
 
 
@@ -118,8 +116,6 @@ public:
 	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
-
-	void editImmediately();
 };
 
 
