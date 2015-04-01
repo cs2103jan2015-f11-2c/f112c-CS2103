@@ -46,7 +46,7 @@ public:
 
 	/*Edit support methods*/
 	vector<Event> editNormal(int index, Event editedEvent);
-	vector<Event> editFloating(int index, Event editedEvent);
+	vector<Event> editFloat(int index, Event editedEvent);
 
 	/*delete edit support methods*/
 	int findNormalIndex(int eventID);

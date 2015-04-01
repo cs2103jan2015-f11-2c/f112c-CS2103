@@ -131,7 +131,7 @@ vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event edit
 	} else{ 
 		index = findFloatingIndex(eventID);
 		if(index > NOT_FOUND){  //Floating Case
-			toLogic = editFloating(index, editedEvent);
+			toLogic = editFloat(index, editedEvent);
 		}
 	}
 	logger.logStoragePosition("Leaving editEvent");
@@ -169,7 +169,7 @@ vector<Event> EventModifier::editNormal(int index, Event editedEvent){
 	return tempContents;
 }
 
-vector<Event> EventModifier::editFloating(int index, Event editedEvent){ //check if float to float or float to normal
+vector<Event> EventModifier::editFloat(int index, Event editedEvent){ //check if float to float or float to normal
 	
 	vector<Event> toLogic, tempContents = EventStorage::storage().getFloatingContent();
 	
