@@ -23,10 +23,15 @@ public:
 	//Search Methods
 	vector<Event> searchNameOccurrence(string eventName);
 	vector<Event> searchNameExact(string eventName);
+	vector<Event> searchLevelImportance(int level);
+	vector<Event> searchAllImportance();
 
 	//Support methods for search
 	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchExactString(string eventName, vector<Event> eventVectorToSearch);
+	vector<Event> searchEventWithImportance(int level, vector<Event> vectorToSearch);	
+	vector<Event> searchEventWithAllImportance(vector<Event> vectorToSearch);	
+	vector<Event> combineResults(vector<Event> floatingEvents, vector<Event> normalEvents);
 
 	//Support methods for del and edit
 	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);

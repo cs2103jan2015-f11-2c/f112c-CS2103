@@ -37,6 +37,16 @@ vector<Event> EventFacade::findNameExact(string eventName){
 	return searcher.searchNameExact(eventName);
 }
 
+vector<Event> EventFacade::findLevelImportance(int level){
+	logger.logStoragePosition("findLevelImportance");
+	return searcher.searchLevelImportance(level);
+}
+
+vector<Event> EventFacade::findAllImportance(){
+	logger.logStoragePosition("findALLImportance");
+	return searcher.searchAllImportance();
+}
+
 /*To EventOrganiser*/
 vector<Event> EventFacade::showDates(Event eventWithStartEndTimes){
 	logger.logStoragePosition("showDates");

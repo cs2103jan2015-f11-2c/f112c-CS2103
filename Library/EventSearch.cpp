@@ -1,6 +1,9 @@
 #include "EventSearch.h"
 
-const int EventSearch::NOT_FOUND = -1 ;
+const int EventSearch::NOT_FOUND = -1;
+const int EventSearch::MAX_LEVEL = 3;
+const int EventSearch::MIN_LEVEL = 1;
+
 
 EventSearch::EventSearch()
 {
@@ -23,8 +26,7 @@ vector<Event> EventSearch::searchNameOccurrence(string eventName){
 	floatingEvents = searchEventWithName(eventName, floatingEvents);
 	normalEvents = searchEventWithName(eventName, normalEvents);
 
-	normalEvents = organiser.showEvents(normalEvents);
-	floatingEvents.insert( floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
+	floatingEvents = combineResults(floatingEvents, normalEvents);
 
 	logger.logStoragePosition("leaving searchNameOccurrence");
 	return floatingEvents;
@@ -56,9 +58,8 @@ vector<Event> EventSearch::searchNameExact(string eventName){
 	floatingEvents = searchExactString(eventName, floatingEvents);
 	normalEvents = searchExactString(eventName, normalEvents);
 
-	normalEvents = organiser.showEvents(normalEvents);
-	floatingEvents.insert( floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
-	
+	floatingEvents = combineResults(floatingEvents, normalEvents);
+
 	logger.logStoragePosition("leaving checkExactString");
 	return floatingEvents;
 }
@@ -77,6 +78,77 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 	return returnVector;
 }
 
+//search level of importance
+vector<Event> EventSearch::searchLevelImportance(int level){
+	logger.logStorageIntData("searching for this level of importance" ,level);
+	
+	vector<Event> floatingEvents =  EventStorage::storage().getFloatingContent();
+	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+	//try{
+	floatingEvents = searchEventWithImportance(level, floatingEvents);
+	normalEvents = searchEventWithImportance(level, normalEvents);
+	//} catch(exception&){
+	// if level more than 3, = 3
+	//}
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//Support method --- finds importance match
+vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> vectorToSearch){
+
+	vector<Event> returnVector;
+	/*if(level > 3){
+		string exception = "ERROR: Level greater than 3";
+		throw exception;
+	}*/
+	if(level > MAX_LEVEL){
+		level = MAX_LEVEL;
+	} 
+	if( level < MIN_LEVEL){
+		level = MIN_LEVEL;
+	}
+
+	for(auto i=0;i<vectorToSearch.size();i++){
+		if(level == vectorToSearch[i].getImportanceLevel()){
+			returnVector.push_back(vectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//search method finds all important events
+vector<Event> EventSearch::searchAllImportance(){
+	logger.logStoragePosition("searchALLImportance");
+	vector<Event> returnVector;
+	
+	vector<Event> floatingEvents =  EventStorage::storage().getFloatingContent();
+	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+
+	floatingEvents = searchEventWithAllImportance(floatingEvents);
+	normalEvents = searchEventWithAllImportance(normalEvents);	
+
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//Support method --- finds all events with importance level > 0
+vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSearch){
+
+	vector<Event> returnVector;
+
+	for(auto i=0;i<vectorToSearch.size();i++){
+		if(vectorToSearch[i].getImportanceLevel() >= MIN_LEVEL){
+			returnVector.push_back(vectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//support method
+vector<Event> EventSearch::combineResults(vector<Event> floatingEvents, vector<Event> normalEvents){
+	normalEvents = organiser.showEvents(normalEvents);
+	floatingEvents.insert( floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
+	return floatingEvents;
+}
 
 //find index in internal storages with ID (DEL / EDIT SUPPORT)
 int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){

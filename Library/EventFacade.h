@@ -29,9 +29,10 @@ public:
 	/*To EventSearch*/
 	vector<Event> findNameOccurrence(string eventName); //checkMultipleResults
 	vector<Event> findNameExact(string eventName); //checkExactString
+	vector<Event> findLevelImportance(int level);
+	vector<Event> findAllImportance();	
 	//vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);
 	//vector<Event> findCompleted();
-	//show importance
 
 	/*To EventOrganiser*/
 	vector<Event> showDates(Event eventWithStartEndTimes);
@@ -43,8 +44,6 @@ public:
 	//complete to eventarchive
 	//bool is completed -- event modifer
 	//is deadline - storage changes
-	//importance - storage changes
-	//sort by importance (show importance)
 	//unit testing
 	//exception for reading
 };
