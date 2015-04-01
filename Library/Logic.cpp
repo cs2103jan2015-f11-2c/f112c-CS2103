@@ -36,8 +36,8 @@ Logic::~Logic() {
 
 
 //GETTERS
-EventFacade Logic::getEventStorage() {
-	return eventStore;
+EventFacade Logic::getEventFacade() {
+	return eventFacade;
 }
 
 vector<LogicUpdater::EVENT_STRING> Logic::getFloatingStrings() {
@@ -93,7 +93,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
-		Command* addCommand = new AddCommand(&eventStore, userEvent);
+		Command* addCommand = new AddCommand(&eventFacade, userEvent);
 		log(CREATED_ADD);
 		return executor.execute(addCommand);
 						   }
@@ -111,7 +111,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			eventToDelete = updater.getEventFromID(id);
 		}
 
-		Command* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
+		Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
 		log(CREATED_DELETE);
 		return executor.execute(deleteCommand);
 						  }
@@ -125,31 +125,31 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			eventToEdit = updater.getEventFromID(id);
 		}
 
-		Command* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
+		Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
 		log(CREATED_EDIT);
 		return executor.execute(editCommand);
 					   }
 
 	case Parser::SEARCH: {
-		Command* searchCommand = new SearchCommand(&eventStore, nameOfEvent);
+		Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
 		log(CREATED_SEARCH);
 		return executor.execute(searchCommand);
 						 }
 
 	case Parser::SHOW: {
-		Command* showCommand = new ShowCommand(&eventStore, userEvent);
+		Command* showCommand = new ShowCommand(&eventFacade, userEvent);
 		log(CREATED_SHOW);
 		return executor.execute(showCommand);
 					   }
 
 	case Parser::SHOWALL: {
-		Command* showAllCommand = new ShowAllCommand(&eventStore);
+		Command* showAllCommand = new ShowAllCommand(&eventFacade);
 		log(CREATED_SHOWALL);
 		return executor.execute(showAllCommand);
 						  }
 
 	case Parser::SHOWALLIMPORTANT: {
-		Command* showAllImportantCommand = new ShowAllImportantCommand(&eventStore);
+		Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
 		log(CREATED_SHOWALLIMPORTANT);
 		return executor.execute(showAllImportantCommand);
 								   }
@@ -159,13 +159,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 						  }*/
 
 	case Parser::SHOWFLOAT: {
-		Command* showFloatCommand = new ShowFloatCommand(&eventStore);
+		Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
 		log(CREATED_SHOWFLOAT);
 		return executor.execute(showFloatCommand);
 							}
 
 	case Parser::SHOWIMPORTANT: {
-		Command* showImportanceCommand = new ShowImportanceCommand(&eventStore, userEvent.getImportanceLevel());
+		Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
 		log(CREATED_SHOWIMPORTANCE);
 		return executor.execute(showImportanceCommand);
 		break;
@@ -218,12 +218,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			break;
 							   }
 
-							   /*case Parser::COMPLETE: {
-							   break;
-							   }*/
-
+		case Parser::COMPLETE:
 		case Parser::DELETE_: {
-			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector() ;
+			vector<Event> normalEvents, floatingEvents, tempEvents = commandPtr->getEventVector();
 
 			if (!commandPtr->getIsExecuted()) {
 				setEventVectors(normalEvents, floatingEvents, tempEvents);
@@ -232,6 +229,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
+						
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -253,13 +251,22 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				throw !isDone;
 			}
 
-			//successful delete
+			//successful complete/delete
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
+			if (command = Parser::DELETE_) { //for delete
 			Event deletedEvent = commandPtr->getEvent();
 			string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
-			vector<tm> tmVec = updater.getTempMainDisplayLabel();
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
+			return;
+			} else { //for complete
+				Event completedEvent = commandPtr->getEvent();
+				//string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
+
+				//updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
+				return;
+			}
 			break;
 							  }
 

@@ -135,9 +135,7 @@ CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e
 void CompleteCommand::execute() {
 	//if id found in current display, delete immediately
 	if (id > 0) {
-		isFloating = userEvent.getIsFloating();
-		//completedEvents = eventFacade->???
-		isExecuted = true;
+		completeImmediately();
 		return;
 	}
 
@@ -145,13 +143,33 @@ void CompleteCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case 0: {
-		break;
-			}
+	case SIZE_ZERO: { //no exact match
+		userEvent = createInvalidEvent();
+		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		numResults = getNumEvents(tempEvents);
 
-	case 1: {
+		switch (numResults) {
+		case 0: { //no partial match
+			completedEvents.push_back(createInvalidEvent());
+			userEvent = createInvalidEvent();
+			isExecuted = true;
+			return;
+				}
+
+		default: { //at least 1 partial match
+			completedEvents = tempEvents;
+			userEvent = createInvalidEvent();
+			isExecuted = false;
+			return;
+				 }
+		}
+
 		break;
-			}
+					}
+
+	case SIZE_ONE: {
+		break;
+				   }
 
 	default: {
 		break;
@@ -168,6 +186,12 @@ Event CompleteCommand::getEvent() {
 }
 
 void CompleteCommand::undo() {
+}
+
+void CompleteCommand::completeImmediately() {
+	isFloating = userEvent.getIsFloating();
+	//completedEvents = eventFacade->???
+	isExecuted = true;
 }
 
 
@@ -196,13 +220,13 @@ void DeleteCommand::execute() {
 		userEvent = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
+		
 		switch (numResults) {
 		case 0: { //no partial match
 			deletedEvents.push_back(createInvalidEvent());
 			userEvent = createInvalidEvent();
 			isExecuted = true;
 			return;
-			break;
 				}
 
 		default: { //at least 1 partial match
@@ -210,9 +234,9 @@ void DeleteCommand::execute() {
 			userEvent = createInvalidEvent();
 			isExecuted = false;
 			return;
-			break;
 				 }
 		}
+
 		break;
 				}
 

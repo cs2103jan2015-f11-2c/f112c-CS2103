@@ -80,6 +80,8 @@ public:
 	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
+
+	void completeImmediately();
 };
 
 

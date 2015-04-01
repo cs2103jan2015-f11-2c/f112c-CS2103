@@ -20,7 +20,7 @@ using std::ostringstream;
 class Logic {
 private:
 	Parser* parserPtr;
-	EventFacade eventStore;
+	EventFacade eventFacade;
 	LogicUpdater updater;
 	Executor executor;
 	vector<string> logStrings;
@@ -53,7 +53,7 @@ public:
 
 
 	//getters
-	EventFacade getEventStorage();
+	EventFacade getEventFacade();
 	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
 	vector<LogicUpdater::EVENT_STRING> getMainStrings();
 	vector<string> getFeedbackStrings();
