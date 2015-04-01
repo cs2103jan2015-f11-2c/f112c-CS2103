@@ -28,21 +28,14 @@ private:
 public:
 	//for logging
 	static const string LOG_FILE_NAME;
-	static const string CREATING_ADD;
 	static const string CREATED_ADD;
-	static const string CREATING_DELETE;
 	static const string CREATED_DELETE;
-	static const string CREATING_EDIT;
 	static const string CREATED_EDIT;
-	static const string CREATING_SHOW;
 	static const string CREATED_SHOW;
-	static const string CREATING_SHOWALL;
 	static const string CREATED_SHOWALL;
-	static const string CREATING_SHOWFLOAT;
+	static const string CREATED_SHOWALLIMPORTANT;
 	static const string CREATED_SHOWFLOAT;
-	static const string CREATING_SHOWIMPORTANCE;
 	static const string CREATED_SHOWIMPORTANCE;
-	static const string CREATING_SEARCH;
 	static const string CREATED_SEARCH;
 	static const string QUEUEING_UNDO;
 	static const string QUEUEING_REDO;

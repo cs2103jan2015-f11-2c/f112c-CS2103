@@ -174,6 +174,21 @@ public:
 
 
 
+class ShowAllImportantCommand : public Command {
+private:
+	EventFacade* eventFacade;
+	vector<Event> eventsToShow;
+public:
+	ShowAllImportantCommand(EventFacade* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
 class ShowDueCommand : public Command {
 private:
 	EventFacade* eventFacade;

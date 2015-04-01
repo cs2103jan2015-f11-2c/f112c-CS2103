@@ -2,21 +2,14 @@
 
 //for logging
 const string Logic::LOG_FILE_NAME = "LogicLog.txt";
-const string Logic::CREATING_ADD = "creating add command";
 const string Logic::CREATED_ADD = "created add command";
-const string Logic::CREATING_DELETE = "creating delete command";
 const string Logic::CREATED_DELETE = "created delete command";
-const string Logic::CREATING_EDIT = "creating edit command";
 const string Logic::CREATED_EDIT = "created edit command";
-const string Logic::CREATING_SHOW = "creating show command";
 const string Logic::CREATED_SHOW = "created show command";
-const string Logic::CREATING_SHOWALL = "creating show all command";
 const string Logic::CREATED_SHOWALL = "created show all command";
-const string Logic::CREATING_SHOWFLOAT = "creating showfloat command";
+const string Logic::CREATED_SHOWALLIMPORTANT = "created show all command";
 const string Logic::CREATED_SHOWFLOAT = "created showfloat command";
-const string Logic::CREATING_SHOWIMPORTANCE = "creating show importance command";
 const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
-const string Logic::CREATING_SEARCH = "creating search command";
 const string Logic::CREATED_SEARCH = "created search command";
 const string Logic::QUEUEING_UNDO = "queueing undo";
 const string Logic::QUEUEING_REDO = "queueing redo";
@@ -100,7 +93,6 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
-		log(CREATING_ADD);
 		Command* addCommand = new AddCommand(&eventStore, userEvent);
 		log(CREATED_ADD);
 		return executor.execute(addCommand);
@@ -111,7 +103,6 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 						   }*/
 
 	case Parser::DELETE_: {
-		log(CREATING_DELETE);
 		int id = convertNameToID(nameOfEvent);
 
 		Event eventToDelete;
@@ -126,7 +117,6 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 						  }
 
 	case Parser::EDIT: {
-		log(CREATING_EDIT);
 		int id = convertNameToID(nameOfEvent);
 
 		Event eventToEdit;
@@ -141,40 +131,40 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 					   }
 
 	case Parser::SEARCH: {
-		log(CREATING_SEARCH);
-
 		Command* searchCommand = new SearchCommand(&eventStore, nameOfEvent);
 		log(CREATED_SEARCH);
 		return executor.execute(searchCommand);
 						 }
 
 	case Parser::SHOW: {
-		log(CREATING_SHOW);
 		Command* showCommand = new ShowCommand(&eventStore, userEvent);
 		log(CREATED_SHOW);
 		return executor.execute(showCommand);
 					   }
 
 	case Parser::SHOWALL: {
-		log(CREATING_SHOWALL);
 		Command* showAllCommand = new ShowAllCommand(&eventStore);
 		log(CREATED_SHOWALL);
 		return executor.execute(showAllCommand);
 						  }
+
+	case Parser::SHOWALLIMPORTANT: {
+		Command* showAllImportantCommand = new ShowAllImportantCommand(&eventStore);
+		log(CREATED_SHOWALLIMPORTANT);
+		return executor.execute(showAllImportantCommand);
+								   }
 
 						  /*case Parser::SHOWDUE: {
 						  break;
 						  }*/
 
 	case Parser::SHOWFLOAT: {
-		log(CREATING_SHOWFLOAT);
 		Command* showFloatCommand = new ShowFloatCommand(&eventStore);
 		log(CREATED_SHOWFLOAT);
 		return executor.execute(showFloatCommand);
 							}
 
 	case Parser::SHOWIMPORTANT: {
-		log(CREATING_SHOWIMPORTANCE);
 		Command* showImportanceCommand = new ShowImportanceCommand(&eventStore, userEvent.getImportanceLevel());
 		log(CREATED_SHOWIMPORTANCE);
 		return executor.execute(showImportanceCommand);
@@ -338,6 +328,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 						   }
 
 		case Parser::SHOWALL:
+		case Parser::SHOWALLIMPORTANT:
 		case Parser::SHOWIMPORTANT: {
 			vector<Event> normalEvents, floatingEvents;
 

@@ -433,6 +433,29 @@ void ShowAllCommand::undo() {
 
 
 
+ShowAllImportantCommand::ShowAllImportantCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowAllImportantCommand::execute() {
+	eventsToShow = eventFacade->findAllImportance();
+}
+
+vector<Event> ShowAllImportantCommand::getEventVector() {
+	return eventsToShow;
+}
+
+Event ShowAllImportantCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowAllImportantCommand::undo() {
+}
+
+
+
+
 ShowDueCommand::ShowDueCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
