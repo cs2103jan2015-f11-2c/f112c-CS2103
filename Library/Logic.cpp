@@ -112,24 +112,30 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 	case Parser::DELETE_: {
 		log(CREATING_DELETE);
-		string name = convertUserInputToName(nameOfEvent);
+		int id = convertNameToID(nameOfEvent);
 
 		Event eventToDelete;
-		eventToDelete.setName(name);
+		eventToDelete.setName(nameOfEvent);
+		if (id != INVALID_NUMBER) {
+			eventToDelete = updater.getEventFromID(id);
+		}
 
-		Command* deleteCommand = new DeleteCommand(&eventStore, eventToDelete);
+		Command* deleteCommand = new DeleteCommand(&eventStore, id, eventToDelete);
 		log(CREATED_DELETE);
 		return executor.execute(deleteCommand);
 						  }
 
 	case Parser::EDIT: {
 		log(CREATING_EDIT);
-		string name = convertUserInputToName(nameOfEvent);
+		int id = convertNameToID(nameOfEvent);
 
 		Event eventToEdit;
-		eventToEdit.setName(name);
+		eventToEdit.setName(nameOfEvent);
+		if (id != INVALID_NUMBER) {
+			eventToEdit = updater.getEventFromID(id);
+		}
 
-		Command* editCommand = new EditCommand(&eventStore, eventToEdit, userEvent);
+		Command* editCommand = new EditCommand(&eventStore, id, eventToEdit, userEvent);
 		log(CREATED_EDIT);
 		return executor.execute(editCommand);
 					   }
@@ -462,17 +468,21 @@ bool Logic::isNumber(string s) {
 }
 
 //returns id of event if found in updater, -1 otherwise
-string Logic::convertUserInputToName(string input) {
-	if (isNumber(input)) {
-		int index = std::stoi(input);
+int Logic::convertNameToID(string name) {
+	if (isNumber(name)) {
+		int index = std::stoi(name);
 
-		if (index == Command::SIZE_ZERO | index > updater.getTotalNumEvents()) {
-			return EMPTY_STRING;
+		if (index == Command::SIZE_ZERO) {
+			return INVALID_NUMBER;
+		}
+
+		if (index > updater.getTotalNumEvents()) {
+			return INVALID_NUMBER;
 		} else {
-			return updater.getNameFromIndex(index);
+			return updater.getIDFromIndex(index);
 		}
 	} else {
-		return input;
+		return INVALID_NUMBER;
 	}
 }
 
