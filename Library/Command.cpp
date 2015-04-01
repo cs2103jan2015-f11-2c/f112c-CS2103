@@ -351,6 +351,7 @@ void EditCommand::undo() {
 void EditCommand::editImmediately() {
 	isFloating = eventToEdit.getIsFloating();
 	editedResults = eventFacade->editEvent(id, eventToEdit, editedEvent);
+	editedEvent = getEventFromID(editedResults, id);
 	isExecuted = true;
 }
 
