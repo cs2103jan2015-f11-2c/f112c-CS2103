@@ -49,6 +49,7 @@ public:
 
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
+	static const string SPACE;
 
 
 	//constructor, destructor
@@ -79,7 +80,7 @@ public:
 	//others
 	bool isNumber(string s);
 	string convertUserInputToName(string input);
-	
+	bool isSameDate(tm date1, tm date2);
 
 	//log
 	void log(string logString);

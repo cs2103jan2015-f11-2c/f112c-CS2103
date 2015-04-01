@@ -72,7 +72,6 @@ public:
 	void setFeedback(string feedbackToUser);
 	void setID(int number);
 
-
 	//unused
 	void setTags(vector<string> userTags);
 	void setDescription(string desc);

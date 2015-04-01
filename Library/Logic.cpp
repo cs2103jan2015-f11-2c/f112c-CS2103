@@ -23,6 +23,7 @@ const string Logic::CASE_1 = "entered case 1";
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
+const string Logic::SPACE = " ";
 
 
 //CONSTRUCTOR, DESTRUCTOR
@@ -202,6 +203,13 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
+			if (command == Parser::ADD) {
+				if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+					feedback += SPACE + updater.setSingleDayString(userEvent.getStartDate());
+				} else {
+					feedback += SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+				}
+			}
 			int id = userEvent.getID();
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id);
@@ -463,6 +471,12 @@ string Logic::convertUserInputToName(string input) {
 	} else {
 		return input;
 	}
+}
+
+bool Logic::isSameDate(tm date1, tm date2) {
+	return(date1.tm_mday == date2.tm_mday &&
+		date1.tm_mon == date2.tm_mon &&
+		date1.tm_year == date2.tm_year);
 }
 
 
