@@ -173,9 +173,8 @@ void CompleteCommand::undo() {
 
 
 
-DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e) {
+DeleteCommand::DeleteCommand(EventFacade* eventStorage, Event e) {
 	eventFacade = eventStorage;
-	id = eventID;
 	userEvent = e;
 	isExecuted = false;
 	isUndoable = true;
@@ -264,9 +263,8 @@ void DeleteCommand::deleteImmediately() {
 
 
 
-EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited) {
+EditCommand::EditCommand(EventFacade* eventStorage, Event toEdit, Event edited) {
 	eventFacade = eventStorage;
-	id = eventID;
 	eventToEdit = toEdit;
 	editedEvent = edited;
 	isExecuted = false;
@@ -342,7 +340,7 @@ Event EditCommand::getEvent() {
 
 void EditCommand::undo() {
 	if (eventToEdit.getID() != INVALID_NUMBER) {
-		eventFacade->deleteEvent(editedEvent.getID(), editedEvent);
+		editedResults = eventFacade->deleteEvent(editedEvent.getID(), editedEvent);
 		editedResults = eventFacade->addEvent(eventToEdit);
 		return;
 	}

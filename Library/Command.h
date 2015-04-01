@@ -93,7 +93,7 @@ private:
 	vector<Event> deletedEvents;
 
 public:
-	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
+	DeleteCommand(EventFacade* eventStorage, Event userEvent);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();
@@ -113,7 +113,7 @@ private:
 	vector<Event> editedResults;
 
 public:
-	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited);
+	EditCommand(EventFacade* eventStorage, Event toEdit, Event edited);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();

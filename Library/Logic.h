@@ -78,7 +78,7 @@ public:
 
 	//others
 	bool isNumber(string s);
-	int convertNameToID(string name);
+	string convertUserInputToName(string input);
 	
 
 	//log
