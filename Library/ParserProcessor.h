@@ -45,6 +45,7 @@ private:
 	bool nameFound;
 	bool toFound;
 	bool deadlineFound;
+	bool importanceFound;
 
 	//boolean variables for Show command
 	//to check if Show is a range of days 

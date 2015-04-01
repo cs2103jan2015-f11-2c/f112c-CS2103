@@ -226,15 +226,15 @@ std::string Parser::createFeedback(std::string errorCode){
 		return "Error: No event name found. Please type ';' after an event name.";
 	}
 	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DATES){
-		return "Error: Too many date inputs detected.";
+		return "Error: Too many date inputs detected. Maximum of 2 date inputs.";
 	}
 	if(errorCode == ParserExceptions::ERROR_TOO_MANY_TIMES){
-		return "Error: Too many time inputs detected.";
+		return "Error: Too many time inputs detected. Maximum of 2 time inputs.";
 	}
 	if(errorCode == ParserExceptions::ERROR_MISSING_DAY){
 		return "Error: No day input found before month.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNUSED_INTEGERS){
+	if(errorCode == ParserExceptions::ERROR_UNUSED_INFORMATION){
 		return "Error: Wrong formatting, not all information has been successfully recorded.";
 	}
 	if(errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN){
@@ -262,6 +262,15 @@ std::string Parser::createFeedback(std::string errorCode){
 		return "Error: Invalid minutes input for time.";
 	}
 	if(errorCode == ParserExceptions::ERROR_START_AFTER_END){
-		return "Error: Start day/time is later than End day/time";
+		return "Error: Start day is later than End day";
+	}
+	if(errorCode == ParserExceptions::ERROR_NO_SHOW){
+		return "Error: No registered show found. Please use search instead.";
+	}
+	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_DATES){
+		return "Error: Too many date inputs detected. Maximum of 1 date input for deadline events.";
+	}
+	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_TIMES){
+		return "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
 	}
 }

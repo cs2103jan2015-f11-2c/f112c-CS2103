@@ -55,6 +55,7 @@ ParserProcessor::ParserProcessor(){
 	nameFound = false;
 	toFound = false;
 	deadlineFound = false;
+	importanceFound = false;
 
 	oneMatchFound = false;
 	twoMatchFound = false;
@@ -102,14 +103,14 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 		//Check Exception Cases:
 		//Case 1: no name, no day, no time input at all
 		if(!nameFound && !startDayFound && !startTimeFound){
-			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 		}
 		//Case 2: name is found. additional input detected after event name but not read in at all
-		if(nameFound && !startDayFound && !startTimeFound){
+		if(nameFound && !startDayFound && !startTimeFound && !importanceFound){
 			if(fragmentedWords.size() > 1){
-				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);	
 			}
 		}
 		//Case 3: due/deadline keyword found but no date or time input
@@ -123,8 +124,8 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 		for(i = 0; i < fragmentedWords.size(); i++){
 			try {
 				auto tempInt = std::stoi(fragmentedWords[i]);
-				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 			} catch (std::invalid_argument& e){
 			}
 		}
@@ -172,15 +173,15 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 		//Check Exception Cases:
 		//Case 1: no name, no day, no time input at all
 		if(!nameFound && !startDayFound && !startTimeFound){
-			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 		}
 		//Case 2: some data are unused, means there might be wrong formatting or too many information entered
 		for(i = 0; i < fragmentedWords.size(); i++){
 			try {
 				auto tempInt = std::stoi(fragmentedWords[i]);
-				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 			} catch (std::invalid_argument& e){
 			}
 		}
@@ -231,8 +232,16 @@ bool ParserProcessor::identifyDay(int index){
 			
 			//assigning start and end date according to what keyword was found
 			if(strDay == "today" || strDay == "tdy"){
-				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
-				startDayFound = true;
+				if(!startDayFound){
+					tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+					startDayFound = true;
+				} else if(!endDayFound){
+					tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
+					endDayFound = true;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+				}
 			} else if(strDay == "tomorrow" || strDay == "tmr"){
 				if(!startDayFound){
 					tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
@@ -385,7 +394,6 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift){
 	if(tempIndex >= 0){
 		if(fragmentedWords[tempIndex] == "to"){
 			tempIndex--;
-			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			if(tempIndex >= 0){
 				try {
 					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
@@ -411,6 +419,9 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo){
 			endDayFound = true;
 			tempEventStore.setEndDate(day,month,year);
 			toFound = false;
+		} else if(tempEventStore.getIsDeadline()){
+			logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
 		} else {
 			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
@@ -421,6 +432,9 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo){
 	} else if(!endDayFound){
 		endDayFound = true;
 		tempEventStore.setEndDate(day,month,year);
+	} else if(tempEventStore.getIsDeadline()){
+		logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
+		throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
 	} else {
 		logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
 		throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
@@ -575,7 +589,6 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 	if(tempIndex >= 0){
 		if(fragmentedWords[tempIndex] == "to"){
 			tempIndex--;
-			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			if(tempIndex >= 0){
 				try {
 					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
@@ -657,6 +670,9 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 			endTimeFound = true;
 			tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
 			toFound = false;
+		} else if(tempEventStore.getIsDeadline()){
+			logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
 		} else {
 			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
@@ -667,6 +683,9 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 	} else if(!endTimeFound){				
 		endTimeFound = true;
 		tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+	} else if(tempEventStore.getIsDeadline()){
+		logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+		throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
 	} else {
 		logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
 		throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
@@ -699,10 +718,11 @@ bool ParserProcessor::identifyImportance(int index){
 			if(tempStr.at(i) == '!'){
 				levelImportance++;
 			} else {
-				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 			}
 		}
+		importanceFound = true;
 		tempEventStore.setImportanceLevel(levelImportance);
 	}
 	return matchFound;
@@ -939,16 +959,16 @@ Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords
 	//Exception Cases:
 	//Case 1: no show is found
 	if (!systemShowOthers && !systemShowYear && !userShowDay && !userShowMonth && !userShowRangeOfDays && !userShowRangeOfMonths && !systemShowWeek && !systemShowMonth){
-		logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-		throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+		logger.logParserError(ParserExceptions::ERROR_NO_SHOW);
+		throw ParserExceptions(ParserExceptions::ERROR_NO_SHOW);
 	}
 
 	//Case 2: some data are unused, means there might be wrong formatting or too many information entered
 	for(i = 0; i < fragmentedWords.size(); i++){
 		try {
 			auto tempInt = std::stoi(fragmentedWords[i]);
-			logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+			logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 		} catch (std::invalid_argument& e){
 		}
 	}
@@ -1077,8 +1097,8 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 			if(firstWord[i] == '!'){
 				levelImportance++;
 			} else {
-				logger.logParserError(ParserExceptions::ERROR_UNUSED_INTEGERS);
-				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INTEGERS);
+				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 			}
 		}
 		tempEventStore.setImportanceLevel(levelImportance);
@@ -1109,9 +1129,19 @@ bool ParserProcessor::identifyShowDay(int index){
 			
 			//assigning start and end date according to what keyword was found
 			if(strDay == "today" || strDay == "tdy"){
-				tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
-				oneMatchFound = true;
-				userShowDay = true;
+				if(!oneMatchFound){
+					tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+					oneMatchFound = true;
+					userShowDay = true;
+				} else if(!twoMatchFound){
+					tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
+					twoMatchFound = true;
+					userShowRangeOfDays = true;
+					userShowDay = false;
+				} else {
+					logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+					throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+				}
 			} else if(strDay == "tomorrow" || strDay == "tmr"){
 				if(!oneMatchFound){
 					tempEventStore.setStartDate(now->tm_mday+1,now->tm_mon,now->tm_year);
