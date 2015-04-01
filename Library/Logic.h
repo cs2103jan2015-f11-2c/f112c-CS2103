@@ -81,7 +81,7 @@ public:
 
 	//others
 	bool isNumber(string s);
-	string convertUserInputToName(string input);
+	int convertNameToID(string input);
 	bool isSameDate(tm date1, tm date2);
 
 	//log
