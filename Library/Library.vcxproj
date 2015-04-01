@@ -82,6 +82,7 @@
     <ClCompile Include="ParserProcessor.cpp" />
     <ClCompile Include="EventSearch.cpp" />
     <ClCompile Include="UIHelp.cpp" />
+    <ClCompile Include="UILog.cpp" />
     <ClCompile Include="UIShow.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +106,7 @@
     <ClInclude Include="ParserProcessor.h" />
     <ClInclude Include="EventSearch.h" />
     <ClInclude Include="UIHelp.h" />
+    <ClInclude Include="UILog.h" />
     <ClInclude Include="UIShow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
