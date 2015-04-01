@@ -248,6 +248,36 @@ namespace UnitTest
 
 		}
 
+		TEST_METHOD(UIShow_isFirstDayOfMonth_Test){
+			time_t now;
+			struct tm date;
+			bool testResult;
+			bool expectedResult;
+			
+			time(&now);
+			date = *localtime(&now);
+
+			//Correct Case
+			date.tm_mday = 0;
+			date.tm_mon = 0; 
+			date.tm_year = 115;
+
+			expectedResult = true;
+			testResult = show.isFirstDayOfMonth(date);
+			Assert::AreEqual(expectedResult, testResult);
+
+			//Expected failing case
+			date.tm_mday = 5;
+			date.tm_mon = 1; 
+			date.tm_year = 115;
+
+			expectedResult = false;
+			testResult = show.isFirstDayOfMonth(date);
+			Assert::AreEqual(expectedResult, testResult);
+		}
+
+		
+
 		TEST_METHOD(UIShow_displayNext_Test){
 		
 		

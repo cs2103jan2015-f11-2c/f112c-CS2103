@@ -13,7 +13,7 @@
 // TODO: reference additional headers your program requires here
 //UI references
 #include "UIShow.h"
-#include "CommandSuggestion.h"
+#include "UICommandSuggestion.h"
 #include "UIHelp.h"
 
 

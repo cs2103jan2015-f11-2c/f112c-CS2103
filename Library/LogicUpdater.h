@@ -9,6 +9,7 @@
 #define LOGIC_UPDATER
 
 #include <assert.h>
+#include <ctime>
 #include <sstream>
 #include <algorithm>
 #include "Event.h"
@@ -46,8 +47,9 @@ public:
 	static const string REDO_MESSAGE;
 
 	static const string WORD_TODAY;
-	static const string WORD_YESTERDAY;
 	static const string WORD_TOMORROW;
+	static const string WORD_MONTH;
+	static const string WORD_WEEK;
 
 	static const string WORD_ALLDAY;
 
@@ -111,6 +113,9 @@ public:
 	bool isSingleDay(vector<tm>);
 	bool isToday(tm);
 	bool isTomorrow(tm);
+	bool isDisplayMonth(tm,tm);
+	bool isFirstDayOfMonth(tm);
+	bool isLastDayOfMonth(tm);
 	std::string setSingleDayString(tm);
 	std::string setMultipleDaysString(tm,tm);
 
@@ -131,6 +136,12 @@ public:
 	int getStartTime(Event);
 	int getEndTime(Event); 
 
+	bool isDisplayWeek(tm,tm);
+	bool isFirstDayOfWeek(tm);
+	bool isLastDayOfWeek(tm);
+
+	bool isSameMonth(tm,tm);
+	bool isSameYear(tm,tm);
 };
 
 #endif

@@ -150,12 +150,8 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 	} else {
 		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]) + " to " + convertFromTmToStr(mainDisplayDate[1]);
 	}
+
 	return newShowCommand;
-
-
-
-
-
 }
 
 int UIShow::countNumDays(tm startDay, tm endDay){
@@ -277,6 +273,7 @@ std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::str
 	 for (; std::isdigit(startDate[i]);i++){
 		startDateMonth += startDate[i];
 	 }
+
 	 int startDateMonthNum = stringToInt(startDateMonth);
 	 std::string startDateMonthString = intToMonth(startDateMonthNum-1);
 
@@ -314,4 +311,5 @@ std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::str
 	 
 	 return command;
 }
+
 

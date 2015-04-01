@@ -20,6 +20,10 @@ const string LogicUpdater::REDO_MESSAGE = "redo";
 
 const string LogicUpdater::WORD_TODAY = "Today";
 const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
+const string LogicUpdater::WORD_MONTH = "Month";
+const string LogicUpdater::WORD_WEEK = "Week";
+
+
 const string LogicUpdater::WORD_ALLDAY = "All Day";
 
 const int LogicUpdater::SHIFT_BY_ONE = 1;
@@ -40,7 +44,6 @@ LogicUpdater::LogicUpdater() {
 	tmNow = localtime(&timeNow);
 	tempMainDisplayLabel.push_back(*tmNow);
 	tempMainDisplayLabel.push_back(*tmNow);
-
 }
 
 //getters
@@ -299,8 +302,6 @@ void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 		} else if (isTomorrow (label[0])){
 			string commandTomorrow = "[" + WORD_TOMORROW + "] ";
 			mainDisplayLabel += commandTomorrow;
-		} else {
-			//do nothing
 		}
 			
 		std::string dateInString = setSingleDayString(label[0]);
@@ -356,6 +357,54 @@ bool LogicUpdater::isTomorrow(tm date){
 	return isDateTomorrow;
 }
 
+bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate){
+	bool isMonth;
+
+	if (isFirstDayOfMonth(frontDate) && isLastDayOfMonth(backDate) && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
+		isMonth = true;
+	} else {
+		isMonth = false;
+	}
+
+	return isMonth;
+}
+
+bool LogicUpdater::isFirstDayOfMonth(tm frontDate){
+	bool isFirstDay;
+	
+	int monthBefore = frontDate.tm_mon;
+
+	frontDate.tm_mday--;
+	std::mktime(&frontDate);
+	int monthAfter = frontDate.tm_mon;
+
+	if (monthBefore != monthAfter){
+		isFirstDay = true;
+	} else {
+		isFirstDay = false;
+	}
+
+	return isFirstDay;
+}
+
+bool LogicUpdater::isLastDayOfMonth(tm backDate){
+	bool isLastDay;
+	
+	int monthBefore = backDate.tm_mon;
+
+	backDate.tm_mday++;
+	std::mktime(&backDate);
+	int monthAfter = backDate.tm_mon;
+
+	if (monthBefore != monthAfter){
+		isLastDay = true;
+	} else {
+		isLastDay = false;
+	}
+
+	return isLastDay;
+}
+
 std::string LogicUpdater::setSingleDayString(tm label){
 	string dayOfMonth = intToString(label.tm_mday);
 	string month = intToMonth(label.tm_mon);
@@ -368,10 +417,18 @@ std::string LogicUpdater::setSingleDayString(tm label){
 std::string LogicUpdater::setMultipleDaysString(tm start,tm end){
 	std::string multipleDaysString = "";
 
+	if (isDisplayMonth(start,end)){
+		string commandMonth = "[" + WORD_MONTH + "] ";
+		multipleDaysString += commandMonth;
+	} else if (isDisplayWeek(start,end)){
+		string commandWeek = "[" + WORD_WEEK + "] ";
+		multipleDaysString += commandWeek;
+	}
+
 	string startDayOfMonth = intToString(start.tm_mday);
 	string startMonth = intToMonth(start.tm_mon);
 
-	multipleDaysString = startDayOfMonth + " " + startMonth;
+	multipleDaysString += startDayOfMonth + " " + startMonth;
 
 	if (start.tm_year != end.tm_year){
 		string startYear = intToString(start.tm_year + 1900) ;
@@ -723,8 +780,65 @@ int LogicUpdater:: getEndTime(Event toGet){
 }
 
 
+bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate){
+	bool isWeek;
 
+	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && (backDate.tm_mday - frontDate.tm_mday) == 6 && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
+		isWeek = true;
+	} else {
+		isWeek = false;
+	}
+	return isWeek;
+}
 
+bool LogicUpdater::isFirstDayOfWeek(tm frontDate){
+	bool isFirstDay;
+
+	if (frontDate.tm_wday == 0){
+		isFirstDay = true;
+	} else {
+		isFirstDay = false;
+	}
+
+	return isFirstDay;
+
+}
+
+bool LogicUpdater::isLastDayOfWeek(tm backDate){
+	bool isLastDay;
+
+	if (backDate.tm_wday == 6){
+		isLastDay = true;
+	} else {
+		isLastDay = false;
+	}
+
+	return isLastDay;
+}
+
+bool LogicUpdater::isSameMonth(tm frontDate,tm backDate){
+	bool sameMonth;
+
+	if(frontDate.tm_mon == backDate.tm_mon){
+		sameMonth = true;
+	} else {
+		sameMonth = false;
+	}
+
+	return sameMonth;
+}
+
+bool LogicUpdater::isSameYear(tm frontDate,tm backDate){
+	bool sameYear;
+
+	if(frontDate.tm_year == backDate.tm_year){
+		sameYear = true;
+	} else {
+		sameYear = false;
+	}
+
+	return sameYear;
+}
 
 
 
