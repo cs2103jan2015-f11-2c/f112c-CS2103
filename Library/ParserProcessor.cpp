@@ -206,6 +206,7 @@ bool ParserProcessor::identifyEventName(int index){
 	if(fragmentedWords[index].find(";") != std::string::npos){
 		tempEventStore.setName(fragmentedWords[index].substr(0,fragmentedWords[index].find_last_of(";")));
 		nameFound = true;
+		fragmentedWords[index] = LOCKUP_USED_INFORMATION;
 	}
 	return nameFound;
 }
@@ -384,6 +385,7 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift){
 	if(tempIndex >= 0){
 		if(fragmentedWords[tempIndex] == "to"){
 			tempIndex--;
+			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			if(tempIndex >= 0){
 				try {
 					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
@@ -573,6 +575,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 	if(tempIndex >= 0){
 		if(fragmentedWords[tempIndex] == "to"){
 			tempIndex--;
+			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			if(tempIndex >= 0){
 				try {
 					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
