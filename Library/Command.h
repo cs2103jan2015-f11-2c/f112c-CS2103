@@ -18,6 +18,7 @@ public:
 	static const int INVALID_NUMBER;
 	static const int SIZE_ZERO;
 	static const int SIZE_ONE;
+	static const int SIZE_TWO;
 
 	static const string LOG_FILE_NAME;
 
@@ -182,6 +183,22 @@ private:
 	vector<Event> eventsToShow;
 public:
 	ShowAllImportantCommand(EventFacade* eventStorage);
+	void execute();
+	vector<Event> getEventVector();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+class ShowCompletedCommand : public Command {
+private:
+	EventFacade* eventFacade;
+	vector<Event> eventsToShow;
+
+public:
+	ShowCompletedCommand(EventFacade* eventStorage);
 	void execute();
 	vector<Event> getEventVector();
 	Event getEvent();

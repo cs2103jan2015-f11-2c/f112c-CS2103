@@ -4,6 +4,7 @@
 const int Command::INVALID_NUMBER = -1;
 const int Command::SIZE_ZERO = 0;
 const int Command::SIZE_ONE = 1;
+const int Command::SIZE_TWO = 2;
 
 const string Command::LOG_FILE_NAME = "CommandLog.txt";
 
@@ -475,6 +476,28 @@ Event ShowAllImportantCommand::getEvent() {
 }
 
 void ShowAllImportantCommand::undo() {
+}
+
+
+
+
+ShowCompletedCommand::ShowCompletedCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowCompletedCommand::execute() {
+}
+
+vector<Event> ShowCompletedCommand::getEventVector() {
+	return eventsToShow;
+}
+
+Event ShowCompletedCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowCompletedCommand::undo() {
 }
 
 

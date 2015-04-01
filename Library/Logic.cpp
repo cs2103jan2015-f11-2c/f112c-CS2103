@@ -3,6 +3,7 @@
 //for logging
 const string Logic::LOG_FILE_NAME = "LogicLog.txt";
 const string Logic::CREATED_ADD = "created add command";
+const string Logic::CREATED_COMPLETE = "created complete command";
 const string Logic::CREATED_DELETE = "created delete command";
 const string Logic::CREATED_EDIT = "created edit command";
 const string Logic::CREATED_SHOW = "created show command";
@@ -13,8 +14,6 @@ const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
 const string Logic::CREATED_SEARCH = "created search command";
 const string Logic::QUEUEING_UNDO = "queueing undo";
 const string Logic::QUEUEING_REDO = "queueing redo";
-const string Logic::CASE_0 = "entered case 0";
-const string Logic::CASE_1 = "entered case 1";
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
@@ -90,6 +89,8 @@ bool Logic::executeUserInput(string input) {
 
 //create command object, call executor to execute it
 Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
+	assert(isProperCommand(command));
+
 	switch (command) {
 	case Parser::ADD:
 	case Parser::ADDFLOAT: {
@@ -98,9 +99,20 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		return executor.execute(addCommand);
 						   }
 
-						   /*case Parser::COMPLETE: {
-						   break;
-						   }*/
+	case Parser::COMPLETE: {
+		int id = convertNameToID(nameOfEvent);
+
+		Event eventToComplete;
+		eventToComplete.setName(nameOfEvent);
+		if (id != INVALID_NUMBER) {
+			eventToComplete = updater.getEventFromID(id);
+		}
+
+		Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
+		log(CREATED_COMPLETE);
+		return executor.execute(completeCommand);
+		break;
+						   }
 
 	case Parser::DELETE_: {
 		int id = convertNameToID(nameOfEvent);
@@ -154,9 +166,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		return executor.execute(showAllImportantCommand);
 								   }
 
-						  /*case Parser::SHOWDUE: {
-						  break;
-						  }*/
+								   /*case Parser::SHOWCOMPLETE: {
+								   break;
+								   }*/
+
+								   /*case Parser::SHOWDUE: {
+								   break;
+								   }*/
 
 	case Parser::SHOWFLOAT: {
 		Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
@@ -194,6 +210,8 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 //update new information for UI to display
 void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent) {
+	assert(isProperCommand(command));
+
 	try {
 		bool isDone = true;
 
@@ -229,7 +247,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
-						
+
 						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT);
 						return;
 				}
@@ -255,11 +273,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 			if (command = Parser::DELETE_) { //for delete
-			Event deletedEvent = commandPtr->getEvent();
-			string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
+				Event deletedEvent = commandPtr->getEvent();
+				string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
-			return;
+				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
+				return;
 			} else { //for complete
 				Event completedEvent = commandPtr->getEvent();
 				//string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
@@ -336,6 +354,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::SHOWALL:
 		case Parser::SHOWALLIMPORTANT:
+		case Parser::SHOWCOMPLETE:
 		case Parser::SHOWIMPORTANT: {
 			vector<Event> normalEvents, floatingEvents;
 
@@ -345,11 +364,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT);
 			break;
-									   }
+									}
 
-									   /*case Parser::SHOWDUE: {
-									   break;
-									   }*/
+									/*case Parser::SHOWDUE: {
+									break;
+									}*/
 
 		case Parser::SHOWFLOAT: {
 			vector<Event> normalEvents = updater.getNormalEvents();
@@ -435,7 +454,7 @@ vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents, LogicUpdater up
 		tmVec = updater.getTempMainDisplayLabel();
 	} else { //at least 1 normal event to show (1st will always be marker)
 		tmVec.push_back(normalEvents[1].getStartDate());
-		if (normalEvents.size() > 2) { //if >1 normal event, show end date of last event
+		if (normalEvents.size() > Command::SIZE_TWO) { //if >1 normal event, show end date of last event
 			tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
 		} else {
 			tmVec.push_back(normalEvents[1].getEndDate());
@@ -455,6 +474,25 @@ void Logic::deleteParserPtr() {
 
 //OTHERS
 
+bool Logic::isProperCommand(Parser::commandType commandType) {
+	return ( (commandType == Parser::ADD) |
+		(commandType == Parser::ADDFLOAT) |
+		(commandType == Parser::COMPLETE) |
+		(commandType == Parser::DELETE_) |
+		(commandType == Parser::EDIT) |
+		(commandType == Parser::SEARCH) |
+		(commandType == Parser::SHOW) |
+		(commandType == Parser::SHOWALL) |
+		(commandType == Parser::SHOWALLIMPORTANT) |
+		(commandType == Parser::SHOWCOMPLETE) |
+		(commandType == Parser::SHOWDUE) |
+		(commandType == Parser::SHOWFLOAT) |
+		(commandType == Parser::SHOWIMPORTANT) |
+		(commandType == Parser::UNDO) |
+		(commandType == Parser::REDO) |
+		(commandType == Parser::ERROR_) );
+}
+
 //returns true if input string consists of only numeric digits
 bool Logic::isNumber(string s) {
 	for (unsigned int i = 0 ; i < s.size() ; i++) {
@@ -463,6 +501,12 @@ bool Logic::isNumber(string s) {
 		}
 	}
 	return true;
+}
+
+bool Logic::isSameDate(tm date1, tm date2) {
+	return(date1.tm_mday == date2.tm_mday &&
+		date1.tm_mon == date2.tm_mon &&
+		date1.tm_year == date2.tm_year);
 }
 
 //returns id of event if found in updater, -1 otherwise
@@ -482,12 +526,6 @@ int Logic::convertNameToID(string name) {
 	} else {
 		return INVALID_NUMBER;
 	}
-}
-
-bool Logic::isSameDate(tm date1, tm date2) {
-	return(date1.tm_mday == date2.tm_mday &&
-		date1.tm_mon == date2.tm_mon &&
-		date1.tm_year == date2.tm_year);
 }
 
 

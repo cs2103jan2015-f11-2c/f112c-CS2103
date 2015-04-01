@@ -29,6 +29,7 @@ public:
 	//for logging
 	static const string LOG_FILE_NAME;
 	static const string CREATED_ADD;
+	static const string CREATED_COMPLETE;
 	static const string CREATED_DELETE;
 	static const string CREATED_EDIT;
 	static const string CREATED_SHOW;
@@ -39,8 +40,6 @@ public:
 	static const string CREATED_SEARCH;
 	static const string QUEUEING_UNDO;
 	static const string QUEUEING_REDO;
-	static const string CASE_0;
-	static const string CASE_1;
 
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
@@ -73,11 +72,12 @@ public:
 
 
 	//others
+	bool isProperCommand(Parser::commandType commandType);
 	bool isNumber(string s);
-	int convertNameToID(string input);
 	bool isSameDate(tm date1, tm date2);
+	int convertNameToID(string input);
 
-	//log
+	//logging
 	void log(string logString);
 	void log(int logInt);
 	void log(string logString, int logInt);
