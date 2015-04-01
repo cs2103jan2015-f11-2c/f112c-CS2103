@@ -12,7 +12,6 @@
 #include <sstream>
 #include <algorithm>
 #include "Event.h"
-#include "Conversion.h"
 
 using std::ostringstream;
 
@@ -49,6 +48,8 @@ public:
 	static const string WORD_TOMORROW;
 
 	static const string WORD_ALLDAY;
+
+	static const int SHIFT_BY_ONE;
 
 
 	
@@ -100,32 +101,43 @@ public:
 	void setFeedbackStrings(string newFeedback);
 
 private:
-	//private setters
-	void setNormalEvents(vector<Event> events,vector<tm> label);
-	
-	void setFloatingEvents(vector<Event> events);
-	void setMainDisplayLabel (vector<tm> label);
 
-	//private methods
-	void normalEventsToString();
-	void floatingEventsToString();
-	
+	void initializeEventString(EVENT_STRING &item);
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
-	bool setIsNew(int);
+	void setFloatingEvents(vector<Event> events);
+	void floatingEventsToString();
+	bool setFloatingIsNew(int);
+
+	void setMainDisplayLabel (vector<tm> label);
+	bool isSingleDay(vector<tm>);
+	std::string setSingleDayString(tm);
+	std::string setMultipleDaysString(tm,tm);
+	bool isToday(tm);
+	bool isTomorrow(tm);
+	
+	void setNormalEvents(vector<Event> events,vector<tm> label);
+	void normalEventsToString();
+	std::string setMarkerEventString(Event, int );
+	std::string setNormalEventDateString(Event, int );
+
+	bool setNormalIsNew(int);
 	void setIsClash(int,int,int,std::vector<int>);
+	bool isAllDay(Event);
 
 	std::string intToDayOfWeek (int);
 	std::string intToMonth (int);
+	std::string intToString(int);
+	string intToTime (int);
 
 	int getStartTime(Event);
 	int getEndTime(Event); 
 
-	string intToTime (int);
+	
+	
+	
 
-	bool isToday(tm);
-	bool isTomorrow(tm);
-	bool isAllDay(Event);
+	
 
 
 };

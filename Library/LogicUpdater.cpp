@@ -21,6 +21,8 @@ const string LogicUpdater::WORD_TODAY = "Today";
 const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
 const string LogicUpdater::WORD_ALLDAY = "All Day";
 
+const int LogicUpdater::SHIFT_BY_ONE = 1;
+
 //constructor
 LogicUpdater::LogicUpdater() {
 	normalEvents.clear();
@@ -195,9 +197,10 @@ void LogicUpdater::floatingEventsToString() {
 	
 	for (int i = 0; i < floatingEvents.size(); i++) {
 		EVENT_STRING temp;
+		initializeEventString(temp);
 		
 		ostringstream outDate;
-		outDate << (i + 1) << ".";
+		outDate << (i + SHIFT_BY_ONE) << ".";
 		temp.dateString = outDate.str();
 		outDate.clear();
 
@@ -206,21 +209,44 @@ void LogicUpdater::floatingEventsToString() {
 		temp.eventString = outEvent.str();
 		outEvent.clear();
 		
-		temp.isClash = false;
-		temp.isMarker = false;
 		temp.isCompleted = floatingEvents[i].getIsCompleted();
 		temp.importanceLevel = floatingEvents[i].getImportanceLevel();
 
-		if (floatingEvents[i].getID() == newID){
-			temp.isNew = true;
-		} else{
-			temp.isNew = false;
-		}
-
+		temp.isNew = setFloatingIsNew (i);
+		
 		floatingDisplayStrings.push_back(temp);
 	}
+
 	assert(floatingDisplayStrings.size()>=1);
 }
+
+
+bool LogicUpdater::setFloatingIsNew(int vectorIndex){
+	assert(floatingEvents.size() > vectorIndex);
+
+	bool isNew;
+
+	if ( floatingEvents[vectorIndex].getID() == newID){
+		isNew = true;
+		} else{
+			isNew = false;
+		}
+
+	return isNew;
+}
+
+
+void LogicUpdater::initializeEventString(LogicUpdater::EVENT_STRING &item){
+	item.dateString = "";
+	item.eventString = "";
+	item.isNew = false;
+	item.isClash = false;
+	item.isMarker = false;
+	item.isCompleted = false;
+	item.importanceLevel = 0;
+}
+
+
 
 void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
 	normalEvents = events;
@@ -310,58 +336,93 @@ bool LogicUpdater::isTomorrow(tm date){
 	return isDateTomorrow;
 }
 
+std::string LogicUpdater::intToString(int num){
+	std::string outString;
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+bool LogicUpdater::isSingleDay(vector<tm> label){
+	assert(label.size()==2);
+
+	bool isSingle;
+
+	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon && label[0].tm_year == label[1].tm_year){
+		isSingle = true;
+	} else{
+		isSingle = false;
+	}
+
+	return isSingle;
+}
+
+std::string LogicUpdater::setSingleDayString(tm label){
+	string dayOfMonth = intToString(label.tm_mday);
+	string month = intToMonth(label.tm_mon);
+	string dayOfWeek = intToDayOfWeek(label.tm_wday);
+	string dateInString = dayOfMonth + " " + month + ", " + dayOfWeek;
+
+	return dateInString;
+}
+
+std::string LogicUpdater::setMultipleDaysString(tm start,tm end){
+	std::string multipleDaysString = "";
+
+	string startDayOfMonth = intToString(start.tm_mday);
+	string startMonth = intToMonth(start.tm_mon);
+
+	multipleDaysString = startDayOfMonth + " " + startMonth;
+
+	if (start.tm_year != end.tm_year){
+		string startYear = intToString(start.tm_year + 1900) ;
+		multipleDaysString += " " + startYear;
+	}
+
+	multipleDaysString += " - ";
+
+	string endDayOfMonth = intToString(end.tm_mday);
+	string endMonth = intToMonth(end.tm_mon);
+
+	multipleDaysString += endDayOfMonth + " " + endMonth;
+
+	string endYear = intToString(end.tm_year + 1900);
+	multipleDaysString += " " +endYear;
+
+	return multipleDaysString;
+}
+
+
 void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 	assert(label.size()==2);
 
-	//Clear past data
 	mainDisplayLabel = "";
 
-	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon){
-		//1 day only
+	if (isSingleDay(label)){
 		if (isToday (label[0])){
 			string commandToday = "[" + WORD_TODAY + "] ";
 			mainDisplayLabel += commandToday;
-		}
-
-		if (isTomorrow (label[0])){
+		} else if (isTomorrow (label[0])){
 			string commandTomorrow = "[" + WORD_TOMORROW + "] ";
 			mainDisplayLabel += commandTomorrow;
+		} else {
+			//do nothing
 		}
-
-		Conversion convert;
-		string dayOfMonth = convert.intToString(label[0].tm_mday);
-		string month = intToMonth(label[0].tm_mon);
-		string dayOfWeek = intToDayOfWeek(label[0].tm_wday);
-		string dateInString = dayOfMonth + " " + month + ", " + dayOfWeek;
+			
+		std::string dateInString = setSingleDayString(label[0]);
 		
 		mainDisplayLabel += dateInString;
 	} else {
-		//More than 1 day
-		Conversion convert;
-		string startDayOfMonth = convert.intToString(label[0].tm_mday);
-		string startMonth = intToMonth(label[0].tm_mon);
-
-		mainDisplayLabel = startDayOfMonth + " " + startMonth;
-
-		if (label[0].tm_year != label[1].tm_year){
-			string startYear = convert.intToString(label[0].tm_year+ 1900) ;
-			mainDisplayLabel += " " + startYear;
-		}
-
-		mainDisplayLabel += " - ";
-
-		string endDayOfMonth = convert.intToString(label[1].tm_mday);
-		string endMonth = intToMonth(label[1].tm_mon);
-
-		mainDisplayLabel += endDayOfMonth + " " + endMonth;
-
-		string endYear = convert.intToString(label[1].tm_year + 1900);
-		mainDisplayLabel += " " +endYear;
+		mainDisplayLabel = setMultipleDaysString(label[0],label[1]);
 	}
 }
 
-bool LogicUpdater::setIsNew(int vectorIndex){
+
+bool LogicUpdater::setNormalIsNew(int vectorIndex){
+	assert (normalEvents.size() > vectorIndex);
+	
 	bool isNew;
+
 	if (newID == normalEvents[vectorIndex].getID()){
 		isNew = true;
 	} else {
@@ -491,6 +552,65 @@ bool LogicUpdater::isAllDay(Event eventToDisplay){
 	return isAllDayEvent;
 }
 
+std::string LogicUpdater::setMarkerEventString(Event marker, int index){
+	ostringstream out;
+
+	if( index != 0){
+		out << "\n";
+	}
+
+	out << "[";
+	out << marker.getStartDate().tm_mday;
+	out << " ";
+
+	int monthInt =marker.getStartDate().tm_mon;
+	out << intToMonth(monthInt);
+
+	out << " ";
+	out << marker.getStartDate().tm_year + 1900;
+
+	out << ", ";
+
+	int dayOfWeekInt = marker.getStartDate().tm_wday;
+	out << intToDayOfWeek(dayOfWeekInt);
+
+	out << "]";
+	out << "==============================================================";
+	out << "\n";
+
+	return out.str();
+}
+
+std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int eventIndex){
+	ostringstream outDate;
+	
+	outDate << eventIndex << "." ;
+	outDate << "\t" ;
+
+	outDate << "[";
+	if (eventToBeSet.getIsDeadline()){
+		outDate << "*DUE*   ";
+		int endTime = getEndTime(eventToBeSet);
+		outDate << intToTime(endTime);
+	} else if (isAllDay(eventToBeSet)){
+		outDate << "    ";
+		outDate << WORD_ALLDAY;
+		outDate << "    ";
+	} else{
+		int startTime = getStartTime(eventToBeSet);
+		outDate << intToTime(startTime);
+		outDate << "-" ;
+		int endTime = getEndTime(eventToBeSet);
+		outDate << intToTime(endTime);
+	}
+			
+	outDate << "]" ;
+	outDate << "\t";
+		
+	return outDate.str();
+}
+
+
 void LogicUpdater::normalEventsToString() {
 	mainDisplayStrings.clear();
 
@@ -499,103 +619,42 @@ void LogicUpdater::normalEventsToString() {
 		return;
 	}
 
-	std::vector<int> indexOfMarker;
+	std::vector<int> indexOfMarkers;
 
-	int headCounter =0;
 	int newEventStartTime = 0;
 	int newEventEndTime = 0;
 	int newEventIndex = -1;
 
-	//This for loop requires refactoring
 	int indexForNormalEvents = getTotalFloatingEvents();
 
 	for (int i=0; i < normalEvents.size(); i++){
 		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;
+		initializeEventString(toBePushed);
 
-		//Generate header
 		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-			indexOfMarker.push_back(i);
+			
+			indexOfMarkers.push_back(i);
 
-			ostringstream out;
-			//Initialization
 			toBePushed.isMarker = true;
-			toBePushed.isClash = false;
-			toBePushed.isNew = false;
-			toBePushed.importanceLevel = 0;
-			toBePushed.dateString = "";
-			toBePushed.isCompleted = false;
 
-			if (headCounter!=0){
-				out << "\n";
-			} else {
-				headCounter++;
-			}
+			toBePushed.eventString = setMarkerEventString(normalEvents[i],i);
 
-			out << "[";
-			out << normalEvents[i].getStartDate().tm_mday;
-			out << " ";
-
-			int monthInt = normalEvents[i].getStartDate().tm_mon;
-			out << intToMonth(monthInt);
-
-			out << " ";
-			out << normalEvents[i].getStartDate().tm_year + 1900;
-
-			out << ", ";
-
-			int dayOfWeekInt = normalEvents[i].getStartDate().tm_wday;
-			out << intToDayOfWeek(dayOfWeekInt);
-
-			out << "]";
-			out << "==============================================================";
-			out << "\n";
-
-			toBePushed.eventString = out.str();
-
-			//This is executed everytime a new marker is found
-			//It will set isClash for the whole previous day
-			if (indexOfMarker.size() >= 2){
-				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarker);
-			}
-		} 
-		 //Generate event list
-		 else {
-			//initialization
-			toBePushed.isMarker = false;
-			toBePushed.isNew = setIsNew(i);
+		} else {
+			toBePushed.isNew = setNormalIsNew(i);
 			toBePushed.isCompleted = normalEvents[i].getIsCompleted();
 			toBePushed.importanceLevel = normalEvents[i].getImportanceLevel();
 
-			ostringstream outDate;
-			outDate << (++indexForNormalEvents) << "." ;
-			outDate << "\t" ;
+			toBePushed.dateString = setNormalEventDateString(normalEvents[i],++indexForNormalEvents);
 
-			outDate << "[";
-			if (normalEvents[i].getIsDeadline()){
-				outDate << "*DUE*   ";
-				int endTime = getEndTime(normalEvents[i]);
-				outDate << intToTime(endTime);
-			}
-			else if (isAllDay(normalEvents[i])){
-				outDate << "    ";
-				outDate << WORD_ALLDAY;
-				outDate << "    ";
-			} else{
-				int startTime = getStartTime(normalEvents[i]);
-				outDate << intToTime(startTime);
-				outDate << "-" ;
-				int endTime = getEndTime(normalEvents[i]);
-				outDate << intToTime(endTime);
-			}
-			
-			outDate << "]" ;
-			outDate << "\t";
-			toBePushed.dateString = outDate.str();
+
+
+
+			///////////////////////// Continue Refactoring From here /////////////////////////////
+
 
 
 			ostringstream outEvent;
-
 			std::string nameOfEvent = normalEvents[i].getName();
 			while( nameOfEvent.size() > 42 ){
 				outEvent << nameOfEvent.substr(0,42);
@@ -640,9 +699,9 @@ void LogicUpdater::normalEventsToString() {
 		mainDisplayStrings.push_back(toBePushed);
 	}
 
-	indexOfMarker.push_back(normalEvents.size());
+	indexOfMarkers.push_back(normalEvents.size());
 
-	setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarker);
+	setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
 
 	assert(mainDisplayStrings.size()>=1);
 }
