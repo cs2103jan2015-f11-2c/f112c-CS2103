@@ -49,7 +49,7 @@ public:
 
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
-	static const string SPACE;
+	static const string COLON_SPACE;
 
 
 	//constructor, destructor

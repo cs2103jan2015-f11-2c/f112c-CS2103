@@ -103,6 +103,9 @@ public:
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
 	void setFeedbackStrings(string newFeedback);
 
+	std::string setSingleDayString(tm);
+	std::string setMultipleDaysString(tm,tm);
+
 private:
 
 	void initializeEventString(EVENT_STRING &item);
@@ -114,8 +117,6 @@ private:
 
 	void setMainDisplayLabel (vector<tm> label);
 	bool isSingleDay(vector<tm>);
-	std::string setSingleDayString(tm);
-	std::string setMultipleDaysString(tm,tm);
 	bool isToday(tm);
 	bool isTomorrow(tm);
 	

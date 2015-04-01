@@ -23,7 +23,7 @@ const string Logic::CASE_1 = "entered case 1";
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
-const string Logic::SPACE = " ";
+const string Logic::COLON_SPACE = ": ";
 
 
 //CONSTRUCTOR, DESTRUCTOR
@@ -205,9 +205,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 			if (command == Parser::ADD) {
 				if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
-					feedback += SPACE + updater.setSingleDayString(userEvent.getStartDate());
+					feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
 				} else {
-					feedback += SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+					feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
 				}
 			}
 			int id = userEvent.getID();
