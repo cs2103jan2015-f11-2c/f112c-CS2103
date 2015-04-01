@@ -52,6 +52,7 @@ public:
 	static const string WORD_ALLDAY;
 
 	static const int SHIFT_BY_ONE;
+	static const int MAX_LENGTH_EVENT_NAME;
 
 
 	
@@ -106,8 +107,6 @@ public:
 	std::string setSingleDayString(tm);
 	std::string setMultipleDaysString(tm,tm);
 
-private:
-
 	void initializeEventString(EVENT_STRING &item);
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
@@ -122,8 +121,9 @@ private:
 	
 	void setNormalEvents(vector<Event> events,vector<tm> label);
 	void normalEventsToString();
-	std::string setMarkerEventString(Event, int );
-	std::string setNormalEventDateString(Event, int );
+	std::string setMarkerEventString(Event, int);
+	std::string setNormalEventDateString(Event, int);
+	std::string setNormalEventEventString(Event);
 
 	bool setNormalIsNew(int);
 	void setIsClash(int,int,int,std::vector<int>);

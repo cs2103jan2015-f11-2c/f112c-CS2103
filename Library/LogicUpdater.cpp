@@ -23,6 +23,7 @@ const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
 const string LogicUpdater::WORD_ALLDAY = "All Day";
 
 const int LogicUpdater::SHIFT_BY_ONE = 1;
+const int LogicUpdater::MAX_LENGTH_EVENT_NAME = 42;
 
 //constructor
 LogicUpdater::LogicUpdater() {
@@ -457,6 +458,8 @@ bool LogicUpdater::setNormalIsNew(int vectorIndex){
 
 
 void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex, std::vector<int> indexOfNewMarker){
+	assert(indexOfNewMarker.size() >=0);
+
 	//If there is a clash, this variable will become true
 	bool setNewItemClash = false;
 
@@ -634,6 +637,22 @@ std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int event
 	return outDate.str();
 }
 
+std::string LogicUpdater::setNormalEventEventString(Event eventToBeSet){
+	ostringstream outEvent;
+
+	std::string nameOfEvent = eventToBeSet.getName();
+
+	while(nameOfEvent.size() > MAX_LENGTH_EVENT_NAME){
+		outEvent << nameOfEvent.substr(0,MAX_LENGTH_EVENT_NAME);
+		outEvent << "\n";
+		outEvent << "\t\t\t\t\t";
+		nameOfEvent = nameOfEvent.substr(MAX_LENGTH_EVENT_NAME);
+	}
+
+	outEvent << nameOfEvent;
+	
+	return outEvent.str();	
+}
 
 void LogicUpdater::normalEventsToString() {
 	mainDisplayStrings.clear();
@@ -652,7 +671,6 @@ void LogicUpdater::normalEventsToString() {
 	int indexForNormalEvents = getTotalFloatingEvents();
 
 	for (int i=0; i < normalEvents.size(); i++){
-		//Constructing MAIN_EVENT items and initializing
 		EVENT_STRING toBePushed;
 		initializeEventString(toBePushed);
 
@@ -664,68 +682,34 @@ void LogicUpdater::normalEventsToString() {
 
 			toBePushed.eventString = setMarkerEventString(normalEvents[i],i);
 
+			if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
+				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+				newEventIndex = -1;
+			}
 		} else {
 			toBePushed.isNew = setNormalIsNew(i);
 			toBePushed.isCompleted = normalEvents[i].getIsCompleted();
 			toBePushed.importanceLevel = normalEvents[i].getImportanceLevel();
 
 			toBePushed.dateString = setNormalEventDateString(normalEvents[i],++indexForNormalEvents);
-
-
-
-
-			///////////////////////// Continue Refactoring From here /////////////////////////////
-
-
-
-			ostringstream outEvent;
-			std::string nameOfEvent = normalEvents[i].getName();
-			while( nameOfEvent.size() > 42 ){
-				outEvent << nameOfEvent.substr(0,42);
-				outEvent << "\n";
-				outEvent << "\t\t\t\t\t";
-				nameOfEvent = nameOfEvent.substr(42);
-			}
-
-			outEvent << nameOfEvent;
-	
-			if (normalEvents[i].getDescription() != ""){
-				outEvent << " ";
-				outEvent << "(";
-				outEvent << normalEvents[i].getDescription();
-				outEvent << ")";
-			}
-
-			if (normalEvents[i].getTags().size() != 0){
-				outEvent << "\n";
-				outEvent << "\t\t\t\t";
-			
-				vector<string> tagVector = normalEvents[i].getTags();
-				for (int i=0; i<tagVector.size(); i++){
-					outEvent << tagVector[i];
-					outEvent << " "; 
-				}	
-			}
-			toBePushed.eventString = outEvent.str();	
+			toBePushed.eventString = setNormalEventEventString(normalEvents[i]);			
 		}
 
 		if (toBePushed.isNew == true){
 			newEventStartTime = getStartTime(normalEvents[i]);
 			newEventEndTime = getEndTime(normalEvents[i]);
 			newEventIndex = i;
-			
-			//Add in exception
 		}
-		
-		//Set isClash is false first
-		toBePushed.isClash = false;
 
 		mainDisplayStrings.push_back(toBePushed);
 	}
 
 	indexOfMarkers.push_back(normalEvents.size());
 
-	setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+	if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
+		setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+		newEventIndex = -1;
+	}
 
 	assert(mainDisplayStrings.size()>=1);
 }
