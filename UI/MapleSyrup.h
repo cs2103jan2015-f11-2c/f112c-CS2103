@@ -6,7 +6,7 @@
 
 #include "Logic.h"
 #include "Conversion.h"
-#include "CommandSuggestion.h"
+#include "UICommandSuggestion.h"
 #include "UIHelp.h"
 #include "UIShow.h"
 
@@ -32,7 +32,7 @@ namespace UI {
 	public ref class MapleSyrup : public System::Windows::Forms::Form
 	{
 	private:
-		CommandSuggestion* cSPtr; 
+		UICommandSuggestion* cSPtr; 
 
 		Logic* lGPtr;
 		
@@ -106,7 +106,7 @@ namespace UI {
 			//TODO: Add the constructor code here
 
 			//Initialization
-			cSPtr = new CommandSuggestion;
+			cSPtr = new UICommandSuggestion;
 
 			lGPtr = new Logic;
 
@@ -1138,39 +1138,39 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 std::string temp = convertToStd(commandBox->Text);
 			 std::string tempCommand = cVPtr->toLowerCase(temp);
 
-			 CommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
+			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
 
 			 switch(tempCommandType){
-			 case CommandSuggestion::ADD_:{
+			 case UICommandSuggestion::ADD_:{
 				 std::vector<std::string> suggestionAdd = cSPtr->getSuggestionAdd();
 				 displaySuggestion(suggestionAdd);
 				 break;
 										  }
-			 case CommandSuggestion::DELETE_:{
+			 case UICommandSuggestion::DELETE_:{
 				 std::vector<std::string> suggestionDelete = cSPtr->getSuggestionDelete();
 				 displaySuggestion(suggestionDelete);
 				 break;
 										  }
-			 case CommandSuggestion::EDIT_:{
+			 case UICommandSuggestion::EDIT_:{
 				 std::vector<std::string> suggestionEdit = cSPtr->getSuggestionEdit();
 				 displaySuggestion(suggestionEdit);
 				 break;
 										  }
-			 case CommandSuggestion::SEARCH_:{
+			 case UICommandSuggestion::SEARCH_:{
 				 std::vector<std::string> suggestionSearch = cSPtr->getSuggestionSearch();
 				 displaySuggestion(suggestionSearch);
 				 break;
 										  }
-			 case CommandSuggestion::SHOW_:{
+			 case UICommandSuggestion::SHOW_:{
 				 std::vector<std::string> suggestionShow = cSPtr->getSuggestionShow();
 				 displaySuggestion(suggestionShow);
 				 break;
 										  }
-			 case CommandSuggestion::UNDISPLAY_:{
+			 case UICommandSuggestion::UNDISPLAY_:{
 				 unDisplaySuggestion();
 				 break;
 										  }
-			 case CommandSuggestion::INVALID_:{
+			 case UICommandSuggestion::INVALID_:{
 				 break;
 										  }
 			 }

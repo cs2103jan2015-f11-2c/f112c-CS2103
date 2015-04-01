@@ -207,6 +207,33 @@ void LogicUpdater::setFeedbackStrings(string newFeedback) {
 	assert (feedbackDisplayStrings.size()<=3);
 }
 
+
+void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
+	EVENT_STRING noEvent;
+	noEvent.dateString = "";
+	noEvent.eventString = NO_EVENTS_MESSAGE;
+	noEvent.isNew = false;
+	noEvent.isClash= false;
+	noEvent.isMarker = false;
+	noEvent.isCompleted = false;
+	noEvent.importanceLevel= 0;
+	displayVec.push_back(noEvent);
+
+	assert(displayVec.size()==1);
+}
+
+void LogicUpdater::initializeEventString(LogicUpdater::EVENT_STRING &item){
+	item.dateString = "";
+	item.eventString = "";
+	item.isNew = false;
+	item.isClash = false;
+	item.isMarker = false;
+	item.isCompleted = false;
+	item.importanceLevel = 0;
+}
+
+
+
 void LogicUpdater::setFloatingEvents(vector<Event> events) {
 	floatingEvents = events;
 	floatingEventsToString();
@@ -245,7 +272,6 @@ void LogicUpdater::floatingEventsToString() {
 	assert(floatingDisplayStrings.size()>=1);
 }
 
-
 bool LogicUpdater::setFloatingIsNew(int vectorIndex){
 	assert(floatingEvents.size() > vectorIndex);
 
@@ -261,73 +287,42 @@ bool LogicUpdater::setFloatingIsNew(int vectorIndex){
 }
 
 
-void LogicUpdater::initializeEventString(LogicUpdater::EVENT_STRING &item){
-	item.dateString = "";
-	item.eventString = "";
-	item.isNew = false;
-	item.isClash = false;
-	item.isMarker = false;
-	item.isCompleted = false;
-	item.importanceLevel = 0;
-}
+void LogicUpdater::setMainDisplayLabel (vector<tm> label){
+	assert(label.size()==2);
 
+	mainDisplayLabel = "";
 
-
-void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
-	normalEvents = events;
-	tempMainDisplayLabel = label;
-	setMainDisplayLabel(label);
-	normalEventsToString();
-}
-
-std::string LogicUpdater::intToMonth (int monthInNum){
-	if(monthInNum == 0){
-		return "January";
-	} else if(monthInNum  == 1){
-		return "Feburary";
-	} else if(monthInNum  == 2){
-		return "March";
-	} else if(monthInNum  == 3){
-		return "April";
-	} else if(monthInNum  == 4){
-		return "May";
-	} else if(monthInNum  == 5){
-		return "June";
-	} else if(monthInNum  == 6){
-		return "July";
-	} else if(monthInNum  == 7){
-		return "August";
-	} else if(monthInNum  == 8){
-		return "September";
-	} else if(monthInNum  == 9){
-		return "October";
-	} else if(monthInNum  == 10){
-		return "November";
-	} else if(monthInNum  == 11){
-		return "December";
+	if (isSingleDay(label)){
+		if (isToday (label[0])){
+			string commandToday = "[" + WORD_TODAY + "] ";
+			mainDisplayLabel += commandToday;
+		} else if (isTomorrow (label[0])){
+			string commandTomorrow = "[" + WORD_TOMORROW + "] ";
+			mainDisplayLabel += commandTomorrow;
+		} else {
+			//do nothing
+		}
+			
+		std::string dateInString = setSingleDayString(label[0]);
+		
+		mainDisplayLabel += dateInString;
 	} else {
-		return "Invalid month";
+		mainDisplayLabel = setMultipleDaysString(label[0],label[1]);
 	}
 }
 
-std::string LogicUpdater::intToDayOfWeek (int dayInNum){
-	if(dayInNum == 0){
-		return "Sunday";
-	} else if (dayInNum == 1){
-		return "Monday";
-	} else if (dayInNum == 2){
-		return "Tuesday";
-	} else if (dayInNum == 3){
-		return "Wednesday";
-	} else if (dayInNum == 4){
-		return "Thursday";
-	} else if (dayInNum == 5){
-		return "Friday";
-	} else if (dayInNum == 6){
-		return "Saturday";
+bool LogicUpdater::isSingleDay(vector<tm> label){
+	assert(label.size()==2);
+
+	bool isSingle;
+
+	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon && label[0].tm_year == label[1].tm_year){
+		isSingle = true;
 	} else{
-		return "Invalid day";
+		isSingle = false;
 	}
+
+	return isSingle;
 }
 
 bool LogicUpdater::isToday(tm date){
@@ -359,27 +354,6 @@ bool LogicUpdater::isTomorrow(tm date){
 	}
 
 	return isDateTomorrow;
-}
-
-std::string LogicUpdater::intToString(int num){
-	std::string outString;
-	std::ostringstream oss;
-	oss << num;
-	return oss.str();
-}
-
-bool LogicUpdater::isSingleDay(vector<tm> label){
-	assert(label.size()==2);
-
-	bool isSingle;
-
-	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon && label[0].tm_year == label[1].tm_year){
-		isSingle = true;
-	} else{
-		isSingle = false;
-	}
-
-	return isSingle;
 }
 
 std::string LogicUpdater::setSingleDayString(tm label){
@@ -418,165 +392,66 @@ std::string LogicUpdater::setMultipleDaysString(tm start,tm end){
 }
 
 
-void LogicUpdater::setMainDisplayLabel (vector<tm> label){
-	assert(label.size()==2);
 
-	mainDisplayLabel = "";
+void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
+	normalEvents = events;
+	tempMainDisplayLabel = label;
+	setMainDisplayLabel(label);
+	normalEventsToString();
+}
+void LogicUpdater::normalEventsToString() {
+	mainDisplayStrings.clear();
 
-	if (isSingleDay(label)){
-		if (isToday (label[0])){
-			string commandToday = "[" + WORD_TODAY + "] ";
-			mainDisplayLabel += commandToday;
-		} else if (isTomorrow (label[0])){
-			string commandTomorrow = "[" + WORD_TOMORROW + "] ";
-			mainDisplayLabel += commandTomorrow;
+	if (normalEvents.empty()) {
+		setNoEventsMessage(mainDisplayStrings);
+		return;
+	}
+
+	std::vector<int> indexOfMarkers;
+	int newEventStartTime = 0;
+	int newEventEndTime = 0;
+	int newEventIndex = -1;
+	int indexForNormalEvents = getTotalFloatingEvents();
+
+	for (int i=0; i < normalEvents.size(); i++){
+		EVENT_STRING toBePushed;
+		initializeEventString(toBePushed);
+
+		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){	
+			indexOfMarkers.push_back(i);
+
+			toBePushed.isMarker = true;
+			toBePushed.eventString = setMarkerEventString(normalEvents[i],i);
+
+			//isClash is set between 2 markers 
+			if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
+				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+				newEventIndex = -1;
+			}
 		} else {
-			//do nothing
+			toBePushed.isNew = setNormalIsNew(i);
+			toBePushed.isCompleted = normalEvents[i].getIsCompleted();
+			toBePushed.importanceLevel = normalEvents[i].getImportanceLevel();
+			toBePushed.dateString = setNormalEventDateString(normalEvents[i],++indexForNormalEvents);
+			toBePushed.eventString = setNormalEventEventString(normalEvents[i]);			
 		}
-			
-		std::string dateInString = setSingleDayString(label[0]);
-		
-		mainDisplayLabel += dateInString;
-	} else {
-		mainDisplayLabel = setMultipleDaysString(label[0],label[1]);
-	}
-}
 
-
-bool LogicUpdater::setNormalIsNew(int vectorIndex){
-	assert (normalEvents.size() > vectorIndex);
-	
-	bool isNew;
-
-	if (newID == normalEvents[vectorIndex].getID()){
-		isNew = true;
-	} else {
-		isNew = false;
-	}
-	return isNew;
-}
-
-
-void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex, std::vector<int> indexOfNewMarker){
-	assert(indexOfNewMarker.size() >=0);
-
-	//If there is a clash, this variable will become true
-	bool setNewItemClash = false;
-
-	for (int i=indexOfNewMarker[indexOfNewMarker.size()-2]+1; i < indexOfNewMarker[indexOfNewMarker.size()-1]; i++){
-		int checkEventStartTime = getStartTime (normalEvents[i]);
-		int checkEventEndTime = getEndTime (normalEvents[i]);
-
-		//Case 1
-		if (checkEventStartTime < newEventStartTime && newEventStartTime < checkEventEndTime){
-			if (normalEvents[i].getID() != newID){
-				mainDisplayStrings[i].isClash = true;
-				setNewItemClash = true;
-			}
+		if (toBePushed.isNew == true){
+			newEventStartTime = getStartTime(normalEvents[i]);
+			newEventEndTime = getEndTime(normalEvents[i]);
+			newEventIndex = i;
 		}
-		
-		//Case 2
-		if (checkEventStartTime < newEventEndTime && newEventEndTime < checkEventEndTime){
-			if (normalEvents[i].getID() != newID){
-				mainDisplayStrings[i].isClash = true;
-				setNewItemClash = true;
-			}
-		}
-		
-		//Case 3
-		if (newEventStartTime < checkEventStartTime  && checkEventStartTime < newEventEndTime){
-			if (normalEvents[i].getID() != newID){
-				mainDisplayStrings[i].isClash = true;
-				setNewItemClash = true;
-			}
-		}
-		
-		//Case 4
-		if (newEventStartTime < checkEventEndTime && checkEventEndTime < newEventEndTime){
-			if (normalEvents[i].getID() != newID){
-				mainDisplayStrings[i].isClash = true;
-				setNewItemClash = true;
-			}
-		}
-		
-		//Case 5 exactly same timeslot
-		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime){
-			if (normalEvents[i].getID() != newID){
-				mainDisplayStrings[i].isClash = true;
-				setNewItemClash = true;
-			}
-		}
-		
-		if (setNewItemClash){
-			mainDisplayStrings[newEventIndex].isClash = true;
-		}
+
+		mainDisplayStrings.push_back(toBePushed);
 	}
-}
-
-int LogicUpdater:: getStartTime(Event toGet){
-	return toGet.getStartDate().tm_hour*100 + toGet.getStartDate().tm_min;
-}
-
-int LogicUpdater:: getEndTime(Event toGet){
-	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
-}
-
-std::string LogicUpdater::intToTime (int timeInInt){
-	int hours;
-	int minutes;
-	bool afterTwelve = false;
-	std::ostringstream oss;
-	hours = timeInInt/100;
-	minutes = timeInInt%100;
-
-	if(hours > 12){
-		hours = hours - 12;
-		afterTwelve = true;
+	indexOfMarkers.push_back(normalEvents.size());
+	//isClash is set after last event too
+	if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
+		setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+		newEventIndex = -1;
 	}
 
-	if (hours == 12){
-		afterTwelve = true;
-	}
-
-	if(hours >= 10){
-		oss << hours;
-	} else{
-		oss << "0";
-		oss << hours;
-	}
-
-	oss << ":";
-
-	if(minutes >= 10){
-		oss << minutes;
-	} else{
-		oss << "0";
-		oss << minutes;
-	}
-
-	if(afterTwelve){		
-		oss << "pm";
-	} else {
-		oss << "am";
-	}
-	
-	return oss.str();
-}
-
-bool LogicUpdater::isAllDay(Event eventToDisplay){
-	bool isAllDayEvent = false;
-	
-	int startTime = getStartTime(eventToDisplay);
-	string startTimeInString = intToTime(startTime);
-
-	int endTime = getEndTime(eventToDisplay);
-	string endTimeInString = intToTime(endTime);
-
-	if (startTimeInString == "00:00am"  && endTimeInString == "11:59pm"){
-		isAllDayEvent = true;
-	}
-
-	return isAllDayEvent;
+	assert(mainDisplayStrings.size()>=1);
 }
 
 std::string LogicUpdater::setMarkerEventString(Event marker, int index){
@@ -654,79 +529,203 @@ std::string LogicUpdater::setNormalEventEventString(Event eventToBeSet){
 	return outEvent.str();	
 }
 
-void LogicUpdater::normalEventsToString() {
-	mainDisplayStrings.clear();
+bool LogicUpdater::setNormalIsNew(int vectorIndex){
+	assert (normalEvents.size() > vectorIndex);
+	
+	bool isNew;
 
-	if (normalEvents.empty()) {
-		setNoEventsMessage(mainDisplayStrings);
-		return;
+	if (newID == normalEvents[vectorIndex].getID()){
+		isNew = true;
+	} else {
+		isNew = false;
 	}
+	return isNew;
+}
 
-	std::vector<int> indexOfMarkers;
+void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex, std::vector<int> indexOfNewMarker){
+	assert(indexOfNewMarker.size() >=0);
 
-	int newEventStartTime = 0;
-	int newEventEndTime = 0;
-	int newEventIndex = -1;
+	//If there is a clash, this variable will become true
+	bool setNewItemClash = false;
 
-	int indexForNormalEvents = getTotalFloatingEvents();
+	for (int i=indexOfNewMarker[indexOfNewMarker.size()-2]+1; i < indexOfNewMarker[indexOfNewMarker.size()-1]; i++){
+		int checkEventStartTime = getStartTime (normalEvents[i]);
+		int checkEventEndTime = getEndTime (normalEvents[i]);
 
-	for (int i=0; i < normalEvents.size(); i++){
-		EVENT_STRING toBePushed;
-		initializeEventString(toBePushed);
-
-		if (normalEvents[i].getName() == NEW_DAY_MESSAGE){
-			
-			indexOfMarkers.push_back(i);
-
-			toBePushed.isMarker = true;
-
-			toBePushed.eventString = setMarkerEventString(normalEvents[i],i);
-
-			if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
-				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
-				newEventIndex = -1;
+		//Case 1
+		if (checkEventStartTime < newEventStartTime && newEventStartTime < checkEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
 			}
-		} else {
-			toBePushed.isNew = setNormalIsNew(i);
-			toBePushed.isCompleted = normalEvents[i].getIsCompleted();
-			toBePushed.importanceLevel = normalEvents[i].getImportanceLevel();
-
-			toBePushed.dateString = setNormalEventDateString(normalEvents[i],++indexForNormalEvents);
-			toBePushed.eventString = setNormalEventEventString(normalEvents[i]);			
 		}
-
-		if (toBePushed.isNew == true){
-			newEventStartTime = getStartTime(normalEvents[i]);
-			newEventEndTime = getEndTime(normalEvents[i]);
-			newEventIndex = i;
+		
+		//Case 2
+		if (checkEventStartTime < newEventEndTime && newEventEndTime < checkEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
 		}
-
-		mainDisplayStrings.push_back(toBePushed);
+		
+		//Case 3
+		if (newEventStartTime < checkEventStartTime  && checkEventStartTime < newEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+		
+		//Case 4
+		if (newEventStartTime < checkEventEndTime && checkEventEndTime < newEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+		
+		//Case 5 exactly same timeslot
+		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime){
+			if (normalEvents[i].getID() != newID){
+				mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+			}
+		}
+		
+		if (setNewItemClash){
+			mainDisplayStrings[newEventIndex].isClash = true;
+		}
 	}
-
-	indexOfMarkers.push_back(normalEvents.size());
-
-	if( indexOfMarkers.size() >= 2 && newEventIndex != -1 ){
-		setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
-		newEventIndex = -1;
-	}
-
-	assert(mainDisplayStrings.size()>=1);
 }
 
-void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
-	EVENT_STRING noEvent;
-	noEvent.dateString = "";
-	noEvent.eventString = NO_EVENTS_MESSAGE;
-	noEvent.isNew = false;
-	noEvent.isClash= false;
-	noEvent.isMarker = false;
-	noEvent.isCompleted = false;
-	noEvent.importanceLevel= 0;
-	displayVec.push_back(noEvent);
+bool LogicUpdater::isAllDay(Event eventToDisplay){
+	bool isAllDayEvent = false;
+	
+	int startTime = getStartTime(eventToDisplay);
+	string startTimeInString = intToTime(startTime);
 
-	assert(displayVec.size()==1);
+	int endTime = getEndTime(eventToDisplay);
+	string endTimeInString = intToTime(endTime);
+
+	if (startTimeInString == "00:00am"  && endTimeInString == "11:59pm"){
+		isAllDayEvent = true;
+	}
+
+	return isAllDayEvent;
 }
+
+
+std::string LogicUpdater::intToDayOfWeek (int dayInNum){
+	if(dayInNum == 0){
+		return "Sunday";
+	} else if (dayInNum == 1){
+		return "Monday";
+	} else if (dayInNum == 2){
+		return "Tuesday";
+	} else if (dayInNum == 3){
+		return "Wednesday";
+	} else if (dayInNum == 4){
+		return "Thursday";
+	} else if (dayInNum == 5){
+		return "Friday";
+	} else if (dayInNum == 6){
+		return "Saturday";
+	} else{
+		return "Invalid day";
+	}
+}
+
+std::string LogicUpdater::intToMonth (int monthInNum){
+	if(monthInNum == 0){
+		return "January";
+	} else if(monthInNum  == 1){
+		return "Feburary";
+	} else if(monthInNum  == 2){
+		return "March";
+	} else if(monthInNum  == 3){
+		return "April";
+	} else if(monthInNum  == 4){
+		return "May";
+	} else if(monthInNum  == 5){
+		return "June";
+	} else if(monthInNum  == 6){
+		return "July";
+	} else if(monthInNum  == 7){
+		return "August";
+	} else if(monthInNum  == 8){
+		return "September";
+	} else if(monthInNum  == 9){
+		return "October";
+	} else if(monthInNum  == 10){
+		return "November";
+	} else if(monthInNum  == 11){
+		return "December";
+	} else {
+		return "Invalid month";
+	}
+}
+
+std::string LogicUpdater::intToString(int num){
+	std::string outString;
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+std::string LogicUpdater::intToTime (int timeInInt){
+	int hours;
+	int minutes;
+	bool afterTwelve = false;
+	std::ostringstream oss;
+	hours = timeInInt/100;
+	minutes = timeInInt%100;
+
+	if(hours > 12){
+		hours = hours - 12;
+		afterTwelve = true;
+	}
+
+	if (hours == 12){
+		afterTwelve = true;
+	}
+
+	if(hours >= 10){
+		oss << hours;
+	} else{
+		oss << "0";
+		oss << hours;
+	}
+
+	oss << ":";
+
+	if(minutes >= 10){
+		oss << minutes;
+	} else{
+		oss << "0";
+		oss << minutes;
+	}
+
+	if(afterTwelve){		
+		oss << "pm";
+	} else {
+		oss << "am";
+	}
+	
+	return oss.str();
+}
+
+int LogicUpdater:: getStartTime(Event toGet){
+	return toGet.getStartDate().tm_hour*100 + toGet.getStartDate().tm_min;
+}
+
+int LogicUpdater:: getEndTime(Event toGet){
+	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
+}
+
+
+
+
+
 
 
 

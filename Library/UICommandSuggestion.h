@@ -1,17 +1,17 @@
 #pragma once
 
-#ifndef COMMANDSUGGESTION_H_
-#define COMMANDSUGGESTION_H_
+#ifndef UICOMMANDSUGGESTION_H_
+#define UICOMMANDSUGGESTION_H_
 
 #include <iostream>
 #include <string>
 #include <vector>
 
-class CommandSuggestion
+class UICommandSuggestion
 {
 public:
-	CommandSuggestion(void);
-	~CommandSuggestion(void);
+	UICommandSuggestion(void);
+	~UICommandSuggestion(void);
 
 	enum ComdType {
 		ADD_,
@@ -80,7 +80,5 @@ public:
 	std::vector<std::string> getSuggestionEdit();
 	std::vector<std::string> getSuggestionSearch();
 	std::vector<std::string> getSuggestionShow();
-
-
 };
 #endif

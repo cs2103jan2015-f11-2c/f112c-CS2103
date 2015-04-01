@@ -1,6 +1,6 @@
 // Display keeps track of 3 x vector<Event> (1 each for floating, normal and feedback) and 3 x vector<string> (similar to event vectors)
 // When any of the vector<Event> is changed, it will update the corresponding vector<string>
-//		(e.g. if normalEvents is changed it will change mainDisplayStrings, floatingEvents<=>floatingDisplayStrings, feedbackEvents<=>feedbackDisplayStrings)
+// (e.g. if normalEvents is changed it will change mainDisplayStrings, floatingEvents<=>floatingDisplayStrings, feedbackEvents<=>feedbackDisplayStrings)
 // UI can get any of the vector<string> to display in the appropriate window, no need to get vector<Event>
 
 #pragma once
@@ -54,9 +54,6 @@ public:
 	static const int SHIFT_BY_ONE;
 	static const int MAX_LENGTH_EVENT_NAME;
 
-
-	
-
 private:
 	//Private attributes
 	vector<Event> normalEvents;
@@ -71,7 +68,6 @@ private:
 	vector<string> errorStrings;
 	
 	int newID;
-	
 
 public:
 	//constructor
@@ -104,9 +100,6 @@ public:
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
 	void setFeedbackStrings(string newFeedback);
 
-	std::string setSingleDayString(tm);
-	std::string setMultipleDaysString(tm,tm);
-
 	void initializeEventString(EVENT_STRING &item);
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
@@ -118,13 +111,14 @@ public:
 	bool isSingleDay(vector<tm>);
 	bool isToday(tm);
 	bool isTomorrow(tm);
-	
+	std::string setSingleDayString(tm);
+	std::string setMultipleDaysString(tm,tm);
+
 	void setNormalEvents(vector<Event> events,vector<tm> label);
 	void normalEventsToString();
 	std::string setMarkerEventString(Event, int);
 	std::string setNormalEventDateString(Event, int);
 	std::string setNormalEventEventString(Event);
-
 	bool setNormalIsNew(int);
 	void setIsClash(int,int,int,std::vector<int>);
 	bool isAllDay(Event);
@@ -136,13 +130,6 @@ public:
 
 	int getStartTime(Event);
 	int getEndTime(Event); 
-
-	
-	
-	
-
-	
-
 
 };
 

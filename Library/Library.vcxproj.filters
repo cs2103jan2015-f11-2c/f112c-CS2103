@@ -61,7 +61,7 @@
     <ClCompile Include="EventModifier.cpp">
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
-    <ClCompile Include="CommandSuggestion.cpp">
+    <ClCompile Include="UICommandSuggestion.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,7 +126,7 @@
     <ClInclude Include="EventSearch.h">
       <Filter>Header Files\Storage</Filter>
     </ClInclude>
-    <ClInclude Include="CommandSuggestion.h">
+    <ClInclude Include="UICommandSuggestion.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -62,7 +62,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CommandSuggestion.cpp" />
+    <ClCompile Include="UICommandSuggestion.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="EventFacade.cpp" />
     <ClCompile Include="EventModifier.cpp" />
@@ -85,7 +85,7 @@
     <ClCompile Include="UIShow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CommandSuggestion.h" />
+    <ClInclude Include="UICommandSuggestion.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="EventFacade.h" />
     <ClInclude Include="EventModifier.h" />
