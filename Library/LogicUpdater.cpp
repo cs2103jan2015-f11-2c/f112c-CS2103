@@ -3,6 +3,7 @@
 
 const int LogicUpdater::GARBAGE_INT = -12345;
 const int LogicUpdater::INVALID_NUMBER = -1;
+const string LogicUpdater::EMPTY_STRING = "";
 
 const string LogicUpdater::NO_EVENTS_MESSAGE = "Currently no task";
 const string LogicUpdater::ADDED_MESSAGE = " added";
@@ -109,6 +110,29 @@ int LogicUpdater::getIDFromIndex(int index) {
 			count--;
 
 			return normalEvents[count].getID();
+		}
+	}
+}
+
+string LogicUpdater::getNameFromIndex (int index) {
+	if (index > getTotalNumEvents()) {
+		return EMPTY_STRING;
+	} else {
+		if (index <= getTotalFloatingEvents()) {
+			return floatingEvents[index-1].getName();
+		} else {
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+
+			while (count != normalIndex) {
+				if (normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			return normalEvents[count].getName();
 		}
 	}
 }

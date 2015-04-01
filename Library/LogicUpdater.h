@@ -31,6 +31,8 @@ public:
 
 	static const int GARBAGE_INT;
 	static const int INVALID_NUMBER;
+	static const string EMPTY_STRING;
+
 	static const string NO_EVENTS_MESSAGE;
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;
@@ -90,6 +92,7 @@ public:
 	int getTotalFloatingEvents();
 	int getTotalNormalEvents();
 	int getIDFromIndex(int index);
+	string getNameFromIndex (int index);
 	int getIDFromName(string name);
 	int getNewID();
 
