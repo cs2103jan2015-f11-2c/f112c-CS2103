@@ -22,8 +22,9 @@ const string LABEL_ISDEADLINE = "Is Deadline: ";
 class EventStorage{
 private:
 
-	//This is for external storage
+	//These are external storages
 	static const string currentFile;
+	static const string completedFile;
 
 	//These are internal storages
 	vector<Event> normalContent;
@@ -31,6 +32,7 @@ private:
 
 	Conversion conversion;
 	EventLog logger;
+
 	//Constructor, Destructor
 	EventStorage(void); //will read the currentFile into the normalContent vector 
 	~EventStorage(void);
@@ -49,10 +51,11 @@ public:
 	}
 
 	//Methods
-	void writeToCurrentFile();
-	void readToContent();
+	void writeToCurrentFile();	//called when setters are called
+	void readToContent();	//called once. upon opening of program ---------------to be refacted
 
-	void export(std::ofstream& writeFile);
+	void exportNormal(std::ostream& out);
+	void exportFloating(std::ostream& out);
 
 	void createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed);
 	void createNormalEvent(Event* tempEvent, string name, string id, string deadline, string importance, string startHour, string startMin, string startDay, 
@@ -64,6 +67,7 @@ public:
 	//setters
 	void setNormalContent(vector<Event> newNormalContent);
 	void setFloatingContent(vector<Event> newFloatingContent);
+
 };
 #endif
 

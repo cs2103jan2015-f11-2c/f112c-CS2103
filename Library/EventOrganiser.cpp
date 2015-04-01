@@ -23,17 +23,17 @@ EventOrganiser::~EventOrganiser(void)
 }
 
 //returns all events with marker
-vector<Event> EventOrganiser::showAllNormalEvent(){
-	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+vector<Event> EventOrganiser::showAllNormalCurrent(){
+	vector<Event> tempContent =	allNormalCurrent();
 	tempContent = showEvents(tempContent);
 	logger.logStorageIntData(SHOW_ALL_NORMAL_EVENTS,tempContent.size());
 	return tempContent;
 }
 
 //returns all floating events
-vector<Event> EventOrganiser::showAllFloatingEvent(){
+vector<Event> EventOrganiser::showAllFloatingCurrent(){
 	logger.logStoragePosition(SHOW_ALL_FLOATING_EVENTS);
-	return EventStorage::storage().getFloatingContent();
+	return allFloatingCurrent();
 }
 
 //show event Vector items, sorted and marked
@@ -49,7 +49,7 @@ vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
 vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEndTimes){
 	logger.logStoragePosition(SHOW_DATES_FROM_NORMAL_CONTENT);
 
-	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+	vector<Event> tempContent = allNormalCurrent();
 	tempContent = showDateRange(eventWithStartEndTimes, tempContent);
 	return tempContent;
 }
@@ -102,9 +102,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 			for(int k=0; k<exisitngEventDates.size();k++){
 				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) && (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
 					//check all day.. set starttime and endtime
-					if((eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday) 
-						|| (eventsToFilter[j].getStartDate().tm_mon != eventsToFilter[j].getEndDate().tm_mon)
-						|| (eventsToFilter[j].getStartDate().tm_year != eventsToFilter[j].getEndDate().tm_year)){ //if multi day event
+					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
 						tempEvent = eventsToFilter[j];
 						if(wantedEventDates[i].tm_mday == tempEvent.getStartDate().tm_mday){ //start of multiday
 							tempEvent.setEndTime(23,59);
@@ -262,4 +260,64 @@ int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 
 	int difference = difftime(end,start);
 	return difference;
+}
+
+vector<Event> EventOrganiser::allNormalCurrent(){
+	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+	vector<Event> results;
+
+	for(auto i=0;i<tempContent.size();i++){
+		if(tempContent[i].getIsCompleted() == false){
+			results.push_back(tempContent[i]);
+		}
+	}
+	return results;
+}
+
+vector<Event> EventOrganiser::allFloatingCurrent(){
+	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
+	vector<Event> results;
+
+	for(auto i=0;i<tempContent.size();i++){
+		if(tempContent[i].getIsCompleted() == false){
+			results.push_back(tempContent[i]);
+		}
+	}
+	return results;
+}
+
+vector<Event> EventOrganiser::allNormalCompleted(){
+	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+	vector<Event> results;
+
+	for(auto i=0;i<tempContent.size();i++){
+		if(tempContent[i].getIsCompleted() == true){
+			results.push_back(tempContent[i]);
+		}
+	}
+	return results;
+}
+
+vector<Event> EventOrganiser::allFloatingCompleted(){
+	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
+	vector<Event> results;
+
+	for(auto i=0;i<tempContent.size();i++){
+		if(tempContent[i].getIsCompleted() == true){
+			results.push_back(tempContent[i]);
+		}
+	}
+	return results;
+}
+
+void EventOrganiser::saveNormal(vector<Event> normalCurrent){
+	vector<Event> tempNormalCompleted = allNormalCompleted();
+	normalCurrent.insert( normalCurrent.end(), tempNormalCompleted.begin(), tempNormalCompleted.end() );
+	EventStorage::storage().setNormalContent(normalCurrent);
+}
+
+void EventOrganiser::saveFloating(vector<Event> floatingCurrent){
+	vector<Event> tempFloatingCompleted = allFloatingCompleted();
+	floatingCurrent.insert( floatingCurrent.end(), tempFloatingCompleted.begin(), tempFloatingCompleted.end() );
+	EventStorage::storage().setFloatingContent(floatingCurrent);
 }

@@ -19,8 +19,8 @@ vector<Event> EventSearch::searchNameOccurrence(string eventName){
 	logger.logStoragePosition("searchNameOccurrence");
 	
 	//get events from internal storages
-	vector<Event> floatingEvents = EventStorage::storage().getFloatingContent();
-	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+	vector<Event> floatingEvents = organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
 
 	//search through names
 	floatingEvents = searchEventWithName(eventName, floatingEvents);
@@ -52,8 +52,8 @@ vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> e
 vector<Event> EventSearch::searchNameExact(string eventName){
 	logger.logStoragePosition("searchNameExact");
 	
-	vector<Event> floatingEvents =  EventStorage::storage().getFloatingContent();
-	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
 
 	floatingEvents = searchExactString(eventName, floatingEvents);
 	normalEvents = searchExactString(eventName, normalEvents);
@@ -82,8 +82,8 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 vector<Event> EventSearch::searchLevelImportance(int level){
 	logger.logStorageIntData("searching for this level of importance" ,level);
 	
-	vector<Event> floatingEvents =  EventStorage::storage().getFloatingContent();
-	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
 	//try{
 	floatingEvents = searchEventWithImportance(level, floatingEvents);
 	normalEvents = searchEventWithImportance(level, normalEvents);
@@ -121,8 +121,8 @@ vector<Event> EventSearch::searchAllImportance(){
 	logger.logStoragePosition("searchALLImportance");
 	vector<Event> returnVector;
 	
-	vector<Event> floatingEvents =  EventStorage::storage().getFloatingContent();
-	vector<Event> normalEvents = EventStorage::storage().getNormalContent();
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
 
 	floatingEvents = searchEventWithAllImportance(floatingEvents);
 	normalEvents = searchEventWithAllImportance(normalEvents);	
@@ -161,6 +161,9 @@ int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearc
 	} 
 	return NOT_FOUND;
 }
+
+
+
 
 //search all vector and all component of events save into events of vector results
 vector<Event> EventSearch::searchAllComponentsOfEvent(string informationToSearch, vector<Event> contentToSearch){

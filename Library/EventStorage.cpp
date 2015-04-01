@@ -1,6 +1,7 @@
 #include "EventStorage.h"
 	
 const string EventStorage::currentFile = "mytext.txt";
+const string EventStorage::completedFile = "myCompleted.txt";
 
 //CONSTRUCTOR, DESTRUCTOR
 //read all from text file first to have past memory
@@ -37,8 +38,6 @@ void EventStorage::readToContent(){
 			getline(readFile, name);
 			//cin event times
 			getline(readFile, startYear);
-
-
 			getline(readFile, startMonth);
 			getline(readFile, startDay);
 			getline(readFile, startHour);
@@ -119,12 +118,18 @@ void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id,
 
 	floatingContent.push_back(*tempEvent);
 }
-
 void EventStorage::writeToCurrentFile(){
-	std::ofstream writeFile(currentFile);
+	std::ofstream out(currentFile);
 	
+	exportNormal(out);
+	exportFloating(out);
+
+	out.close();
+}
+
+void EventStorage::exportNormal(std::ostream& out){
 	for(auto i=0;i<normalContent.size();i++){
-		writeFile 
+		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(normalContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << normalContent[i].getName() << std::endl 
 			<< conversion.tmToString(normalContent[i]) << std::endl
@@ -132,9 +137,12 @@ void EventStorage::writeToCurrentFile(){
 			<< LABEL_ISCOMPLETED << conversion.boolToString(normalContent[i].getIsCompleted()) << std::endl
 			<< LABEL_IMPORTANCE << normalContent[i].getImportanceLevel() << std::endl
 			<< LABEL_ID << normalContent[i].getID() << std::endl << std::endl;
-	}	
+	}
+}
+
+void EventStorage::exportFloating(std::ostream& out){
 	for(auto i=0;i<floatingContent.size();i++){
-		writeFile 
+		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(floatingContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << floatingContent[i].getName() << std::endl 
 			<< conversion.tmToString(floatingContent[i]) << std::endl
@@ -143,20 +151,8 @@ void EventStorage::writeToCurrentFile(){
 			<< LABEL_IMPORTANCE << floatingContent[i].getImportanceLevel() << std::endl
 			<< LABEL_ID << floatingContent[i].getID() << std::endl << std::endl;	
 	}
-	writeFile.close();
 }
-/*
-void EventStorage::export(std::ofstream& writeFile){
-	writeFile 
-		<< LABEL_ISFLOATING << conversion.boolToString(normalContent[i].getIsFloating()) << std::endl 
-		<< LABEL_EVENTNAME << normalContent[i].getName() << std::endl 
-		<< conversion.tmToString(normalContent[i]) << std::endl
-		<< LABEL_ISDEADLINE << conversion.boolToString(normalContent[i].getIsDeadline()) << std::endl
-		<< LABEL_ISCOMPLETED << conversion.boolToString(normalContent[i].getIsCompleted()) << std::endl
-		<< LABEL_IMPORTANCE << normalContent[i].getImportanceLevel() << std::endl
-		<< LABEL_ID << normalContent[i].getID() << std::endl << std::endl;
-}
-*/
+
 //getters
 vector<Event> EventStorage::getNormalContent(){
 	logger.logStorageIntData("getNormalContent",normalContent.size());
@@ -177,4 +173,3 @@ void EventStorage::setFloatingContent(vector<Event> newFloatingContent){
 	floatingContent = newFloatingContent;
 	writeToCurrentFile();
 }
-

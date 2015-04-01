@@ -21,7 +21,7 @@ vector<Event> EventModifier::add(Event newEvent){
 	vector<Event> toLogic;
 	if(newEvent.getIsFloating()){
 		addfloat(newEvent);
-		toLogic = organiser.showAllFloatingEvent();	
+		toLogic = organiser.showAllFloatingCurrent();	
 	} else{
 		addNormal(newEvent);
 		toLogic = organiser.showDatesFromNormalContent(newEvent);
@@ -32,15 +32,15 @@ vector<Event> EventModifier::add(Event newEvent){
 //Add support methods
 void EventModifier::addfloat(Event newEvent){
 	vector<Event> tempContents;
-	tempContents = EventStorage::storage().getFloatingContent();
+	tempContents = organiser.allFloatingCurrent();
 	tempContents.push_back(newEvent);
-	EventStorage::storage().setFloatingContent(tempContents);
+	organiser.saveFloating(tempContents);
 }
 void EventModifier::addNormal(Event newEvent){
 	vector<Event> tempContents;
-	tempContents = EventStorage::storage().getNormalContent();
+	tempContents = organiser.allNormalCurrent();
 	tempContents.push_back(newEvent);
-	EventStorage::storage().setNormalContent(tempContents);
+	organiser.saveNormal(tempContents);
 }
 
 //delete method
@@ -74,13 +74,13 @@ vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted){
 
 //support methods
 int EventModifier::findNormalIndex(int eventID){
-	vector<Event> tempContents = EventStorage::storage().getNormalContent();
+	vector<Event> tempContents = organiser.allNormalCurrent();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;
 }
 
 int EventModifier::findFloatingIndex(int eventID){
-	vector<Event> tempContents = EventStorage::storage().getFloatingContent();
+	vector<Event> tempContents = organiser.allFloatingCurrent();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;
 }
@@ -88,10 +88,10 @@ int EventModifier::findFloatingIndex(int eventID){
 //delete support methods
 vector<Event> EventModifier::deleteNormal(int index){
 	
-	vector<Event> tempContents = EventStorage::storage().getNormalContent();
+	vector<Event> tempContents = organiser.allNormalCurrent();
 	Event deletedEvent = tempContents[index];
 	tempContents.erase(tempContents.begin() + index);
-	EventStorage::storage().setNormalContent(tempContents);
+	organiser.saveNormal(tempContents);
 
 	logger.logStorageStringData("deletedNormal",deletedEvent.getName());
 	vector<Event> toLogic = organiser.showDatesFromNormalContent(deletedEvent);	
@@ -101,13 +101,13 @@ vector<Event> EventModifier::deleteNormal(int index){
 
 vector<Event> EventModifier::deletefloat(int index){
 	
-	vector<Event> tempContents = EventStorage::storage().getFloatingContent();
+	vector<Event> tempContents = organiser.allFloatingCurrent();
 	Event deletedEvent = tempContents[index];
 	tempContents.erase(tempContents.begin() + index);
-	EventStorage::storage().setFloatingContent(tempContents);
+	organiser.saveFloating(tempContents);
 
 	logger.logStorageStringData("deletedFloating",deletedEvent.getName());
-	vector<Event> toLogic = organiser.showAllFloatingEvent();	
+	vector<Event> toLogic = organiser.showAllFloatingCurrent();	
 	return toLogic;
 }
 
@@ -131,7 +131,7 @@ vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event edit
 	} else{ 
 		index = findFloatingIndex(eventID);
 		if(index > NOT_FOUND){  //Floating Case
-			toLogic = editFloat(index, editedEvent);
+			toLogic = editFloating(index, editedEvent);
 		}
 	}
 	logger.logStoragePosition("Leaving editEvent");
@@ -141,7 +141,7 @@ vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event edit
 //edit support functions
 vector<Event> EventModifier::editNormal(int index, Event editedEvent){
 	
-	vector<Event> tempContents = EventStorage::storage().getNormalContent();
+	vector<Event> tempContents = organiser.allNormalCurrent();
 
 	if(editedEvent.getName() != ""){
 		(tempContents[index]).setName(editedEvent.getName());
@@ -158,20 +158,20 @@ vector<Event> EventModifier::editNormal(int index, Event editedEvent){
 	if(editedEvent.getEndDate().tm_min != DEFAULT){
 		(tempContents[index]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
 	}
-	if(editedEvent.getImportanceLevel() != DEFAULT){ //check with che
+	if(editedEvent.getImportanceLevel() != NOT_FOUND){ 
 		(tempContents[index]).setImportanceLevel(editedEvent.getImportanceLevel());
 	}
 	
-	EventStorage::storage().setNormalContent(tempContents);
+	organiser.saveNormal(tempContents);
 	logger.logStorageStringData("editedNormal",tempContents[index].getName());
 
 	tempContents = organiser.showDatesFromNormalContent(tempContents[index]);
 	return tempContents;
 }
 
-vector<Event> EventModifier::editFloat(int index, Event editedEvent){ //check if float to float or float to normal
+vector<Event> EventModifier::editFloating(int index, Event editedEvent){ //check if float to float or float to normal
 	
-	vector<Event> toLogic, tempContents = EventStorage::storage().getFloatingContent();
+	vector<Event> toLogic, tempContents = organiser.allFloatingCurrent();
 	
 	if(editedEvent.getName() != ""){
 		(tempContents[index]).setName(editedEvent.getName());		
@@ -185,10 +185,10 @@ vector<Event> EventModifier::editFloat(int index, Event editedEvent){ //check if
 	}
 	if(editedEvent.getEndDate().tm_min != DEFAULT){
 		(tempContents[index]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
-	}
-	if(editedEvent.getDescription() != ""){
-		(tempContents[index]).setDescription(editedEvent.getDescription());
 	} 
+	if(editedEvent.getImportanceLevel() != NOT_FOUND){
+		(tempContents[index]).setImportanceLevel(editedEvent.getImportanceLevel());
+	}
 	if(editedEvent.getStartDate().tm_mday != DEFAULT){ //change to normal event
 		(tempContents[index]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
 		(tempContents[index]).setIsFloating(false);
@@ -196,9 +196,69 @@ vector<Event> EventModifier::editFloat(int index, Event editedEvent){ //check if
 		del(NOT_FOUND,tempContents[index]);  //delete from floatingContent
 		toLogic = add(tempContents[index]);  //add to normalContent		
 	} else{
-		EventStorage::storage().setFloatingContent(tempContents);
+		organiser.saveFloating(tempContents);
 		logger.logStorageStringData("editedFloating",tempContents[index].getName());
-		toLogic = organiser.showAllFloatingEvent();
+		toLogic = organiser.showAllFloatingCurrent();
 	}
 	return toLogic;
+}
+
+vector<Event> EventModifier::complete(int eventID, Event completedEvent){
+	logger.logStoragePosition(COMPLETE);
+	
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	//extract ID if event is not in display
+	if(eventID == NOT_FOUND){ 
+		eventID = completedEvent.getID(); //set relevant eventID 
+	}
+
+	assert(eventID != NOT_FOUND);
+
+	index = findNormalIndex(eventID);
+	logger.logStorageIntData("The index from current content is: ",index);
+	
+	if(index > NOT_FOUND){  	//Normal Case
+		toLogic = completeNormal(index, eventID);
+	} else{						
+		index = findFloatingIndex(eventID);
+		if(index > NOT_FOUND){  //Floating Case
+			toLogic = completeFloat(index);
+		}
+	}
+	logger.logStoragePosition("Leaving completeEvent");
+	return toLogic;
+}
+
+//complete support methods
+vector<Event> EventModifier::completeNormal(int index, int eventID){  //mark and push into completedcontent. pushback into delete vector to return to logic
+	//mark complete
+	vector<Event> tempContents = organiser.allNormalCurrent();
+
+	vector<Event> completedEventDates = organiser.showDatesFromNormalContent(tempContents[index]);
+	completedEventDates = markCompleted(eventID, completedEventDates);
+	
+	tempContents[index].setIsCompleted(true);
+	organiser.saveNormal(tempContents);
+
+	return completedEventDates;
+}
+
+vector<Event> EventModifier::markCompleted(int eventID, vector<Event> completedEventDates){
+
+	for(auto i=0;i<completedEventDates.size();i++){
+		if(completedEventDates[i].getID() == eventID){
+			completedEventDates[i].setIsCompleted(true);
+		}
+	}
+	return completedEventDates;
+}
+
+vector<Event> EventModifier::completeFloat(int index){
+	//mark complete
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	tempContents[index].setIsCompleted(true);
+	organiser.saveFloating(tempContents);
+	return tempContents;
 }

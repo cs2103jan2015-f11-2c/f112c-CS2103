@@ -12,7 +12,7 @@ private:
 	static const int EventSearch::NOT_FOUND;
 	static const int EventSearch::MAX_LEVEL;
 	static const int EventSearch::MIN_LEVEL;
-
+	
 	EventOrganiser organiser;
 	EventLog logger;
 

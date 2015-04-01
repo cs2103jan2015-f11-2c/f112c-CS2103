@@ -11,6 +11,7 @@
 const string ADD = "Adding..";
 const string DELETE = "deleting..";
 const string EDIT = "editing..";
+const string COMPLETE = "completing..";
 
 class EventModifier{
 private:
@@ -31,26 +32,29 @@ public:
 
 	/*Add Method*/
 	vector<Event> add(Event newEvent);
-	/*Add support methods*/
 	void addNormal(Event newEvent);
 	void addfloat(Event newEvent);
 
 	/*Delete Method*/
 	vector<Event> del(int eventID, Event eventToBeDeleted);
-	/*delete support methods*/
 	vector<Event> deletefloat(int index);
 	vector<Event> deleteNormal(int index);
 
 	/*Edit Method*/
 	vector<Event> edit(int eventID, Event eventToBeEdited, Event editedEvent);	
-
-	/*Edit support methods*/
 	vector<Event> editNormal(int index, Event editedEvent);
-	vector<Event> editFloat(int index, Event editedEvent);
-
-	/*delete edit support methods*/
+	vector<Event> editFloating(int index, Event editedEvent);
+	
+	/*Complete Method*/
+	vector<Event> complete(int eventID, Event completedEvent);
+	vector<Event> completeNormal(int index, int eventID);
+	vector<Event> completeFloat(int index);
+	vector<Event> markCompleted(int eventID, vector<Event> completedEventDates);
+	
+	/*delete/edit/complete support methods*/
 	int findNormalIndex(int eventID);
 	int findFloatingIndex(int eventID);
+
 };
 
 

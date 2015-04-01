@@ -26,10 +26,10 @@ public:
 	~EventOrganiser(void);
 	
 	//Show All methods
-	vector<Event> showAllNormalEvent();
+	vector<Event> showAllNormalCurrent();
 
 	//Show floating method
-	vector<Event> showAllFloatingEvent();
+	vector<Event> showAllFloatingCurrent();
 	
 	//Show method
 	vector<Event> showEvents(vector<Event> eventsToShow);
@@ -45,6 +45,16 @@ public:
 	vector<Event> sortEventVectorByDate(vector<Event> eventsToSort);
 	vector<Event> sortEventVectorByEndDate(vector<Event> eventsToSort);
 	int findTimeDiff(tm startDay, tm endDay);
+	
+	//filter complete / uncompleted 
+	vector<Event> allNormalCurrent();
+	vector<Event> allFloatingCurrent();
+	vector<Event> allNormalCompleted();
+	vector<Event> allFloatingCompleted();
+
+	//appends completed task and set
+	void saveNormal(vector<Event> normalCurrent);//, vector<Event> normalCompleted);
+	void saveFloating(vector<Event> floatingCurrent);//, vector<Event> floatingCompleted);
 };
 
 #endif

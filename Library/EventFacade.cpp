@@ -26,6 +26,11 @@ vector<Event> EventFacade::editEvent(int eventID, Event eventToBeEdited, Event e
 	return modifier.edit(eventID, eventToBeEdited, editedEvent);
 }
 
+vector<Event> EventFacade::completeEvent(int eventID, Event completedEvent){
+	logger.logStoragePosition("completeEvent");
+	return modifier.complete(eventID, completedEvent);
+}
+
 /*To EventSearch*/
 vector<Event> EventFacade::findNameOccurrence(string eventName){
 	logger.logStoragePosition("findNameOccurrence");
@@ -53,13 +58,22 @@ vector<Event> EventFacade::showDates(Event eventWithStartEndTimes){
 	return organiser.showDatesFromNormalContent(eventWithStartEndTimes);
 }
 
-vector<Event> EventFacade::showAllFloatingEvents(){
-	logger.logStoragePosition("showAllFloatingEvents");
-	return organiser.showAllFloatingEvent();
-}
-
 vector<Event> EventFacade::showAllNormalEvents(){
 	logger.logStoragePosition("showAllNormalEvents");
-	return organiser.showAllNormalEvent();
+	return organiser.showAllNormalCurrent();
 }
-	
+
+vector<Event> EventFacade::showAllFloatingEvents(){
+	logger.logStoragePosition("showAllFloatingEvents");
+	return organiser.showAllFloatingCurrent();
+}
+
+vector<Event> EventFacade::showAllNormalCompleted(){
+	logger.logStoragePosition("showAllNormalCompleted");
+	return organiser.allNormalCompleted();
+}
+
+vector<Event> EventFacade::showAllFloatingCompleted(){
+	logger.logStoragePosition("showAllFloatingCompleted");
+	return organiser.allFloatingCompleted();
+}
