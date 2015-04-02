@@ -1314,12 +1314,13 @@ private: void closeCalendar(){
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 String^ tempToBeSearched = searchBox->Text;
 
-			 /*
+			 
 			 if (tempToBeSearched == ""){
-				std::string loadCommandFloating = showPtr->getShowFloat();
-				executeUserInput(loadCommandFloating);
+				String^ NO_SEARCH_INPUT = "No Search Input\n";
+				display->Text = NO_SEARCH_INPUT;
+				floatingTasksDisplay->Text = NO_SEARCH_INPUT;
 			 }
-			 */
+			 
 
 			 std::string toBeSearched = convertToStd(tempToBeSearched);
 			 std::string COMMAND_SEARCH = "search";
@@ -1334,6 +1335,11 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
+			 
+			 String^ NO_SEARCH_INPUT = "No Search Input\n";
+			 display->Text = NO_SEARCH_INPUT;
+			 floatingTasksDisplay->Text = NO_SEARCH_INPUT;
+			 
 			 displayToMainDisplayLabel("Search Mode");
 		 }
 
