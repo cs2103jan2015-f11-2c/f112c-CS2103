@@ -285,9 +285,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				return;
 			} else { //for complete
 				Event completedEvent = commandPtr->getEvent();
-				//string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
+				string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
 
-				//updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
 				return;
 			}
 			break;
