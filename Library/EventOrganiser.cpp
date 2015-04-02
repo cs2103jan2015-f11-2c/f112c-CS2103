@@ -7,8 +7,10 @@ const int EventOrganiser::UNIQUE_ID = -123;
 const string EventOrganiser::MARKER_CODE = "-MSmsgjyw-";
 
 //For logging
-const string EventOrganiser::SHOW_ALL_NORMAL_EVENTS = "showAllNormalEvent";
-const string EventOrganiser::SHOW_ALL_FLOATING_EVENTS = "showAllFloatingEvent";
+const string EventOrganiser::SHOW_ALL_NORMAL_CURRENT = "showAllNormalCurrent";
+const string EventOrganiser::SHOW_ALL_NORMAL_COMPLETED = "showAllNormalCompleted";
+const string EventOrganiser::SHOW_ALL_FLOATING_CURRENT = "showAllFloatingCurrent";
+const string EventOrganiser::SHOW_ALL_FLOATING_COMPLETED = "showAllFloatingCompleted";
 const string EventOrganiser::SHOW_EVENTS = "showEvents";
 const string EventOrganiser::SHOW_DATES_FROM_NORMAL_CONTENT = "showDatesFromNormalContent";
 const string EventOrganiser::DATE_RANGE = "dateRange";
@@ -22,19 +24,33 @@ EventOrganiser::~EventOrganiser(void)
 {
 }
 
-//returns all events with marker
+//returns all normal events with marker
 vector<Event> EventOrganiser::showAllNormalCurrent(){
 	vector<Event> tempContent =	allNormalCurrent();
 	tempContent = showEvents(tempContent);
-	logger.logStorageIntData(SHOW_ALL_NORMAL_EVENTS,tempContent.size());
+	logger.logStorageIntData(SHOW_ALL_NORMAL_CURRENT,tempContent.size());
 	return tempContent;
 }
 
+vector<Event> EventOrganiser::showAllNormalCompleted(){
+	vector<Event> tempContent = allNormalCompleted();
+	tempContent = showEvents(tempContent);
+	logger.logStorageIntData(SHOW_ALL_NORMAL_COMPLETED,tempContent.size());
+	return tempContent;
+}
+
+
 //returns all floating events
 vector<Event> EventOrganiser::showAllFloatingCurrent(){
-	logger.logStoragePosition(SHOW_ALL_FLOATING_EVENTS);
+	logger.logStoragePosition(SHOW_ALL_FLOATING_CURRENT);
 	return allFloatingCurrent();
 }
+
+vector<Event> EventOrganiser::showAllFloatingCompleted(){
+	logger.logStoragePosition(SHOW_ALL_FLOATING_COMPLETED);
+	return allFloatingCompleted();
+}
+
 
 //show event Vector items, sorted and marked
 vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){

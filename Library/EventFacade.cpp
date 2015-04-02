@@ -70,10 +70,10 @@ vector<Event> EventFacade::showAllFloatingEvents(){
 
 vector<Event> EventFacade::showAllNormalCompleted(){
 	logger.logStoragePosition("showAllNormalCompleted");
-	return organiser.allNormalCompleted();
+	return organiser.showAllNormalCompleted();
 }
 
 vector<Event> EventFacade::showAllFloatingCompleted(){
 	logger.logStoragePosition("showAllFloatingCompleted");
-	return organiser.allFloatingCompleted();
+	return organiser.showAllFloatingCompleted();
 }

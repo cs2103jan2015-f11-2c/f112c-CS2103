@@ -12,8 +12,10 @@ private:
 	static const string MARKER_CODE;
 	
 	//For logging
-	static const string SHOW_ALL_NORMAL_EVENTS;
-	static const string SHOW_ALL_FLOATING_EVENTS;
+	static const string SHOW_ALL_NORMAL_CURRENT;
+	static const string SHOW_ALL_NORMAL_COMPLETED;
+	static const string SHOW_ALL_FLOATING_CURRENT;
+	static const string SHOW_ALL_FLOATING_COMPLETED;
 	static const string SHOW_EVENTS;
 	static const string SHOW_DATES_FROM_NORMAL_CONTENT;
 	static const string DATE_RANGE;
@@ -27,9 +29,11 @@ public:
 	
 	//Show All methods
 	vector<Event> showAllNormalCurrent();
+	vector<Event> showAllNormalCompleted();
 
 	//Show floating method
 	vector<Event> showAllFloatingCurrent();
+	vector<Event> showAllFloatingCompleted();
 	
 	//Show method
 	vector<Event> showEvents(vector<Event> eventsToShow);
