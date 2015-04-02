@@ -84,7 +84,13 @@ string LogicUpdater::getMainDisplayLabel() {
 }
 
 int LogicUpdater::getTotalNumEvents() {
-	return floatingEvents.size() + normalEvents.size();
+	int normalCount = 0;
+	for (int i = 0 ; i < normalEvents.size() ; i++) {
+		if (normalEvents[i].getName() != NEW_DAY_MESSAGE) {
+			normalCount++;
+		}
+	}
+	return floatingEvents.size() + normalCount;
 }
 
 int LogicUpdater::getTotalFloatingEvents() {
