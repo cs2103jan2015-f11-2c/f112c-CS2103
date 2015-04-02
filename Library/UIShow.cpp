@@ -101,7 +101,7 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		std::mktime(&nextMonth);
 
 		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
-		std::string yearString = intToString(nextMonth.tm_year);
+		std::string yearString = intToString(nextMonth.tm_year + 1900);
 
 		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
 		
@@ -181,7 +181,7 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		std::mktime(&nextMonth);
 
 		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
-		std::string yearString = intToString(nextMonth.tm_year);
+		std::string yearString = intToString(nextMonth.tm_year + 1900);
 
 		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
 		

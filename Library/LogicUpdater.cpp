@@ -795,7 +795,7 @@ int LogicUpdater:: getEndTime(Event toGet){
 
 
 bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate){
-	bool isWeek;
+	bool isWeek  = false;
 
 	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && (backDate.tm_mday - frontDate.tm_mday) == 6 && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
 		isWeek = true;
