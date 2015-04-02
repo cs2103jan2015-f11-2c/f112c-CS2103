@@ -24,6 +24,8 @@ public:
 	vector<Event> deleteEvent(int eventID, Event eventToBeDeleted);
 	vector<Event> editEvent(int eventID, Event eventToBeEdited, Event editedEvent);
 	vector<Event> completeEvent(int eventID, Event completedEvent);
+	//vector<Event> uncompleteEvent(int eventID, Event uncompletedEvent);
+	
 
 	/*To EventSearch*/
 	vector<Event> findNameOccurrence(string eventName); //checkMultipleResults
@@ -31,7 +33,6 @@ public:
 	vector<Event> findLevelImportance(int level);
 	vector<Event> findAllImportance();
 	//vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);
-	//vector<Event> findCompleted();
 
 	/*To EventOrganiser*/
 	vector<Event> showDates(Event eventWithStartEndTimes);
@@ -49,7 +50,9 @@ public:
 	//return day with the eventtobecomplete marked to true
 	//is complete file
 	//showCompleted
-
+	//limit
+	//clear all completed tbc
+	//
 };
 
 #endif
