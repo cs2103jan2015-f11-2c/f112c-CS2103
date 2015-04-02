@@ -35,6 +35,7 @@ public:
 	static const string CREATED_SHOW;
 	static const string CREATED_SHOWALL;
 	static const string CREATED_SHOWALLIMPORTANT;
+	static const string CREATED_SHOWCOMPLETED;
 	static const string CREATED_SHOWFLOAT;
 	static const string CREATED_SHOWIMPORTANCE;
 	static const string CREATED_SEARCH;

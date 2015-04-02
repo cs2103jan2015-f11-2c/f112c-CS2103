@@ -9,6 +9,7 @@ const string Logic::CREATED_EDIT = "created edit command";
 const string Logic::CREATED_SHOW = "created show command";
 const string Logic::CREATED_SHOWALL = "created show all command";
 const string Logic::CREATED_SHOWALLIMPORTANT = "created show all command";
+const string Logic::CREATED_SHOWCOMPLETED = "created show completed command";
 const string Logic::CREATED_SHOWFLOAT = "created showfloat command";
 const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
 const string Logic::CREATED_SEARCH = "created search command";
@@ -166,12 +167,14 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		return executor.execute(showAllImportantCommand);
 								   }
 
-								   /*case Parser::SHOWCOMPLETE: {
-								   break;
-								   }*/
+	case Parser::SHOWCOMPLETE: {
+		Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
+		log(CREATED_SHOWCOMPLETED);
+		return executor.execute(showCompletedCommand);
+							   }
 
-								   /*case Parser::SHOWDUE: {
-								   break;
+							   /*case Parser::SHOWDUE: {
+							   break;
 								   }*/
 
 	case Parser::SHOWFLOAT: {
@@ -424,7 +427,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 
 	unsigned int i = 0;
 	//push all floating events from original into floating vector
-	while (original[i].getName() != LogicUpdater::NEW_DAY_MESSAGE) {
+	while (original[i].getIsFloating()) {
 		floating.push_back(original[i]);
 		i++;
 		if (i == original.size()) {

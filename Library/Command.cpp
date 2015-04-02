@@ -498,6 +498,11 @@ ShowCompletedCommand::ShowCompletedCommand(EventFacade* eventStorage) {
 }
 
 void ShowCompletedCommand::execute() {
+	vector<Event> floating = eventFacade->showAllFloatingCompleted();
+	vector<Event> normal = eventFacade->showAllNormalCompleted();
+	floating.insert(floating.end(), normal.begin(), normal.end());
+
+	eventsToShow = floating;
 }
 
 vector<Event> ShowCompletedCommand::getEventVector() {
