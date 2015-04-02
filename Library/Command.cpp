@@ -168,12 +168,25 @@ void CompleteCommand::execute() {
 		break;
 					}
 
-	case SIZE_ONE: {
-		break;
+	case SIZE_ONE: { //1 exact match
+		if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+			isFloating = true;
+			userEvent = tempEvents[0];
+			completedEvents = eventFacade->completeEvent(tempEvents[0].getID(), tempEvents[0]);
+		} else { //1 normal match => event will be at index 1
+			isFloating = false;
+			userEvent = tempEvents[1];
+			completedEvents = eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
+		}
+		isExecuted = true;
+		return;
 				   }
 
-	default: {
-		break;
+	default: { //more than 1 exact match
+		completedEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
+		isExecuted = false;
+		return;
 			 }
 	}
 }
@@ -191,7 +204,7 @@ void CompleteCommand::undo() {
 
 void CompleteCommand::completeImmediately() {
 	isFloating = userEvent.getIsFloating();
-	//completedEvents = eventFacade->???
+	completedEvents = eventFacade->completeEvent(id, userEvent);
 	isExecuted = true;
 }
 
@@ -253,7 +266,6 @@ void DeleteCommand::execute() {
 		}
 		isExecuted = true;
 		return;
-		break;
 				   }
 
 	default: { //more than 1 exact match
@@ -261,7 +273,6 @@ void DeleteCommand::execute() {
 		userEvent = createInvalidEvent();
 		isExecuted = false;
 		return;
-		break;
 			 };
 	};
 }
