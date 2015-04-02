@@ -797,7 +797,7 @@ int LogicUpdater:: getEndTime(Event toGet){
 bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate){
 	bool isWeek  = false;
 
-	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && (backDate.tm_mday - frontDate.tm_mday) == 6 && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
+	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && countNumDays(frontDate,backDate) == 6 ){
 		isWeek = true;
 	}
 
@@ -857,6 +857,22 @@ bool LogicUpdater::isSameYear(tm frontDate,tm backDate){
 	return sameYear;
 }
 
+int LogicUpdater::countNumDays(tm startDay, tm endDay){
+	initializeTime(startDay);
+	initializeTime(endDay);
+	std::time_t start = std::mktime(&startDay);
+	std::time_t end = std::mktime(&endDay);
+
+	int dayDifference = std::difftime(end,start)/(60*60*24);
+
+	return dayDifference;
+}
+
+void LogicUpdater::initializeTime(tm date){
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 0;
+}
 
 
 

@@ -145,6 +145,9 @@ public:
 
 	bool isSameMonth(tm,tm);
 	bool isSameYear(tm,tm);
+
+	int countNumDays(tm, tm);
+	void initializeTime(tm);
 };
 
 #endif
