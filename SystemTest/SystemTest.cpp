@@ -17,6 +17,7 @@
 #include "ParserLog.cpp"
 #include "EventLog.cpp"
 #include "ParserExceptions.cpp"
+#include "Event.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -30,26 +31,26 @@ namespace SystemTest
 
 		TEST_METHOD(ADD_EVENT)
 		{
-			std::string textLine, testString;
-			std::string expectedString;
-
-			std::string expectedString;
-			std::vector<std::string> tempVector;
+			std::string expectedFeedback;
+			std::vector<std::string> tempFeedbackVector;
 
 			//Case 1: Add with no event name
 			Assert::AreEqual(l.executeUserInput("add "),false);
-			tempVector = l.getFeedbackStrings();
-			expectedString = "Error: No event name found. Please type ';' after an event name.";
-			Assert::AreEqual(tempVector[0],expectedString);
+			tempFeedbackVector = l.getFeedbackStrings();
+			expectedFeedback = "Error: Missing input.";
+			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 1: Add floating
 			Assert::AreEqual(l.executeUserInput("add cs1;"),true);
-			expectedString = "Is Floating: 1\nName: cs1\nStart Year: 0\nStart Month: 0\nStart Day: 0\nStart Hour: 0\n";
-			expectedString += "Start Min: 0\nEnd Year: 0\nEnd Month: 0\nEnd Day: 0\nEnd Hour: 0\nEnd Min: 0\n";
-			expectedString += "Deadline: 0\nCompleted: 0\nImportance: 0\n";
+			tempFeedbackVector = l.getFeedbackStrings();
+			expectedFeedback = "cs1 added";
+			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 			
 			//Case 2: Add normal event
-			Assert::AreEqual(l.executeUserInput("add cs1; 23-24apr 3-4pm"),true);
+			Assert::AreEqual(l.executeUserInput("add cs2; 23-24apr 3-4pm"),true);
+			tempFeedbackVector = l.getFeedbackStrings();
+			expectedFeedback = "cs2 added: 23 April - 24 April 2015";
+			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 3: Add normal event, 
 		}
