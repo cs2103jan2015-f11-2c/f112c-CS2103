@@ -496,6 +496,8 @@ bool Logic::isProperCommand(Parser::commandType commandType) {
 		(commandType == Parser::EDIT) |
 		(commandType == Parser::SEARCH) |
 		(commandType == Parser::SHOW) |
+		(commandType == Parser::SHOWWEEK) |
+		(commandType == Parser::SHOWMONTH) |
 		(commandType == Parser::SHOWALL) |
 		(commandType == Parser::SHOWALLIMPORTANT) |
 		(commandType == Parser::SHOWCOMPLETE) |
