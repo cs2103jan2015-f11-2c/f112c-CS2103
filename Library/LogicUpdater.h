@@ -45,6 +45,7 @@ public:
 	static const string NEW_DAY_MESSAGE;
 	static const string UNDO_MESSAGE;
 	static const string REDO_MESSAGE;
+	static const string COMPLETED_MESSEAGE;
 
 	static const string WORD_TODAY;
 	static const string WORD_TOMORROW;

@@ -66,6 +66,49 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		return "";
 	}
 
+	if (currentMainDisplayLabel.substr(0,6) == "[Week]"){
+		time_t now;
+		struct tm front;
+		struct tm back;
+
+		time(&now);
+		front = *localtime(&now);
+		back = *localtime(&now);
+
+		front = mainDisplayDate[1];
+		front.tm_mday += 1;
+		std::mktime(&front);
+
+		back = front;
+		back.tm_mday += 6;
+		std::mktime(&back);
+
+		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
+
+		return newCommand;
+	}
+
+	if (currentMainDisplayLabel.substr(0,7) == "[Month]"){
+		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+
+		time_t now;
+		struct tm nextMonth;
+
+		time(&now);
+		nextMonth = *localtime(&now);
+		nextMonth = mainDisplayDate[0];
+		nextMonth.tm_mon ++;
+		std::mktime(&nextMonth);
+
+		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
+		std::string yearString = intToString(nextMonth.tm_year);
+
+		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+		
+		return newCommand;
+	}
+
+
 	std::string newShowCommand = "";
 
 	//function to check whether it is single or multiple day
@@ -101,6 +144,48 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 	
 	if (currentMainDisplayLabel == "Shortcuts"){
 		return "";
+	}
+
+	if (currentMainDisplayLabel.substr(0,6) == "[Week]"){
+		time_t now;
+		struct tm front;
+		struct tm back;
+
+		time(&now);
+		front = *localtime(&now);
+		back = *localtime(&now);
+
+		back = mainDisplayDate[1];
+		back.tm_mday -= 7;
+		std::mktime(&back);
+
+		front = back;
+		front.tm_mday -= 6;
+		std::mktime(&front);
+
+		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
+
+		return newCommand;
+	}
+
+	if (currentMainDisplayLabel.substr(0,7) == "[Month]"){
+		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+
+		time_t now;
+		struct tm nextMonth;
+
+		time(&now);
+		nextMonth = *localtime(&now);
+		nextMonth = mainDisplayDate[0];
+		nextMonth.tm_mon --;
+		std::mktime(&nextMonth);
+
+		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
+		std::string yearString = intToString(nextMonth.tm_year);
+
+		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+		
+		return newCommand;
 	}
 
 	std::string newShowCommand = "";
