@@ -65,6 +65,7 @@ private:
 
 	vector<EVENT_STRING> mainDisplayStrings;
 	string mainDisplayLabel;
+	string weekMonthOrNothing;
 	vector<EVENT_STRING> floatingDisplayStrings;
 	vector<string> feedbackDisplayStrings;
 	vector<string> errorStrings;
@@ -99,7 +100,7 @@ public:
 	Event getEventFromID(int id);
 
 	//setter
-	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id);
+	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id, string weekMonthOrNothing);
 	void setFeedbackStrings(string newFeedback);
 
 	void initializeEventString(EVENT_STRING &item);
@@ -110,6 +111,7 @@ public:
 	bool setFloatingIsNew(int);
 
 	void setMainDisplayLabel (vector<tm> label);
+	void setWeekMonthOrNothing(string);
 	bool isSingleDay(vector<tm>);
 	bool isToday(tm);
 	bool isTomorrow(tm);

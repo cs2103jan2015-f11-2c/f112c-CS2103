@@ -197,8 +197,9 @@ Event LogicUpdater::getEventFromID(int id) {
 
 
 //setters
-void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id){
+void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing){
 	newID = id;
+	setWeekMonthOrNothing (weekMonthOrNothing);
 	setFeedbackStrings(feedback);
 	setFloatingEvents(floatingEvents);
 	setNormalEvents(normalEvents, label);
@@ -318,6 +319,10 @@ void LogicUpdater::setMainDisplayLabel (vector<tm> label){
 	}
 }
 
+void LogicUpdater::setWeekMonthOrNothing(string identity){
+	weekMonthOrNothing = identity;
+}
+
 bool LogicUpdater::isSingleDay(vector<tm> label){
 	assert(label.size()==2);
 
@@ -364,12 +369,14 @@ bool LogicUpdater::isTomorrow(tm date){
 }
 
 bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate){
-	bool isMonth;
+	bool isMonth = false;
 
 	if (isFirstDayOfMonth(frontDate) && isLastDayOfMonth(backDate) && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
 		isMonth = true;
-	} else {
-		isMonth = false;
+	}
+
+	if (weekMonthOrNothing == WORD_MONTH){
+		isMonth = true;
 	}
 
 	return isMonth;
@@ -791,9 +798,12 @@ bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate){
 
 	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && (backDate.tm_mday - frontDate.tm_mday) == 6 && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)){
 		isWeek = true;
-	} else {
-		isWeek = false;
 	}
+
+	if (weekMonthOrNothing == WORD_WEEK){
+		isWeek = true;
+	}
+
 	return isWeek;
 }
 
