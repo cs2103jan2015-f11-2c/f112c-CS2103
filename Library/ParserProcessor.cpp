@@ -699,8 +699,16 @@ bool ParserProcessor::identifyDeadline(int index){
 	if(fragmentedWords[index] == "due"){
 		tempEventStore.setIsDeadline(true);
 		deadlineFound = true;
-		startDayFound = true;
-		startTimeFound = true;
+		if(!endDayFound){
+			endDayFound = true;
+		} else {
+			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+		}
+		if(!endTimeFound){
+			endTimeFound = true;
+		} else {
+			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+		}
 		matchFound = true;
 	}
 	return matchFound;
@@ -735,22 +743,22 @@ void ParserProcessor::addEventCorrector(){
 
 	//Deadline events, set Start date and Start time to be equal to the End date and End time read from input
 	if(tempEventStore.getIsDeadline()){
-		struct tm tempTime = tempEventStore.getEndDate();
-		if(endDayFound && endTimeFound){
-			tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
-			tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
+		struct tm tempTime = tempEventStore.getStartDate();
+		if(startDayFound && startTimeFound){
+			tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
+			tempEventStore.setEndTime(tempTime.tm_hour,tempTime.tm_min);
 		}
-		if(endDayFound && !endTimeFound){
+		if(startDayFound && !startTimeFound){
 			tempEventStore.setStartTime(23,59);
 			tempEventStore.setEndTime(23,59);
-			tempEventStore.setStartDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
-			endTimeFound = true;
+			tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
+			startTimeFound = true;
 		}
-		if(!endDayFound && endTimeFound){
+		if(!startDayFound && startTimeFound){
 			tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
-			tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
-			tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
-			endDayFound = true;
+			tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+			tempEventStore.setEndTime(tempTime.tm_hour,tempTime.tm_min);
+			startDayFound = true;
 		}
 	}
 	//Floating events, set temporary Event isFloating to true
