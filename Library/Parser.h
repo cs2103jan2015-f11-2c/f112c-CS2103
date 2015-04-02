@@ -33,6 +33,8 @@ public:
 		SHOWIMPORTANT,
 		SHOWALLIMPORTANT,
 		SHOWCOMPLETE,
+		SHOWWEEK,
+		SHOWMONTH,
 		UNDO,
 		REDO,
 		COMPLETE
@@ -52,7 +54,7 @@ private:
 	Event tempEventStore;
 	std::string nameOfEvent;
 
-	static const int NUMBER_OF_KEYWORDS_COMMANDS = 10;
+	static const int NUMBER_OF_KEYWORDS_COMMANDS = 11;
 	std::string keywordCommands[NUMBER_OF_KEYWORDS_COMMANDS];
 
 public:
@@ -63,6 +65,7 @@ public:
 	std::string getOriginal();
 	Event getEvent();
 	std::string getNameOfEvent();
+	int errorCounter;
 
 	//main methods
 	void processInput();

@@ -172,7 +172,7 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 
 		//Check Exception Cases:
 		//Case 1: no name, no day, no time input at all
-		if(!nameFound && !startDayFound && !startTimeFound){
+		if(!nameFound && !startDayFound && !startTimeFound && !importanceFound){
 			logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
 			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 		}
@@ -900,6 +900,9 @@ void ParserProcessor::editEventCorrector(){
 		tempEventStore.setStartTime(100,100);
 		tempEventStore.setEndTime(100,100);
 	}
+	if(!importanceFound){
+		tempEventStore.setImportanceLevel(-1);
+	}
 }
 
 //Performs mktime on both the Start date as well as the End date of the temporary Event to ensure a correct (day, month, year) and also
@@ -927,13 +930,14 @@ void ParserProcessor::eventMktimeCorrector(){
 Event ParserProcessor::processShowEvent(std::vector<std::string> fragmentedWords_){
 	logger.logParserEnterFunc(PROCESS_SHOW_EVENT);
 
+	std::string tempString;
 	fragmentedWords = fragmentedWords_;
 	int tempInt = 0;
 	int daysToEndWeek = 0, weekday = 0;
 	int day = now->tm_mday;
 	int month = now->tm_mon;
 	int year = now->tm_year;
-	
+
 	unsigned int i = 0; 
 	//Check for show by year. E.g. show year/yr   show 2015   show 2015-2016
 	if(i < fragmentedWords.size()){
@@ -1063,11 +1067,14 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 	
 	//Check all system show commands and assign Start and End date accordingly if required
 	if (firstWord == "next" || firstWord == "nxt"){
+		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 		tempIndex++;
 		nextFound = true;
 		firstWord = fragmentedWords[tempIndex];
 	}
 	if (firstWord == "week" || firstWord == "wk"){
+		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+		tempEventStore.setName("week");
 		weekday = now->tm_wday;
 		daysToEndWeek = 6 - weekday;
 		if(nextFound){
@@ -1079,6 +1086,8 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 		}
 		systemShowWeek = true;
 	} else if(firstWord == "month" || firstWord == "mth"){
+		tempEventStore.setName("month");
+		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 		if(nextFound){
 			tempEventStore.setStartDate(1,month+1,year);
 			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month+1,year);
@@ -1088,8 +1097,9 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex){
 		}
 		systemShowMonth = true;
 	} else if(firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || 
-				firstWord == "important" || firstWord == "impt" || firstWord == "done" || firstWord == "completed"){
+				firstWord == "important" || firstWord == "impt" || firstWord == "done" || firstWord == "completed" || firstWord == "complete"){
 		tempEventStore.setName(firstWord);
+		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 		systemShowOthers = true;
 	} else if(firstWord[0] == '!'){
 		int levelImportance = 0;

@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <cassert>
+#include <cctype>
 #include "ParserExceptions.h"
 #include "ParserLog.h"
 

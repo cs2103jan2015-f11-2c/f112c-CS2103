@@ -14,6 +14,8 @@ Parser::Parser(std::string input)
 	keywordCommands[7] = "redo";
 	keywordCommands[8] = "done";
 	keywordCommands[9] = "completed";
+	keywordCommands[10] = "complete";
+	errorCounter = 0;
 
 	logger.logParserStart(input);
 	original = input;
@@ -59,10 +61,12 @@ void Parser::processInput(){
 		tokenizeOriginalString();
 		determineCommandType();
 		logger.logParserSuccess(original);
+		errorCounter = 0;
 	} catch (ParserExceptions& e){
 		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
 		typeOfCommand = Parser::ERROR_;
 		logger.logParserFailure(original);
+		errorCounter++;
 	}
 }
 
@@ -95,7 +99,7 @@ void Parser::determineCommandType(){
 			determineEditCommand();
 		} else if(command == "show"){
 			determineShowCommand();
-		} else if(command == "done" || command == "completed"){
+		} else if(command == "done" || command == "completed" || command == "complete"){
 			determineCompleteCommand();
 		} else if(command == "search" || command == "undo" || command == "redo"){
 			determineOtherCommand();
@@ -159,15 +163,19 @@ void Parser::determineShowCommand(){
 		} else if(tempEventStore.getName() == "all"){
 			typeOfCommand = Parser::SHOWALL;
 		} else if(tempEventStore.getName() == "due"){
-				typeOfCommand = Parser::SHOWDUE;
+			typeOfCommand = Parser::SHOWDUE;
 		} else if(tempEventStore.getName() == "specificimportance"){
-				typeOfCommand = Parser::SHOWIMPORTANT;
+			typeOfCommand = Parser::SHOWIMPORTANT;
 		} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
-				typeOfCommand = Parser::SHOWALLIMPORTANT;
-		} else if(tempEventStore.getName() == "completed" || tempEventStore.getName() == "done"){
-				typeOfCommand = Parser::SHOWCOMPLETE;
+			typeOfCommand = Parser::SHOWALLIMPORTANT;
+		} else if(tempEventStore.getName() == "completed" || tempEventStore.getName() == "done" || tempEventStore.getName() == "complete"){
+			typeOfCommand = Parser::SHOWCOMPLETE;
+		} else if(tempEventStore.getName() == "week"){
+			typeOfCommand = Parser::SHOWWEEK;
+		} else if(tempEventStore.getName() == "month"){
+			typeOfCommand = Parser::SHOWMONTH;
 		} else {
-				typeOfCommand = Parser::SHOW;
+			typeOfCommand = Parser::SHOW;
 		}
 	} catch (ParserExceptions& e){
 		throw e;
@@ -187,8 +195,6 @@ void Parser::determineOtherCommand(){
 	if(command == "search"){
 		nameOfEvent = details;
 		typeOfCommand = Parser::SEARCH;
-	} else if(command == "done" || command == "completed"){
-		typeOfCommand = Parser::COMPLETE;
 	} else if(command == "undo"){
 		typeOfCommand = Parser::UNDO;
 	} else if(command == "redo"){
@@ -219,58 +225,60 @@ bool Parser::checkCommandUndoRedo(){
 
 //Sets the feedback based on what exception code was thrown to be returned to Logic and displayed to the user.
 std::string Parser::createFeedback(std::string errorCode){
+	std::string tempFeedback;
 	if(errorCode == ParserExceptions::ERROR_MISSING_INPUT){
-		return "Error: Missing input.";
+		tempFeedback = "Error: Missing input.";
 	}
 	if(errorCode == ParserExceptions::ERROR_NO_NAME){
-		return "Error: No event name found. Please type ';' after an event name.";
+		tempFeedback = "Error: No event name found. Please type ';' after an event name.";
 	}
 	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DATES){
-		return "Error: Too many date inputs detected. Maximum of 2 date inputs.";
+		tempFeedback = "Error: Too many date inputs detected. Maximum of 2 date inputs.";
 	}
 	if(errorCode == ParserExceptions::ERROR_TOO_MANY_TIMES){
-		return "Error: Too many time inputs detected. Maximum of 2 time inputs.";
+		tempFeedback = "Error: Too many time inputs detected. Maximum of 2 time inputs.";
 	}
 	if(errorCode == ParserExceptions::ERROR_MISSING_DAY){
-		return "Error: No day input found before month.";
+		tempFeedback = "Error: No day input found before month.";
 	}
 	if(errorCode == ParserExceptions::ERROR_UNUSED_INFORMATION){
-		return "Error: Wrong formatting, not all information has been successfully recorded.";
+		tempFeedback = "Error: Wrong formatting, not all information has been successfully recorded.";
 	}
 	if(errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN){
-		return "Error: No hour/minute input before am/pm.";
+		tempFeedback = "Error: No hour/minute input before am/pm.";
 	}
 	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DEL){
-		return "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
+		tempFeedback = "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
 	}
 	if(errorCode == ParserExceptions::ERROR_MISSING_INDEX){
-		return "Error: No event index or event name found. Please type ';' after the event name.";
+		tempFeedback = "Error: No event index or event name found. Please type ';' after the event name.";
 	}
 	if(errorCode == ParserExceptions::ERROR_INSUFFICIENT_INFO){
-		return "Error: Not enough information to execute command.";
+		tempFeedback = "Error: Not enough information to execute command.";
 	}
 	if(errorCode == ParserExceptions::ERROR_UNKNOWN_COMMAND){
-		return "Error: Unknown command.";
+		tempFeedback = "Error: Unknown command.";
 	}
 	if(errorCode == ParserExceptions::ERROR_UNKNOWN_DATE){
-		return "Error: Unknown date input.";
+		tempFeedback = "Error: Unknown date input.";
 	}
 	if(errorCode == ParserExceptions::ERROR_UNKNOWN_HOUR){
-		return "Error: Invalid hour input for time.";
+		tempFeedback = "Error: Invalid hour input for time.";
 	}
 	if(errorCode == ParserExceptions::ERROR_UNKNOWN_MINUTE){
-		return "Error: Invalid minutes input for time.";
+		tempFeedback = "Error: Invalid minutes input for time.";
 	}
 	if(errorCode == ParserExceptions::ERROR_START_AFTER_END){
-		return "Error: Start day is later than End day";
+		tempFeedback = "Error: Start day is later than End day";
 	}
 	if(errorCode == ParserExceptions::ERROR_NO_SHOW){
-		return "Error: No registered show found. Please use search instead.";
+		tempFeedback = "Error: No registered show found. Please use search instead.";
 	}
 	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_DATES){
-		return "Error: Too many date inputs detected. Maximum of 1 date input for deadline events.";
+		tempFeedback = "Error: Too many date inputs detected. Maximum of 1 date input for deadline events.";
 	}
 	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_TIMES){
-		return "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
+		tempFeedback = "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
 	}
+	return tempFeedback;
 }

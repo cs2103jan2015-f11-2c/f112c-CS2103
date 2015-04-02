@@ -31,6 +31,9 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(" ");
 	std::string tempStr = input.substr(0,strCutIndex);
+	for(unsigned int i = 0; i < tempStr.size(); i++){
+		tempStr[i] = std::tolower(tempStr[i]);
+	}
 	//assert string not empty
 	return tempStr;
 }
@@ -174,10 +177,14 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	strCutIndex = input.find_first_not_of(" -.;",strCutIndex); // remove unwanted spaces after ;
 	if(strCutIndex == std::string::npos){
 		endOfString = true;
-	}
-	
-	while(!endOfString){
+	} else {
 		input = input.substr(strCutIndex);
+		for(unsigned int i = 0; i < input.size(); i++){
+			input[i] = std::tolower(input[i]);
+		}
+	}
+
+	while(!endOfString){
 		strCutIndex = input.find_first_of(" -.");  
 		fragmentedWords.push_back(input.substr(0,strCutIndex));
 		if(strCutIndex != std::string::npos){
@@ -188,6 +195,8 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
 		if(strCutIndex == std::string::npos){
 			endOfString = true;
+		} else {
+			input = input.substr(strCutIndex);
 		}
 	}
 	//assert vector not empty
@@ -221,6 +230,9 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 			endOfString = true;
 		} else {
 			input = input.substr(strCutIndex);
+			for(unsigned int i = 0; i < input.size(); i++){
+				input[i] = std::tolower(input[i]);
+			}
 		}
 	}
 
@@ -263,6 +275,10 @@ std::vector<std::string> InputStringSplit::fragmentShowString(std::string input)
 	if(input.find_first_not_of(" -.") == std::string::npos){
 		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	}
+
+	for(unsigned int i = 0; i < input.size(); i++){
+		input[i] = std::tolower(input[i]);
 	}
 
 	while(!endOfString){
