@@ -23,7 +23,6 @@ EventStorage::~EventStorage(void)
 
 //METHODS
 void EventStorage::readToContent(){
-	
 	std::ifstream readFile(currentFile);
 	std::string textLine, name, deadline, importance, tags, startYear, startMonth, startDay, startHour, startMin, 
 		endYear, endMonth, endDay, endHour, endMin, id, completed, space;
