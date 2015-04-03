@@ -24,7 +24,6 @@ private:
 
 	//These are external storages
 	static const string currentFile;
-	static const string completedFile;
 
 	//These are internal storages
 	vector<Event> normalContent;
@@ -51,6 +50,7 @@ public:
 	}
 
 	//Methods
+	void checkFileExist(); //creates file if does not exist
 	void writeToCurrentFile();	//called when setters are called
 	void readToContent();	//called once. upon opening of program ---------------to be refacted
 

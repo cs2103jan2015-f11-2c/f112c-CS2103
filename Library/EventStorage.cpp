@@ -1,13 +1,13 @@
 #include "EventStorage.h"
 	
-const string EventStorage::currentFile = "mytext.txt";
-const string EventStorage::completedFile = "myCompleted.txt";
+const string EventStorage::currentFile = "myStorage.txt";
 
 //CONSTRUCTOR, DESTRUCTOR
 //read all from text file first to have past memory
 EventStorage::EventStorage(void)
 {
 	logger.logStoragePosition("creating storage object");
+	checkFileExist();
 	readToContent();
 }
 
@@ -20,8 +20,12 @@ EventStorage::~EventStorage(void)
 //try if no match vector label string and temp string fill in default
 //set error in feedback.
 
-
 //METHODS
+void EventStorage::checkFileExist(){
+	std::ofstream out(currentFile, std::ios::app);
+	out.close();
+}
+
 void EventStorage::readToContent(){
 	std::ifstream readFile(currentFile);
 	std::string textLine, name, deadline, importance, tags, startYear, startMonth, startDay, startHour, startMin, 
