@@ -31,15 +31,30 @@ vector<Event> EventFacade::completeEvent(int eventID, Event completedEvent){
 	return modifier.complete(eventID, completedEvent);
 }
 
+vector<Event> EventFacade::uncompleteEvent(int eventID, Event uncompletedEvent){
+	logger.logStoragePosition("uncompleteEvent");
+	return modifier.uncomplete(eventID, uncompletedEvent);
+}
+
 /*To EventSearch*/
 vector<Event> EventFacade::findNameOccurrence(string eventName){
 	logger.logStoragePosition("findNameOccurrence");
-	return searcher.searchNameOccurrence(eventName);
+	return searcher.searchNormalNameOccurrence(eventName);
 }
 
 vector<Event> EventFacade::findNameExact(string eventName){
 	logger.logStoragePosition("findNameExact");
-	return searcher.searchNameExact(eventName);
+	return searcher.searchNormalNameExact(eventName);
+}
+
+vector<Event> EventFacade::findCompletedNameOccurrence(string eventName){
+	logger.logStoragePosition("findCompletedNameOccurrence");
+	return searcher.searchCompletedNameOccurrence(eventName);
+}
+
+vector<Event> EventFacade::findCompletedNameExact(string eventName){
+	logger.logStoragePosition("findCompletedNameExact");
+	return searcher.searchCompletedNameExact(eventName);
 }
 
 vector<Event> EventFacade::findLevelImportance(int level){

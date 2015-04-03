@@ -15,21 +15,38 @@ EventSearch::~EventSearch()
 
 //checking methods
 //checking method 1 --- search event with matching string name and returns sorted with marker
-vector<Event> EventSearch::searchNameOccurrence(string eventName){
-	logger.logStoragePosition("searchNameOccurrence");
+vector<Event> EventSearch::searchNormalNameOccurrence(string eventName){
+	//get events from internal storages
+	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
+	vector<Event> normalCurrent = organiser.allNormalCurrent();
+
+	vector<Event> toLogic = searchNameOccurrence(eventName, normalCurrent, floatingCurrent);
+	return toLogic;
+}
+
+//checking method 1 --- search completed with matching string name and returns sorted with marker
+vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	
 	//get events from internal storages
-	vector<Event> floatingEvents = organiser.allFloatingCurrent();
-	vector<Event> normalEvents = organiser.allNormalCurrent();
+	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
 
+	vector<Event> toLogic = searchNameOccurrence(eventName, normalCompleted, floatingCompleted);
+	return toLogic;
+}
+
+//Support method --- finds string name match
+vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
+	logger.logStoragePosition("searchNameOccurrence");
+	
 	//search through names
-	floatingEvents = searchEventWithName(eventName, floatingEvents);
-	normalEvents = searchEventWithName(eventName, normalEvents);
+	floating = searchEventWithName(eventName, floating);
+	normal = searchEventWithName(eventName, normal);
 
-	floatingEvents = combineResults(floatingEvents, normalEvents);
+	floating = combineResults(floating, normal);
 
 	logger.logStoragePosition("leaving searchNameOccurrence");
-	return floatingEvents;
+	return floating;
 }
 
 //Support method --- finds string name match
@@ -49,22 +66,41 @@ vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> e
 }
 
 //checking method 2 --- search event with exact string name and returns sorted with marker
-vector<Event> EventSearch::searchNameExact(string eventName){
-	logger.logStoragePosition("searchNameExact");
+vector<Event> EventSearch::searchNormalNameExact(string eventName){
 	
-	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
-	vector<Event> normalEvents = organiser.allNormalCurrent();
+	//get events from internal storages
+	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
+	vector<Event> normalCurrent = organiser.allNormalCurrent();
 
-	floatingEvents = searchExactString(eventName, floatingEvents);
-	normalEvents = searchExactString(eventName, normalEvents);
+	vector<Event> toLogic = searchNameExact(eventName, normalCurrent, floatingCurrent);
+	return toLogic;
+}
 
-	floatingEvents = combineResults(floatingEvents, normalEvents);
+//checking method 2 --- search normal with exact string name and returns sorted with marker
+vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 
-	logger.logStoragePosition("leaving checkExactString");
-	return floatingEvents;
+	//get events from internal storages
+	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+
+	vector<Event> toLogic = searchNameExact(eventName, normalCompleted, floatingCompleted);
+	return toLogic;
 }
 
 //Support method --- find exact string name match
+vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> normal, vector<Event> floating){
+	logger.logStoragePosition("searchNameExact");
+	
+
+	floating = searchExactString(eventName, floating);
+	normal = searchExactString(eventName, normal);
+
+	floating = combineResults(floating, normal);
+
+	logger.logStoragePosition("leaving checkExactString");
+	return floating;
+}
+
 vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eventVectorToSearch){
 	logger.logStorageStringData("searching For Exact EventName", eventName);
 	vector<Event> returnVector;
@@ -77,6 +113,7 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 	}
 	return returnVector;
 }
+
 
 //search level of importance
 vector<Event> EventSearch::searchLevelImportance(int level){

@@ -262,3 +262,62 @@ vector<Event> EventModifier::completeFloat(int index){
 	organiser.saveFloating(tempContents);
 	return tempContents;
 }
+
+vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent){
+	logger.logStoragePosition(COMPLETE);
+	
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	//extract ID if event is not in display
+	if(eventID == NOT_FOUND){ 
+		eventID = UncompletedEvent.getID(); //set relevant eventID 
+	}
+
+	assert(eventID != NOT_FOUND);
+
+	index = findNormalCompletedIndex(eventID);
+	logger.logStorageIntData("The index from current content is: ",index);
+	
+	if(index > NOT_FOUND){  	//Normal Case
+		toLogic = uncompleteNormal(index, eventID);
+	} else{						
+		index = findFloatingCompletedIndex(eventID);
+		if(index > NOT_FOUND){  //Floating Case
+			toLogic = uncompleteFloat(index);
+		}
+	}
+	logger.logStoragePosition("Leaving uncompleteEvent");
+	return toLogic;
+}
+
+vector<Event> EventModifier::uncompleteNormal(int index, int eventID){  //mark and push into completedcontent. pushback into delete vector to return to logic
+	//mark complete
+	vector<Event> tempContents = organiser.allNormalCompleted();
+
+	tempContents[index].setIsCompleted(false);
+	organiser.saveNormalCompleted(tempContents);
+
+	return organiser.showDatesFromNormalContent(tempContents[index]);
+}
+
+vector<Event> EventModifier::uncompleteFloat(int index){
+	//mark complete
+	vector<Event> tempContents = organiser.allFloatingCompleted();
+	tempContents[index].setIsCompleted(false);
+	organiser.saveFloatingCompleted(tempContents);
+	return organiser.allFloatingCurrent();
+}
+
+	//support methods
+int EventModifier::findNormalCompletedIndex(int eventID){
+	vector<Event> tempContents = organiser.allNormalCompleted();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}
+
+int EventModifier::findFloatingCompletedIndex(int eventID){
+	vector<Event> tempContents = organiser.allFloatingCompleted();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}

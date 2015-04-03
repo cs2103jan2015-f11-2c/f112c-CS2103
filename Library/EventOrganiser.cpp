@@ -337,3 +337,15 @@ void EventOrganiser::saveFloating(vector<Event> floatingCurrent){
 	floatingCurrent.insert( floatingCurrent.end(), tempFloatingCompleted.begin(), tempFloatingCompleted.end() );
 	EventStorage::storage().setFloatingContent(floatingCurrent);
 }
+
+void EventOrganiser::saveNormalCompleted(vector<Event> normalCompleted){
+	vector<Event> tempNormalCurrent = allNormalCurrent();
+	tempNormalCurrent.insert( tempNormalCurrent.end(), normalCompleted.begin(), normalCompleted.end() );
+	EventStorage::storage().setNormalContent(tempNormalCurrent);
+}
+
+void EventOrganiser::saveFloatingCompleted(vector<Event> floatingCompleted){
+	vector<Event> tempFloatingCurrent = allFloatingCurrent();
+	tempFloatingCurrent.insert( tempFloatingCurrent.end(), floatingCompleted.begin(), floatingCompleted.end() );
+	EventStorage::storage().setFloatingContent(tempFloatingCurrent);
+}

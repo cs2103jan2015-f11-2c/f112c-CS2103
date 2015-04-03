@@ -24,12 +24,14 @@ public:
 	vector<Event> deleteEvent(int eventID, Event eventToBeDeleted);
 	vector<Event> editEvent(int eventID, Event eventToBeEdited, Event editedEvent);
 	vector<Event> completeEvent(int eventID, Event completedEvent);
-	//vector<Event> uncompleteEvent(int eventID, Event uncompletedEvent);
+	vector<Event> uncompleteEvent(int eventID, Event uncompletedEvent);
 	
 
 	/*To EventSearch*/
-	vector<Event> findNameOccurrence(string eventName); //checkMultipleResults
-	vector<Event> findNameExact(string eventName); //checkExactString
+	vector<Event> findNameOccurrence(string eventName); 
+	vector<Event> findNameExact(string eventName); 
+	vector<Event> findCompletedNameOccurrence(string eventName);
+	vector<Event> findCompletedNameExact(string eventName);
 	vector<Event> findLevelImportance(int level);
 	vector<Event> findAllImportance();
 	//vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);

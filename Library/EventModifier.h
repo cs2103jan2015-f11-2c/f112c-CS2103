@@ -51,9 +51,16 @@ public:
 	vector<Event> completeFloat(int index);
 	vector<Event> markCompleted(int eventID, vector<Event> completedEventDates);
 	
+	/*Uncomplete Method*/
+	vector<Event> uncomplete(int eventID, Event UncompletedEvent);
+	vector<Event> uncompleteNormal(int index, int eventID);
+	vector<Event> uncompleteFloat(int index);
+
 	/*delete/edit/complete support methods*/
 	int findNormalIndex(int eventID);
-	int findFloatingIndex(int eventID);
+	int findFloatingIndex(int eventID);	
+	int findNormalCompletedIndex(int eventID);
+	int findFloatingCompletedIndex(int eventID);
 
 };
 

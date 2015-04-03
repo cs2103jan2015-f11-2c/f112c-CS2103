@@ -59,6 +59,8 @@ public:
 	//appends completed task and set
 	void saveNormal(vector<Event> normalCurrent);//, vector<Event> normalCompleted);
 	void saveFloating(vector<Event> floatingCurrent);//, vector<Event> floatingCompleted);
+	void saveNormalCompleted(vector<Event> normalCompleted);
+	void saveFloatingCompleted(vector<Event> floatingCompleted);
 };
 
 #endif

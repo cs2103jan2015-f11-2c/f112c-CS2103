@@ -22,12 +22,18 @@ public:
 	~EventSearch(void);
 	
 	//Search Methods
-	vector<Event> searchNameOccurrence(string eventName);
-	vector<Event> searchNameExact(string eventName);
+	vector<Event> searchNormalNameOccurrence(string eventName);
+	vector<Event> searchCompletedNameOccurrence(string eventName);
+
+	vector<Event> searchNormalNameExact(string eventName);
+	vector<Event> searchCompletedNameExact(string eventName);
+
 	vector<Event> searchLevelImportance(int level);
 	vector<Event> searchAllImportance();
 
 	//Support methods for search
+	vector<Event> searchNameExact(string eventName, vector<Event> normal, vector<Event> floating);
+	vector<Event> searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating);
 	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchExactString(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchEventWithImportance(int level, vector<Event> vectorToSearch);	
