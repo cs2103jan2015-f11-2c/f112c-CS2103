@@ -454,10 +454,11 @@ namespace UI {
 			this->dueLabel->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dueLabel->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			resources->ApplyResources(this->dueLabel, L"dueLabel");
-			this->dueLabel->ForeColor = System::Drawing::Color::Black;
+			this->dueLabel->ForeColor = System::Drawing::Color::DimGray;
 			this->dueLabel->Name = L"dueLabel";
 			this->dueLabel->ReadOnly = true;
 			this->dueLabel->TabStop = false;
+			this->dueLabel->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::dueLabel_TextChanged);
 			// 
 			// MapleSyrup
 			// 
@@ -1409,5 +1410,7 @@ private: Void log(std::string label, std::string commands){
 
 
 
+private: System::Void dueLabel_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+		 }
 };
 }

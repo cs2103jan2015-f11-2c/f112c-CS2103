@@ -154,3 +154,84 @@ Main displayed: Successful
 Main label displayed: [Today] 5 April, Sunday
 User Command: maplesyrup
 Clear All Log Files: All log files cleared
+Clear All Log Files: All log files cleared
+Program starts at: 05 Apr,Sunday, 01:22:56
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Logic command executed & returns: True
+Feedback displayed: showing today
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: add hello;
+Logic command executed & returns: True
+Feedback displayed: hello added
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: add hello1;9pm
+Logic command executed & returns: True
+Feedback displayed: hello1 added: 5 April, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: delete 1
+Logic command executed & returns: True
+Feedback displayed: hello deleted
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Logic command executed & returns: True
+Feedback displayed: undo
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: done 1
+Logic command executed & returns: True
+Feedback displayed: hello completed
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: add hello3;10pm
+Logic command executed & returns: True
+Feedback displayed: hello3 added: 5 April, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Clear All Log Files: All log files cleared
+Program starts at: 05 Apr,Sunday, 01:25:11
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Logic command executed & returns: True
+Feedback displayed: showing today
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Clear All Log Files: All log files cleared
+Program starts at: 05 Apr,Sunday, 01:25:59
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Logic command executed & returns: True
+Feedback displayed: showing today
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Clear All Log Files: All log files cleared
+Program starts at: 05 Apr,Sunday, 01:29:27
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+Logic command executed & returns: True
+Feedback displayed: showing today
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 5 April, Sunday
+User Command: maplesyrup
+Clear All Log Files: All log files cleared

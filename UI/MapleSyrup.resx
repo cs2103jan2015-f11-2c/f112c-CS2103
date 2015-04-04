@@ -4406,10 +4406,10 @@
     <value>Courier New, 8.25pt</value>
   </data>
   <data name="dueDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 537</value>
+    <value>6, 541</value>
   </data>
   <data name="dueDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 117</value>
+    <value>228, 113</value>
   </data>
   <data name="dueDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>10000</value>
@@ -4433,7 +4433,7 @@
     <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="dueLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 509</value>
+    <value>8, 511</value>
   </data>
   <data name="dueLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>226, 26</value>
@@ -4442,7 +4442,7 @@
     <value>10001</value>
   </data>
   <data name="dueLabel.Text" xml:space="preserve">
-    <value>*Due* soon</value>
+    <value>  Near Due</value>
   </data>
   <data name="&gt;&gt;dueLabel.Name" xml:space="preserve">
     <value>dueLabel</value>
