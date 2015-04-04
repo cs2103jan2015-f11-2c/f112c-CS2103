@@ -92,3 +92,9 @@ vector<Event> EventFacade::showAllFloatingCompleted(){
 	logger.logStoragePosition("showAllFloatingCompleted");
 	return organiser.showAllFloatingCompleted();
 }
+
+/*To EventStorage*/
+bool EventFacade::dataRead(){
+	logger.logStoragePosition("dataRead");
+	return EventStorage::storage().getIsRead();
+}
