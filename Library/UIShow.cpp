@@ -125,7 +125,14 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 		return WORD_SEARCH_MODE;
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
 		return WORD_SHORTCUTS;
+	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newShowCommand = COMMAND_SHOW + " " + "week " + currentMainDisplayLabel.substr(6);
+		return newShowCommand;
+	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+		std::string newShowCommand = COMMAND_SHOW + " " + "month" + currentMainDisplayLabel.substr(7);
+		return newShowCommand;
 	} else {
+
 		std::string newShowCommand = "";
 
 		bool isSingleDate = checkIsSingleDate(mainDisplayDate);

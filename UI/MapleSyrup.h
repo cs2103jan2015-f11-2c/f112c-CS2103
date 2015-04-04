@@ -555,7 +555,7 @@ private: void loadData(){
 		 }
 
 private: void clearAllLogFiles(){
-			 char* fileName[5] = {"EventLog.txt" , "MapleSyrupGUILog.txt" , "UILog.txt" , "logicLog.txt" , "ParserLog.txt"};
+			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt", "logicLog.txt" , "ParserLog.txt"};
 
 			 for (int i=0; i<5;i++){
 				std::ofstream out(fileName[i], std::ofstream::trunc);
@@ -897,7 +897,7 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 				isDeveloperCommand = true;
 			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "maplesyrup"){
 				clearAllLogFiles();
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				std::ofstream out("myStorage.txt", std::ofstream::trunc);
 				out.close();
 				Application::Exit();
 				isDeveloperCommand = true;
@@ -1307,14 +1307,15 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 log("Search Mode exited", "");
 			 searchBox->Text = "";
-			 std::string currentShowCommand = showPtr->getCurrentCommand();
 			 
-			 //Reload main display before search mode
-			 executeUserInput(currentShowCommand);
-
 			 //Reload floating display before search mode
 			 std::string loadCommandFloating = showPtr->getShowFloat();
 			 executeUserInput(loadCommandFloating);
+
+			 std::string currentShowCommand = showPtr->getCurrentCommand();
+
+			 //Reload main display before search mode
+			 executeUserInput(currentShowCommand); 
 		 }
 //===================================================================================================================================================================			 
 
