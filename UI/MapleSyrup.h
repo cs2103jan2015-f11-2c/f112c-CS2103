@@ -50,6 +50,11 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
 	private: System::Windows::Forms::Button^  redoButton;
+	private: System::Windows::Forms::RichTextBox^  dueDisplay;
+	private: System::Windows::Forms::TextBox^  dueLabel;
+
+
+
 	private: System::Windows::Forms::Button^  undoButton;
 
 	public:
@@ -149,6 +154,8 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->dueDisplay = (gcnew System::Windows::Forms::RichTextBox());
+			this->dueLabel = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -435,6 +442,23 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::shortcutsToolStripMenuItem_Click);
 			// 
+			// dueDisplay
+			// 
+			this->dueDisplay->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			resources->ApplyResources(this->dueDisplay, L"dueDisplay");
+			this->dueDisplay->Name = L"dueDisplay";
+			// 
+			// dueLabel
+			// 
+			this->dueLabel->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->dueLabel->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->dueLabel->Cursor = System::Windows::Forms::Cursors::SizeAll;
+			resources->ApplyResources(this->dueLabel, L"dueLabel");
+			this->dueLabel->ForeColor = System::Drawing::Color::Black;
+			this->dueLabel->Name = L"dueLabel";
+			this->dueLabel->ReadOnly = true;
+			this->dueLabel->TabStop = false;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -442,6 +466,7 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->dueDisplay);
 			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->helpButton);
@@ -461,6 +486,7 @@ namespace UI {
 			this->Controls->Add(this->commandBox);
 			this->Controls->Add(this->display);
 			this->Controls->Add(this->calenderTop);
+			this->Controls->Add(this->dueLabel);
 			this->ForeColor = System::Drawing::Color::Black;
 			this->HelpButton = true;
 			this->KeyPreview = true;

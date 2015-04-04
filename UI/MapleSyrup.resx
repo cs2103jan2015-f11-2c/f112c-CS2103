@@ -170,7 +170,7 @@
     <value>Microsoft Sans Serif, 11.25pt</value>
   </data>
   <data name="commandBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 530</value>
+    <value>271, 517</value>
   </data>
   <data name="commandBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>662, 24</value>
@@ -195,7 +195,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;commandBox.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>19</value>
   </data>
   <data name="feedbackBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Courier New, 9.75pt</value>
@@ -204,7 +204,7 @@
     <value>271, 558</value>
   </data>
   <data name="feedbackBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>662, 97</value>
+    <value>662, 87</value>
   </data>
   <data name="feedbackBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -225,7 +225,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;feedbackBox.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>18</value>
   </data>
   <data name="searchBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 12pt</value>
@@ -252,7 +252,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;searchBox.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>17</value>
   </data>
   <data name="display.Font" type="System.Drawing.Font, System.Drawing">
     <value>Courier New, 12pt</value>
@@ -268,7 +268,7 @@
     <value>Vertical</value>
   </data>
   <data name="display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>692, 440</value>
+    <value>692, 424</value>
   </data>
   <data name="display.TabIndex" type="System.Int32, mscorlib">
     <value>999</value>
@@ -292,7 +292,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;display.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>20</value>
   </data>
   <data name="floatingTasksDisplay.Font" type="System.Drawing.Font, System.Drawing">
     <value>Courier New, 12pt</value>
@@ -301,7 +301,7 @@
     <value>5, 83</value>
   </data>
   <data name="floatingTasksDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 440</value>
+    <value>229, 424</value>
   </data>
   <data name="floatingTasksDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>1000</value>
@@ -322,7 +322,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;floatingTasksDisplay.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="mainDisplayLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 14.25pt, style=Bold</value>
@@ -349,7 +349,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;mainDisplayLabel.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>16</value>
   </data>
   <data name="pictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -385,7 +385,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pictureBox2.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="comdIcon.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -722,7 +722,7 @@
     <value>Stretch</value>
   </data>
   <data name="comdIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 531</value>
+    <value>240, 517</value>
   </data>
   <data name="comdIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>26, 25</value>
@@ -743,7 +743,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;comdIcon.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>15</value>
   </data>
   <data name="calenderIcon.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1515,7 +1515,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;calenderIcon.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>14</value>
   </data>
   <data name="pictureBox1.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -2077,7 +2077,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 47</value>
+    <value>53, 49</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2101,7 +2101,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pictureBox1.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="floatingIcon.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -2663,7 +2663,7 @@
     <value>NoControl</value>
   </data>
   <data name="floatingIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>102, 47</value>
+    <value>102, 49</value>
   </data>
   <data name="floatingIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2687,7 +2687,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;floatingIcon.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="pictureBox8.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Zoom</value>
@@ -3249,7 +3249,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>152, 47</value>
+    <value>152, 49</value>
   </data>
   <data name="pictureBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3273,7 +3273,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pictureBox8.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="searchIcon.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3389,7 +3389,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;searchIcon.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>13</value>
   </data>
   <data name="calenderTop.Location" type="System.Drawing.Point, System.Drawing">
     <value>648, 3</value>
@@ -3413,7 +3413,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;calenderTop.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>21</value>
   </data>
   <data name="redoButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3568,7 +3568,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;redoButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="undoButton.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -4202,7 +4202,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;undoButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="showButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -4235,7 +4235,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;showButton.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="helpButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -4268,13 +4268,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;helpButton.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="suggestBar.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
   </data>
   <data name="suggestBar.Location" type="System.Drawing.Point, System.Drawing">
-    <value>271, 553</value>
+    <value>271, 540</value>
   </data>
   <data name="suggestBar.Size" type="System.Drawing.Size, System.Drawing">
     <value>662, 54</value>
@@ -4295,13 +4295,22 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;suggestBar.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <metadata name="showDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>102, 21</value>
   </metadata>
   <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 114</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
+    <value>showDropDown</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>113, 22</value>
@@ -4354,20 +4363,20 @@
   <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
     <value>Archive</value>
   </data>
-  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 114</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
-    <value>showDropDown</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>238, 24</value>
   </metadata>
   <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 70</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
+    <value>helpDropDown</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="introductionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>152, 22</value>
@@ -4393,14 +4402,59 @@
   <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
     <value>Shortcuts</value>
   </data>
-  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 70</value>
+  <data name="dueDisplay.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Courier New, 8.25pt</value>
   </data>
-  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
-    <value>helpDropDown</value>
+  <data name="dueDisplay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 537</value>
   </data>
-  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="dueDisplay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 117</value>
+  </data>
+  <data name="dueDisplay.TabIndex" type="System.Int32, mscorlib">
+    <value>10000</value>
+  </data>
+  <data name="dueDisplay.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;dueDisplay.Name" xml:space="preserve">
+    <value>dueDisplay</value>
+  </data>
+  <data name="&gt;&gt;dueDisplay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dueDisplay.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;dueDisplay.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="dueLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 14.25pt, style=Bold</value>
+  </data>
+  <data name="dueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 509</value>
+  </data>
+  <data name="dueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 26</value>
+  </data>
+  <data name="dueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>10001</value>
+  </data>
+  <data name="dueLabel.Text" xml:space="preserve">
+    <value>*Due* soon</value>
+  </data>
+  <data name="&gt;&gt;dueLabel.Name" xml:space="preserve">
+    <value>dueLabel</value>
+  </data>
+  <data name="&gt;&gt;dueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dueLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;dueLabel.ZOrder" xml:space="preserve">
+    <value>22</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
