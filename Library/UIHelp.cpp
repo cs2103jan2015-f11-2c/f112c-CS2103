@@ -10,6 +10,8 @@ UIHelp::~UIHelp(void)
 {
 }
 
+
+// static variables that cannot initialise in "UIHelp.h"
 const std::string UIHelp::HELP_GUIDE_WELCOME_MESSAGE = "Welcome to MapleSyrup. Following are the commands: \n";
 
 const std::string UIHelp::HELP_GUIDE_ADD[UIHelp::NUM_ADD] = { "There are a total of 9 ways to add an event:\n",
@@ -101,6 +103,97 @@ const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tC
 																		  "10.\tCtrl + Shift ----- Focus to command Box",
 																	};
 
+//Functions	
+std::string UIHelp::getHelpWelcomeMessage(){
+	return HELP_GUIDE_WELCOME_MESSAGE;
+}
+
+std::string UIHelp::getHelpAdd(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_ADD;i++){
+		out += HELP_GUIDE_ADD[i];
+	}
+
+	return out;
+}
+
+std::string UIHelp::getHelpDelete(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_DELETE;i++){
+		out += HELP_GUIDE_DELETE[i];
+	}
+
+	return out;
+}
+
+std::string UIHelp::getHelpEdit(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_EDIT;i++){
+		out += HELP_GUIDE_EDIT[i];
+	}
+
+	return out;
+}
+
+std::string UIHelp::getHelpDone(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_DONE;i++){
+		out += HELP_GUIDE_DONE[i];
+	}
+
+	return out;
+}
+
+std::string UIHelp::getHelpSearch(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_SEARCH;i++){
+		out += HELP_GUIDE_SEARCH[i];
+	}
+
+	return out;
+}
+
+std::string UIHelp::getHelpShow(){
+	std::string out = "";
+
+	for (int i=0; i<NUM_SHOW;i++){
+		out += HELP_GUIDE_SHOW[i];
+	}
+
+	return out;
+}
+	
+std::string UIHelp::getHelpUndo(){
+	return HELP_GUIDE_UNDO;
+}
+	
+std::string UIHelp::getHelpRedo(){
+	return HELP_GUIDE_REDO ;
+}
+	
+std::string UIHelp::getHelpExit(){
+	return HELP_GUIDE_EXIT;
+}
+
+LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
+	LogicUpdater::EVENT_STRING temp;
+
+	temp.dateString = "";
+	temp.eventString = stdString;
+	temp.importanceLevel = 0;
+	temp.isCompleted = false;
+	temp.isMarker = false;
+	temp.isClash = false;
+	temp.isNew = false;
+
+	return temp;
+}
+
 std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpIntroduction(){
 	std::vector<LogicUpdater::EVENT_STRING> vectOfHelp;
 
@@ -188,96 +281,3 @@ std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpShortcuts(){
 
 	return vectOfComds;
 }
-	
-LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
-	LogicUpdater::EVENT_STRING temp;
-
-	temp.dateString = "";
-	temp.eventString = stdString;
-	temp.importanceLevel = 0;
-	temp.isCompleted = false;
-	temp.isMarker = false;
-	temp.isClash = false;
-	temp.isNew = false;
-
-	return temp;
-}
-
-
-std::string UIHelp::getHelpWelcomeMessage(){
-	return HELP_GUIDE_WELCOME_MESSAGE;
-}
-
-std::string UIHelp::getHelpAdd(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_ADD;i++){
-		out += HELP_GUIDE_ADD[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpDelete(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_DELETE;i++){
-		out += HELP_GUIDE_DELETE[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpEdit(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_EDIT;i++){
-		out += HELP_GUIDE_EDIT[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpDone(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_DONE;i++){
-		out += HELP_GUIDE_DONE[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpSearch(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_SEARCH;i++){
-		out += HELP_GUIDE_SEARCH[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpShow(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_SHOW;i++){
-		out += HELP_GUIDE_SHOW[i];
-	}
-
-	return out;
-}
-	
-std::string UIHelp::getHelpUndo(){
-	return HELP_GUIDE_UNDO;
-}
-	
-std::string UIHelp::getHelpRedo(){
-	return HELP_GUIDE_REDO ;
-}
-	
-std::string UIHelp::getHelpExit(){
-	return HELP_GUIDE_EXIT;
-}
-
-	

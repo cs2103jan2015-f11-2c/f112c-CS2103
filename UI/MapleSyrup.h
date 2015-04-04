@@ -1,16 +1,12 @@
 #pragma once
 #include <iostream>
-
 #include <assert.h>
 #include <cctype>
 
 #include "Logic.h"
-#include "Conversion.h"
 #include "UICommandSuggestion.h"
 #include "UIHelp.h"
 #include "UIShow.h"
-
- 
 
 namespace UI {
 
@@ -35,8 +31,6 @@ namespace UI {
 		UICommandSuggestion* cSPtr; 
 
 		Logic* lGPtr;
-		
-		Conversion* cVPtr;
 
 		UIHelp* helpPtr;
 
@@ -44,12 +38,7 @@ namespace UI {
 
 	private: System::Windows::Forms::Button^  showButton;
 	private: System::Windows::Forms::Button^  helpButton;
-
-
-
-
 	private: System::Windows::Forms::MonthCalendar^  calenderTop;
-
 	private: System::Windows::Forms::ContextMenuStrip^  showDropDown;
 	private: System::Windows::Forms::ToolStripMenuItem^  dayToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  weekToolStripMenuItem;
@@ -62,39 +51,6 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
 	private: System::Windows::Forms::Button^  redoButton;
 	private: System::Windows::Forms::Button^  undoButton;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private: System::Windows::Forms::Timer^  timer1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	public:
 		MapleSyrup(void)
@@ -109,8 +65,6 @@ namespace UI {
 			cSPtr = new UICommandSuggestion;
 
 			lGPtr = new Logic;
-
-			cVPtr = new Conversion;
 
 			helpPtr = new UIHelp;
 
@@ -128,49 +82,21 @@ namespace UI {
 				delete components;
 			}
 		}
-
-
 	public: System::Windows::Forms::RichTextBox^  feedbackBox;
 	private: System::Windows::Forms::TextBox^  searchBox;
 	private: System::Windows::Forms::RichTextBox^  display;
 	private: System::Windows::Forms::RichTextBox^  floatingTasksDisplay;
-
 	private: System::Windows::Forms::TextBox^  mainDisplayLabel;
-
-
-
-
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
-
-
-
 	private: System::Windows::Forms::PictureBox^  comdIcon;
 	private: System::Windows::Forms::PictureBox^  calenderIcon;
-
-
-
-
-
-
-
-
-
-
-
-
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::PictureBox^  floatingIcon;
 	private: System::Windows::Forms::PictureBox^  pictureBox8;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::PictureBox^  searchIcon;
-
 	private: System::Windows::Forms::TextBox^  commandBox;
-
 	private: System::Windows::Forms::ListBox^  suggestBar;
-
-	private: System::Windows::Forms::FontDialog^  fontDialog1;
-
-
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -213,7 +139,6 @@ namespace UI {
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
-			this->fontDialog1 = (gcnew System::Windows::Forms::FontDialog());
 			this->showDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->dayToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->weekToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -224,7 +149,6 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -545,6 +469,7 @@ namespace UI {
 			this->Load += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyDown);
 			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyUp);
+			this->Leave += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Leave);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::MapleSyrup_MouseClick);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
@@ -562,11 +487,14 @@ namespace UI {
 
 #pragma endregion
 
-
+/**
+ * @author A0111230J
+ */
 
 /*
 * =================================================================================================================================================================== 
 * Functions to load GUI & data
+* GUI exited
 * ===================================================================================================================================================================
 */
 //Pre-condition : None
@@ -574,10 +502,8 @@ namespace UI {
 //Invoked by MapleSyrup.cpp
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			clearAllLogFiles();
-
 			initializeAndUndisplayAll();
 			initializeShortcut();
-
 			loadData();
 }
 
@@ -590,7 +516,7 @@ private: void initializeAndUndisplayAll(){
 private: void loadData(){
 			 DateTime current = DateTime::Now;
 			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
-			 log ("Program starts at: " + convertToStd(timeToLog));
+			 log ("Program starts at:", convertToStd(timeToLog));
 
 			 std::string loadCommand1 = showPtr->getShowFloat();
 			 executeUserInput(loadCommand1);
@@ -601,15 +527,15 @@ private: void loadData(){
 			 commandBox->Select();
 		 }
 
-
 private: void clearAllLogFiles(){
-			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" , "logicLog.txt" , "ParserLog.txt"};
+			 char* fileName[5] = {"EventLog.txt" , "MapleSyrupGUILog.txt" , "UILog.txt" , "logicLog.txt" , "ParserLog.txt"};
 
-			 for (int i=0; i<4;i++){
+			 for (int i=0; i<5;i++){
 				std::ofstream out(fileName[i], std::ofstream::trunc);
 				out.close();
 			 }
 
+			 log ("Clear All Log Files:", "All log files cleared");
 		 }
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
@@ -617,18 +543,43 @@ private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Win
 			closeCalendar();
 		 }
 
+private: System::Void MapleSyrup_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 DateTime current = DateTime::Now;
+			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
+			 log ("Program terminated at:", convertToStd(timeToLog));
+		 }
 //===================================================================================================================================================================
-
 
 /*
 * =================================================================================================================================================================== 
-* Functions for UI shortcut
+* Functions to convert between std::String and System::String^ 
+* This is to essential for communication between various classes and this UI
 * ===================================================================================================================================================================
 */
 
-//Pre-condition : None 
-//Execute shortcuts for UI
+//Pre-condition : None
+//Convert a System::String^ type to std::string type
+public: std::string convertToStd(String^ sysStr){
+			char buffer[999];
+			sprintf(buffer,"%s",sysStr);
+			std::string stdString(buffer);
+			return stdString;
+		}
 
+//Pre-condition : None
+//Convert a std::string type to System::String^ type
+public: String^ convertToSys(std::string stdStr){
+			String^ sysString = gcnew String(stdStr.c_str());
+			Console::WriteLine(sysString);
+			return sysString;
+		}
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions for UI shortcuts
+* ===================================================================================================================================================================
+*/
 private: bool isCtrlPressed;
 
 private: void initializeShortcut(){
@@ -640,7 +591,7 @@ private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Window
 				display->Select();
 			 }
 
-			 ///////////////////////Shortcuts that uses control key///////////////////////////
+			 //Shortcuts that uses control key
 			 if (e->KeyCode == Keys::ControlKey){
 				 isCtrlPressed = true;
 			 }
@@ -675,54 +626,23 @@ private: System::Void MapleSyrup_KeyUp(System::Object^  sender, System::Windows:
 				 isCtrlPressed = false;
 			 }
 		 }
-
 //===================================================================================================================================================================
-
-
-
-/*
-* =================================================================================================================================================================== 
-* Functions to change between std::String and System::String^ 
-* This is to essential for communication between various classes and this UI
-* ===================================================================================================================================================================
-*/
-
-//Pre-condition : None
-//Convert a System::String^ type to std::string type
-public: std::string convertToStd(String^ sysStr){
-			char buffer[999];
-			sprintf(buffer,"%s",sysStr);
-			std::string stdString(buffer);
-			return stdString;
-		}
-
-//Pre-condition : None
-//Convert a std::string type to System::String^ type
-public: String^ convertToSys(std::string stdStr){
-			String^ sysString = gcnew String(stdStr.c_str());
-			Console::WriteLine(sysString);
-			return sysString;
-		}
-
-//===================================================================================================================================================================
-
-
 
 /*
 * =================================================================================================================================================================== 
 * Functions to display information received from Logic.h to the various displays on UI; 
-* namely main display, floating tasks display and feedback box.
+* Namely main display, main display label, floating tasks display and feedback box.
 * ===================================================================================================================================================================
 */
 
-
-//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function
 //Get the error string from Logic.h when invoked by function executeUserInput(). 
 //It proceed on to display this error string onto the feedbackBox of the UI.
 private: void displayErrorString(){
 			vector<std::string> displayErrorToFeedback = lGPtr->getFeedbackStrings();
-
 			displayToFeedbackBox(displayErrorToFeedback);
+
+			log ("Error string displayed:",displayErrorToFeedback.back());
 		}
 
 //Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
@@ -749,7 +669,56 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 					feedbackBox->Text += temp + "\n" ;
 				}
 
-			log ("Feedback displayed");
+			if (!displayToFeedback.empty()){
+				log ("Feedback displayed:", displayToFeedback.back());
+			}
+		}
+
+//Pre-condition : vector displayToFloating to be correctly updated
+//Display list of floating tasks to floating display
+private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
+			floatingTasksDisplay->Text = "";
+
+				for (unsigned int i = 0; i < displayToFloating.size(); i++){
+					if (displayToFloating[i].isNew){
+						String^ date = convertToSys (displayToFloating[i].dateString);
+						floatingTasksDisplay->SelectionColor = Color::Green;
+
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+
+						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
+						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+						floatingTasksDisplay->ScrollToCaret();				
+					} else {
+						String^ date = convertToSys (displayToFloating[i].dateString);
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						floatingTasksDisplay->SelectedText = date;
+
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+						floatingTasksDisplay->SelectionColor = Color::Red;
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectedText = importanceSymbolString;
+						
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectedText = eventName + "\n";
+					}
+				}
+
+				log ("Floating displayed:", "Successful");
 		}
 
 //Pre-condition : vector displayToMain to be correctly updated
@@ -776,7 +745,6 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 					display->SelectedText = date + importanceSymbolString + eventName + "\n";
 
 					display->ScrollToCaret();
-
 				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
 					String^ date = convertToSys(displayToMain[i].dateString);
 					
@@ -787,7 +755,6 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 
 					display->SelectionColor = Color::Red;
 					display->SelectedText = date + importanceSymbolString + eventName + "\n";
-
 				} else if(displayToMain[i].isNew && !displayToMain[i].isClash){
 						String^ date = convertToSys(displayToMain[i].dateString);
 					
@@ -801,14 +768,12 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 						display->SelectedText = date + importanceSymbolString + eventName + "\n";
 
 						int indexToBeScrolledTo = display->GetFirstCharIndexOfCurrentLine();
-
 				} else {
-							
 						displayNormalEventToMain(displayToMain[i]);
 					}
 			}
 
-			log ("Main displayed");
+			log ("Main displayed:" , "Successful");
 		 }
 
 
@@ -829,7 +794,6 @@ private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
 				 display->SelectionColor = Color::MidnightBlue;
 				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
 				 display->SelectedText = eventName + "\n";
-				 
 			 } else {
 				 String^ date = convertToSys (normalEvent.dateString);
 				 display->SelectionColor = Color::MidnightBlue;
@@ -853,56 +817,7 @@ private: void displayToMainDisplayLabel (std::string displayToMainLabel){
 			 String^ mainLabelDisplay = convertToSys (displayToMainLabel);
 			 mainDisplayLabel->Text = mainLabelDisplay; 
 
-			 log ("Main label displayed");
-		}
-
-//Pre-condition : vector displayToFloating to be correctly updated
-//Display list of floating tasks to floating display
-private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
-			floatingTasksDisplay->Text = "";
-
-				for (unsigned int i = 0; i < displayToFloating.size(); i++){
-					if (displayToFloating[i].isNew){
-						String^ date = convertToSys (displayToFloating[i].dateString);
-						floatingTasksDisplay->SelectionColor = Color::Green;
-
-						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
-						String^ importanceSymbolString = convertToSys (importanceSymbol);
-
-						String^  eventName= convertToSys (displayToFloating[i].eventString);
-
-						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
-						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
-
-						floatingTasksDisplay->ScrollToCaret();
-						
-					} else {
-						String^ date = convertToSys (displayToFloating[i].dateString);
-						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
-						}
-						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
-						floatingTasksDisplay->SelectedText = date;
-
-						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
-						String^ importanceSymbolString = convertToSys (importanceSymbol);
-						floatingTasksDisplay->SelectionColor = Color::Red;
-						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
-						}
-						floatingTasksDisplay->SelectedText = importanceSymbolString;
-						
-						String^  eventName= convertToSys (displayToFloating[i].eventString);
-						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
-						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
-						}
-						floatingTasksDisplay->SelectedText = eventName + "\n";
-						
-					}
-				}
-
-				log ("Floating displayed");
+			 log ("Main label displayed:", displayToMainLabel);
 		}
 
 private: std::string setImportancesymbol(int importanceLevel){
@@ -920,40 +835,27 @@ private: std::string setImportancesymbol(int importanceLevel){
 /*
 * =================================================================================================================================================================== 
 * Functions to check and decide whether input command should be executed by UI or pass to logic
+* It moves on to execute the command respectively
 * ===================================================================================================================================================================
 */
+//Pre-condition : None
+//This function centralises all the calls from the various parts/event handlers from the UI 
+//It first checks and matches commands that are related to developer or UI-handled. If yes, it proceeds with executing these commands
+public: void executeUserInput(std::string input){
+			if (checkAndExecuteDeveloperCommands(input)){
+				return;
+			}
 
-std::string toLowerCase(std::string word){
-	for (int i=0;i<word.size();i++){
-		 word[i] = tolower(word[i]);
-	 }
-	return word;
- }
-
-
-
-public: void resetCommandBar(){
-			commandBox->Text = "";
+			if (checkAndExecuteUIHandledCommands(input)){
+				return;
+			}
+		
+			//Pass userinput to logic when the command does not fit those handed by UI
+			passCommandToLogic(input);
 		}
 
-
-//===================================================================================================================================================================
-
-
-
-
-
-
-
-/*
-* =================================================================================================================================================================== 
-* Functions that link UI to Logic.h
-* Commands / invokes are passed from UI to Logic.h 
-* Information are received from Logic.h through it's getters 
-* ===================================================================================================================================================================
-*/
-
-//Pre-condition : Only for Developer to clear off data
+//Pre-condition : This function can only be called by function executeUserInput() of UI
+// [WARNING - Only for Developers to clear off data]
 // This function takes in a std::string and check whether it is a developer command
 // If yes, it will proceed on to execute the command and return true
 // If no, it will return false
@@ -973,10 +875,12 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 				Application::Exit();
 				isDeveloperCommand = true;
 			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				std::ofstream out("myStorage.txt", std::ofstream::trunc);
 				out.close();
 				Application::Exit();
 				isDeveloperCommand = true;
+
+				log ("Developer command executed:", "mapleclearall" );
 			} else {
 				isDeveloperCommand = false;
 			}
@@ -984,7 +888,7 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 			return isDeveloperCommand;
 		}
 
-//Pre-condition : None
+//Pre-condition : This function can only be called by function executeUserInput() of UI
 // This function takes in a std::string and check whether it is a UI-handled command
 // If yes, it will proceed on to execute the command and return true
 // If no, it will return false
@@ -996,27 +900,43 @@ private: bool checkAndExecuteUIHandledCommands(std::string input){
 			if (inputInLowerCase.size() ==4 &&  inputInLowerCase.substr(0,4) == "exit"){
 				Application::Exit();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "exit" );
 			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "help"){
 				displayHelpIntroduction();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "help" );
 			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "commands"){
 				displayHelpCommands();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "commands" );
 			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "calendar"){
 				executeCalendarShortcut();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "calendar" );
 			} else if (inputInLowerCase.size() ==6 && inputInLowerCase.substr(0,6) == "search"){
 				searchBox->Select();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "search" );
 			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "next"){
 				executeNextKey();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "next" );
 			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) =="back"){
 				executeBackKey();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "back" );
 			} else if (inputInLowerCase.size() ==9 && inputInLowerCase.substr(0,9) == "shortcuts"){
 				displayHelpShortCuts();
 				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "shortcuts" );
 			} else{
 				isUIHandledCommand = false;
 
@@ -1025,32 +945,39 @@ private: bool checkAndExecuteUIHandledCommands(std::string input){
 			return isUIHandledCommand;
 		 }
 
-//Pre-condition : Ensure command from user is passed into this function
-//This function centralises all the calls from the various parts/event handlers from the UI to Logic.h for execution
+//Pre-condition: Check that commmand does not belong to Develop/UI-handleded commands before passing to this function
+//				 This function can only be called by function executeUserInput() of UI
+//This function links UI to Logic.h by passing a command for logic.h to execute
 //Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
-//It proceed on to call functions to display the relevant information to the various displays on the UI 
-public: void executeUserInput(std::string input){
-			if (checkAndExecuteDeveloperCommands(input)){
-				log("Logic return: developer commands executed" );
-				return;
-			}
+//it proceeds to call functions to display the relevant information to the various displays on the UI 
+private: void passCommandToLogic(std::string input){
+			 std::string inputInLowerCase = toLowerCase(input);
 
-			if (checkAndExecuteUIHandledCommands(input)){
-				log("Logic return: UI-handled commands executed" );
-				return;
-			}
-		
-			//Pass userinput to logic when the command does not fit those handed by UI
-  			 bool isExecuted = lGPtr->executeUserInput(input);
-			 log("Logic return: " + convertToStd(isExecuted.ToString()));
+			 bool isExecuted = lGPtr->executeUserInput(inputInLowerCase);
+			 log("Logic command executed & returns:", convertToStd(isExecuted.ToString()));
 
 			 if(isExecuted){
 				 displayToAllDisplays();
 			 } else {
 				 displayErrorString();
 			 }
-		}
+		 }
 
+
+
+std::string toLowerCase(std::string word){
+	for (int i=0;i<word.size();i++){
+		 word[i] = tolower(word[i]);
+	 }
+	return word;
+ }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* commandBar
+* ===================================================================================================================================================================
+*/
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode != Keys::Enter){
 				return;
@@ -1061,7 +988,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 unDisplaySuggestion();
 			 
 			 std::string input = convertToStd(temp);
-			 log("User Command: " + input);
+			 log("User Command:", input);
 
 			 if (temp == ""){
 				 return;
@@ -1070,38 +997,8 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 			 executeUserInput(input);
 		 }
 
-
-//===================================================================================================================================================================
-
-/*
-* =================================================================================================================================================================== 
-* Functions that link UI to UIHelp.h to display help information
-* ===================================================================================================================================================================
-*/
-
-private: void displayHelpIntroduction(){
-			 std::string toMainDisplayLabel = "Help Introduction";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
-			 displayToMainDisplay(helpIntroduction);
-		 }
-
-
-private: void displayHelpCommands(){
-			 std::string toMainDisplayLabel = "Commands";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
-			 displayToMainDisplay(helpCommands);
-		 }
-
-public: void displayHelpShortCuts(){
-			 std::string toMainDisplayLabel = "Shortcuts";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
-			 displayToMainDisplay(helpShortcuts);
+public: void resetCommandBar(){
+			commandBox->Text = "";
 		}
 //===================================================================================================================================================================
 
@@ -1110,7 +1007,6 @@ public: void displayHelpShortCuts(){
 * Functions that link commandBar to CommandSuggestion.h to display the various suggestions 
 * ===================================================================================================================================================================
 */
-
 //Pre-condition : None 
 //Display the information in vector suggestion onto suggestBar
 private: void displaySuggestion(std::vector<std::string> suggestion){
@@ -1136,7 +1032,7 @@ private: void unDisplaySuggestion(){
 //Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 std::string temp = convertToStd(commandBox->Text);
-			 std::string tempCommand = cVPtr->toLowerCase(temp);
+			 std::string tempCommand = toLowerCase(temp);
 
 			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
 
@@ -1175,10 +1071,37 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 										  }
 			 }
 		 }
-
-
 //===================================================================================================================================================================
 
+/*
+* =================================================================================================================================================================== 
+* Functions that link UI to UIHelp.h to display help information
+* ===================================================================================================================================================================
+*/
+private: void displayHelpIntroduction(){
+			 std::string toMainDisplayLabel = "Help Introduction";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
+			 displayToMainDisplay(helpIntroduction);
+		 }
+
+private: void displayHelpCommands(){
+			 std::string toMainDisplayLabel = "Commands";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
+			 displayToMainDisplay(helpCommands);
+		 }
+
+public: void displayHelpShortCuts(){
+			 std::string toMainDisplayLabel = "Shortcuts";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
+			 displayToMainDisplay(helpShortcuts);
+		}
+//===================================================================================================================================================================
 
 /*
 * =================================================================================================================================================================== 
@@ -1187,12 +1110,12 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 * Functions that are under the help column call the respective help functions within this class
 * ===================================================================================================================================================================
 */
-
 // To display & undisplay the Show column when clicked
 private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {		
 			 showDropDown->Show(showButton,0,showButton->Height);		 
 		 }
 
+// Execute the respective show commands when clicked
 private: System::Void dayToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowDay();
 			 executeUserInput(loadCommand);
@@ -1219,11 +1142,12 @@ private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, Sy
 		 }
 
 
-// To display & undisplay the Help column when mouse click
+// To display & undisplay the Help column when clicked
 private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {	 
 			 helpDropDown->Show(helpButton,0,helpButton->Height);	 
 		 }
 
+// Execute the respective help commands when clicked
 private: System::Void introductionToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 displayHelpIntroduction();
 		 }
@@ -1235,11 +1159,7 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 displayHelpShortCuts();
 		 }
-
-
-
 //===================================================================================================================================================================
-
 
 /*
 * =================================================================================================================================================================== 
@@ -1250,23 +1170,6 @@ private: bool topCalenderDisplayed;
 
 private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System::EventArgs^  e) {
 			 calenderTop->Visible=false;
-		 }
-
-//Pre-condition : Only works when dates are chosen from the calendar
-//It receives the start and end date to be displayed from calendar and pass them to UIShow.h to generate a proper command
-//It moves on to pass this command to function executeUserInput for executition
-private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
-			 //Start date
-			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
-			 std::string startDate = convertToStd(tempStartDate);
-
-			 //End date
-			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
-			 std::string endDate = convertToStd(tempEndDate);
-
-			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
-
-			 executeUserInput(command);
 		 }
 
 private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) { 
@@ -1301,9 +1204,23 @@ private: void closeCalendar(){
 			calenderTop->SendToBack();
 		 }
 
+//Pre-condition : Only works when dates are chosen from the calendar
+//It receives the start and end date to be displayed from calendar and pass them to UIShow.h to generate a proper command
+//It moves on to pass this command to function executeUserInput for executition
+private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
+			 //Start date
+			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
+			 std::string startDate = convertToStd(tempStartDate);
+
+			 //End date
+			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
+			 std::string endDate = convertToStd(tempEndDate);
+
+			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
+
+			 executeUserInput(command);
+		 }
 //===================================================================================================================================================================
-
-
 
 /*
 * =================================================================================================================================================================== 
@@ -1311,17 +1228,19 @@ private: void closeCalendar(){
 * ===================================================================================================================================================================
 */
 
+private: void noSearchInput(){
+			 String^ NO_SEARCH_INPUT = "No Search Input\n";
+			 display->Text = NO_SEARCH_INPUT;
+			 floatingTasksDisplay->Text = NO_SEARCH_INPUT;
+		 }
+
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 String^ tempToBeSearched = searchBox->Text;
 
-			 
 			 if (tempToBeSearched == ""){
-				String^ NO_SEARCH_INPUT = "No Search Input\n";
-				display->Text = NO_SEARCH_INPUT;
-				floatingTasksDisplay->Text = NO_SEARCH_INPUT;
+				 noSearchInput();
 			 }
 			 
-
 			 std::string toBeSearched = convertToStd(tempToBeSearched);
 			 std::string COMMAND_SEARCH = "search";
 			 std::string searchCommand = COMMAND_SEARCH + " " + toBeSearched;
@@ -1336,16 +1255,14 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
 			 
-			 String^ NO_SEARCH_INPUT = "No Search Input\n";
-			 display->Text = NO_SEARCH_INPUT;
-			 floatingTasksDisplay->Text = NO_SEARCH_INPUT;
-			 
+			 noSearchInput();
 			 displayToMainDisplayLabel("Search Mode");
 		 }
 
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 searchBox->Text = "";
 			 std::string currentShowCommand = showPtr->getCurrentCommand();
+			 
 			 //Reload main display before search mode
 			 executeUserInput(currentShowCommand);
 
@@ -1355,27 +1272,12 @@ private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs
 		 }
 //===================================================================================================================================================================			 
 
-
 /*
 * =================================================================================================================================================================== 
 * Functions that allow toggle between main display, floating display and commandBox.
 * Functions that allow toggle between previous and next day of main display
 * ===================================================================================================================================================================
 */
-private: void executeBackKey(){
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
-			 executeUserInput(newShowCommand);
-		 }
-
-private: void executeNextKey(){
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
-			 executeUserInput(newShowCommand);
-		 }
-
 private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 		  if (e->KeyCode == Keys::Left){
 				 executeBackKey();
@@ -1393,6 +1295,20 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 			 }
 		 }
 
+private: void executeBackKey(){
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+			 executeUserInput(newShowCommand);
+		 }
+
+private: void executeNextKey(){
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+			 executeUserInput(newShowCommand);
+		 }
+
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 display->SelectionStart = 0;
 		 }
@@ -1405,9 +1321,7 @@ private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, Syst
 			 if (e->KeyCode == Keys::Escape){
 			    commandBox->Select();
 			 }
-
 		 }
-
 //===================================================================================================================================================================	
 
 /*
@@ -1437,17 +1351,15 @@ private: void redoLastCommand(){
 * Logging function
 * ===================================================================================================================================================================
 */
+private: Void log(std::string label, std::string commands){
+			 std::ofstream outFile("MapleSyrupGUILog.txt",std::ios::app);
 
-private: Void log(std::string logString){
-			 std::ofstream outFile("GUILog.txt",std::ios::app);
-
-			 outFile << logString + "\n";
+			 outFile << label + " " + commands + "\n";
 
 			 outFile.close();
 		 }
-
-
 //===================================================================================================================================================================
+
 
 
 

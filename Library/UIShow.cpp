@@ -19,6 +19,14 @@ const std::string UIShow::SHOW_ALL = "show all";
 const std::string UIShow::SHOW_ARCHIVE = "show archive";
 const std::string UIShow::SHOW_FLOAT = "show floating";
 
+const std::string UIShow::WORD_COMMANDS = "Commands";
+const std::string UIShow::WORD_HELP_INTRO = "Help Introduction";
+const std::string UIShow::WORD_SEARCH_MODE = "Search Mode";
+const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
+
+const std::string UIShow::LABEL_WEEK = "[Week]";
+const std::string UIShow::LABEL_MONTH = "[Month]";
+
 
 std::string UIShow::getShowDay(){
 	return SHOW_DAY;
@@ -45,58 +53,139 @@ std::string UIShow::getShowFloat(){
 }
 
 std::string UIShow::getCurrentCommand(){
-	return currentCommand;
+	return _currentCommand;
 }
 
 
 std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
-	if (currentMainDisplayLabel == "Commands"){
+	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
-	}
-
-	if (currentMainDisplayLabel == "Help Introduction"){
-		return "";
-	}
-
-	if (currentMainDisplayLabel == "Search Mode"){
-		return "";
-	}
-
-	if (currentMainDisplayLabel == "Shortcuts"){
-		return "";
-	}
-
-	if (currentMainDisplayLabel.substr(0,6) == "[Week]"){
-		time_t now;
-		struct tm front;
-		struct tm back;
-
-		time(&now);
-		front = *localtime(&now);
-		back = *localtime(&now);
-
-		front = mainDisplayDate[1];
-		front.tm_mday += 1;
-		std::mktime(&front);
-
-		back = front;
-		back.tm_mday += 6;
-		std::mktime(&back);
-
-		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
-
+	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newCommand = generateShowWeekForNext(mainDisplayDate[1]);
+		return newCommand;
+	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+		std::string newCommand = generateShowMonthForNext(mainDisplayDate[0]);
+		return newCommand;
+	} else if (checkIsSingleDate(mainDisplayDate) ){
+		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
+		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
+		return newCommand;
+	} else {
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
+		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
+		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
 		return newCommand;
 	}
+}
 
-	if (currentMainDisplayLabel.substr(0,7) == "[Month]"){
+
+std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
+		return "";
+	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newCommand = generateShowWeekForBack(mainDisplayDate[1]);
+		return newCommand;
+	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
 		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+		std::string newCommand = generateShowMonthForBack(mainDisplayDate[0]);
+		return newCommand;
+	} else if (checkIsSingleDate(mainDisplayDate) ){
+		tm newDateToShow = shiftDate(mainDisplayDate[0],-1);
+		 std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
+		 return newCommand;
+	} else {
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
+		tm newStartDate = shiftDate(mainDisplayDate[0], -numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], -numDaysToShift);
+		std:: string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
+		return newCommand;
+	}
+}
 
+std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
+	std::string startDateString = generateDateString(startDate);
+	std::string endDateString = generateDateString(endDate);
+	 
+	std::string command = COMMAND_SHOW + " " + startDateString  + " to " + endDateString;
+	return command;
+}
+
+void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	_currentCommand = generateCurrentCommand(currentMainDisplayLabel, mainDisplayDate);
+}
+
+std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP_INTRO;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH_MODE;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
+	} else {
+		std::string newShowCommand = "";
+
+		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
+		
+		if ( isSingleDate ){
+			newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]);
+		} else {
+			newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]) + " to " + convertFromTmToStr(mainDisplayDate[1]);
+		}
+
+		return newShowCommand;
+	}
+}
+
+tm UIShow::shiftDate(tm date, int numDaysToShift){
+	time_t t = time(0);
+	struct tm* newDatePtr = localtime(&t);
+
+	newDatePtr->tm_mday = date.tm_mday + numDaysToShift;
+	newDatePtr->tm_mon = date.tm_mon;
+	newDatePtr->tm_year = date.tm_year;
+	std::mktime(newDatePtr);
+
+	struct tm newDate;
+	newDate.tm_mday = newDatePtr->tm_mday;
+	newDate.tm_mon = newDatePtr->tm_mon;
+	newDate.tm_year = newDatePtr->tm_year;
+	
+	return newDate;
+}
+
+std::string UIShow::generateShowWeekForNext(tm endDate){
+	time_t now;
+	struct tm front;
+	struct tm back;
+
+	time(&now);
+	front = *localtime(&now);
+	back = *localtime(&now);
+
+	front = endDate;
+	front.tm_mday += 1;
+	std::mktime(&front);
+
+	back = front;
+	back.tm_mday += 6;
+	std::mktime(&back);
+
+	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
+
+	return newCommand;
+}
+
+std::string UIShow::generateShowMonthForNext(tm startDate){
 		time_t now;
 		struct tm nextMonth;
 
 		time(&now);
 		nextMonth = *localtime(&now);
-		nextMonth = mainDisplayDate[0];
+		nextMonth = startDate;
 		nextMonth.tm_mon ++;
 		std::mktime(&nextMonth);
 
@@ -106,137 +195,86 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
 		
 		return newCommand;
-	}
-
-
-	std::string newShowCommand = "";
-
-	//function to check whether it is single or multiple day
-	bool isSingleDate = checkIsSingleDate(mainDisplayDate);
-	if ( isSingleDate ){
-		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
-	} else {
-		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
-		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
-		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
-	}
-	return newShowCommand;
-	
 }
 
+std::string UIShow::generateShowWeekForBack(tm endDate){
+	time_t now;
+	struct tm front;
+	struct tm back;
 
+	time(&now);
+	front = *localtime(&now);
+	back = *localtime(&now);
 
-std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
-	//show back the same stuffs
-	if (currentMainDisplayLabel == "Commands"){
-		return "";
-	}
+	back = endDate;
+	back.tm_mday -= 7;
+	std::mktime(&back);
 
-	if (currentMainDisplayLabel == "Help Introduction"){
-		return "";
-	}
+	front = back;
+	front.tm_mday -= 6;
+	std::mktime(&front);
 
-	if (currentMainDisplayLabel == "Search Mode"){
-		return "";
-	}
-	
-	if (currentMainDisplayLabel == "Shortcuts"){
-		return "";
-	}
+	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
 
-	if (currentMainDisplayLabel.substr(0,6) == "[Week]"){
-		time_t now;
-		struct tm front;
-		struct tm back;
+	return newCommand;
+}
 
-		time(&now);
-		front = *localtime(&now);
-		back = *localtime(&now);
+std::string UIShow::generateShowMonthForBack(tm startDate){
+	time_t now;
+	struct tm nextMonth;
 
-		back = mainDisplayDate[1];
-		back.tm_mday -= 7;
-		std::mktime(&back);
+	time(&now);
+	nextMonth = *localtime(&now);
+	nextMonth = startDate;
+	nextMonth.tm_mon --;
+	std::mktime(&nextMonth);
 
-		front = back;
-		front.tm_mday -= 6;
-		std::mktime(&front);
+	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
+	std::string yearString = intToString(nextMonth.tm_year + 1900);
 
-		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
-
-		return newCommand;
-	}
-
-	if (currentMainDisplayLabel.substr(0,7) == "[Month]"){
-		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
-
-		time_t now;
-		struct tm nextMonth;
-
-		time(&now);
-		nextMonth = *localtime(&now);
-		nextMonth = mainDisplayDate[0];
-		nextMonth.tm_mon --;
-		std::mktime(&nextMonth);
-
-		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
-		std::string yearString = intToString(nextMonth.tm_year + 1900);
-
-		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+	std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
 		
-		return newCommand;
-	}
-
-	std::string newShowCommand = "";
-
-	//function to check whether it is single or multiple day
-	bool isSingleDate = checkIsSingleDate(mainDisplayDate);
-	if ( isSingleDate ){
-		tm newDateToShow = shiftDate(mainDisplayDate[0],-1);
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
-	} else {
-		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
-		tm newStartDate = shiftDate(mainDisplayDate[0], -numDaysToShift);
-		tm newEndDate = shiftDate(mainDisplayDate[1], -numDaysToShift);
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
-	}
-	return newShowCommand;
+	return newCommand;
 }
 
-void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
-	currentCommand = generateCurrentCommand(currentMainDisplayLabel, mainDisplayDate);
-}
-
-std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
-	//show back the same stuffs
-	if (currentMainDisplayLabel == "Commands"){
-		return "Commands";
-	}
-
-	if (currentMainDisplayLabel == "Help Introduction"){
-		return "Help";
-	}
-
-	if (currentMainDisplayLabel == "Search Mode"){
-		return "Search";
-	}
+std::string UIShow::generateDateString(std::string date){
+	int i=0;
 	
-	if (currentMainDisplayLabel == "Shortcuts"){
-		return "Shortcuts";
+	std::string startDateDay = "";
+	for (;std::isdigit(date[i]);i++){
+		startDateDay += date[i];
 	}
 
-	std::string newShowCommand = "";
+	i++;
 
-	//function to check whether it is single or multiple day
-	bool isSingleDate = checkIsSingleDate(mainDisplayDate);
-	if ( isSingleDate ){
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]);
-	} else {
-		newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]) + " to " + convertFromTmToStr(mainDisplayDate[1]);
+	std::string startDateMonth = "";
+	for (;std::isdigit(date[i]);i++){
+		startDateMonth += date[i];
 	}
 
-	return newShowCommand;
+	int startDateMonthNum = stringToInt(startDateMonth);
+	std::string startDateMonthString = intToMonth(startDateMonthNum-1);
+
+	i++;
+
+	std::string startDateYear = "";
+	for (;std::isdigit(date[i]);i++){
+		startDateYear += date[i];
+	}
+
+	std::string dateString =  startDateDay + startDateMonthString + " " + startDateYear;
+	return dateString;
+}
+
+std::string UIShow::convertFromTmToStr(tm date){
+	std::string dateString = "";
+
+	dateString += intToString(date.tm_mday);
+	dateString += intToMonth(date.tm_mon);
+	dateString += " ";
+	dateString += intToString(date.tm_year + 1900);
+
+	return dateString;
 }
 
 int UIShow::countNumDays(tm startDay, tm endDay){
@@ -256,19 +294,14 @@ void UIShow::initializeTime(tm date){
 	date.tm_sec = 0;
 }
 
+bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
+	bool isSingleDate = false;
 
-
-std::string UIShow::convertFromTmToStr(tm date){
-	std::string dateString = "";
-
-	dateString += intToString(date.tm_mday);
-	dateString += intToMonth(date.tm_mon);
-	dateString += " ";
-	dateString += intToString(date.tm_year + 1900);
-
-	return dateString;
+	if(mainDisplayDate[0].tm_mday == mainDisplayDate[1].tm_mday && mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon && mainDisplayDate[0].tm_year == mainDisplayDate[1].tm_year){
+			isSingleDate = true;
+		}
+	return isSingleDate;
 }
-
 
 std::string UIShow::intToString (int num){
 	std::string outString;
@@ -315,86 +348,8 @@ std::string UIShow::intToMonth (int monthInNum){
 }
 
 
-tm UIShow::shiftDate(tm date, int numDaysToShift){
-	time_t t = time(0);
-	struct tm* newDatePtr = localtime(&t);
-
-	newDatePtr->tm_mday = date.tm_mday + numDaysToShift;
-	newDatePtr->tm_mon = date.tm_mon;
-	newDatePtr->tm_year = date.tm_year;
-	std::mktime(newDatePtr);
-
-	struct tm newDate;
-	newDate.tm_mday = newDatePtr->tm_mday;
-	newDate.tm_mon = newDatePtr->tm_mon;
-	newDate.tm_year = newDatePtr->tm_year;
-	
-	return newDate;
-}
-
-
-bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
-	bool isSingleDate = false;
-
-	if(mainDisplayDate[0].tm_mday == mainDisplayDate[1].tm_mday && mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon && mainDisplayDate[0].tm_year == mainDisplayDate[1].tm_year){
-			isSingleDate = true;
-		}
-	return isSingleDate;
-}
 
 
 
-std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
-	 int i=0;
-	
-	 std::string startDateDay = "";
-	 for (;std::isdigit(startDate[i]);i++){
-			startDateDay += startDate[i];
-	 }
-
-	 i++;
-
-	 std::string startDateMonth = "";
-	 for (; std::isdigit(startDate[i]);i++){
-		startDateMonth += startDate[i];
-	 }
-
-	 int startDateMonthNum = stringToInt(startDateMonth);
-	 std::string startDateMonthString = intToMonth(startDateMonthNum-1);
-
-	 i++;
-
-	 std::string startDateYear = "";
-	 for (; std::isdigit(startDate[i]);i++){
-		startDateYear += startDate[i];
-	 }
-
-	 i=0;
-	 std::string endDateDay = "";
-	  
-	 for (; std::isdigit(endDate[i]);i++){
-		 endDateDay += endDate[i];
-	 }
-
-	 i++;
-
-	 std::string endDateMonth = "";
-	 for (; std::isdigit(endDate[i]);i++){
-		 endDateMonth += endDate[i];
-	 }
-	 int endDateMonthNum = stringToInt(endDateMonth);
-	 std::string endDateMonthString = intToMonth(endDateMonthNum-1);
-
-	 i++;
-
-	 std::string endDateYear = "";
-	 for (; std::isdigit(endDate[i]);i++){
-		 endDateYear += endDate[i];
-	 }
-
-	 std::string command = COMMAND_SHOW + " " + startDateDay + startDateMonthString + " " + startDateYear + " to " + endDateDay + endDateMonthString + " " + endDateYear;
-	 
-	 return command;
-}
 
 

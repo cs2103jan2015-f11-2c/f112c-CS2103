@@ -15,16 +15,12 @@ UICommandSuggestion::~UICommandSuggestion(void)
 {
 }
 
-// static strings that cannot initialise in "CommandSuggestion.h"
+// static strings that cannot initialise in "UICommandSuggestion.h"
 const std::string UICommandSuggestion::COMMAND_ADD = "add";
 const std::string UICommandSuggestion::COMMAND_DELETE = "delete";
 const std::string UICommandSuggestion::COMMAND_EDIT = "edit";
 const std::string UICommandSuggestion::COMMAND_SEARCH = "search";
 const std::string UICommandSuggestion::COMMAND_SHOW = "show";
-const std::string UICommandSuggestion::COMMAND_UNDO = "undo";
-const std::string UICommandSuggestion::COMMAND_REDO = "redo";
-const std::string UICommandSuggestion::COMMAND_EXIT = "exit";
-const std::string UICommandSuggestion::COMMAND_HELP = "help";
 
 const std::string UICommandSuggestion::COMMAND_AD = "ad";
 const std::string UICommandSuggestion::COMMAND_DELET = "delet";

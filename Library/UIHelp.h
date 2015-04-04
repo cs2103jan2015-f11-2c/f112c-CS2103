@@ -1,3 +1,12 @@
+/**
+ * This class is used to store and retrieve information related to help and commands to suggest to the user.
+ * It has a total of 3 public methods ( getHelpIntroduction(), getHelpCommands(), getHelpShortcuts() ) for caller to get the respective 
+ * information in std::vector<LogicUpdater::EVENT_STRING> form.
+ * No pre-condition is needed to use this class and no imformation is needed to be passed into any of the public methods.
+
+ * @author A0111230J
+ */
+
 #pragma once
 
 #ifndef UIHELP_H
@@ -5,18 +14,23 @@
 
 #include <iostream>
 #include <string>
-
 #include <assert.h>
-
 #include "LogicUpdater.h"
 
 class UIHelp
 {
 public:
+
+	//Constructors & destructors
 	UIHelp(void);
 	~UIHelp(void);
 
-private:
+/*
+* =================================================================================================================================================================== 
+* Static variables (integers) which contain the sizes of the arrays which contain the help information
+* Static variables (std::string arrays) which contain the help information
+* ===================================================================================================================================================================
+*/
 	static const int NUM_ADD = 10;
 	static const int NUM_DELETE = 6;
 	static const int NUM_EDIT = 6;
@@ -38,19 +52,15 @@ private:
 	static const std::string HELP_GUIDE_EXIT;
 	static const std::string HELP_GUIDE_COMMANDS [NUM_COMMANDS];
 	static const std::string HELP_GUIDE_SHORTCUTS [NUM_SHORTCUTS];
+//===================================================================================================================================================================
 
-public:
-	//public getter
 
-	//Return a short introduction/teaching guide to caller
-	std::vector<LogicUpdater::EVENT_STRING> getHelpIntroduction();
-	
-	//Return a list of commands to caller
-	std::vector<LogicUpdater::EVENT_STRING> getHelpCommands();
-
-	//Return a list of shortcuts to caller
-	std::vector<LogicUpdater::EVENT_STRING> getHelpShortcuts();
-	
+/*
+* =================================================================================================================================================================== 
+* Functions that convert the respective help information from its storage form(array) into std::string form
+* Function convertToEventString() further convert the respective std::string into EVENT_STRING form 
+* ===================================================================================================================================================================
+*/
 private:
 	std::string getHelpWelcomeMessage();
 	std::string getHelpAdd();
@@ -64,6 +74,27 @@ private:
 	std::string getHelpExit();
 
 	LogicUpdater::EVENT_STRING convertToEventString(std::string);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public attributes and their respective APIs
+* ===================================================================================================================================================================
+*/
+public:
+
+	//Pre-condition : None
+	//Return a short introduction/teaching guide about the usage of MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpIntroduction();
+	
+	//Pre-condition : None
+	//Return a list of commands and their description supported in MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpCommands();
+
+	//Pre-condition : None
+	//Return a list of shortcuts and their description supported in MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpShortcuts();
+//===================================================================================================================================================================
 
 };
 
