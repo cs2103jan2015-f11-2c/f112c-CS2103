@@ -39,4 +39,17 @@ namespace UnitTest
 		}
 
 	};
+
+/**
+* @author A0111230J
+*/
+	TEST_CLASS(LogicUpdaterTest)
+	{
+	public:
+		
+		
+
+	};
+
+
 }

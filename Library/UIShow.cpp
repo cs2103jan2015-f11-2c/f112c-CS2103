@@ -238,6 +238,7 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 }
 
 std::string UIShow::generateDateString(std::string date){
+	//need to chekc validity of the date
 	int i=0;
 	
 	std::string startDateDay = "";
@@ -285,7 +286,9 @@ int UIShow::countNumDays(tm startDay, tm endDay){
 
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
-	return dayDifference;
+	int absoluteDayDifference = std::abs(dayDifference);
+
+	return absoluteDayDifference;
 }
 
 void UIShow::initializeTime(tm date){
@@ -311,6 +314,9 @@ std::string UIShow::intToString (int num){
 }
 
 int UIShow::stringToInt (std::string str){
+	//check str is not empty
+	//check every char in str is a digit
+
 	int outNum;
 	std::istringstream in(str);
 	in >> outNum;

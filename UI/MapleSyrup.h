@@ -1075,36 +1075,6 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 
 /*
 * =================================================================================================================================================================== 
-* Functions that link UI to UIHelp.h to display help information
-* ===================================================================================================================================================================
-*/
-private: void displayHelpIntroduction(){
-			 std::string toMainDisplayLabel = "Help Introduction";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
-			 displayToMainDisplay(helpIntroduction);
-		 }
-
-private: void displayHelpCommands(){
-			 std::string toMainDisplayLabel = "Commands";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
-			 displayToMainDisplay(helpCommands);
-		 }
-
-public: void displayHelpShortCuts(){
-			 std::string toMainDisplayLabel = "Shortcuts";
-			 displayToMainDisplayLabel(toMainDisplayLabel);
-
-			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
-			 displayToMainDisplay(helpShortcuts);
-		}
-//===================================================================================================================================================================
-
-/*
-* =================================================================================================================================================================== 
 * Functions and attributes that control show and help column
 * Functions that are under the show column call UIShow.h directly to obtain the respective commands and pass them to function executeUserInput for execution
 * Functions that are under the help column call the respective help functions within this class
@@ -1117,26 +1087,31 @@ private: System::Void showButton_Click(System::Object^  sender, System::EventArg
 
 // Execute the respective show commands when clicked
 private: System::Void dayToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 log("Called UIShow.showDay", "");
 			 std::string loadCommand = showPtr->getShowDay();
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void weekToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 log("Called UIShow.showWeek", "");
 			 std::string loadCommand = showPtr->getShowWeek();
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void monthToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 log("Called UIShow.showMonth", "");
 			 std::string loadCommand = showPtr->getShowMonth();
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void allToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 log("Called UIShow.showAll", "");
 			 std::string loadCommand = showPtr->getShowAll();
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 log("Called UIShow.showArchive", "");
 			 std::string loadCommand = showPtr->getShowArchive();
 			 executeUserInput(loadCommand);
 		 }
@@ -1159,6 +1134,45 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 displayHelpShortCuts();
 		 }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link UI to UIHelp.h to display help information
+* ===================================================================================================================================================================
+*/
+private: void displayHelpIntroduction(){
+			 std::string toMainDisplayLabel = "Help Introduction";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
+
+			 log("Called UIHelp.introduction", "");
+
+			 displayToMainDisplay(helpIntroduction);
+		 }
+
+private: void displayHelpCommands(){
+			 std::string toMainDisplayLabel = "Commands";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
+
+			 log("Called UIHelp.commands", "");
+
+			 displayToMainDisplay(helpCommands);
+		 }
+
+public: void displayHelpShortCuts(){
+			 std::string toMainDisplayLabel = "Shortcuts";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
+
+			 log("Called UIHelp.shortcuts", "");
+
+			 displayToMainDisplay(helpShortcuts);
+		}
 //===================================================================================================================================================================
 
 /*
@@ -1216,8 +1230,9 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
 			 std::string endDate = convertToStd(tempEndDate);
 
-			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
+			 log("Calendar date(s) selected:", startDate + "to" + endDate);
 
+			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 			 executeUserInput(command);
 		 }
 //===================================================================================================================================================================
@@ -1251,15 +1266,19 @@ private: System::Void searchBox_TextChanged(System::Object^  sender, System::Eve
 		 }
 
 private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 log("Search Mode entered", "");
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
-			 
+
+			 log("Called UIShow.setCurrentCommand:", mainLabel);
+
 			 noSearchInput();
 			 displayToMainDisplayLabel("Search Mode");
 		 }
 
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 log("Search Mode exited", "");
 			 searchBox->Text = "";
 			 std::string currentShowCommand = showPtr->getCurrentCommand();
 			 
@@ -1290,8 +1309,7 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 			 }
 
 		  if (e->KeyCode == Keys::Escape){
-			    floatingTasksDisplay->Select();
-				
+			    floatingTasksDisplay->Select();			
 			 }
 		 }
 
@@ -1299,6 +1317,7 @@ private: void executeBackKey(){
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+			 log("Called UIShow.displayBack:", mainLabel);
 			 executeUserInput(newShowCommand);
 		 }
 
@@ -1306,6 +1325,7 @@ private: void executeNextKey(){
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+			 log("Called UIShow.displayNext:", mainLabel);
 			 executeUserInput(newShowCommand);
 		 }
 
@@ -1352,7 +1372,7 @@ private: void redoLastCommand(){
 * ===================================================================================================================================================================
 */
 private: Void log(std::string label, std::string commands){
-			 std::ofstream outFile("MapleSyrupGUILog.txt",std::ios::app);
+			 std::ofstream outFile("GUILog.txt",std::ios::app);
 
 			 outFile << label + " " + commands + "\n";
 
