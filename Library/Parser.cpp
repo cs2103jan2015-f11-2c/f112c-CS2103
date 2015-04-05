@@ -27,27 +27,27 @@ Parser::~Parser(void)
 }
 
 	//GETTERS
-Parser::commandType Parser::getCommandType(){
+Parser::commandType Parser::getCommandType() {
 	return typeOfCommand;
 }
 
-std::string Parser::getCommand(){
+std::string Parser::getCommand() {
 	return command;
 }
 
-std::string Parser::getDetails(){
+std::string Parser::getDetails() {
 	return details;
 }
 
-std::string Parser::getOriginal(){
+std::string Parser::getOriginal() {
 	return original;
 }
 
-Event Parser::getEvent(){
+Event Parser::getEvent() {
 	return tempEventStore;
 }
 
-std::string Parser::getNameOfEvent(){
+std::string Parser::getNameOfEvent() {
 	return nameOfEvent;
 }
 
@@ -56,13 +56,13 @@ std::string Parser::getNameOfEvent(){
 //These are done by calling InputStringSplit object to separate the input string into its components, and then calling the ParserProcessor object to retrieve the information 
 //and organise them into the Event format. 
 //Receives any thrown exceptions from the InputStringSplit and ParserProcessor objects and sets the feedback to the user, to be returned to Logic.
-void Parser::processInput(){
+void Parser::processInput() {
 	try {
 		tokenizeOriginalString();
 		determineCommandType();
 		logger.logParserSuccess(original);
 		errorCounter = 0;
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
 		typeOfCommand = Parser::ERROR_;
 		logger.logParserFailure(original);
@@ -71,73 +71,73 @@ void Parser::processInput(){
 }
 
 //Function splits the input string into command and details.
-void Parser::tokenizeOriginalString(){
+void Parser::tokenizeOriginalString() {
 	logger.logParserEnterFunc(TOKENISE_ORIGINAL_STRING);
 
 	try {
 		command = splitter.extractFirstWord(original);
-		if(checkCommandExist()){
-			if(!checkCommandUndoRedo()){
+		if (checkCommandExist()) {
+			if (!checkCommandUndoRedo()) {
 				details = splitter.extractDetails(original);
 			}
 		} else {
 			details = original;
 			command = "add";
 		}
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineCommandType(){
+void Parser::determineCommandType() {
 	try {
-		if(command == "add"){
+		if (command == "add") {
 			determineAddCommand();
-		} else if(command == "delete" || command == "del"){
+		} else if (command == "delete" || command == "del") {
 			determineDelCommand();
-		} else if(command == "edit"){
+		} else if (command == "edit") {
 			determineEditCommand();
-		} else if(command == "show"){
+		} else if (command == "show") {
 			determineShowCommand();
-		} else if(command == "done" || command == "completed" || command == "complete"){
+		} else if (command == "done" || command == "completed" || command == "complete") {
 			determineCompleteCommand();
-		} else if(command == "search" || command == "undo" || command == "redo"){
+		} else if (command == "search" || command == "undo" || command == "redo") {
 			determineOtherCommand();
 		} else {
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_COMMAND);
 		}
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 	return;
 }
 
-void Parser::determineAddCommand(){
+void Parser::determineAddCommand() {
 	std::vector<std::string> fragmentedWords;
 
 	try {
 		fragmentedWords = splitter.fragmentAddString(details);
 		tempEventStore = processor.processAddEvent(fragmentedWords);
-		if(tempEventStore.getIsFloating() == true){
+		if (tempEventStore.getIsFloating() == true) {
 			typeOfCommand = Parser::ADDFLOAT;
 		} else {
 			typeOfCommand = Parser::ADD;
 		}
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineDelCommand(){
+void Parser::determineDelCommand() {
 	try {
 		nameOfEvent = splitter.extractDelDoneEventName(details);
 		typeOfCommand = Parser::DELETE_;
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineEditCommand(){
+void Parser::determineEditCommand() {
 	std::vector<std::string> fragmentedWords;
 	
 	try {
@@ -146,68 +146,68 @@ void Parser::determineEditCommand(){
 		fragmentedWords = splitter.fragmentEditString(details);
 		tempEventStore = processor.processEditEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineShowCommand(){
+void Parser::determineShowCommand() {
 	std::vector<std::string> fragmentedWords;
 	
 	try {
 		nameOfEvent = details;
 		fragmentedWords = splitter.fragmentShowString(details);
 		tempEventStore = processor.processShowEvent(fragmentedWords);
-		if(tempEventStore.getName() == "floating" || tempEventStore.getName() == "float"){
+		if (tempEventStore.getName() == "floating" || tempEventStore.getName() == "float") {
 			typeOfCommand = Parser::SHOWFLOAT;
-		} else if(tempEventStore.getName() == "all"){
+		} else if (tempEventStore.getName() == "all") {
 			typeOfCommand = Parser::SHOWALL;
-		} else if(tempEventStore.getName() == "due"){
+		} else if (tempEventStore.getName() == "due") {
 			typeOfCommand = Parser::SHOWDUE;
-		} else if(tempEventStore.getName() == "specificimportance"){
+		} else if (tempEventStore.getName() == "specificimportance") {
 			typeOfCommand = Parser::SHOWIMPORTANT;
-		} else if(tempEventStore.getName() == "important" || tempEventStore.getName() == "impt"){
+		} else if (tempEventStore.getName() == "important" || tempEventStore.getName() == "impt") {
 			typeOfCommand = Parser::SHOWALLIMPORTANT;
-		} else if(tempEventStore.getName() == "completed" || tempEventStore.getName() == "done" || tempEventStore.getName() == "complete"){
+		} else if (tempEventStore.getName() == "completed" || tempEventStore.getName() == "done" || tempEventStore.getName() == "complete") {
 			typeOfCommand = Parser::SHOWCOMPLETE;
-		} else if(tempEventStore.getName() == "week"){
+		} else if (tempEventStore.getName() == "week") {
 			typeOfCommand = Parser::SHOWWEEK;
-		} else if(tempEventStore.getName() == "month"){
+		} else if (tempEventStore.getName() == "month") {
 			typeOfCommand = Parser::SHOWMONTH;
 		} else {
 			typeOfCommand = Parser::SHOW;
 		}
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineCompleteCommand(){
+void Parser::determineCompleteCommand() {
 	try {
 		nameOfEvent = splitter.extractDelDoneEventName(details);
 		typeOfCommand = Parser::COMPLETE;
-	} catch (ParserExceptions& e){
+	} catch (ParserExceptions& e) {
 		throw e;
 	}
 }
 
-void Parser::determineOtherCommand(){
-	if(command == "search"){
+void Parser::determineOtherCommand() {
+	if (command == "search") {
 		nameOfEvent = details;
 		typeOfCommand = Parser::SEARCH;
-	} else if(command == "undo"){
+	} else if (command == "undo") {
 		typeOfCommand = Parser::UNDO;
-	} else if(command == "redo"){
+	} else if (command == "redo") {
 		typeOfCommand = Parser::REDO;
 	}
 }
 
 //Checks with a list of commands that Parser recognises to confirm whether the command is supported.
-bool Parser::checkCommandExist(){
+bool Parser::checkCommandExist() {
 	bool commandExist = false;
 
-	for(int j = 0; j < NUMBER_OF_KEYWORDS_COMMANDS; j++){
-		if(command == keywordCommands[j]){
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_COMMANDS; j++) {
+		if (command == keywordCommands[j]) {
 			commandExist = true;
 		}
 	}
@@ -215,69 +215,69 @@ bool Parser::checkCommandExist(){
 }
 
 //Checks whether the command is an undo or redo command
-bool Parser::checkCommandUndoRedo(){
+bool Parser::checkCommandUndoRedo() {
 	bool isUndoRedo = false;
-	if(command == "undo" || command == "redo"){
+	if (command == "undo" || command == "redo") {
 		isUndoRedo = true;
 	}
 	return isUndoRedo;
 }
 
 //Sets the feedback based on what exception code was thrown to be returned to Logic and displayed to the user.
-std::string Parser::createFeedback(std::string errorCode){
+std::string Parser::createFeedback(std::string errorCode) {
 	std::string tempFeedback;
-	if(errorCode == ParserExceptions::ERROR_MISSING_INPUT){
+	if (errorCode == ParserExceptions::ERROR_MISSING_INPUT) {
 		tempFeedback = "Error: Missing input.";
 	}
-	if(errorCode == ParserExceptions::ERROR_NO_NAME){
+	if (errorCode == ParserExceptions::ERROR_NO_NAME) {
 		tempFeedback = "Error: No event name found. Please type ';' after an event name.";
 	}
-	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DATES){
+	if (errorCode == ParserExceptions::ERROR_TOO_MANY_DATES) {
 		tempFeedback = "Error: Too many date inputs detected. Maximum of 2 date inputs.";
 	}
-	if(errorCode == ParserExceptions::ERROR_TOO_MANY_TIMES){
+	if (errorCode == ParserExceptions::ERROR_TOO_MANY_TIMES) {
 		tempFeedback = "Error: Too many time inputs detected. Maximum of 2 time inputs.";
 	}
-	if(errorCode == ParserExceptions::ERROR_MISSING_DAY){
+	if (errorCode == ParserExceptions::ERROR_MISSING_DAY) {
 		tempFeedback = "Error: No day input found before month.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNUSED_INFORMATION){
+	if (errorCode == ParserExceptions::ERROR_UNUSED_INFORMATION) {
 		tempFeedback = "Error: Wrong formatting, not all information has been successfully recorded.";
 	}
-	if(errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN){
+	if (errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN) {
 		tempFeedback = "Error: No hour/minute input before am/pm.";
 	}
-	if(errorCode == ParserExceptions::ERROR_TOO_MANY_DEL){
+	if (errorCode == ParserExceptions::ERROR_TOO_MANY_DEL) {
 		tempFeedback = "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
 	}
-	if(errorCode == ParserExceptions::ERROR_MISSING_INDEX){
+	if (errorCode == ParserExceptions::ERROR_MISSING_INDEX) {
 		tempFeedback = "Error: No event index or event name found. Please type ';' after the event name.";
 	}
-	if(errorCode == ParserExceptions::ERROR_INSUFFICIENT_INFO){
+	if (errorCode == ParserExceptions::ERROR_INSUFFICIENT_INFO) {
 		tempFeedback = "Error: Not enough information to execute command.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNKNOWN_COMMAND){
+	if (errorCode == ParserExceptions::ERROR_UNKNOWN_COMMAND) {
 		tempFeedback = "Error: Unknown command.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNKNOWN_DATE){
+	if (errorCode == ParserExceptions::ERROR_UNKNOWN_DATE) {
 		tempFeedback = "Error: Unknown date input.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNKNOWN_HOUR){
+	if (errorCode == ParserExceptions::ERROR_UNKNOWN_HOUR) {
 		tempFeedback = "Error: Invalid hour input for time.";
 	}
-	if(errorCode == ParserExceptions::ERROR_UNKNOWN_MINUTE){
+	if (errorCode == ParserExceptions::ERROR_UNKNOWN_MINUTE) {
 		tempFeedback = "Error: Invalid minutes input for time.";
 	}
-	if(errorCode == ParserExceptions::ERROR_START_AFTER_END){
+	if (errorCode == ParserExceptions::ERROR_START_AFTER_END) {
 		tempFeedback = "Error: Start day is later than End day";
 	}
-	if(errorCode == ParserExceptions::ERROR_NO_SHOW){
+	if (errorCode == ParserExceptions::ERROR_NO_SHOW) {
 		tempFeedback = "Error: No registered show found. Please use search instead.";
 	}
-	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_DATES){
+	if (errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_DATES) {
 		tempFeedback = "Error: Too many date inputs detected. Maximum of 1 date input for deadline events.";
 	}
-	if(errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_TIMES){
+	if (errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_TIMES) {
 		tempFeedback = "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
 	}
 	return tempFeedback;

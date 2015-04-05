@@ -15,7 +15,6 @@
 #include <string>
 #include <ctime>
 #include <cctype>
-#include <cmath>
 #include <vector>
 #include <sstream>
 #include <assert.h>
@@ -83,33 +82,49 @@ public:
 	//e.g. It takes in Mar. It will return show Feb
 	std::string generateCurrentCommand(std::string, std::vector<tm>);
 
-	//Pre-condition : Non
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
-	// Can accept any int (positive and negative)
+	//Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string generateShowWeekForNext(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string generateShowMonthForNext(tm);
 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string generateShowWeekForBack(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string generateShowMonthForBack(tm);
 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 1970 <= year <= 3000 )
+	//[WARNING - assertion failure if date is invalid]
+	//Pass in the date in dd/MM/YYYY form
+	//Returns date in dd Month YYYY std::string form
 	std::string generateDateString(std::string);
 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string convertFromTmToStr(tm);
 
-	//Pre-condition : Non
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
 	//Pass in the 2 dates in tm type
 	//Return number of days between these 2 dates. 
-	//[WARNINGS
 	//[Remarks - All return numbers will be non-negative regardless the order of dates passed in] 
 	int countNumDays(tm, tm);
-	void initializeTime(tm);
 
+	void initializeTime(tm);
+	//Pre-condition : size of vector should be 2
+	//				  Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
 	bool checkIsSingleDate(std::vector<tm>);
 
+
 	std::string intToString(int);
+	
+	//Pre-condition : string must not be empty
 	int stringToInt(std::string);
+
 	std::string intToMonth(int);
 //===================================================================================================================================================================
 
@@ -121,6 +136,7 @@ public:
 	//Pre-condition : Non
 	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
 	//It returns the string which contain the command to display the next date(s)/labels based on what it has received
+	//Validity of the input and output dates are checked
 	//e.g. It takes in 10 Feb. It will return show 11feb
 	//e.g. It takes in 10 Feb - 20 Feb. It will return show 20feb - 2mar (Next 10 days)
 	//e.g. It takes in Mar. It will return show Apr
@@ -129,6 +145,7 @@ public:
 	//Pre-condition : Non
 	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
 	//It returns the string which contain the command to display the previous date(s)/labels based on what it has received
+	//Validity of the input and output dates are checked
 	//e.g. It takes in 10 Feb. It will return show 9beb
 	//e.g. It takes in 10 Feb - 20 Feb. It will return show 31jan - 9feb (Previous 10 days)
 	//e.g. It takes in Mar. It will return show Feb
@@ -138,6 +155,7 @@ public:
 	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
 	//This function takes in a string that contains that date(s) from calendar in it's specific format of dd/mm/yyyy in string form
 	//and return it's equivalent show command
+	//Validity of the input and output dates are checked
 	std::string generateDisplayFromCalender(std::string,std::string);
 
 	//Pre-condition : Non

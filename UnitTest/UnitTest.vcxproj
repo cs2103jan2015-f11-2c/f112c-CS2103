@@ -87,7 +87,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LogicTest.cpp" />
+    <ClCompile Include="CommandTest.cpp" />
+    <ClCompile Include="EventTest.cpp" />
     <ClCompile Include="InputStringSplitTest.cpp" />
     <ClCompile Include="ParserProcessorTest.cpp" />
     <ClCompile Include="stdafx.cpp">

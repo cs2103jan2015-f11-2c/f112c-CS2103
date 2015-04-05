@@ -1,8 +1,3 @@
-/**
- * @author A0111230J
- */
-
-
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <ctime>
@@ -10,7 +5,6 @@
 // Please include the .cpp of the file you are testing, else there will be error
 #include "UIShow.cpp"
 #include "UIHelp.cpp"
-#include "UICommandSuggestion.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -51,7 +45,6 @@ namespace UnitTest
 			front = *localtime(&now);
 			back = *localtime(&now);
 
-			//Case 1.1 : Safely within boundary - small days difference of 9 
 			front.tm_mon = 1; 
 			front.tm_mday = 1;
 			front.tm_year = 115;
@@ -60,162 +53,20 @@ namespace UnitTest
 			back.tm_mday = 10;
 			back.tm_year = 115;
 			testResult = show.countNumDays(front,back);
-
+			
+			//Case 1 : Correct number of days - 9
 			expectedResult = 9;
 			Assert::AreEqual(expectedResult,testResult);
 
-			//Case 1.2 : Same day
-			front.tm_mon = 1; 
-			front.tm_mday = 1;
-			front.tm_year = 115;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 1;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
+			// Expected failing test
+			// Case 2: boundary testing - more than 9
+			expectedResult = 10;
+			Assert::AreNotEqual(expectedResult,testResult);
 
-			expectedResult = 0;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 1.3 : Back day before front day
-			front.tm_mon = 1; 
-			front.tm_mday = 10;
-			front.tm_year = 115;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 8;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 2;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 2.1 : Boundary test (year) - front year within boundary of 70
-			front.tm_mon = 1; 
-			front.tm_mday = 1;
-			front.tm_year = 70;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 10;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 16445;
-
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 2.2 : Boundary test (year) - front year below boundary of 70
-			front.tm_mon = 1; 
-			front.tm_mday = 1;
-			front.tm_year = 69;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 10;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			//Assert::ExpectException
-
-			//Case 2.3 : Boundary test (year) - back year within boundary of 1110
-			front.tm_mon = 1; 
-			front.tm_mday = 1;
-			front.tm_year = 115;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 10;
-			back.tm_year = 1100;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 359773;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 2.4 : Boundary test (year) - back year above boundary of 1110
-			front.tm_mon = 1; 
-			front.tm_mday = 1;
-			front.tm_year = 115;
-			
-			back.tm_mon = 1;  
-			back.tm_mday = 10;
-			back.tm_year = 1101;
-			testResult = show.countNumDays(front,back);
-
-			//Assert::ExpectException
-
-			//Case 3.1 : Safely within boundary - month value 0
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 0;  
-			back.tm_mday = 2;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 2;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.2 : Boundary test (month) - after adjustment year 70
-			front.tm_mon = -539; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 0;  
-			back.tm_mday = 0;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 16405;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.3 : Boundary test (month) - after adjustment year below 70
-			front.tm_mon = -540; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 0;  
-			back.tm_mday = 0;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			//Assert::ExpectException
-			
-
-			//Case 3.4 : Boundary test (month) - after adjustment year at 1110 
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 11831;  
-			back.tm_mday = 2;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 360100;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.5 : Boundary test (month) - after adjustment year above 1110 
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 11832;  
-			back.tm_mday = 2;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			//Assert::ExpectException
-			
-			//Case 3.4 : Boundary test (month) - above 11
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 12;  
-			back.tm_mday = 0;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			//Assert::ExpectException
+			// Expected failing test
+			// Case 3: boundary testing - less than 9
+			expectedResult = 8;
+			Assert::AreNotEqual(expectedResult,testResult);
 
 		}
 
@@ -226,7 +77,7 @@ namespace UnitTest
 			bool testResult;
 			bool expectedResult;
 			
-			//Case 1.1: Same day, expected true
+			//Same day, expected true
 			front.tm_mday = 10;
 			front.tm_mon = 1;
 			front.tm_year = 1;
@@ -244,10 +95,10 @@ namespace UnitTest
 			Assert::AreEqual(expectedResult,testResult);
 			testVector.clear();
 
-			//Case 1.2: Different day, expected false
+			//Different day, expected false
 			front.tm_mday = 10;
 			front.tm_mon = 1;
-			front.tm_year = 69;
+			front.tm_year = 1;
 
 			back.tm_mday = 10;
 			back.tm_mon = 2;
@@ -262,32 +113,14 @@ namespace UnitTest
 			Assert::AreEqual(expectedResult,testResult);
 			testVector.clear();
 
-			//Case 2.1: boundary test - maximum negative int
-			front.tm_mday = -18446744073709551615;
-			front.tm_mon = -18446744073709551615;
-			front.tm_year = -18446744073709551615;
+			//Expected failing test
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
 
-			back.tm_mday = -18446744073709551615;
-			back.tm_mon = -18446744073709551615;
-			back.tm_year = -18446744073709551615;
-
-			testVector.push_back(front);
-			testVector.push_back(back);
-
-			testResult = show.checkIsSingleDate(testVector);
-			expectedResult = true;
-
-			Assert::AreEqual(expectedResult,testResult);
-			testVector.clear();
-
-			//Case 2.1: boundary test - maximum positive int
-			front.tm_mday = 18446744073709551615;
-			front.tm_mon = 18446744073709551615;
-			front.tm_year = 18446744073709551615;
-
-			back.tm_mday = 18446744073709551615;
-			back.tm_mon = 18446744073709551615;
-			back.tm_year = 18446744073709551615;
+			back.tm_mday = 10;
+			back.tm_mon = 2;
+			back.tm_year = 1;
 
 			testVector.push_back(front);
 			testVector.push_back(back);
@@ -295,32 +128,12 @@ namespace UnitTest
 			testResult = show.checkIsSingleDate(testVector);
 			expectedResult = true;
 
-			Assert::AreEqual(expectedResult,testResult);
-			testVector.clear();
-
-			//Case 2.1: boundary test - maximum difference
-			front.tm_mday = 18446744073709551615;
-			front.tm_mon = 18446744073709551615;
-			front.tm_year = 18446744073709551615;
-
-			back.tm_mday = 0;
-			back.tm_mon = 0;
-			back.tm_year = 0;
-
-			testVector.push_back(front);
-			testVector.push_back(back);
-
-			testResult = show.checkIsSingleDate(testVector);
-			expectedResult = false;
-
-			Assert::AreEqual(expectedResult,testResult);
+			Assert::AreNotEqual(expectedResult,testResult);
 			testVector.clear();
 		}
 
 
 		TEST_METHOD(UIShow_convertFromTmToString_Test){
-			//boundary tests of day,month & year of tm date is voided as it has already been tested in TEST_METHOD(UIShow_countNumDays_Test)
-
 			time_t now;
 			struct tm date;
 			std::string testResult;
@@ -432,121 +245,79 @@ namespace UnitTest
 			Assert::AreEqual(expectedDay, testResult.tm_mday);
 			Assert::AreEqual(expectedMonth, testResult.tm_mon);
 			Assert::AreNotEqual(expectedYear, testResult.tm_year);
+
+			//Too large number
+			testResult = show.shiftDate(date,3000000);
+			expectedDay = 7;
+			expectedMonth = 2;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreNotEqual(expectedYear, testResult.tm_year);
 		}
 
+		TEST_METHOD(UIShow_isFirstDayOfMonth_Test){
+			/*
+			time_t now;
+			struct tm date;
+			bool testResult;
+			bool expectedResult;
+			
+			time(&now);
+			date = *localtime(&now);
 
-		TEST_METHOD(UIShow_intToString_Test){
+			//Correct Case
+			date.tm_mday = 0;
+			date.tm_mon = 0; 
+			date.tm_year = 115;
 
-			//normal int number
+			expectedResult = true;
+			testResult = show.isFirstDayOfMonth(date);
+			Assert::AreEqual(expectedResult, testResult);
 
-			//maximum int number
+			//Expected failing case
+			date.tm_mday = 5;
+			date.tm_mon = 1; 
+			date.tm_year = 115;
 
-			//minimum int number
+			expectedResult = false;
+			testResult = show.isFirstDayOfMonth(date);
+			Assert::AreEqual(expectedResult, testResult);
+			*/
+		}
+
 		
-		}
-
-		TEST_METHOD(UIShow_stringToInt_Test){
-			int expectedResult;
-			int testResult;
-			std::string input = "";
-
-			//normal string length
-
-			//minimum int number
-
-			//maximum int number
-
-			//empty string - assertion
-
-			//string not all digit - assertion
-		
-		}
 
 		TEST_METHOD(UIShow_displayNext_Test){
-
-			//[week] - complete
-			//[week] - incomplete
-
-			//[month] - complete
-			//[month] - incomplete
-
-			//vector<tm> normal case - 5 days difference
-			//vector<tm> normal case - maximum days difference
-			//vector<tm> normal case - no day difference
-			//vector<tm> front later than back
+		
+		
 		
 		}
 
 		TEST_METHOD(UIShow_displayBack_Test){
 
-			//[week] - complete
-			//[week] - incomplete
 
-			//[month] - complete
-			//[month] - incomplete
 
-			//vector<tm> normal case - 5 days difference
-			//vector<tm> normal case - maximum days difference
-			//vector<tm> normal case - no day difference
-			//vector<tm> front later than back
-
-		}
-
-		TEST_METHOD(UIShow_generateDateString_Test){
-
-			//full valid date input
-
-			//day -1
-			//day 32
-
-			//month -1
-			//month 12
-
-			//below min year
-			//above max year
-		}
-
-		TEST_METHOD(UIShow_generteDisplayFromCalendar_Test){
-
-			//normal valid
-
-			//start date later than end date 
-		}
-
-		TEST_METHOD(UIShow_generteCurrentCommand_Test){
-
-			//[week] - complete
-			//[week] - incomplete
-
-			//[month] - complete
-			//[month] - incomplete
-
-			//vector<tm> normal case - 5 days difference
-			//vector<tm> normal case - maximum days difference
-			//vector<tm> normal case - no day difference
-			//vector<tm> front later than back
 		}
 
 
 	};
 
-
-	//Unit test for UIcommandSuggest class
-	TEST_CLASS(UIcommandSuggestTest)
+	//Unit test for UIHelp class
+	TEST_CLASS(UIHelpTest)
 	{
 	public:
-		UICommandSuggestion comdSuggest;
 
-		TEST_METHOD(UICommandSuggestion_getComdType_Test){
 
-			//normal case add
 
-			//normal case ad
 
-			//boundary empty string
+	};
 
-			//boundary very large string
-		}
+	//Unit test for commandSuggest class
+	TEST_CLASS(commandSuggestTest)
+	{
+	public:
+
 
 
 

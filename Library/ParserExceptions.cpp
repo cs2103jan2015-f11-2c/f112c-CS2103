@@ -19,11 +19,11 @@ const std::string ParserExceptions::ERROR_NO_SHOW = "PS015";
 const std::string ParserExceptions::ERROR_DUE_TOO_MANY_DATES = "PS016";
 const std::string ParserExceptions::ERROR_DUE_TOO_MANY_TIMES = "PS017";
 
-ParserExceptions::ParserExceptions(std::string errorCode){
+ParserExceptions::ParserExceptions(std::string errorCode) {
 	exceptionCode = errorCode;
 }
 
-std::string ParserExceptions::getExceptionCode(){
+std::string ParserExceptions::getExceptionCode() {
 	return exceptionCode;
 }
 

@@ -58,6 +58,13 @@ std::string UIShow::getCurrentCommand(){
 
 
 std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+	
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
 	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
@@ -82,6 +89,13 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 
 
 std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
 	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
@@ -117,6 +131,10 @@ void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector
 }
 
 std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+	
 	if (currentMainDisplayLabel == WORD_COMMANDS){
 		return WORD_COMMANDS;
 	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
@@ -126,13 +144,12 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
 		return WORD_SHORTCUTS;
 	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
-		std::string newShowCommand = COMMAND_SHOW + " " + "week " + currentMainDisplayLabel.substr(6);
+		std::string newShowCommand = SHOW_WEEK + currentMainDisplayLabel.substr(6);
 		return newShowCommand;
 	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
-		std::string newShowCommand = COMMAND_SHOW + " " + "month" + currentMainDisplayLabel.substr(7);
+		std::string newShowCommand = SHOW_MONTH + currentMainDisplayLabel.substr(7);
 		return newShowCommand;
 	} else {
-
 		std::string newShowCommand = "";
 
 		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
@@ -154,7 +171,12 @@ tm UIShow::shiftDate(tm date, int numDaysToShift){
 	newDatePtr->tm_mday = date.tm_mday + numDaysToShift;
 	newDatePtr->tm_mon = date.tm_mon;
 	newDatePtr->tm_year = date.tm_year;
+
 	std::mktime(newDatePtr);
+
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
 
 	struct tm newDate;
 	newDate.tm_mday = newDatePtr->tm_mday;
@@ -187,21 +209,25 @@ std::string UIShow::generateShowWeekForNext(tm endDate){
 }
 
 std::string UIShow::generateShowMonthForNext(tm startDate){
-		time_t now;
-		struct tm nextMonth;
+	time_t now;
+	struct tm nextMonth;
 
-		time(&now);
-		nextMonth = *localtime(&now);
-		nextMonth = startDate;
-		nextMonth.tm_mon ++;
-		std::mktime(&nextMonth);
+	time(&now);
+	nextMonth = *localtime(&now);
+	nextMonth = startDate;
+	nextMonth.tm_mon ++;
+	std::mktime(&nextMonth);
 
-		std::string nextMonthString = intToMonth(nextMonth.tm_mon);
-		std::string yearString = intToString(nextMonth.tm_year + 1900);
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
 
-		std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
-		
-		return newCommand;
+	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
+	std::string yearString = intToString(nextMonth.tm_year + 1900);
+
+	std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+	
+	return newCommand;
 }
 
 std::string UIShow::generateShowWeekForBack(tm endDate){
@@ -236,6 +262,10 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 	nextMonth.tm_mon --;
 	std::mktime(&nextMonth);
 
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+
 	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
 	std::string yearString = intToString(nextMonth.tm_year + 1900);
 
@@ -245,36 +275,49 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 }
 
 std::string UIShow::generateDateString(std::string date){
-	//need to chekc validity of the date
+	int index=0;
 	int i=0;
 	
-	std::string startDateDay = "";
-	for (;std::isdigit(date[i]);i++){
-		startDateDay += date[i];
+	std::string dateDay = "";
+	for (;std::isdigit(date[index]);index++){
+		dateDay += date[index];
 	}
 
-	i++;
+	int dateDayInt = stringToInt(dateDay);
+	
+	index++;
 
-	std::string startDateMonth = "";
-	for (;std::isdigit(date[i]);i++){
-		startDateMonth += date[i];
+	std::string dateMonth = "";
+	for (;std::isdigit(date[index]);index++){
+		dateMonth += date[index];
 	}
 
-	int startDateMonthNum = stringToInt(startDateMonth);
-	std::string startDateMonthString = intToMonth(startDateMonthNum-1);
+	int dateMonthInt = stringToInt(dateMonth);
+	
+	std::string dateMonthString = intToMonth(dateMonthInt-1);
 
-	i++;
+	index++;
 
-	std::string startDateYear = "";
-	for (;std::isdigit(date[i]);i++){
-		startDateYear += date[i];
+	std::string dateYear = "";
+	for (;std::isdigit(date[index]);index++){
+		dateYear += date[index];
 	}
 
-	std::string dateString =  startDateDay + startDateMonthString + " " + startDateYear;
+	int dateYearInt = stringToInt(dateYear);
+
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+	
+	std::string dateString =  dateDay + dateMonthString + " " + dateYear;
 	return dateString;
 }
 
 std::string UIShow::convertFromTmToStr(tm date){
+	//exception 1 <= month day <=31
+	//exception 1 <= month <= 12
+	//exception year
+
 	std::string dateString = "";
 
 	dateString += intToString(date.tm_mday);
@@ -291,11 +334,12 @@ int UIShow::countNumDays(tm startDay, tm endDay){
 	std::time_t start = std::mktime(&startDay);
 	std::time_t end = std::mktime(&endDay);
 
+	// if 70<=tm_year<=1100
+	// throw exception
+
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
-	int absoluteDayDifference = std::abs(dayDifference);
-
-	return absoluteDayDifference;
+	return dayDifference;
 }
 
 void UIShow::initializeTime(tm date){
@@ -305,6 +349,8 @@ void UIShow::initializeTime(tm date){
 }
 
 bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
+	assert(mainDisplayDate.size() == 2);
+
 	bool isSingleDate = false;
 
 	if(mainDisplayDate[0].tm_mday == mainDisplayDate[1].tm_mday && mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon && mainDisplayDate[0].tm_year == mainDisplayDate[1].tm_year){
@@ -314,6 +360,8 @@ bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
 }
 
 std::string UIShow::intToString (int num){
+	assert(num>=0);
+
 	std::string outString;
 	std::ostringstream oss;
 	oss << num;
@@ -321,8 +369,7 @@ std::string UIShow::intToString (int num){
 }
 
 int UIShow::stringToInt (std::string str){
-	//check str is not empty
-	//check every char in str is a digit
+	assert(!str.empty());
 
 	int outNum;
 	std::istringstream in(str);
