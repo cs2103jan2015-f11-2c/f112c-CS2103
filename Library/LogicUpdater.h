@@ -1,7 +1,12 @@
-// Display keeps track of 3 x vector<Event> (1 each for floating, normal and feedback) and 3 x vector<string> (similar to event vectors)
-// When any of the vector<Event> is changed, it will update the corresponding vector<string>
-// (e.g. if normalEvents is changed it will change mainDisplayStrings, floatingEvents<=>floatingDisplayStrings, feedbackEvents<=>feedbackDisplayStrings)
-// UI can get any of the vector<string> to display in the appropriate window, no need to get vector<Event>
+/**
+ * This class is used store information that are to be displayed to the user. 
+ * Key information are first stored in it's primitive vector<event> and vector<tm> form. These information are subsequently being converted and stored as vector<EVENT_STRING> and vector<string> form.
+ * The former form is being used by the setter for checking and updating purposes while the latter is being used for direct and easier display to user. 
+ *
+ * @author A0111230J
+ * @author wj
+ */
+
 
 #pragma once
 
@@ -38,6 +43,8 @@ public:
 	static const int GARBAGE_INT;
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
+	static const int SHIFT_BY_ONE;
+	static const int MAX_LENGTH_EVENT_NAME;
 
 	static const string NO_EVENTS_MESSAGE;
 	static const string ADDED_MESSAGE;
@@ -56,11 +63,27 @@ public:
 	static const string WORD_TOMORROW;
 	static const string WORD_MONTH;
 	static const string WORD_WEEK;
-
 	static const string WORD_ALLDAY;
 
-	static const int SHIFT_BY_ONE;
-	static const int MAX_LENGTH_EVENT_NAME;
+	static const string LABEL_TODAY;
+	static const string LABEL_TOMORROW;
+	static const string LABEL_MONTH;
+	static const string LABEL_WEEK;
+	static const string LABEL_ALLDAY;
+	static const string LABEL_DUE;
+
+	static const string BLANK_SPACE;
+	static const string TAB;
+	static const string LEAVE_A_LINE;
+	static const string OPEN_SQUARE_BRACKET;
+	static const string CLOSE_SQUARE_BRACKET;
+	static const string FULL_STOP;
+	static const string COMMA;
+	static const string DASH_WITH_SPACES;
+	static const string DASH_WITHOUT_SPACES;
+
+
+	
 //===================================================================================================================================================================
 
 /*
@@ -69,19 +92,19 @@ public:
 * ===================================================================================================================================================================
 */
 private:
-	vector<Event> normalEvents;
-	vector<Event> floatingEvents;
-	vector<Event> feedbackEvents;
-	vector<tm> tempMainDisplayLabel;
+	vector<Event> _normalEvents;
+	vector<Event> _floatingEvents;
+	vector<Event> _feedbackEvents;
+	vector<tm> _tempMainDisplayLabel;
 
-	vector<EVENT_STRING> mainDisplayStrings;
-	string mainDisplayLabel;
-	string weekMonthOrNothing;
-	vector<EVENT_STRING> floatingDisplayStrings;
-	vector<string> feedbackDisplayStrings;
-	vector<string> errorStrings;
-	
-	int newID;
+	int _newID;
+	string _weekMonthOrNothing;
+
+	vector<EVENT_STRING> _mainDisplayStrings;
+	string _mainDisplayLabel;
+	vector<EVENT_STRING> _floatingDisplayStrings;
+	vector<string> _feedbackDisplayStrings;
+	vector<string> _errorStrings;
 //===================================================================================================================================================================
 
 /*
@@ -93,90 +116,151 @@ public:
 	//constructor
 	LogicUpdater();
 	
-	//getters
+	//WJ
+	//Getters for extracting information when setting/updating
 	vector<Event> getNormalEvents();
 	vector<Event> getFloatingEvents();
 	vector<Event> getFeedbackEvents();
-	vector<tm> getTempMainDisplayLabel();
+	
+	int getTotalNumEvents();
+	int getTotalFloatingEvents();
+	int getTotalNormalEvents();
 
+	int getIDFromIndex(int index);
+	string getNameFromIndex (int index);
+	int getIDFromName(string name);
+	int getNewID();
+	bool getIsFloatingFromID(int id);
+	Event getEventFromID(int id);
+
+	//YK
+	//Getters for extracting information to display
 	vector<EVENT_STRING> getMainDisplayStrings();
 	vector<EVENT_STRING> getFloatingDisplayStrings();
 	vector<string> getFeedbackDisplayStrings();
 	vector<string> getErrorStrings();
 	string getMainDisplayLabel();
-	
-	int getTotalNumEvents();
-	int getTotalFloatingEvents();
-	int getTotalNormalEvents();
-	int getIDFromIndex(int index);
-	string getNameFromIndex (int index);
-	int getIDFromName(string name);
-	int getNewID();
-
-	bool getIsFloatingFromID(int id);
-	Event getEventFromID(int id);
+	vector<tm> getTempMainDisplayLabel();
 //===================================================================================================================================================================
 
 /*
 * =================================================================================================================================================================== 
 * Public setters & respective APIs
 * ===================================================================================================================================================================
-*/
+*/	
+	//Pre-condition : vector<tm> label to be of size 2
+	//				  Conventionally, id will house the id of a newly-added event, but will take on LogicUpdater::GARBAGE_INT when there is no new event
+	//				  weekMonthOrNothing can only contain one of the 3 words (LogicUpdater::WORD_MONTH, LogicUpdater::WORD_WEEK, or empty)
+	//This function is the single point assessed by the setter to updated the information to be displayed to user
+	//Information passed into this function will be processed and stored in 2 forms in the respective private attribute of this Class
 	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id, string weekMonthOrNothing);
+
+	//Pre-condition : None
+	//This function is the single point assessed by the setter to updated the feedback to be displayed
+	//[WARNING - This function is purely to update the feedback only. It is being used in the case where only feedback required update which the other information
+	//remain the same]
+	//[WARNING - Empty feedbackstring will be ignored and recorded]
 	void setFeedbackStrings(string newFeedback);
 //===================================================================================================================================================================
 
 /*
 * =================================================================================================================================================================== 
-* Private methods to support operation
+* Intermediate supporting functions that are invoked by the Public setters 
+* The main roles of these functions is to update the private attributes of these classes correctly
+* These functions are asssisted by the Universal basic supporting functions
+* ===================================================================================================================================================================
+*/
+	void setFloatingEvents(vector<Event> events);
+
+	//Pre-condition : _floatingEvents to be correctly set
+	//Converts the newly updated _floatingEvents into and stored as EVENT_STRING form
+	void floatingEventsToString();
+
+	//Pre-condition: Dates passed in cannot be the same
+	//[WARNING - start date must be on the left & end date on the right] 
+	std::string setMultipleDaysString(tm,tm);
+
+	//Pre-condition : Size of vector must be 2
+	void setMainDisplayLabel (vector<tm> label);
+
+	void setWeekMonthOrNothing(string);
+
+	std::string setSingleDayString(tm);
+
+	//Pre-condition : Size of vector<tm> must be 2
+	void setNormalEvents(vector<Event> events,vector<tm> label);
+	
+	void normalEventsToString();
+
+	std::string setMarkerEventString(Event, int);
+
+	std::string setNormalEventDateString(Event, int);
+
+	std::string setNormalEventEventString(Event);
+
+	void setIsClash(int,int,int,std::vector<int>);
+
+	//Pre-condition : Vector passed in must be empty
+	//This vector will become size 1 containing the NO_EVENTS_MESSAGE
+	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Universal basic supporting functions
 * ===================================================================================================================================================================
 */
 	void initializeEventString(EVENT_STRING &item);
-	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
 
-	void setFloatingEvents(vector<Event> events);
-	void floatingEventsToString();
-	bool setFloatingIsNew(int);
+	void initializeTime(tm);
 
-	void setMainDisplayLabel (vector<tm> label);
-	void setWeekMonthOrNothing(string);
+	bool setIsNew(Event);
+
+	//Pre-condition : Size of vector must be 2
 	bool isSingleDay(vector<tm>);
-	bool isToday(tm);
-	bool isTomorrow(tm);
-	bool isDisplayMonth(tm,tm);
-	bool isFirstDayOfMonth(tm);
-	bool isLastDayOfMonth(tm);
-	std::string setSingleDayString(tm);
-	std::string setMultipleDaysString(tm,tm);
 
-	void setNormalEvents(vector<Event> events,vector<tm> label);
-	void normalEventsToString();
-	std::string setMarkerEventString(Event, int);
-	std::string setNormalEventDateString(Event, int);
-	std::string setNormalEventEventString(Event);
-	bool setNormalIsNew(int);
-	void setIsClash(int,int,int,std::vector<int>);
+	bool isToday(tm);
+	
+	bool isTomorrow(tm);
+
+	//Pre-condition: Dates passed in to be in 12-hr formatt - e.g. 12:30pm
 	bool isAllDay(Event);
 
-	std::string intToDayOfWeek (int);
-	std::string intToMonth (int);
-	std::string intToString(int);
-	string intToTime (int);
-
-	int getStartTime(Event);
-	int getEndTime(Event); 
+	//Pre-condition: start date must be on the left & end date on the right
+	bool isDisplayMonth(tm,tm);
+	
+	bool isFirstDayOfMonth(tm);
+	
+	bool isLastDayOfMonth(tm);
 
 	bool isDisplayWeek(tm,tm);
+
 	bool isFirstDayOfWeek(tm);
+
 	bool isLastDayOfWeek(tm);
 
 	bool isSameMonth(tm,tm);
+
 	bool isSameYear(tm,tm);
 
-	int countNumDays(tm, tm);
-	void initializeTime(tm);
-//===================================================================================================================================================================
+	//Pre-condition: Time pass in must be in 24-hrs formatt - hhmm 
+	//Returns time in  12-hr formatt - e.g. 12:30pm
+	string intToTime (int);
+	
+	std::string intToDayOfWeek (int);
+	
+	std::string intToMonth (int);
+	
+	std::string intToString(int);
 
+	std::string tmToString(tm);
+	
+	int getStartTime(Event);
+	
+	int getEndTime(Event); 
+
+	int countNumDays(tm, tm);
+//===================================================================================================================================================================
 };
 
 #endif

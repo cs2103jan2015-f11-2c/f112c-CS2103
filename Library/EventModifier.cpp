@@ -17,7 +17,7 @@ EventModifier::~EventModifier(void)
 //Precondition takes in an event
 //returns a vector of Events of the added date
 vector<Event> EventModifier::add(Event newEvent){  
-	logger.logStoragePosition(ADD);
+	//logger.log(EventLog::ADD);
 	vector<Event> toLogic;
 	if(newEvent.getIsFloating()){
 		addfloat(newEvent);
@@ -45,7 +45,7 @@ void EventModifier::addNormal(Event newEvent){
 
 //delete method
 vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted){
-	logger.logStoragePosition(DELETE);
+	//logger.log(EventLog::MODIFIEREventLog::DELETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
@@ -113,7 +113,7 @@ vector<Event> EventModifier::deletefloat(int index){
 
 //edit method
 vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event editedEvent){
-	logger.logStoragePosition(EDIT);
+	logger.logStoragePosition(EventLog::EDIT);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
@@ -204,7 +204,7 @@ vector<Event> EventModifier::editFloating(int index, Event editedEvent){ //check
 }
 
 vector<Event> EventModifier::complete(int eventID, Event completedEvent){
-	logger.logStoragePosition(COMPLETE);
+	logger.logStoragePosition(EventLog::COMPLETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
@@ -264,7 +264,7 @@ vector<Event> EventModifier::completeFloat(int index){
 }
 
 vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent){
-	logger.logStoragePosition(COMPLETE);
+	logger.logStoragePosition(EventLog::UNCOMPLETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;

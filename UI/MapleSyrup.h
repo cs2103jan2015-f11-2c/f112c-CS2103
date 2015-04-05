@@ -869,13 +869,11 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 				isDeveloperCommand = true;
 			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "maplesyrup"){
 				clearAllLogFiles();
-				std::ofstream out("myStorage.txt", std::ofstream::trunc);
-				out.close();
+				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
 			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
-				std::ofstream out("myStorage.txt", std::ofstream::trunc);
-				out.close();
+				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
 
@@ -886,6 +884,17 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 
 			return isDeveloperCommand;
 		}
+
+private: void clearAllStorageFiles(){
+			std::ofstream out1("myStorage.txt", std::ofstream::trunc);
+			out1.close();
+
+			std::ofstream out2("myCurrent.txt", std::ofstream::trunc);
+			out2.close();
+
+			std::ofstream out3("myBackup.txt", std::ofstream::trunc);
+			out3.close();
+		 }
 
 //Pre-condition : This function can only be called by function executeUserInput() of UI
 // This function takes in a std::string and check whether it is a UI-handled command
