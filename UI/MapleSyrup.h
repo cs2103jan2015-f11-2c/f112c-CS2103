@@ -839,6 +839,8 @@ private: std::string setImportancesymbol(int importanceLevel){
 //This function centralises all the calls from the various parts/event handlers from the UI 
 //It first checks and matches commands that are related to developer or UI-handled. If yes, it proceeds with executing these commands
 public: void executeUserInput(std::string input){
+			log("executeUserInput:", input);
+
 			if (checkAndExecuteDeveloperCommands(input)){
 				return;
 			}
