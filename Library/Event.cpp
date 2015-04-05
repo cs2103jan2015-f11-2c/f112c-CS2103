@@ -169,8 +169,11 @@ void Event::setIsCompleted(bool completed) {
 }
 
 void Event::setImportanceLevel(int importance) {
-	if(importance > 3){
+	if(importance > 3) {
 		importance = 3;
+	}
+	if (importance < 0) {
+		importance = 0;
 	}
 	importanceLevel = importance;
 }
