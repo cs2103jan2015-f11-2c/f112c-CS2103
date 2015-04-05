@@ -4,8 +4,6 @@
 #define COMMAND_H
 
 #include <algorithm>
-#include <fstream>
-#include <sstream>
 #include "EventFacade.h"
 #include "LogicLog.h"
 
