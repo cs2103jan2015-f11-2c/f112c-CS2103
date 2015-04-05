@@ -21,7 +21,7 @@ const string LogicLog::ISNUMBER_INPUT_EMPTY = "isNumber input string empty";
 void LogicLog::log(string logString) {
 	ofstream outFile;
 	outFile.open(LOG_FILE_NAME, ios::app);
-	outFile << logString;
+	outFile << logString << endl;
 	outFile.close();
 }
 
@@ -31,7 +31,7 @@ void LogicLog::log(int logInt) {
 
 	ofstream outFile;
 	outFile.open(LOG_FILE_NAME, ios::app);
-	outFile << outString.str();
+	outFile << outString.str() << endl;
 	outFile.close();
 }
 
@@ -41,6 +41,6 @@ void LogicLog::log(string logString, int logInt) {
 
 	ofstream outFile;
 	outFile.open(LOG_FILE_NAME, ios::app);
-	outFile << logString + outString.str();
+	outFile << logString + outString.str() << endl;
 	outFile.close();
 }

@@ -11,6 +11,7 @@ using std::string;
 using std::ofstream;
 using std::ostringstream;
 using std::ios;
+using std::endl;
 
 class LogicLog {
 private:

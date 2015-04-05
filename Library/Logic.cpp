@@ -467,7 +467,6 @@ void Logic::deleteParserPtr() {
 
 
 //OTHERS
-
 bool Logic::isProperCommand(Parser::commandType commandType) {
 	return ( (commandType == Parser::ADD) |
 		(commandType == Parser::ADDFLOAT) |

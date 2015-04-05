@@ -8,11 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include "Parser.h"
-#include "EventFacade.h"
 #include "LogicUpdater.h"
-#include "Command.h"
 #include "Executor.h"
-#include "LogicLog.h"
 
 using std::ifstream;
 using std::ofstream;

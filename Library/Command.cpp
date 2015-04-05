@@ -57,42 +57,6 @@ Event Command::createInvalidEvent() {
 	return invalidEvent;
 }
 
-void Command::log(string logString) {
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString);
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Command::log(int logInt) {
-	ostringstream outString;
-	outString << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(outString.str());
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Command::log(string logString, int logInt) {
-	ostringstream outString;
-	outString << " " << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString + outString.str());
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
 
 
 
@@ -236,10 +200,10 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
-		userEvent = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
 		numResults = getNumEvents(tempEvents);
-		
+
 		switch (numResults) {
 		case 0: { //no partial match
 			deletedEvents.push_back(createInvalidEvent());
