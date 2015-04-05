@@ -240,7 +240,6 @@ void EventStorage::importSpace(std::istream& in){
 	}
 }
 
-
 void EventStorage::exportNormal(std::ostream& out){
 	for(auto i=0;i<normalContent.size();i++){
 		out 
