@@ -1,35 +1,56 @@
 #include "EventStorage.h"
 	
 const string EventStorage::currentFile = "myCurrent.txt";
+const string EventStorage::backupFile = "myBackup.txt";
 
 //CONSTRUCTOR, DESTRUCTOR
-//read all from text file first to have past memory
 EventStorage::EventStorage(void)
 {
-	logger.logStoragePosition("creating storage object");
-	checkFileExist();
-	readToContent();
+	startUpFiles();
 }
 
 EventStorage::~EventStorage(void)
 {
 }
 
-//read to temp string
-//check temp string with vector of label string. find first of " "
-//try if no match vector label string and temp string fill in default
-//set error in feedback.
-
-
 //METHODS
+//Reads from txt file upon start up.
+//If read successful, copy to backupFile (set: isRead = true)
+//If read fails, load backupFile and copy backup to currentFile (set: isRead = false)
+void EventStorage::startUpFiles(){
+	logger.logStoragePosition("Syncing with storages...");
+	checkFileExist();
+	readToContent(currentFile);
+	if(isRead){
+		writeToFile(backupFile); //if successful, copy to backupFile
+	} else{
+		normalContent.clear();	//if fail, load backupFile and copy to currentFile
+		floatingContent.clear();
+		readToContent(backupFile);
+		writeToFile(currentFile);
+		isRead = false;		//mark isRead
+	}
+}
+
 void EventStorage::checkFileExist(){
-	std::ofstream out(currentFile, std::ios::app);
+	std::ofstream outCurrent(currentFile, std::ios::app);
+	outCurrent.close();
+	std::ofstream outBackup(backupFile, std::ios::app);
+	outBackup.close();
+}
+
+void EventStorage::writeToFile(string fileName){
+	std::ofstream out(fileName);
+	
+	exportNormal(out);
+	exportFloating(out);
+
 	out.close();
 }
 
-void EventStorage::readToContent(){
+void EventStorage::readToContent(string fileName){
 	
-	std::ifstream in(currentFile);
+	std::ifstream in(fileName);
 	std::string textLine;
 	isRead = true;
 
@@ -60,16 +81,6 @@ void EventStorage::readToContent(){
 	in.close();
 }
 
-void EventStorage::writeToCurrentFile(){
-	std::ofstream out(currentFile);
-	
-	exportNormal(out);
-	exportFloating(out);
-
-	out.close();
-}
-
-//SUPPORT METHODS
 void EventStorage::importNormal(std::istream& in, Event* tempEvent){
 	importName(in, tempEvent);
 	importDate(in, tempEvent);
@@ -280,11 +291,11 @@ vector<Event> EventStorage::getFloatingContent(){
 //setters
 void EventStorage::setNormalContent(vector<Event> newNormalContent){
 	normalContent = newNormalContent;
-	writeToCurrentFile();
+	writeToFile(currentFile);
 }
 void EventStorage::setFloatingContent(vector<Event> newFloatingContent){
 	floatingContent = newFloatingContent;
-	writeToCurrentFile();
+	writeToFile(currentFile);
 }
 
 bool EventStorage::getIsRead(){

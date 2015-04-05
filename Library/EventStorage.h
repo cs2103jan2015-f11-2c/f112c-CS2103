@@ -25,6 +25,7 @@ private:
 
 	//These are external storages
 	static const string currentFile;
+	static const string backupFile;
 
 	//These are internal storages
 	vector<Event> normalContent;
@@ -35,23 +36,23 @@ private:
 	EventLog logger;
 
 	//Constructor, Destructor
-	EventStorage(void); //will read the currentFile into the normalContent vector 
+	EventStorage(void);						//will read the currentFile into the normalContent vector 
 	~EventStorage(void);
 	EventStorage(EventStorage const&);              // copy constructor is private
     void operator=(EventStorage const&);			 // assignment operator is private
 
 public:
 	static EventStorage& storage(){
-        static EventStorage store;	 // Guaranteed to be destroyed.		
+        static EventStorage store;   // Guaranteed to be destroyed.		
         return store;				 // Instantiated on first use.
 	}
 
 	//Methods
+	void startUpFiles();
 	void checkFileExist(); //creates file if does not exist
-	void writeToCurrentFile();	//called when setters are called
-	void readToContent();	//called once. upon opening of program
-
-	//Support for main methods
+	void writeToFile(string fileName);	//called when setters are called
+	void readToContent(string fileName);	//called once. upon opening of program
+	
 	void importNormal(std::istream& in, Event* tempEvent);
 	void importName(std::istream& in, Event* tempEvent);
 	void importDate(std::istream& in, Event* tempEvent);
