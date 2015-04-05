@@ -23,7 +23,7 @@ bool Command::getIsUndoable() {
 
 int Command::getNumEvents(vector<Event> eventVec) {
 	//remove marker events
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() < 0) {
 			eventVec.erase(eventVec.begin() + i);
 		}
@@ -33,7 +33,7 @@ int Command::getNumEvents(vector<Event> eventVec) {
 	vector<int> idVec;
 
 	//only count events with different ID
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) == idVec.end() ) {
 			idVec.push_back(eventVec[i].getID());
 			count++;
@@ -43,7 +43,7 @@ int Command::getNumEvents(vector<Event> eventVec) {
 }
 
 Event Command::getEventFromID(vector<Event> eventVec, int id) {
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() == id) {
 			return eventVec[i];
 		}
@@ -61,7 +61,7 @@ void Command::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString);
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
@@ -74,7 +74,7 @@ void Command::log(int logInt) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
@@ -87,7 +87,7 @@ void Command::log(string logString, int logInt) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString + outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();

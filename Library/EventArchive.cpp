@@ -11,10 +11,10 @@ EventArchive::~EventArchive(void)
 
 //setters
 
-void EventArchive::setCommandType(string commandTypeToSet){
+void EventArchive::setCommandType(string commandTypeToSet) {
 	commandType = commandTypeToSet;
 }
 
-void EventArchive::setArchiveEvent(Event newEventToSet){
+void EventArchive::setArchiveEvent(Event newEventToSet) {
 	archiveEvent = newEventToSet;
 }

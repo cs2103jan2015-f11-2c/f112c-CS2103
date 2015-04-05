@@ -16,7 +16,7 @@ namespace UnitTest
 		std::string expectedOutput;
 		
 		//extractFirstWord always find the first instance of a spacing and take what comes before the space
-		TEST_METHOD(extractFirstWord_Test)
+		TEST_METHOD(InputStringSplit_extractFirstWord_Test)
 		{
 			//Case 1: Empty string
 			testInput = "";
@@ -54,7 +54,7 @@ namespace UnitTest
 		}
 
 		//Finds the first non spacing after the first spacing and takes the whole string after that
-		TEST_METHOD(extractDetails_Test)
+		TEST_METHOD(InputStringSplit_extractDetails_Test)
 		{
 			//Case 1: Empty string
 			testInput = "";
@@ -106,7 +106,7 @@ namespace UnitTest
 		}
 		
 		//Extracts the name of event by finding the last ;, or the index if event name is not found
-		TEST_METHOD(extractDelDoneEventName_Test)
+		TEST_METHOD(InputStringSplit_extractDelDoneEventName_Test)
 		{
 			//Case 1: Empty string
 			testInput = "";
@@ -158,7 +158,7 @@ namespace UnitTest
 		}
 
 		//Extracts the index of the event, or the event name if index is not found
-		TEST_METHOD(extractEditEventName_Test)
+		TEST_METHOD(InputStringSplit_extractEditEventName_Test)
 		{
 			//Case 1: Empty string
 			testInput = "";
@@ -210,7 +210,7 @@ namespace UnitTest
 		}
 
 		//Removes the index of the event, or the event name from the string
-		TEST_METHOD(removeEditEventName_Test)
+		TEST_METHOD(InputStringSplit_removeEditEventName_Test)
 		{
 			std::string eventName;
 
@@ -270,7 +270,7 @@ namespace UnitTest
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentAddString_Test)
+		TEST_METHOD(InputStringSplit_fragmentAddString_Test)
 		{
 			std::vector<std::string> fragmentedWords;
 			std::string expectedOutput0;
@@ -345,7 +345,7 @@ namespace UnitTest
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentEditString_Test)
+		TEST_METHOD(InputStringSplit_fragmentEditString_Test)
 		{
 			std::vector<std::string> fragmentedWords;
 			std::string expectedOutput0;
@@ -420,7 +420,7 @@ namespace UnitTest
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentShowString_Test)
+		TEST_METHOD(InputStringSplit_fragmentShowString_Test)
 		{
 			std::vector<std::string> fragmentedWords;
 			std::string expectedOutput0;

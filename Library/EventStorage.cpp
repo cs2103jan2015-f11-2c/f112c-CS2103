@@ -21,22 +21,22 @@ EventStorage::~EventStorage(void)
 //set error in feedback.
 
 //METHODS
-void EventStorage::checkFileExist(){
+void EventStorage::checkFileExist() {
 	std::ofstream out(currentFile, std::ios::app);
 	out.close();
 }
 
-void EventStorage::readToContent(){
+void EventStorage::readToContent() {
 	std::ifstream readFile(currentFile);
 	std::string textLine, name, deadline, importance, tags, startYear, startMonth, startDay, startHour, startMin, 
 		endYear, endMonth, endDay, endHour, endMin, id, completed, space;
 	
 	getline(readFile, textLine);
-	while(!readFile.eof()){
+	while(!readFile.eof()) {
 
 		Event* tempEvent = new Event;
 
-		if(textLine == (LABEL_ISFLOATING + "0")){					//Normal case 
+		if (textLine == (LABEL_ISFLOATING + "0")) {					//Normal case 
 			//getinfo from textfile;
 			getline(readFile, name);
 			//cin event times
@@ -58,7 +58,7 @@ void EventStorage::readToContent(){
 
 			createNormalEvent(tempEvent, name, id, deadline, importance, startHour, startMin, startDay, startMonth, startYear, endHour, endMin, endDay, endMonth, endYear, completed);
 
-		} else if(textLine == (LABEL_ISFLOATING + "1")){				//floatingEvent
+		} else if (textLine == (LABEL_ISFLOATING + "1")) {				//floatingEvent
 			//getinfo from textfile
 			getline(readFile, name);
 			getline(readFile, startYear);
@@ -86,7 +86,7 @@ void EventStorage::readToContent(){
 }
 
 void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, string deadline, string importance, string startHour, string startMin, string startDay, 
-								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed){
+								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed) {
 
 	tempEvent->setIsFloating(false); //stringToBool
 	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
@@ -109,7 +109,7 @@ void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, s
 	normalContent.push_back(*tempEvent);
 }
 
-void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed){
+void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed) {
 	
 	
 	tempEvent->setIsFloating(true);
@@ -121,7 +121,7 @@ void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id,
 
 	floatingContent.push_back(*tempEvent);
 }
-void EventStorage::writeToCurrentFile(){
+void EventStorage::writeToCurrentFile() {
 	std::ofstream out(currentFile);
 	
 	exportNormal(out);
@@ -130,8 +130,8 @@ void EventStorage::writeToCurrentFile(){
 	out.close();
 }
 
-void EventStorage::exportNormal(std::ostream& out){
-	for(auto i=0;i<normalContent.size();i++){
+void EventStorage::exportNormal(std::ostream& out) {
+	for (auto i = 0; i < normalContent.size(); i++) {
 		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(normalContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << normalContent[i].getName() << std::endl 
@@ -143,8 +143,8 @@ void EventStorage::exportNormal(std::ostream& out){
 	}
 }
 
-void EventStorage::exportFloating(std::ostream& out){
-	for(auto i=0;i<floatingContent.size();i++){
+void EventStorage::exportFloating(std::ostream& out) {
+	for (auto i = 0; i < floatingContent.size(); i++) {
 		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(floatingContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << floatingContent[i].getName() << std::endl 
@@ -157,22 +157,22 @@ void EventStorage::exportFloating(std::ostream& out){
 }
 
 //getters
-vector<Event> EventStorage::getNormalContent(){
+vector<Event> EventStorage::getNormalContent() {
 	logger.logStorageIntData("getNormalContent",normalContent.size());
 	return normalContent;
 }
 
-vector<Event> EventStorage::getFloatingContent(){
+vector<Event> EventStorage::getFloatingContent() {
 	logger.logStorageIntData("getfloatingContent",floatingContent.size());
 	return floatingContent;
 }
 
 //setters
-void EventStorage::setNormalContent(vector<Event> newNormalContent){
+void EventStorage::setNormalContent(vector<Event> newNormalContent) {
 	normalContent = newNormalContent;
 	writeToCurrentFile();
 }
-void EventStorage::setFloatingContent(vector<Event> newFloatingContent){
+void EventStorage::setFloatingContent(vector<Event> newFloatingContent) {
 	floatingContent = newFloatingContent;
 	writeToCurrentFile();
 }

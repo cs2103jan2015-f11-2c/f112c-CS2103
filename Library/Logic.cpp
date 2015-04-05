@@ -446,7 +446,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 		}
 	}
 	//remaining events are normal, push them into normal vector
-	for (; i < original.size() ; i++) {
+	for (; i < original.size(); i++) {
 		normal.push_back(original[i]);
 	}
 }
@@ -526,7 +526,7 @@ bool Logic::isNumber(string s) {
 	}
 
 
-	for (unsigned int i = 0 ; i < s.size() ; i++) {
+	for (unsigned int i = 0; i < s.size(); i++) {
 		if (!isdigit(s[i])) {
 			return false;
 		}
@@ -565,7 +565,7 @@ void Logic::log(string logString) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString);
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
@@ -578,7 +578,7 @@ void Logic::log(int logInt) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
@@ -591,7 +591,7 @@ void Logic::log(string logString, int logInt) {
 	ofstream outFile(LOG_FILE_NAME);
 
 	logStrings.push_back(logString + outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
+	for (unsigned int i = 0; i < logStrings.size(); i++) {
 		outFile << logStrings[i] << endl;
 	}
 	outFile.close();
