@@ -24,6 +24,7 @@ Command* Executor::execute(Command* command) {
 
 Command* Executor::undo() {
 	if(undoStack.empty()) {
+		logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
 		return new NullCommand;
 	}
 	
@@ -41,6 +42,7 @@ Command* Executor::undo() {
 
 Command* Executor::redo() {
 	if(redoStack.empty()) {
+		logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
 		return new NullCommand;
 	}
 
