@@ -78,7 +78,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		case Parser::ADD:
 		case Parser::ADDFLOAT: {
 			Command* addCommand = new AddCommand(&eventFacade, userEvent);
-			logger.log(LogicLog::CREATED_ADD);
+			logger.log(LogicLog::CREATED + LogicLog::ADD);
 			return executor.execute(addCommand);
 							   }
 
@@ -92,7 +92,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
-			logger.log(LogicLog::CREATED_COMPLETE);
+			logger.log(LogicLog::CREATED + LogicLog::COMPLETE);
 			return executor.execute(completeCommand);
 			break;
 							   }
@@ -107,7 +107,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
-			logger.log(LogicLog::CREATED_DELETE);
+			logger.log(LogicLog::CREATED + LogicLog::DELETE);
 			return executor.execute(deleteCommand);
 							  }
 
@@ -121,13 +121,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
-			logger.log(LogicLog::CREATED_EDIT);
+			logger.log(LogicLog::CREATED + LogicLog::EDIT);
 			return executor.execute(editCommand);
 						   }
 
 		case Parser::SEARCH: {
 			Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
-			logger.log(LogicLog::CREATED_SEARCH);
+			logger.log(LogicLog::CREATED + LogicLog::SEARCH);
 			return executor.execute(searchCommand);
 							 }
 
@@ -135,25 +135,25 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		case Parser::SHOWWEEK:
 		case Parser::SHOWMONTH: {
 			Command* showCommand = new ShowCommand(&eventFacade, userEvent);
-			logger.log(LogicLog::CREATED_SHOW);
+			logger.log(LogicLog::CREATED + LogicLog::SHOW);
 			return executor.execute(showCommand);
 								}
 
 		case Parser::SHOWALL: {
 			Command* showAllCommand = new ShowAllCommand(&eventFacade);
-			logger.log(LogicLog::CREATED_SHOWALL);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWALL);
 			return executor.execute(showAllCommand);
 							  }
 
 		case Parser::SHOWALLIMPORTANT: {
 			Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
-			logger.log(LogicLog::CREATED_SHOWALLIMPORTANT);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWALLIMPORTANT);
 			return executor.execute(showAllImportantCommand);
 									   }
 
 		case Parser::SHOWCOMPLETE: {
 			Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
-			logger.log(LogicLog::CREATED_SHOWCOMPLETED);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWCOMPLETED);
 			return executor.execute(showCompletedCommand);
 								   }
 
@@ -163,13 +163,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 		case Parser::SHOWFLOAT: {
 			Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
-			logger.log(LogicLog::CREATED_SHOWFLOAT);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWFLOAT);
 			return executor.execute(showFloatCommand);
 								}
 
 		case Parser::SHOWIMPORTANT: {
 			Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
-			logger.log(LogicLog::CREATED_SHOWIMPORTANCE);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWIMPORTANCE);
 			return executor.execute(showImportanceCommand);
 			break;
 									}

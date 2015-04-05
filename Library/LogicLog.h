@@ -18,21 +18,26 @@ private:
 	static const string LOG_FILE_NAME;
 
 public:
-	static const string CREATED_ADD;
-	static const string CREATED_COMPLETE;
-	static const string CREATED_DELETE;
-	static const string CREATED_EDIT;
-	static const string CREATED_SHOW;
-	static const string CREATED_SHOWALL;
-	static const string CREATED_SHOWALLIMPORTANT;
-	static const string CREATED_SHOWCOMPLETED;
-	static const string CREATED_SHOWFLOAT;
-	static const string CREATED_SHOWIMPORTANCE;
-	static const string CREATED_SEARCH;
+	static const string CREATED;
+	static const string EXECUTED;
+	static const string ADD;
+	static const string COMPLETE;
+	static const string DELETE;
+	static const string EDIT;
+	static const string SHOW;
+	static const string SHOWALL;
+	static const string SHOWALLIMPORTANT;
+	static const string SHOWCOMPLETED;
+	static const string SHOWFLOAT;
+	static const string SHOWIMPORTANCE;
+	static const string SEARCH;
 	static const string QUEUEING_UNDO;
 	static const string QUEUEING_REDO;
 	static const string ISNUMBER_INPUT_EMPTY;
 
+	static const string CASE_0;
+	static const string CASE_1;
+	static const string DEFAULT;
 
 	void log(string logString);
 	void log(int logInt);
