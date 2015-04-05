@@ -289,7 +289,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 				//at least 1 partial match
 				if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
-					string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 					vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
 
 					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);

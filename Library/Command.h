@@ -19,24 +19,27 @@ public:
 	static const int SIZE_ONE;
 	static const int SIZE_TWO;
 
-	static const string LOG_FILE_NAME;
 
 	//virtual methods
 	virtual void execute() = 0;
-	virtual vector<Event> getEventVector() = 0;
 	virtual Event getEvent() = 0;
 	virtual void undo() = 0;
 
 	//common methods
+	vector<Event> getEventVector();
 	bool getIsFloating();
 	bool getIsExecuted();
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
 	Event getEventFromID(vector<Event> eventVec, int id);
+	void checkPartialMatches(int numResults, vector<Event> tempEvents);
+	void chooseExactMatches(Event& userEvent);
 	Event createInvalidEvent();
 
 
 protected:
+	EventFacade* eventFacade;
+	vector<Event> eventsToShow;
 	bool isFloating;
 	bool isExecuted;
 	bool isUndoable;
@@ -48,14 +51,11 @@ protected:
 
 class AddCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	Event userEvent;
-	vector<Event> addedEvents;
 
 public:
 	AddCommand(EventFacade* eventStorage, Event e);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -65,19 +65,17 @@ public:
 
 class CompleteCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	int id;
 	Event userEvent;
-	vector<Event> completedEvents;
 
 public:
 	CompleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 
 	void completeImmediately();
+	void completeExact(vector<Event> tempEvents);
 };
 
 
@@ -85,19 +83,17 @@ public:
 
 class DeleteCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	int id;
 	Event userEvent;
-	vector<Event> deletedEvents;
 
 public:
 	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 
 	void deleteImmediately();
+	void deleteExact(vector<Event> tempEvents);
 };
 
 
@@ -105,19 +101,17 @@ public:
 
 class EditCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	int id;
 	Event eventToEdit, editedEvent;
-	vector<Event> editedResults;
 
 public:
 	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 
 	void editImmediately();
+	void editExact(vector<Event> tempEvents);
 };
 
 
@@ -125,14 +119,11 @@ public:
 
 class SearchCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	string searchString;
-	vector<Event> searchResults;
 
 public:
 	SearchCommand(EventFacade* eventStorage, string s);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -142,14 +133,11 @@ public:
 
 class ShowCommand : public Command {
 private:
-	EventFacade* eventFacade;
 	Event eventRangeToShow;
-	vector<Event> eventsToShow;
 
 public:
 	ShowCommand(EventFacade* eventStorage, Event e);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -159,12 +147,10 @@ public:
 
 class ShowAllCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
+
 public:
 	ShowAllCommand(EventFacade* eventStorage);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -174,12 +160,10 @@ public:
 
 class ShowAllImportantCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
+
 public:
 	ShowAllImportantCommand(EventFacade* eventStorage);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -189,13 +173,10 @@ public:
 
 class ShowCompletedCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
 
 public:
 	ShowCompletedCommand(EventFacade* eventStorage);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -205,13 +186,10 @@ public:
 
 class ShowDueCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
 
 public:
 	ShowDueCommand(EventFacade* eventStorage);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -221,13 +199,10 @@ public:
 
 class ShowFloatCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
 
 public:
 	ShowFloatCommand(EventFacade* eventStorage);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -237,14 +212,11 @@ public:
 
 class ShowImportanceCommand : public Command {
 private:
-	EventFacade* eventFacade;
-	vector<Event> eventsToShow;
 	int importanceLevel;
 
 public:
 	ShowImportanceCommand(EventFacade* eventStorage, int importance);
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };
@@ -253,10 +225,11 @@ public:
 
 
 class NullCommand : public Command {
+private:
+
 public:
 	NullCommand();
 	void execute();
-	vector<Event> getEventVector();
 	Event getEvent();
 	void undo();
 };

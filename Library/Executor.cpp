@@ -30,8 +30,8 @@ Command* Executor::undo() {
 	
 	//push most recently executed command from undo stack to redo stack, undo that command
 	Command* commandPtr = undoStack.top();
-	redoStack.push(commandPtr);
 	assert(commandPtr->getIsUndoable());
+	redoStack.push(commandPtr);
 	commandPtr->undo();
 	undoStack.pop();
 
