@@ -224,11 +224,9 @@ public:
 	bool isTomorrow(tm);
 
 	//Pre-condition: Dates passed in to be in 12-hr formatt - e.g. 12:30pm
-	//				 Recommend passing time to function intToTime before calling this function
 	bool isAllDay(Event);
 
-	//Pre-condition: Dates passed in cannot be the same
-	//[WARNING - start date must be on the left & end date on the right 
+	//Pre-condition: start date must be on the left & end date on the right
 	bool isDisplayMonth(tm,tm);
 	
 	bool isFirstDayOfMonth(tm);

@@ -2,7 +2,6 @@
  * @author A0111230J
  */
 
-
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <ctime>
@@ -320,7 +319,6 @@ namespace UnitTest
 
 		TEST_METHOD(UIShow_convertFromTmToString_Test){
 			//boundary tests of day,month & year of tm date is voided as it has already been tested in TEST_METHOD(UIShow_countNumDays_Test)
-
 			time_t now;
 			struct tm date;
 			std::string testResult;
@@ -474,11 +472,9 @@ namespace UnitTest
 			//vector<tm> normal case - maximum days difference
 			//vector<tm> normal case - no day difference
 			//vector<tm> front later than back
-		
 		}
 
 		TEST_METHOD(UIShow_displayBack_Test){
-
 			//[week] - complete
 			//[week] - incomplete
 
@@ -489,7 +485,6 @@ namespace UnitTest
 			//vector<tm> normal case - maximum days difference
 			//vector<tm> normal case - no day difference
 			//vector<tm> front later than back
-
 		}
 
 		TEST_METHOD(UIShow_generateDateString_Test){
