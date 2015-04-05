@@ -42,10 +42,6 @@ ParserProcessor::ParserProcessor() {
 	keywordDay[9] = "sat";
 	keywordDay[10] = "sun";
 
-	keywordSpecial[0] = "due";
-	keywordSpecial[1] = "to";
-	keywordSpecial[2] = "every";
-
 	matchFound = false;
 	startDayFound = false;
 	endDayFound = false;
@@ -696,7 +692,7 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 //Sets the temporary Event isDeadline to true, and toggles the startDayFound and startTimeFound to true to prevent more than 2 day & time input. 
 //Returns matchFound as true if found. 
 bool ParserProcessor::identifyDeadline(int index) {
-	if (fragmentedWords[index] == "due") {
+	if (fragmentedWords[index] == "due" || fragmentedWords[index] == "by") {
 		tempEventStore.setIsDeadline(true);
 		deadlineFound = true;
 		if (!endDayFound) {
