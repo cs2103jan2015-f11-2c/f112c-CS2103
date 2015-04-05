@@ -13,7 +13,7 @@ namespace UnitTest
 	{
 	public:
 		EventSearch search;
-		TEST_METHOD(EventSearch_searchIndexWithID_Test)
+		TEST_METHOD(searchIndexWithID_Test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, testEvent4;
@@ -65,7 +65,7 @@ namespace UnitTest
 			result = search.searchIndexWithID(000,testCurrentContent);
 			Assert::AreEqual(expected,result);
 		}
-		TEST_METHOD(EventSearch_searchEventWithName_Test)
+		TEST_METHOD(searchEventWithName_Test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, testEvent4;
@@ -119,7 +119,7 @@ namespace UnitTest
 			result = search.searchEventWithName("inexistentEvent",testCurrentContent);
 			Assert::IsTrue(result.empty());
 		}
-		TEST_METHOD(EventSearch_searchExactName_Test)
+		TEST_METHOD(searchExactName_Test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, testEvent4;

@@ -125,14 +125,7 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 		return WORD_SEARCH_MODE;
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
 		return WORD_SHORTCUTS;
-	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
-		std::string newShowCommand = COMMAND_SHOW + " " + "week " + currentMainDisplayLabel.substr(6);
-		return newShowCommand;
-	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
-		std::string newShowCommand = COMMAND_SHOW + " " + "month" + currentMainDisplayLabel.substr(7);
-		return newShowCommand;
 	} else {
-
 		std::string newShowCommand = "";
 
 		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
@@ -245,7 +238,6 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 }
 
 std::string UIShow::generateDateString(std::string date){
-	//need to chekc validity of the date
 	int i=0;
 	
 	std::string startDateDay = "";
@@ -293,9 +285,7 @@ int UIShow::countNumDays(tm startDay, tm endDay){
 
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
-	int absoluteDayDifference = std::abs(dayDifference);
-
-	return absoluteDayDifference;
+	return dayDifference;
 }
 
 void UIShow::initializeTime(tm date){
@@ -321,9 +311,6 @@ std::string UIShow::intToString (int num){
 }
 
 int UIShow::stringToInt (std::string str){
-	//check str is not empty
-	//check every char in str is a digit
-
 	int outNum;
 	std::istringstream in(str);
 	in >> outNum;

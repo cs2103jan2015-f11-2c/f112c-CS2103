@@ -15,7 +15,6 @@
 #include <string>
 #include <ctime>
 #include <cctype>
-#include <cmath>
 #include <vector>
 #include <sstream>
 #include <assert.h>
@@ -76,14 +75,6 @@ public:
 * ===================================================================================================================================================================
 */
 	//Pre-condition : Non
-	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
-	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
-	//e.g. It takes in 10 Feb. It will return 10 Feb
-	//e.g. It takes in 10 Feb - 20 Feb. It will return show 10 Feb - 20 Feb.
-	//e.g. It takes in Mar. It will return show Feb
-	std::string generateCurrentCommand(std::string, std::vector<tm>);
-
-	//Pre-condition : Non
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
 	// Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
@@ -97,17 +88,9 @@ public:
 	std::string generateDateString(std::string);
 
 	std::string convertFromTmToStr(tm);
-
-	//Pre-condition : Non
-	//Pass in the 2 dates in tm type
-	//Return number of days between these 2 dates. 
-	//[WARNINGS
-	//[Remarks - All return numbers will be non-negative regardless the order of dates passed in] 
 	int countNumDays(tm, tm);
 	void initializeTime(tm);
-
 	bool checkIsSingleDate(std::vector<tm>);
-
 	std::string intToString(int);
 	int stringToInt(std::string);
 	std::string intToMonth(int);
@@ -143,6 +126,14 @@ public:
 	//Pre-condition : Non
 	//Use in conjuction with function generateCurrentCommand & store it in currentCommand
 	void setCurrentCommand(std::string, std::vector<tm>);
+
+    //Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
+	//e.g. It takes in 10 Feb. It will return 10 Feb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 10 Feb - 20 Feb.
+	//e.g. It takes in Mar. It will return show Feb
+	std::string generateCurrentCommand(std::string, std::vector<tm>);
 //===================================================================================================================================================================
 
 };
