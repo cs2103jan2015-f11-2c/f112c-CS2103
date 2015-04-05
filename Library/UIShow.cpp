@@ -21,6 +21,7 @@ const std::string UIShow::SHOW_FLOAT = "show floating";
 
 const std::string UIShow::WORD_COMMANDS = "Commands";
 const std::string UIShow::WORD_HELP_INTRO = "Help Introduction";
+const std::string UIShow::WORD_HELP = "Help";
 const std::string UIShow::WORD_SEARCH_MODE = "Search Mode";
 const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
 
@@ -138,7 +139,7 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 	if (currentMainDisplayLabel == WORD_COMMANDS){
 		return WORD_COMMANDS;
 	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
-		return WORD_HELP_INTRO;
+		return WORD_HELP;
 	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
 		return WORD_SEARCH_MODE;
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){

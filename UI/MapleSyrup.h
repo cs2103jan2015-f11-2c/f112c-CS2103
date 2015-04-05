@@ -527,7 +527,6 @@ private: void loadData(){
 private: void clearAllLogFiles(){
 			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" ,"logicLog.txt" , "ParserLog.txt"};
 
-
 			 for (int i=0; i<4;i++){
 				std::ofstream out(fileName[i], std::ofstream::trunc);
 				out.close();
@@ -1116,26 +1115,31 @@ private: System::Void showButton_Click(System::Object^  sender, System::EventArg
 // Execute the respective show commands when clicked
 private: System::Void dayToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowDay();
+			 log("Called UIShow.getShowDay", "");
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void weekToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowWeek();
+			 log("Called UIShow.getShowWeek", "");
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void monthToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowMonth();
+			 log("Called UIShow.getShowMonth", "");
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void allToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowAll();
+			 log("Called UIShow.getShowAll", "");
 			 executeUserInput(loadCommand);
 		 }
 
 private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 std::string loadCommand = showPtr->getShowArchive();
+			 log("Called UIShow.getShowArchive", "");
 			 executeUserInput(loadCommand);
 		 }
 
@@ -1215,7 +1219,6 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 std::string endDate = convertToStd(tempEndDate);
 
 			 log("Calendar date(s) selected & sent to UIShow:", startDate + " to " + endDate);
-
 
 			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 
@@ -1302,6 +1305,7 @@ private: void executeBackKey(){
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+			 log("Called UIShow.displayBack", "");
 			 executeUserInput(newShowCommand);
 		 }
 
@@ -1309,6 +1313,7 @@ private: void executeNextKey(){
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+			 log("Called UIShow.displayNext", "");
 			 executeUserInput(newShowCommand);
 		 }
 

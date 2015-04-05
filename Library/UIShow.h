@@ -42,6 +42,7 @@ public:
 
 	static const std::string WORD_COMMANDS;
 	static const std::string WORD_HELP_INTRO;
+	static const std::string WORD_HELP;
 	static const std::string WORD_SEARCH_MODE;
 	static const std::string WORD_SHORTCUTS;
 
