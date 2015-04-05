@@ -18,10 +18,12 @@ const string LogicLog::SEARCH = "search command";
 const string LogicLog::QUEUEING_UNDO = "queueing undo";
 const string LogicLog::QUEUEING_REDO = "queueing redo";
 const string LogicLog::ISNUMBER_INPUT_EMPTY = "isNumber input string empty";
-
 const string LogicLog::CASE_0 = "entered case 0 for ";
 const string LogicLog::CASE_1 = "entered case 1 for ";
 const string LogicLog::DEFAULT = "entered default for ";
+const string LogicLog::UNDOSTACK_SIZE = "undoStack size ";
+const string LogicLog::REDOSTACK_SIZE = "redoStack size ";
+
 
 void LogicLog::log(string logString) {
 	ofstream outFile;
@@ -42,7 +44,7 @@ void LogicLog::log(int logInt) {
 
 void LogicLog::log(string logString, int logInt) {
 	ostringstream outString;
-	outString << " " << logInt;
+	outString << logInt;
 
 	ofstream outFile;
 	outFile.open(LOG_FILE_NAME, ios::app);

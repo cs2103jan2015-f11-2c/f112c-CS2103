@@ -34,10 +34,11 @@ public:
 	static const string QUEUEING_UNDO;
 	static const string QUEUEING_REDO;
 	static const string ISNUMBER_INPUT_EMPTY;
-
 	static const string CASE_0;
 	static const string CASE_1;
 	static const string DEFAULT;
+	static const string UNDOSTACK_SIZE;
+	static const string REDOSTACK_SIZE;
 
 	void log(string logString);
 	void log(int logInt);

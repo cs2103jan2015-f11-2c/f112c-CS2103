@@ -12,6 +12,7 @@ using std::stack;
 class Executor {
 private:
 	stack<Command*> undoStack, redoStack;
+	LogicLog logger;
 
 public:
 	Executor();

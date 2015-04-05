@@ -132,8 +132,6 @@ void CompleteCommand::execute() {
 			return;
 				 }
 		}
-
-		break;
 					}
 
 	case SIZE_ONE: { //1 exact match
@@ -229,8 +227,6 @@ void DeleteCommand::execute() {
 			return;
 				 }
 		}
-
-		break;
 				}
 
 	case SIZE_ONE: { //1 exact match
@@ -324,7 +320,6 @@ void EditCommand::execute() {
 			return;
 				 }
 		}
-		break;
 					}
 
 	case SIZE_ONE: { //1 exact match

@@ -10,7 +10,6 @@
 #include "Parser.h"
 #include "LogicUpdater.h"
 #include "Executor.h"
-#include "LogicLog.h"
 
 
 class Logic {

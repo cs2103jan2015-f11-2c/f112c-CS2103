@@ -18,6 +18,7 @@ Command* Executor::execute(Command* command) {
 		undoStack.push(command);
 	}
 
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
 	return command;
 }
 
@@ -29,8 +30,12 @@ Command* Executor::undo() {
 	//push most recently executed command from undo stack to redo stack, undo that command
 	Command* commandPtr = undoStack.top();
 	redoStack.push(commandPtr);
+	assert(commandPtr->getIsUndoable());
 	commandPtr->undo();
 	undoStack.pop();
+
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
 	return commandPtr;
 }
 
@@ -44,5 +49,8 @@ Command* Executor::redo() {
 	undoStack.push(commandPtr);
 	commandPtr->execute();
 	redoStack.pop();
+
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
 	return commandPtr;
 }
