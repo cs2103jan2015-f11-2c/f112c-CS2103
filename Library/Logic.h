@@ -41,6 +41,7 @@ public:
 	static const string CREATED_SEARCH;
 	static const string QUEUEING_UNDO;
 	static const string QUEUEING_REDO;
+	static const string ISNUMBER_INPUT_EMPTY;
 
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;

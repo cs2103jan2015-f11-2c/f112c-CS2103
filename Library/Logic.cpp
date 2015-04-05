@@ -15,6 +15,7 @@ const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
 const string Logic::CREATED_SEARCH = "created search command";
 const string Logic::QUEUEING_UNDO = "queueing undo";
 const string Logic::QUEUEING_REDO = "queueing redo";
+const string Logic::ISNUMBER_INPUT_EMPTY = "isNumber input string empty";
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
@@ -92,125 +93,124 @@ bool Logic::executeUserInput(string input) {
 Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 
-	switch (command) {
-	case Parser::ADD:
-	case Parser::ADDFLOAT: {
-		Command* addCommand = new AddCommand(&eventFacade, userEvent);
-		log(CREATED_ADD);
-		return executor.execute(addCommand);
-						   }
-
-	case Parser::COMPLETE: {
-		int id = convertNameToID(nameOfEvent);
-
-		Event eventToComplete;
-		eventToComplete.setName(nameOfEvent);
-		if (id != INVALID_NUMBER) {
-			eventToComplete = updater.getEventFromID(id);
-		}
-
-		Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
-		log(CREATED_COMPLETE);
-		return executor.execute(completeCommand);
-		break;
-						   }
-
-	case Parser::DELETE_: {
-		int id = convertNameToID(nameOfEvent);
-
-		Event eventToDelete;
-		eventToDelete.setName(nameOfEvent);
-		if (id != INVALID_NUMBER) {
-			eventToDelete = updater.getEventFromID(id);
-		}
-
-		Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
-		log(CREATED_DELETE);
-		return executor.execute(deleteCommand);
-						  }
-
-	case Parser::EDIT: {
-		int id = convertNameToID(nameOfEvent);
-
-		Event eventToEdit;
-		eventToEdit.setName(nameOfEvent);
-		if (id != INVALID_NUMBER) {
-			eventToEdit = updater.getEventFromID(id);
-		}
-
-		Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
-		log(CREATED_EDIT);
-		return executor.execute(editCommand);
-					   }
-
-	case Parser::SEARCH: {
-		Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
-		log(CREATED_SEARCH);
-		return executor.execute(searchCommand);
-						 }
-
-	case Parser::SHOW: 
-	case Parser::SHOWWEEK:
-	case Parser::SHOWMONTH: {
-		Command* showCommand = new ShowCommand(&eventFacade, userEvent);
-		log(CREATED_SHOW);
-		return executor.execute(showCommand);
-							}
-
-	case Parser::SHOWALL: {
-		Command* showAllCommand = new ShowAllCommand(&eventFacade);
-		log(CREATED_SHOWALL);
-		return executor.execute(showAllCommand);
-						  }
-
-	case Parser::SHOWALLIMPORTANT: {
-		Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
-		log(CREATED_SHOWALLIMPORTANT);
-		return executor.execute(showAllImportantCommand);
-								   }
-
-	case Parser::SHOWCOMPLETE: {
-		Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
-		log(CREATED_SHOWCOMPLETED);
-		return executor.execute(showCompletedCommand);
+	try {
+		switch (command) {
+		case Parser::ADD:
+		case Parser::ADDFLOAT: {
+			Command* addCommand = new AddCommand(&eventFacade, userEvent);
+			log(CREATED_ADD);
+			return executor.execute(addCommand);
 							   }
 
-							   /*case Parser::SHOWDUE: {
-							   break;
-								   }*/
+		case Parser::COMPLETE: {
+			int id = convertNameToID(nameOfEvent);
 
-	case Parser::SHOWFLOAT: {
-		Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
-		log(CREATED_SHOWFLOAT);
-		return executor.execute(showFloatCommand);
-							}
+			Event eventToComplete;
+			eventToComplete.setName(nameOfEvent);
+			if (id != INVALID_NUMBER) {
+				eventToComplete = updater.getEventFromID(id);
+			}
 
-	case Parser::SHOWIMPORTANT: {
-		Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
-		log(CREATED_SHOWIMPORTANCE);
-		return executor.execute(showImportanceCommand);
-		break;
+			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
+			log(CREATED_COMPLETE);
+			return executor.execute(completeCommand);
+			break;
+							   }
+
+		case Parser::DELETE_: {
+			int id = convertNameToID(nameOfEvent);
+
+			Event eventToDelete;
+			eventToDelete.setName(nameOfEvent);
+			if (id != INVALID_NUMBER) {
+				eventToDelete = updater.getEventFromID(id);
+			}
+
+			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
+			log(CREATED_DELETE);
+			return executor.execute(deleteCommand);
+							  }
+
+		case Parser::EDIT: {
+			int id = convertNameToID(nameOfEvent);
+
+			Event eventToEdit;
+			eventToEdit.setName(nameOfEvent);
+			if (id != INVALID_NUMBER) {
+				eventToEdit = updater.getEventFromID(id);
+			}
+
+			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
+			log(CREATED_EDIT);
+			return executor.execute(editCommand);
+						   }
+
+		case Parser::SEARCH: {
+			Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
+			log(CREATED_SEARCH);
+			return executor.execute(searchCommand);
+							 }
+
+		case Parser::SHOW: 
+		case Parser::SHOWWEEK:
+		case Parser::SHOWMONTH: {
+			Command* showCommand = new ShowCommand(&eventFacade, userEvent);
+			log(CREATED_SHOW);
+			return executor.execute(showCommand);
 								}
 
-	case Parser::UNDO: {
-		log(QUEUEING_UNDO);
-		return executor.undo();
-					   }
+		case Parser::SHOWALL: {
+			Command* showAllCommand = new ShowAllCommand(&eventFacade);
+			log(CREATED_SHOWALL);
+			return executor.execute(showAllCommand);
+							  }
 
-	case Parser::REDO: {
-		log(QUEUEING_REDO);
-		return executor.redo();
-					   }
+		case Parser::SHOWALLIMPORTANT: {
+			Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
+			log(CREATED_SHOWALLIMPORTANT);
+			return executor.execute(showAllImportantCommand);
+									   }
 
-	case Parser::ERROR_: {
+		case Parser::SHOWCOMPLETE: {
+			Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
+			log(CREATED_SHOWCOMPLETED);
+			return executor.execute(showCompletedCommand);
+								   }
+
+								   /*case Parser::SHOWDUE: {
+								   break;
+								   }*/
+
+		case Parser::SHOWFLOAT: {
+			Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
+			log(CREATED_SHOWFLOAT);
+			return executor.execute(showFloatCommand);
+								}
+
+		case Parser::SHOWIMPORTANT: {
+			Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
+			log(CREATED_SHOWIMPORTANCE);
+			return executor.execute(showImportanceCommand);
+			break;
+									}
+
+		case Parser::UNDO: {
+			log(QUEUEING_UNDO);
+			return executor.undo();
+						   }
+
+		case Parser::REDO: {
+			log(QUEUEING_REDO);
+			return executor.redo();
+						   }
+
+		default: {
+			throw false;
+				 }
+		}
+	} catch (bool) {
 		return new NullCommand;
-						 }
-
-	default: {
-		return new NullCommand;
-			 }
 	}
-
 }
 
 //update new information for UI to display
@@ -511,6 +511,21 @@ bool Logic::isProperCommand(Parser::commandType commandType) {
 
 //returns true if input string consists of only numeric digits
 bool Logic::isNumber(string s) {
+	//log if input string is empty
+	try {
+		if (s.size() == Command::SIZE_ZERO) {
+			throw false;
+		} else {
+			throw true;
+		}
+	} catch (bool isEmpty) {
+		if (isEmpty == false) {
+			log(ISNUMBER_INPUT_EMPTY);
+			return false;
+		}
+	}
+
+
 	for (unsigned int i = 0 ; i < s.size() ; i++) {
 		if (!isdigit(s[i])) {
 			return false;
