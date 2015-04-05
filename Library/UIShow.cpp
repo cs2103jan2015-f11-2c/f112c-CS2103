@@ -143,15 +143,12 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 		return WORD_SEARCH_MODE;
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
 		return WORD_SHORTCUTS;
-<<<<<<< HEAD
 	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newShowCommand = SHOW_WEEK + currentMainDisplayLabel.substr(6);
 		return newShowCommand;
 	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
 		std::string newShowCommand = SHOW_MONTH + currentMainDisplayLabel.substr(7);
 		return newShowCommand;
-=======
->>>>>>> origin/master
 	} else {
 		std::string newShowCommand = "";
 
@@ -278,10 +275,7 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 }
 
 std::string UIShow::generateDateString(std::string date){
-<<<<<<< HEAD
 	int index=0;
-=======
->>>>>>> origin/master
 	int i=0;
 	
 	std::string dateDay = "";
@@ -343,11 +337,8 @@ int UIShow::countNumDays(tm startDay, tm endDay){
 	// if 70<=tm_year<=1100
 	// throw exception
 
-<<<<<<< HEAD
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
-=======
->>>>>>> origin/master
 	return dayDifference;
 }
 
@@ -378,11 +369,8 @@ std::string UIShow::intToString (int num){
 }
 
 int UIShow::stringToInt (std::string str){
-<<<<<<< HEAD
 	assert(!str.empty());
 
-=======
->>>>>>> origin/master
 	int outNum;
 	std::istringstream in(str);
 	in >> outNum;

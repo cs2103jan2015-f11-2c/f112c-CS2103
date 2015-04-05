@@ -19,9 +19,6 @@ namespace UI {
 
 	using namespace System::Diagnostics;
 
-	using namespace System::Web;
-	using namespace System::Net::Mail;
-
 	/// <summary>
 	/// Summary for MapleSyrup
 	/// </summary>
@@ -528,13 +525,10 @@ private: void loadData(){
 		 }
 
 private: void clearAllLogFiles(){
-<<<<<<< HEAD
 			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" ,"logicLog.txt" , "ParserLog.txt"};
-=======
-			 char* fileName[5] = {"EventLog.txt" , "MapleSyrupGUILog.txt" , "UILog.txt" , "logicLog.txt" , "ParserLog.txt"};
->>>>>>> origin/master
 
-			 for (int i=0; i<5;i++){
+
+			 for (int i=0; i<4;i++){
 				std::ofstream out(fileName[i], std::ofstream::trunc);
 				out.close();
 			 }
@@ -874,7 +868,7 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 				isDeveloperCommand = true;
 			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "maplesyrup"){
 				clearAllLogFiles();
-				std::ofstream out("mytext.txt", std::ofstream::trunc);
+				std::ofstream out("myStorage.txt", std::ofstream::trunc);
 				out.close();
 				Application::Exit();
 				isDeveloperCommand = true;
@@ -1220,12 +1214,9 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
 			 std::string endDate = convertToStd(tempEndDate);
 
-<<<<<<< HEAD
 			 log("Calendar date(s) selected & sent to UIShow:", startDate + " to " + endDate);
 
 
-=======
->>>>>>> origin/master
 			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 
 			 executeUserInput(command);
@@ -1272,13 +1263,15 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 searchBox->Text = "";
 			 std::string currentShowCommand = showPtr->getCurrentCommand();
-			 
+
+			  //Reload floating display before search mode
+			 std::string loadCommandFloating = showPtr->getShowFloat();
+			 executeUserInput(loadCommandFloating);
+
 			 //Reload main display before search mode
 			 executeUserInput(currentShowCommand);
 
-			 //Reload floating display before search mode
-			 std::string loadCommandFloating = showPtr->getShowFloat();
-			 executeUserInput(loadCommandFloating);
+			
 		 }
 //===================================================================================================================================================================			 
 
@@ -1362,7 +1355,7 @@ private: void redoLastCommand(){
 * ===================================================================================================================================================================
 */
 private: Void log(std::string label, std::string commands){
-			 std::ofstream outFile("MapleSyrupGUILog.txt",std::ios::app);
+			 std::ofstream outFile("GUILog.txt",std::ios::app);
 
 			 outFile << label + " " + commands + "\n";
 

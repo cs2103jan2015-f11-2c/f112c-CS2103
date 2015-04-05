@@ -75,7 +75,6 @@ public:
 * ===================================================================================================================================================================
 */
 	//Pre-condition : Non
-<<<<<<< HEAD
 	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
 	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
 	//e.g. It takes in 10 Feb. It will return 10 Feb
@@ -84,8 +83,6 @@ public:
 	std::string generateCurrentCommand(std::string, std::vector<tm>);
 
 	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
-=======
->>>>>>> origin/master
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
 	//Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
@@ -110,7 +107,6 @@ public:
 
 	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
 	std::string convertFromTmToStr(tm);
-<<<<<<< HEAD
 
 	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
 	//Pass in the 2 dates in tm type
@@ -122,17 +118,11 @@ public:
 	//Pre-condition : size of vector should be 2
 	//				  Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
 	bool checkIsSingleDate(std::vector<tm>);
-
-
-=======
-	int countNumDays(tm, tm);
-	void initializeTime(tm);
-	bool checkIsSingleDate(std::vector<tm>);
->>>>>>> origin/master
-	std::string intToString(int);
 	
 	//Pre-condition : string must not be empty
 	int stringToInt(std::string);
+
+	std::string intToString(int);
 
 	std::string intToMonth(int);
 //===================================================================================================================================================================
@@ -170,14 +160,6 @@ public:
 	//Pre-condition : Non
 	//Use in conjuction with function generateCurrentCommand & store it in currentCommand
 	void setCurrentCommand(std::string, std::vector<tm>);
-
-    //Pre-condition : Non
-	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
-	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
-	//e.g. It takes in 10 Feb. It will return 10 Feb
-	//e.g. It takes in 10 Feb - 20 Feb. It will return show 10 Feb - 20 Feb.
-	//e.g. It takes in Mar. It will return show Feb
-	std::string generateCurrentCommand(std::string, std::vector<tm>);
 //===================================================================================================================================================================
 
 };
