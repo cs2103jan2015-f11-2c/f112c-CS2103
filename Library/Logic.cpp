@@ -1,21 +1,5 @@
 #include "Logic.h"
 
-//for logging
-const string Logic::LOG_FILE_NAME = "LogicLog.txt";
-const string Logic::CREATED_ADD = "created add command";
-const string Logic::CREATED_COMPLETE = "created complete command";
-const string Logic::CREATED_DELETE = "created delete command";
-const string Logic::CREATED_EDIT = "created edit command";
-const string Logic::CREATED_SHOW = "created show command";
-const string Logic::CREATED_SHOWALL = "created show all command";
-const string Logic::CREATED_SHOWALLIMPORTANT = "created show all command";
-const string Logic::CREATED_SHOWCOMPLETED = "created show completed command";
-const string Logic::CREATED_SHOWFLOAT = "created showfloat command";
-const string Logic::CREATED_SHOWIMPORTANCE = "created show importance command";
-const string Logic::CREATED_SEARCH = "created search command";
-const string Logic::QUEUEING_UNDO = "queueing undo";
-const string Logic::QUEUEING_REDO = "queueing redo";
-const string Logic::ISNUMBER_INPUT_EMPTY = "isNumber input string empty";
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
@@ -25,10 +9,6 @@ const string Logic::COLON_SPACE = ": ";
 //CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
 	parserPtr = NULL;
-
-	ofstream outFile(LOG_FILE_NAME);
-	outFile.clear();
-	outFile.close();
 }
 
 Logic::~Logic() {
@@ -98,7 +78,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		case Parser::ADD:
 		case Parser::ADDFLOAT: {
 			Command* addCommand = new AddCommand(&eventFacade, userEvent);
-			log(CREATED_ADD);
+			logger.log(LogicLog::CREATED_ADD);
 			return executor.execute(addCommand);
 							   }
 
@@ -112,7 +92,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
-			log(CREATED_COMPLETE);
+			logger.log(LogicLog::CREATED_COMPLETE);
 			return executor.execute(completeCommand);
 			break;
 							   }
@@ -127,7 +107,7 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
-			log(CREATED_DELETE);
+			logger.log(LogicLog::CREATED_DELETE);
 			return executor.execute(deleteCommand);
 							  }
 
@@ -141,13 +121,13 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 			}
 
 			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
-			log(CREATED_EDIT);
+			logger.log(LogicLog::CREATED_EDIT);
 			return executor.execute(editCommand);
 						   }
 
 		case Parser::SEARCH: {
 			Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
-			log(CREATED_SEARCH);
+			logger.log(LogicLog::CREATED_SEARCH);
 			return executor.execute(searchCommand);
 							 }
 
@@ -155,25 +135,25 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 		case Parser::SHOWWEEK:
 		case Parser::SHOWMONTH: {
 			Command* showCommand = new ShowCommand(&eventFacade, userEvent);
-			log(CREATED_SHOW);
+			logger.log(LogicLog::CREATED_SHOW);
 			return executor.execute(showCommand);
 								}
 
 		case Parser::SHOWALL: {
 			Command* showAllCommand = new ShowAllCommand(&eventFacade);
-			log(CREATED_SHOWALL);
+			logger.log(LogicLog::CREATED_SHOWALL);
 			return executor.execute(showAllCommand);
 							  }
 
 		case Parser::SHOWALLIMPORTANT: {
 			Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
-			log(CREATED_SHOWALLIMPORTANT);
+			logger.log(LogicLog::CREATED_SHOWALLIMPORTANT);
 			return executor.execute(showAllImportantCommand);
 									   }
 
 		case Parser::SHOWCOMPLETE: {
 			Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
-			log(CREATED_SHOWCOMPLETED);
+			logger.log(LogicLog::CREATED_SHOWCOMPLETED);
 			return executor.execute(showCompletedCommand);
 								   }
 
@@ -183,24 +163,24 @@ Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Ev
 
 		case Parser::SHOWFLOAT: {
 			Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
-			log(CREATED_SHOWFLOAT);
+			logger.log(LogicLog::CREATED_SHOWFLOAT);
 			return executor.execute(showFloatCommand);
 								}
 
 		case Parser::SHOWIMPORTANT: {
 			Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
-			log(CREATED_SHOWIMPORTANCE);
+			logger.log(LogicLog::CREATED_SHOWIMPORTANCE);
 			return executor.execute(showImportanceCommand);
 			break;
 									}
 
 		case Parser::UNDO: {
-			log(QUEUEING_UNDO);
+			logger.log(LogicLog::QUEUEING_UNDO);
 			return executor.undo();
 						   }
 
 		case Parser::REDO: {
-			log(QUEUEING_REDO);
+			logger.log(LogicLog::QUEUEING_REDO);
 			return executor.redo();
 						   }
 
@@ -520,7 +500,7 @@ bool Logic::isNumber(string s) {
 		}
 	} catch (bool isEmpty) {
 		if (isEmpty == false) {
-			log(ISNUMBER_INPUT_EMPTY);
+			logger.log(LogicLog::ISNUMBER_INPUT_EMPTY);
 			return false;
 		}
 	}
@@ -557,42 +537,4 @@ int Logic::convertNameToID(string name) {
 	} else {
 		return INVALID_NUMBER;
 	}
-}
-
-
-//LOG
-void Logic::log(string logString) {
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString);
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Logic::log(int logInt) {
-	ostringstream outString;
-	outString << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(outString.str());
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Logic::log(string logString, int logInt) {
-	ostringstream outString;
-	outString << " " << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString + outString.str());
-	for (unsigned int i = 0; i < logStrings.size(); i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
 }

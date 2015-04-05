@@ -63,6 +63,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LogicLog.cpp" />
     <ClCompile Include="UICommandSuggestion.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="EventFacade.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="UIShow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LogicLog.h" />
     <ClInclude Include="UICommandSuggestion.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="EventFacade.h" />
