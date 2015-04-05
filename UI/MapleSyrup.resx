@@ -142,22 +142,22 @@
     <value>shortcuts</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource8" xml:space="preserve">
-    <value>complete</value>
+    <value>completed</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource9" xml:space="preserve">
     <value>search</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource10" xml:space="preserve">
-    <value>search mode</value>
-  </data>
-  <data name="commandBox.AutoCompleteCustomSource11" xml:space="preserve">
     <value>calendar</value>
   </data>
-  <data name="commandBox.AutoCompleteCustomSource12" xml:space="preserve">
+  <data name="commandBox.AutoCompleteCustomSource11" xml:space="preserve">
     <value>next</value>
   </data>
-  <data name="commandBox.AutoCompleteCustomSource13" xml:space="preserve">
+  <data name="commandBox.AutoCompleteCustomSource12" xml:space="preserve">
     <value>back</value>
+  </data>
+  <data name="commandBox.AutoCompleteCustomSource13" xml:space="preserve">
+    <value>done</value>
   </data>
   <data name="commandBox.AutoCompleteCustomSource14" xml:space="preserve">
     <value>undo</value>
