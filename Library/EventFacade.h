@@ -43,6 +43,9 @@ public:
 	vector<Event> showAllNormalCompleted();
 	vector<Event> showAllFloatingCompleted();
 
+	/*To EventStorage*/
+	bool dataRead();
+
 	/*To be done*/
 	//unit testing
 	//exception for reading

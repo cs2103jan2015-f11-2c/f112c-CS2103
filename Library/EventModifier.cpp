@@ -16,13 +16,13 @@ EventModifier::~EventModifier(void)
 //Add method
 //Precondition takes in an event
 //returns a vector of Events of the added date
-vector<Event> EventModifier::add(Event newEvent) {  
+vector<Event> EventModifier::add(Event newEvent){  
 	logger.logStoragePosition(ADD);
 	vector<Event> toLogic;
-	if (newEvent.getIsFloating()) {
+	if(newEvent.getIsFloating()){
 		addfloat(newEvent);
 		toLogic = organiser.showAllFloatingCurrent();	
-	} else {
+	} else{
 		addNormal(newEvent);
 		toLogic = organiser.showDatesFromNormalContent(newEvent);
 	}
@@ -30,13 +30,13 @@ vector<Event> EventModifier::add(Event newEvent) {
 }
 
 //Add support methods
-void EventModifier::addfloat(Event newEvent) {
+void EventModifier::addfloat(Event newEvent){
 	vector<Event> tempContents;
 	tempContents = organiser.allFloatingCurrent();
 	tempContents.push_back(newEvent);
 	organiser.saveFloating(tempContents);
 }
-void EventModifier::addNormal(Event newEvent) {
+void EventModifier::addNormal(Event newEvent){
 	vector<Event> tempContents;
 	tempContents = organiser.allNormalCurrent();
 	tempContents.push_back(newEvent);
@@ -44,14 +44,14 @@ void EventModifier::addNormal(Event newEvent) {
 }
 
 //delete method
-vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted) {
+vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted){
 	logger.logStoragePosition(DELETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
 
 	//extract ID if event is not in display
-	if (eventID == NOT_FOUND) { 
+	if(eventID == NOT_FOUND){ 
 		eventID = eventToBeDeleted.getID(); //set relevant eventID 
 	}
 
@@ -60,11 +60,11 @@ vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted) {
 	index = findNormalIndex(eventID);
 	logger.logStorageIntData("The index from current content is: ",index);
 	
-	if (index > NOT_FOUND) {  	//Normal Case
+	if(index > NOT_FOUND){  	//Normal Case
 		toLogic = deleteNormal(index);
-	} else {						
+	} else{						
 		index = findFloatingIndex(eventID);
-		if (index > NOT_FOUND) {  //Floating Case
+		if(index > NOT_FOUND){  //Floating Case
 			toLogic = deletefloat(index);
 		}
 	}
@@ -73,20 +73,20 @@ vector<Event> EventModifier::del(int eventID, Event eventToBeDeleted) {
 }
 
 //support methods
-int EventModifier::findNormalIndex(int eventID) {
+int EventModifier::findNormalIndex(int eventID){
 	vector<Event> tempContents = organiser.allNormalCurrent();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;
 }
 
-int EventModifier::findFloatingIndex(int eventID) {
+int EventModifier::findFloatingIndex(int eventID){
 	vector<Event> tempContents = organiser.allFloatingCurrent();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;
 }
 
 //delete support methods
-vector<Event> EventModifier::deleteNormal(int index) {
+vector<Event> EventModifier::deleteNormal(int index){
 	
 	vector<Event> tempContents = organiser.allNormalCurrent();
 	Event deletedEvent = tempContents[index];
@@ -99,7 +99,7 @@ vector<Event> EventModifier::deleteNormal(int index) {
 }
 
 
-vector<Event> EventModifier::deletefloat(int index) {
+vector<Event> EventModifier::deletefloat(int index){
 	
 	vector<Event> tempContents = organiser.allFloatingCurrent();
 	Event deletedEvent = tempContents[index];
@@ -112,25 +112,25 @@ vector<Event> EventModifier::deletefloat(int index) {
 }
 
 //edit method
-vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event editedEvent) {
+vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event editedEvent){
 	logger.logStoragePosition(EDIT);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
 
 	//extract ID if event is not in display	
-	if (eventID == NOT_FOUND) { 
+	if(eventID == NOT_FOUND){ 
 		eventID = eventToBeEdited.getID();  
 	}
 
 	assert(eventID != NOT_FOUND);
 	
 	index = findNormalIndex(eventID);
-	if (index > NOT_FOUND) {		//Normal Case
+	if(index > NOT_FOUND){		//Normal Case
 		toLogic = editNormal(index, editedEvent);
-	} else { 
+	} else{ 
 		index = findFloatingIndex(eventID);
-		if (index > NOT_FOUND) {  //Floating Case
+		if(index > NOT_FOUND){  //Floating Case
 			toLogic = editFloating(index, editedEvent);
 		}
 	}
@@ -139,26 +139,26 @@ vector<Event> EventModifier::edit(int eventID, Event eventToBeEdited, Event edit
 }
 
 //edit support functions
-vector<Event> EventModifier::editNormal(int index, Event editedEvent) {
+vector<Event> EventModifier::editNormal(int index, Event editedEvent){
 	
 	vector<Event> tempContents = organiser.allNormalCurrent();
 
-	if (editedEvent.getName() != "") {
+	if(editedEvent.getName() != ""){
 		(tempContents[index]).setName(editedEvent.getName());
 	}
-	if (editedEvent.getStartDate().tm_mday != DEFAULT) { 
+	if(editedEvent.getStartDate().tm_mday != DEFAULT){ 
 		(tempContents[index]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
 	}
-	if (editedEvent.getEndDate().tm_mday != DEFAULT) {
+	if(editedEvent.getEndDate().tm_mday != DEFAULT){
 		(tempContents[index]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,editedEvent.getStartDate().tm_year);
 	}
-	if (editedEvent.getStartDate().tm_hour != DEFAULT) {
+	if(editedEvent.getStartDate().tm_hour != DEFAULT){
 		(tempContents[index]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
 	}
-	if (editedEvent.getEndDate().tm_min != DEFAULT) {
+	if(editedEvent.getEndDate().tm_min != DEFAULT){
 		(tempContents[index]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
 	}
-	if (editedEvent.getImportanceLevel() != NOT_FOUND) { 
+	if(editedEvent.getImportanceLevel() != NOT_FOUND){ 
 		(tempContents[index]).setImportanceLevel(editedEvent.getImportanceLevel());
 	}
 	
@@ -169,33 +169,33 @@ vector<Event> EventModifier::editNormal(int index, Event editedEvent) {
 	return tempContents;
 }
 
-vector<Event> EventModifier::editFloating(int index, Event editedEvent) { //check if float to float or float to normal
+vector<Event> EventModifier::editFloating(int index, Event editedEvent){ //check if float to float or float to normal
 	
 	vector<Event> toLogic, tempContents = organiser.allFloatingCurrent();
 	
-	if (editedEvent.getName() != "") {
+	if(editedEvent.getName() != ""){
 		(tempContents[index]).setName(editedEvent.getName());		
 	}			
-	if (editedEvent.getEndDate().tm_mday != DEFAULT) {
+	if(editedEvent.getEndDate().tm_mday != DEFAULT){
 		(tempContents[index]).setEndDate(editedEvent.getEndDate().tm_mday,editedEvent.getEndDate().tm_mon,editedEvent.getStartDate().tm_year);
 	}
-	if (editedEvent.getStartDate().tm_hour != DEFAULT) {
+	if(editedEvent.getStartDate().tm_hour != DEFAULT){
 		(tempContents[index]).setStartTime(editedEvent.getStartDate().tm_hour,editedEvent.getStartDate().tm_min);
 		(tempContents[index]).setIsFloating(false);			//set time only?
 	}
-	if (editedEvent.getEndDate().tm_min != DEFAULT) {
+	if(editedEvent.getEndDate().tm_min != DEFAULT){
 		(tempContents[index]).setEndTime(editedEvent.getEndDate().tm_hour,editedEvent.getEndDate().tm_min);
 	} 
-	if (editedEvent.getImportanceLevel() != NOT_FOUND) {
+	if(editedEvent.getImportanceLevel() != NOT_FOUND){
 		(tempContents[index]).setImportanceLevel(editedEvent.getImportanceLevel());
 	}
-	if (editedEvent.getStartDate().tm_mday != DEFAULT) { //change to normal event
+	if(editedEvent.getStartDate().tm_mday != DEFAULT){ //change to normal event
 		(tempContents[index]).setStartDate(editedEvent.getStartDate().tm_mday,editedEvent.getStartDate().tm_mon,editedEvent.getStartDate().tm_year);
 		(tempContents[index]).setIsFloating(false);
 
 		del(NOT_FOUND,tempContents[index]);  //delete from floatingContent
 		toLogic = add(tempContents[index]);  //add to normalContent		
-	} else {
+	} else{
 		organiser.saveFloating(tempContents);
 		logger.logStorageStringData("editedFloating",tempContents[index].getName());
 		toLogic = organiser.showAllFloatingCurrent();
@@ -203,14 +203,14 @@ vector<Event> EventModifier::editFloating(int index, Event editedEvent) { //chec
 	return toLogic;
 }
 
-vector<Event> EventModifier::complete(int eventID, Event completedEvent) {
+vector<Event> EventModifier::complete(int eventID, Event completedEvent){
 	logger.logStoragePosition(COMPLETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
 
 	//extract ID if event is not in display
-	if (eventID == NOT_FOUND) { 
+	if(eventID == NOT_FOUND){ 
 		eventID = completedEvent.getID(); //set relevant eventID 
 	}
 
@@ -219,11 +219,11 @@ vector<Event> EventModifier::complete(int eventID, Event completedEvent) {
 	index = findNormalIndex(eventID);
 	logger.logStorageIntData("The index from current content is: ",index);
 	
-	if (index > NOT_FOUND) {  	//Normal Case
+	if(index > NOT_FOUND){  	//Normal Case
 		toLogic = completeNormal(index, eventID);
-	} else {						
+	} else{						
 		index = findFloatingIndex(eventID);
-		if (index > NOT_FOUND) {  //Floating Case
+		if(index > NOT_FOUND){  //Floating Case
 			toLogic = completeFloat(index);
 		}
 	}
@@ -232,7 +232,7 @@ vector<Event> EventModifier::complete(int eventID, Event completedEvent) {
 }
 
 //complete support methods
-vector<Event> EventModifier::completeNormal(int index, int eventID) {  //mark and push into completedcontent. pushback into delete vector to return to logic
+vector<Event> EventModifier::completeNormal(int index, int eventID){  //mark and push into completedcontent. pushback into delete vector to return to logic
 	//mark complete
 	vector<Event> tempContents = organiser.allNormalCurrent();
 
@@ -245,17 +245,17 @@ vector<Event> EventModifier::completeNormal(int index, int eventID) {  //mark an
 	return completedEventDates;
 }
 
-vector<Event> EventModifier::markCompleted(int eventID, vector<Event> completedEventDates) {
+vector<Event> EventModifier::markCompleted(int eventID, vector<Event> completedEventDates){
 
-	for (auto i = 0; i < completedEventDates.size(); i++) {
-		if (completedEventDates[i].getID() == eventID) {
+	for(auto i=0;i<completedEventDates.size();i++){
+		if(completedEventDates[i].getID() == eventID){
 			completedEventDates[i].setIsCompleted(true);
 		}
 	}
 	return completedEventDates;
 }
 
-vector<Event> EventModifier::completeFloat(int index) {
+vector<Event> EventModifier::completeFloat(int index){
 	//mark complete
 	vector<Event> tempContents = organiser.allFloatingCurrent();
 	tempContents[index].setIsCompleted(true);
@@ -263,14 +263,14 @@ vector<Event> EventModifier::completeFloat(int index) {
 	return tempContents;
 }
 
-vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent) {
+vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent){
 	logger.logStoragePosition(COMPLETE);
 	
 	int index = NOT_FOUND; 
 	vector<Event> toLogic;
 
 	//extract ID if event is not in display
-	if (eventID == NOT_FOUND) { 
+	if(eventID == NOT_FOUND){ 
 		eventID = UncompletedEvent.getID(); //set relevant eventID 
 	}
 
@@ -279,11 +279,11 @@ vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent) {
 	index = findNormalCompletedIndex(eventID);
 	logger.logStorageIntData("The index from current content is: ",index);
 	
-	if (index > NOT_FOUND) {  	//Normal Case
+	if(index > NOT_FOUND){  	//Normal Case
 		toLogic = uncompleteNormal(index, eventID);
-	} else {						
+	} else{						
 		index = findFloatingCompletedIndex(eventID);
-		if (index > NOT_FOUND) {  //Floating Case
+		if(index > NOT_FOUND){  //Floating Case
 			toLogic = uncompleteFloat(index);
 		}
 	}
@@ -291,7 +291,7 @@ vector<Event> EventModifier::uncomplete(int eventID, Event UncompletedEvent) {
 	return toLogic;
 }
 
-vector<Event> EventModifier::uncompleteNormal(int index, int eventID) {  //mark and push into completedcontent. pushback into delete vector to return to logic
+vector<Event> EventModifier::uncompleteNormal(int index, int eventID){  //mark and push into completedcontent. pushback into delete vector to return to logic
 	//mark complete
 	vector<Event> tempContents = organiser.allNormalCompleted();
 
@@ -301,7 +301,7 @@ vector<Event> EventModifier::uncompleteNormal(int index, int eventID) {  //mark 
 	return organiser.showDatesFromNormalContent(tempContents[index]);
 }
 
-vector<Event> EventModifier::uncompleteFloat(int index) {
+vector<Event> EventModifier::uncompleteFloat(int index){
 	//mark complete
 	vector<Event> tempContents = organiser.allFloatingCompleted();
 	tempContents[index].setIsCompleted(false);
@@ -310,13 +310,13 @@ vector<Event> EventModifier::uncompleteFloat(int index) {
 }
 
 	//support methods
-int EventModifier::findNormalCompletedIndex(int eventID) {
+int EventModifier::findNormalCompletedIndex(int eventID){
 	vector<Event> tempContents = organiser.allNormalCompleted();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;
 }
 
-int EventModifier::findFloatingCompletedIndex(int eventID) {
+int EventModifier::findFloatingCompletedIndex(int eventID){
 	vector<Event> tempContents = organiser.allFloatingCompleted();
 	int index = searcher.searchIndexWithID(eventID,tempContents);
 	return index;

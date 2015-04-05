@@ -23,7 +23,7 @@ private:
 	bool isFloating;
 	bool isDeadline;
 	bool isCompleted;
-	int importanceLevel; //capped at 3 by parser
+	int importanceLevel;
 	string feedback;
 	int ID; //based on system time
 
@@ -71,6 +71,12 @@ public:
 	void setImportanceLevel(int importance);
 	void setFeedback(string feedbackToUser);
 	void setID(int number);
+
+	//unused
+	void setTags(vector<string> userTags);
+	void setDescription(string desc);
+	
+
 };
 
 #endif

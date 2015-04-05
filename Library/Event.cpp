@@ -148,11 +148,11 @@ void Event::setEndTime(int hour, int minute) {
 	endDateTime.tm_min = minute;
 }
 
-void Event::setStartWeekday(int weekday) {
+void Event::setStartWeekday(int weekday){
 	startDateTime.tm_wday = weekday;
 }
 
-void Event::setEndWeekday(int weekday) {
+void Event::setEndWeekday(int weekday){
 	endDateTime.tm_wday = weekday;
 }
 
@@ -169,12 +169,18 @@ void Event::setIsCompleted(bool completed) {
 }
 
 void Event::setImportanceLevel(int importance) {
-	if (importance > 3) {
+	if(importance > 3){
 		importance = 3;
-	} else if (importance < 0) {
-		importance = 0;
 	}
 	importanceLevel = importance;
+}
+
+void Event::setTags(vector<string> userTags){
+	tags = userTags;
+}
+
+void Event::setDescription(string desc) {
+	description = desc;
 }
 
 void Event::setFeedback(string feedbackToUser) {
