@@ -5,17 +5,10 @@
 
 
 #include <cassert>
-#include <fstream>
-#include <sstream>
 #include "Parser.h"
-#include "EventFacade.h"
 #include "LogicUpdater.h"
-#include "Command.h"
 #include "Executor.h"
 
-using std::ifstream;
-using std::ofstream;
-using std::ostringstream;
 
 class Logic {
 private:
@@ -23,28 +16,12 @@ private:
 	EventFacade eventFacade;
 	LogicUpdater updater;
 	Executor executor;
-	vector<string> logStrings;
+	LogicLog logger;
 
 public:
-	//for logging
-	static const string LOG_FILE_NAME;
-	static const string CREATED_ADD;
-	static const string CREATED_COMPLETE;
-	static const string CREATED_DELETE;
-	static const string CREATED_EDIT;
-	static const string CREATED_SHOW;
-	static const string CREATED_SHOWALL;
-	static const string CREATED_SHOWALLIMPORTANT;
-	static const string CREATED_SHOWCOMPLETED;
-	static const string CREATED_SHOWFLOAT;
-	static const string CREATED_SHOWIMPORTANCE;
-	static const string CREATED_SEARCH;
-	static const string QUEUEING_UNDO;
-	static const string QUEUEING_REDO;
-
-	static const int INVALID_NUMBER;
-	static const string EMPTY_STRING;
-	static const string COLON_SPACE;
+	static const int Logic::INVALID_NUMBER;
+	static const string Logic::EMPTY_STRING;
+	static const string Logic::COLON_SPACE;
 
 
 	//constructor, destructor
@@ -77,11 +54,6 @@ public:
 	bool isNumber(string s);
 	bool isSameDate(tm date1, tm date2);
 	int convertNameToID(string input);
-
-	//logging
-	void log(string logString);
-	void log(int logInt);
-	void log(string logString, int logInt);
 };
 
 #endif

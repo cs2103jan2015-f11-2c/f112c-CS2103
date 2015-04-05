@@ -64,6 +64,12 @@
     <ClCompile Include="UICommandSuggestion.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UILog.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicLog.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Conversion.h">
@@ -128,6 +134,12 @@
     </ClInclude>
     <ClInclude Include="UICommandSuggestion.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UILog.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicLog.h">
+      <Filter>Header Files\Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

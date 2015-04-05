@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Clear All Log Files: All log files cleared
 Program starts at: 05 Apr,Sunday, 17:02:26
 Logic command executed & returns: True
@@ -25,3 +26,5 @@ Feedback displayed: showing month 5 april - 30 april 2015
 Floating displayed: Successful
 Main displayed: Successful
 Main label displayed: 5 April - 30 April 2015
+=======
+>>>>>>> origin/master

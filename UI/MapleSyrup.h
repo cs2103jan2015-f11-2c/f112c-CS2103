@@ -528,7 +528,11 @@ private: void loadData(){
 		 }
 
 private: void clearAllLogFiles(){
+<<<<<<< HEAD
 			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" ,"logicLog.txt" , "ParserLog.txt"};
+=======
+			 char* fileName[5] = {"EventLog.txt" , "MapleSyrupGUILog.txt" , "UILog.txt" , "logicLog.txt" , "ParserLog.txt"};
+>>>>>>> origin/master
 
 			 for (int i=0; i<5;i++){
 				std::ofstream out(fileName[i], std::ofstream::trunc);
@@ -1216,9 +1220,12 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
 			 std::string endDate = convertToStd(tempEndDate);
 
+<<<<<<< HEAD
 			 log("Calendar date(s) selected & sent to UIShow:", startDate + " to " + endDate);
 
 
+=======
+>>>>>>> origin/master
 			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 
 			 executeUserInput(command);
@@ -1355,7 +1362,7 @@ private: void redoLastCommand(){
 * ===================================================================================================================================================================
 */
 private: Void log(std::string label, std::string commands){
-			 std::ofstream outFile("GUILog.txt",std::ios::app);
+			 std::ofstream outFile("MapleSyrupGUILog.txt",std::ios::app);
 
 			 outFile << label + " " + commands + "\n";
 

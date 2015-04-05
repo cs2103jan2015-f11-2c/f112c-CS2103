@@ -6,8 +6,11 @@ const int Command::SIZE_ZERO = 0;
 const int Command::SIZE_ONE = 1;
 const int Command::SIZE_TWO = 2;
 
-const string Command::LOG_FILE_NAME = "CommandLog.txt";
 
+
+vector<Event> Command::getEventVector() {
+	return eventsToShow;
+}
 
 bool Command::getIsFloating() {
 	return isFloating;
@@ -23,7 +26,7 @@ bool Command::getIsUndoable() {
 
 int Command::getNumEvents(vector<Event> eventVec) {
 	//remove marker events
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() < 0) {
 			eventVec.erase(eventVec.begin() + i);
 		}
@@ -33,7 +36,7 @@ int Command::getNumEvents(vector<Event> eventVec) {
 	vector<int> idVec;
 
 	//only count events with different ID
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) == idVec.end() ) {
 			idVec.push_back(eventVec[i].getID());
 			count++;
@@ -43,12 +46,34 @@ int Command::getNumEvents(vector<Event> eventVec) {
 }
 
 Event Command::getEventFromID(vector<Event> eventVec, int id) {
-	for (unsigned int i = 0 ; i < eventVec.size() ; i++) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() == id) {
 			return eventVec[i];
 		}
 	}
 	return createInvalidEvent();
+}
+
+void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
+	switch (numResults) {
+		case SIZE_ZERO: { //no partial match
+			eventsToShow.push_back(createInvalidEvent());
+			isExecuted = true;
+			return;
+						}
+
+		default: { //at least 1 partial match
+			eventsToShow = tempEvents;
+			isExecuted = false;
+			return;
+				 }
+	}
+}
+
+void Command::chooseExactMatches(Event& userEvent) {
+	eventsToShow = eventFacade->findNameOccurrence(userEvent.getName());
+	userEvent = createInvalidEvent();
+	isExecuted = false;
 }
 
 Event Command::createInvalidEvent() {
@@ -57,45 +82,10 @@ Event Command::createInvalidEvent() {
 	return invalidEvent;
 }
 
-void Command::log(string logString) {
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString);
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Command::log(int logInt) {
-	ostringstream outString;
-	outString << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
-
-void Command::log(string logString, int logInt) {
-	ostringstream outString;
-	outString << " " << logInt;
-
-	ofstream outFile(LOG_FILE_NAME);
-
-	logStrings.push_back(logString + outString.str());
-	for (unsigned int i = 0 ; i < logStrings.size() ; i++) {
-		outFile << logStrings[i] << endl;
-	}
-	outFile.close();
-}
 
 
 
-
+//Add Command
 AddCommand::AddCommand(EventFacade* eventStorage, Event e) {
 	eventFacade = eventStorage;
 	userEvent = e;
@@ -104,13 +94,10 @@ AddCommand::AddCommand(EventFacade* eventStorage, Event e) {
 }
 
 void AddCommand::execute() {
-	addedEvents = eventFacade->addEvent(userEvent);
+	eventsToShow = eventFacade->addEvent(userEvent);
 	isFloating = userEvent.getIsFloating();
 	isExecuted = true;
-}
-
-vector<Event> AddCommand::getEventVector() {
-	return addedEvents;
+	logger.log(LogicLog::EXECUTED + LogicLog::ADD);
 }
 
 Event AddCommand::getEvent() {
@@ -118,13 +105,13 @@ Event AddCommand::getEvent() {
 }
 
 void AddCommand::undo() {
-	addedEvents = eventFacade->deleteEvent(userEvent.getID(), userEvent);
+	eventsToShow = eventFacade->deleteEvent(userEvent.getID(), userEvent);
 }
 
 
 
 
-
+//Complete Command
 CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -137,6 +124,7 @@ void CompleteCommand::execute() {
 	//if id found in current display, delete immediately
 	if (id > 0) {
 		completeImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
 		return;
 	}
 
@@ -145,54 +133,28 @@ void CompleteCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
+		logger.log(LogicLog::CASE_0 + LogicLog::COMPLETE);
 		userEvent = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		numResults = getNumEvents(tempEvents);
 
-		switch (numResults) {
-		case 0: { //no partial match
-			completedEvents.push_back(createInvalidEvent());
-			userEvent = createInvalidEvent();
-			isExecuted = true;
-			return;
-				}
-
-		default: { //at least 1 partial match
-			completedEvents = tempEvents;
-			userEvent = createInvalidEvent();
-			isExecuted = false;
-			return;
-				 }
-		}
-
-		break;
+		checkPartialMatches(numResults, tempEvents);
+		return;
 					}
 
 	case SIZE_ONE: { //1 exact match
-		if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
-			isFloating = true;
-			userEvent = tempEvents[0];
-			completedEvents = eventFacade->completeEvent(tempEvents[0].getID(), tempEvents[0]);
-		} else { //1 normal match => event will be at index 1
-			isFloating = false;
-			userEvent = tempEvents[1];
-			completedEvents = eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
-		}
-		isExecuted = true;
+		logger.log(LogicLog::CASE_1 + LogicLog::COMPLETE);
+		completeExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
 		return;
 				   }
 
 	default: { //more than 1 exact match
-		completedEvents = eventFacade->findNameOccurrence(userEvent.getName());
-		userEvent = createInvalidEvent();
-		isExecuted = false;
+		logger.log(LogicLog::DEFAULT + LogicLog::COMPLETE);
+		chooseExactMatches(userEvent);
 		return;
 			 }
 	}
-}
-
-vector<Event> CompleteCommand::getEventVector() {
-	return completedEvents;
 }
 
 Event CompleteCommand::getEvent() {
@@ -200,17 +162,34 @@ Event CompleteCommand::getEvent() {
 }
 
 void CompleteCommand::undo() {
+	if (userEvent.getID() != INVALID_NUMBER) {
+		eventsToShow = eventFacade->uncompleteEvent(userEvent.getID(), userEvent);
+	}
 }
 
 void CompleteCommand::completeImmediately() {
 	isFloating = userEvent.getIsFloating();
-	completedEvents = eventFacade->completeEvent(id, userEvent);
+	eventsToShow = eventFacade->completeEvent(id, userEvent);
+	isExecuted = true;
+}
+
+void CompleteCommand::completeExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		userEvent = tempEvents[0];
+		eventsToShow = eventFacade->completeEvent(tempEvents[0].getID(), tempEvents[0]);
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		userEvent = tempEvents[1];
+		eventsToShow = eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
+	}
 	isExecuted = true;
 }
 
 
 
 
+//Delete Command
 DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -223,6 +202,7 @@ void DeleteCommand::execute() {
 	//if id found in current display, delete immediately
 	if (id > SIZE_ZERO) {
 		deleteImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::DELETE);
 		return;
 	}
 
@@ -231,54 +211,28 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
-		userEvent = createInvalidEvent();
+		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
 		numResults = getNumEvents(tempEvents);
-		
-		switch (numResults) {
-		case 0: { //no partial match
-			deletedEvents.push_back(createInvalidEvent());
-			userEvent = createInvalidEvent();
-			isExecuted = true;
-			return;
-				}
 
-		default: { //at least 1 partial match
-			deletedEvents = tempEvents;
-			userEvent = createInvalidEvent();
-			isExecuted = false;
-			return;
-				 }
-		}
-
-		break;
-				}
+		checkPartialMatches(numResults, tempEvents);
+		return;
+					}
 
 	case SIZE_ONE: { //1 exact match
-		if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
-			isFloating = true;
-			userEvent = tempEvents[0];
-			deletedEvents = eventFacade->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
-		} else { //1 normal match => event will be at index 1
-			isFloating = false;
-			userEvent = tempEvents[1];
-			deletedEvents = eventFacade->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
-		}
-		isExecuted = true;
+		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
+		deleteExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::DELETE);
 		return;
 				   }
 
 	default: { //more than 1 exact match
-		deletedEvents = eventFacade->findNameOccurrence(userEvent.getName());
-		userEvent = createInvalidEvent();
-		isExecuted = false;
+		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
+		chooseExactMatches(userEvent);
 		return;
 			 };
 	};
-}
-
-vector<Event> DeleteCommand::getEventVector() {
-	return deletedEvents;
 }
 
 Event DeleteCommand::getEvent() {
@@ -287,19 +241,33 @@ Event DeleteCommand::getEvent() {
 
 void DeleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		deletedEvents = eventFacade->addEvent(userEvent);
+		eventsToShow = eventFacade->addEvent(userEvent);
 	}
 }
 
 void DeleteCommand::deleteImmediately() {
 	isFloating = userEvent.getIsFloating();
-	deletedEvents = eventFacade->deleteEvent(id, userEvent);
+	eventsToShow = eventFacade->deleteEvent(id, userEvent);
+	isExecuted = true;
+}
+
+void DeleteCommand::deleteExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		userEvent = tempEvents[0];
+		eventsToShow = eventFacade->deleteEvent(tempEvents[0].getID(), tempEvents[0]);
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		userEvent = tempEvents[1];
+		eventsToShow = eventFacade->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
+	}
 	isExecuted = true;
 }
 
 
 
 
+//Edit Command
 EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -312,6 +280,7 @@ EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, E
 void EditCommand::execute() {
 	if (id > 0) {
 		editImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::EDIT);
 		return;
 	}
 
@@ -320,56 +289,29 @@ void EditCommand::execute() {
 
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
+		logger.log(LogicLog::CASE_0 + LogicLog::EDIT);
 		eventToEdit = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(eventToEdit.getName());
 		numResults = tempEvents.size();
-		switch (numResults) {
-		case SIZE_ZERO: { //no partial match
-			editedResults.push_back(createInvalidEvent());
-			isExecuted = true;
-			return;
-			break;
+		
+		checkPartialMatches(numResults, tempEvents);
+		return;
 					}
 
-		default: { //at least 1 partial match
-			editedResults = tempEvents;
-			isExecuted = false;
-			return;
-			break;
-				 }
-		}
-		break;
-				}
-
 	case SIZE_ONE: { //1 exact match
-		if (tempEvents.size() == 1) { //1 floating match => event will be at index 0
-			isFloating = true;
-			eventToEdit = tempEvents[0];
-			editedResults = eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
-		} else { //1 normal match => event will be at index 1
-			isFloating = false;
-			eventToEdit = tempEvents[1];
-			editedResults = eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
-		}
-		editedEvent = getEventFromID(editedResults, eventToEdit.getID());
-		isExecuted = true;
+		logger.log(LogicLog::CASE_1 + LogicLog::EDIT);
+		editExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::EDIT);
 		return;
-		break;
 				   }
 
 	default:{ //more than 1 exact match
-		eventToEdit = createInvalidEvent();
-		editedResults = eventFacade->findNameOccurrence(eventToEdit.getName());
-		isExecuted = false;
+		logger.log(LogicLog::DEFAULT + LogicLog::EDIT);
+		chooseExactMatches(eventToEdit);
 		return;
-		break;
 			}
 	}
 
-}
-
-vector<Event> EditCommand::getEventVector() {
-	return editedResults;
 }
 
 Event EditCommand::getEvent() {
@@ -379,21 +321,35 @@ Event EditCommand::getEvent() {
 void EditCommand::undo() {
 	if (eventToEdit.getID() != INVALID_NUMBER) {
 		eventFacade->deleteEvent(editedEvent.getID(), editedEvent);
-		editedResults = eventFacade->addEvent(eventToEdit);
-		return;
+		eventsToShow = eventFacade->addEvent(eventToEdit);
 	}
 }
 
 void EditCommand::editImmediately() {
 	isFloating = eventToEdit.getIsFloating();
-	editedResults = eventFacade->editEvent(id, eventToEdit, editedEvent);
-	editedEvent = getEventFromID(editedResults, id);
+	eventsToShow = eventFacade->editEvent(id, eventToEdit, editedEvent);
+	editedEvent = getEventFromID(eventsToShow, id);
+	isExecuted = true;
+}
+
+void EditCommand::editExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == 1) { //1 floating match => event will be at index 0
+		isFloating = true;
+		eventToEdit = tempEvents[0];
+		eventsToShow = eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		eventToEdit = tempEvents[1];
+		eventsToShow = eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+	}
+	editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
 	isExecuted = true;
 }
 
 
 
 
+//Search Command
 SearchCommand::SearchCommand(EventFacade* eventStorage, string s) {
 	eventFacade = eventStorage;
 	searchString = s;
@@ -401,11 +357,8 @@ SearchCommand::SearchCommand(EventFacade* eventStorage, string s) {
 }
 
 void SearchCommand::execute() {
-	searchResults = eventFacade->findNameOccurrence(searchString);
-}
-
-vector<Event> SearchCommand::getEventVector() {
-	return searchResults;
+	eventsToShow = eventFacade->findNameOccurrence(searchString);
+	logger.log(LogicLog::EXECUTED + LogicLog::SEARCH);
 }
 
 Event SearchCommand::getEvent() {
@@ -418,6 +371,7 @@ void SearchCommand::undo() {
 
 
 
+//Show Command
 ShowCommand::ShowCommand(EventFacade* eventStorage, Event e) {
 	eventFacade = eventStorage;
 	eventRangeToShow = e;
@@ -426,10 +380,7 @@ ShowCommand::ShowCommand(EventFacade* eventStorage, Event e) {
 
 void ShowCommand::execute() {
 	eventsToShow = eventFacade->showDates(eventRangeToShow);
-}
-
-vector<Event> ShowCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOW);
 }
 
 Event ShowCommand::getEvent() {
@@ -442,6 +393,7 @@ void ShowCommand::undo() {
 
 
 
+//Show All Command
 ShowAllCommand::ShowAllCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -453,10 +405,7 @@ void ShowAllCommand::execute() {
 	floating.insert(floating.end(), normal.begin(), normal.end());
 
 	eventsToShow = floating;
-}
-
-vector<Event> ShowAllCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWALL);
 }
 
 Event ShowAllCommand::getEvent() {
@@ -469,6 +418,7 @@ void ShowAllCommand::undo() {
 
 
 
+//Show All Important Command
 ShowAllImportantCommand::ShowAllImportantCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -476,10 +426,7 @@ ShowAllImportantCommand::ShowAllImportantCommand(EventFacade* eventStorage) {
 
 void ShowAllImportantCommand::execute() {
 	eventsToShow = eventFacade->findAllImportance();
-}
-
-vector<Event> ShowAllImportantCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWALLIMPORTANT);
 }
 
 Event ShowAllImportantCommand::getEvent() {
@@ -492,6 +439,7 @@ void ShowAllImportantCommand::undo() {
 
 
 
+//Show Completed Command
 ShowCompletedCommand::ShowCompletedCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -503,10 +451,7 @@ void ShowCompletedCommand::execute() {
 	floating.insert(floating.end(), normal.begin(), normal.end());
 
 	eventsToShow = floating;
-}
-
-vector<Event> ShowCompletedCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWCOMPLETED);
 }
 
 Event ShowCompletedCommand::getEvent() {
@@ -519,16 +464,13 @@ void ShowCompletedCommand::undo() {
 
 
 
+//Show Due Command
 ShowDueCommand::ShowDueCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
 }
 
 void ShowDueCommand::execute() {
-}
-
-vector<Event> ShowDueCommand::getEventVector() {
-	return eventsToShow;
 }
 
 Event ShowDueCommand::getEvent() {
@@ -541,6 +483,7 @@ void ShowDueCommand::undo() {
 
 
 
+//Show Float Command
 ShowFloatCommand::ShowFloatCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -549,10 +492,7 @@ ShowFloatCommand::ShowFloatCommand(EventFacade* eventStorage) {
 void ShowFloatCommand::execute() {
 	eventsToShow = eventFacade->showAllFloatingEvents();
 	isFloating = true;
-}
-
-vector<Event> ShowFloatCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWFLOAT);
 }
 
 Event ShowFloatCommand::getEvent() {
@@ -565,6 +505,7 @@ void ShowFloatCommand::undo() {
 
 
 
+//Show Importance Command
 ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage, int importance) {
 	eventFacade = eventStorage;
 	importanceLevel = importance;
@@ -573,10 +514,7 @@ ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage, int impo
 
 void ShowImportanceCommand::execute() {
 	eventsToShow = eventFacade->findLevelImportance(importanceLevel);
-}
-
-vector<Event> ShowImportanceCommand::getEventVector() {
-	return eventsToShow;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWIMPORTANCE);
 }
 
 Event ShowImportanceCommand::getEvent() {
@@ -589,17 +527,14 @@ void ShowImportanceCommand::undo() {
 
 
 
+//Null Command
 NullCommand::NullCommand() {
 	isExecuted = false;
 	isUndoable = false;
+	eventsToShow.clear();
 }
 
 void NullCommand::execute() {
-}
-
-vector<Event> NullCommand::getEventVector() {
-	vector<Event> emptyVec;
-	return emptyVec;
 }
 
 Event NullCommand::getEvent() {

@@ -246,6 +246,7 @@ namespace UnitTest
 			Assert::AreEqual(expectedMonth, testResult.tm_mon);
 			Assert::AreNotEqual(expectedYear, testResult.tm_year);
 
+<<<<<<< HEAD
 			//Too large number
 			testResult = show.shiftDate(date,3000000);
 			expectedDay = 7;
@@ -254,6 +255,8 @@ namespace UnitTest
 			Assert::AreEqual(expectedDay, testResult.tm_mday);
 			Assert::AreEqual(expectedMonth, testResult.tm_mon);
 			Assert::AreNotEqual(expectedYear, testResult.tm_year);
+=======
+>>>>>>> origin/master
 		}
 
 		TEST_METHOD(UIShow_isFirstDayOfMonth_Test){

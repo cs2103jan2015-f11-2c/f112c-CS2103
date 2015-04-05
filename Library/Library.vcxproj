@@ -63,6 +63,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LogicLog.cpp" />
     <ClCompile Include="UICommandSuggestion.cpp" />
     <ClCompile Include="Conversion.cpp" />
     <ClCompile Include="EventFacade.cpp" />
@@ -83,9 +84,11 @@
     <ClCompile Include="ParserProcessor.cpp" />
     <ClCompile Include="EventSearch.cpp" />
     <ClCompile Include="UIHelp.cpp" />
+    <ClCompile Include="UILog.cpp" />
     <ClCompile Include="UIShow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LogicLog.h" />
     <ClInclude Include="UICommandSuggestion.h" />
     <ClInclude Include="Conversion.h" />
     <ClInclude Include="EventFacade.h" />
@@ -106,6 +109,7 @@
     <ClInclude Include="ParserProcessor.h" />
     <ClInclude Include="EventSearch.h" />
     <ClInclude Include="UIHelp.h" />
+    <ClInclude Include="UILog.h" />
     <ClInclude Include="UIShow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

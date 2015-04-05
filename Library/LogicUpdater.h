@@ -10,9 +10,9 @@
 
 #include <assert.h>
 #include <ctime>
-#include <sstream>
 #include <algorithm>
 #include "Event.h"
+#include "LogicLog.h"
 
 using std::ostringstream;
 
