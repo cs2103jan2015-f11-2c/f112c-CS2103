@@ -200,6 +200,9 @@ Event CompleteCommand::getEvent() {
 }
 
 void CompleteCommand::undo() {
+	if (userEvent.getID() != INVALID_NUMBER) {
+		completedEvents = eventFacade->uncompleteEvent(userEvent.getID(), userEvent);
+	}
 }
 
 void CompleteCommand::completeImmediately() {
