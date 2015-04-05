@@ -26,6 +26,7 @@ void EventStorage::checkFileExist(){
 	std::ofstream out(currentFile, std::ios::app);
 	out.close();
 }
+
 void EventStorage::readToContent(){
 	
 	std::ifstream in(currentFile);
@@ -59,6 +60,16 @@ void EventStorage::readToContent(){
 	in.close();
 }
 
+void EventStorage::writeToCurrentFile(){
+	std::ofstream out(currentFile);
+	
+	exportNormal(out);
+	exportFloating(out);
+
+	out.close();
+}
+
+//SUPPORT METHODS
 void EventStorage::importNormal(std::istream& in, Event* tempEvent){
 	importName(in, tempEvent);
 	importDate(in, tempEvent);
@@ -229,52 +240,6 @@ void EventStorage::importSpace(std::istream& in){
 	}
 }
 
-/*
-void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, string deadline, string importance, string startHour, string startMin, string startDay, 
-								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed){
-
-	tempEvent->setIsFloating(false); 
-	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
-	
-	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
-	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
-	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
-	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
-
-	tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()),atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
-	
-	tempEvent->setStartDate(atoi((startDay.substr(LABEL_STARTDAY.size())).c_str()),atoi((startMonth.substr(LABEL_STARTMONTH.size())).c_str()),
-		atoi((startYear.substr(LABEL_STARTYEAR.size())).c_str()));
-	
-	tempEvent->setEndTime(atoi((endHour.substr(LABEL_ENDHOUR.size())).c_str()),atoi((endMin.substr(LABEL_ENDMIN.size())).c_str()));
-	
-	tempEvent->setEndDate(atoi((endDay.substr(LABEL_ENDDAY.size())).c_str()),atoi((endMonth.substr(LABEL_ENDMONTH.size())).c_str()),
-		atoi((endYear.substr(LABEL_ENDYEAR.size())).c_str()));
-	
-	normalContent.push_back(*tempEvent);
-}
-
-void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed){
-	
-	
-	tempEvent->setIsFloating(true);
-	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));			
-	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
-	tempEvent->setIsCompleted(conversion.stringToBool((completed.substr(LABEL_ISCOMPLETED.size()))));
-	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
-	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
-
-	floatingContent.push_back(*tempEvent);
-}
-*/
-void EventStorage::writeToCurrentFile(){
-	std::ofstream out(currentFile);
-	
-	exportNormal(out);
-	exportFloating(out);
-
-	out.close();
-}
 
 void EventStorage::exportNormal(std::ostream& out){
 	for(auto i=0;i<normalContent.size();i++){
