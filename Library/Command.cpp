@@ -96,6 +96,7 @@ void Command::log(string logString, int logInt) {
 
 
 
+//Add Command
 AddCommand::AddCommand(EventFacade* eventStorage, Event e) {
 	eventFacade = eventStorage;
 	userEvent = e;
@@ -124,7 +125,7 @@ void AddCommand::undo() {
 
 
 
-
+//Complete Command
 CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -211,6 +212,7 @@ void CompleteCommand::completeImmediately() {
 
 
 
+//Delete Command
 DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -300,6 +302,7 @@ void DeleteCommand::deleteImmediately() {
 
 
 
+//Edit Command
 EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited) {
 	eventFacade = eventStorage;
 	id = eventID;
@@ -394,6 +397,7 @@ void EditCommand::editImmediately() {
 
 
 
+//Search Command
 SearchCommand::SearchCommand(EventFacade* eventStorage, string s) {
 	eventFacade = eventStorage;
 	searchString = s;
@@ -418,6 +422,7 @@ void SearchCommand::undo() {
 
 
 
+//Show Command
 ShowCommand::ShowCommand(EventFacade* eventStorage, Event e) {
 	eventFacade = eventStorage;
 	eventRangeToShow = e;
@@ -442,6 +447,7 @@ void ShowCommand::undo() {
 
 
 
+//Show All Command
 ShowAllCommand::ShowAllCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -469,6 +475,7 @@ void ShowAllCommand::undo() {
 
 
 
+//Show All Important Command
 ShowAllImportantCommand::ShowAllImportantCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -492,6 +499,7 @@ void ShowAllImportantCommand::undo() {
 
 
 
+//Show Completed Command
 ShowCompletedCommand::ShowCompletedCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -519,6 +527,7 @@ void ShowCompletedCommand::undo() {
 
 
 
+//Show Due Command
 ShowDueCommand::ShowDueCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -541,6 +550,7 @@ void ShowDueCommand::undo() {
 
 
 
+//Show Float Command
 ShowFloatCommand::ShowFloatCommand(EventFacade* eventStorage) {
 	eventFacade = eventStorage;
 	isUndoable = false;
@@ -565,6 +575,7 @@ void ShowFloatCommand::undo() {
 
 
 
+//Show Importance Command
 ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage, int importance) {
 	eventFacade = eventStorage;
 	importanceLevel = importance;
@@ -589,6 +600,7 @@ void ShowImportanceCommand::undo() {
 
 
 
+//Null Command
 NullCommand::NullCommand() {
 	isExecuted = false;
 	isUndoable = false;
