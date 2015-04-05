@@ -7,12 +7,6 @@
 #include "EventOrganiser.h"
 #include <assert.h>
 
-//Logging Positions
-const string ADD = "Adding..";
-const string DELETE = "deleting..";
-const string EDIT = "editing..";
-const string COMPLETE = "completing..";
-
 class EventModifier{
 private:
 

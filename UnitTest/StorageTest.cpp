@@ -9,169 +9,786 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {
-	TEST_CLASS(SearchTest)
+	TEST_CLASS(EventSearchTest)
 	{
 	public:
-		EventSearch search;
+		EventSearch searcher;
+
+		//finds event index in currentContent vector with event ID
 		TEST_METHOD(searchIndexWithID_Test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, testEvent4;
 			vector<Event> testCurrentContent;
+
+			//creating test event 1
 			testEvent1.setName("event1");
-			testEvent1.setStartDate(5,3,15);
-			testEvent1.setEndDate(7,3,15);
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(7,3,115);
 			testEvent1.setStartTime(5,5);
 			testEvent1.setEndTime(6,6);
 			testEvent1.setIsFloating(false);
-			testEvent1.setID(1426225500);
+			testEvent1.setID(111);
 
+			//creating test event 2
 			testEvent2.setName("event2");
-			testEvent2.setStartDate(6,3,15);
-			testEvent2.setEndDate(8,3,15);
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
-			testEvent2.setID(1426225502);
+			testEvent2.setID(222);
 
+			//creating test event 3
 			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,15);
-			testEvent3.setEndDate(7,3,15);
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
 			testEvent3.setEndTime(6,40);
 			testEvent3.setIsFloating(false);
-			testEvent3.setID(1426225532);
+			testEvent3.setID(333);
 
-			testEvent4.setName("event4");
-			testEvent4.setStartDate(11,3,15);
-			testEvent4.setEndDate(12,3,15);
-			testEvent4.setStartTime(2,30);
-			testEvent4.setEndTime(3,10);
-			testEvent4.setIsFloating(false);
-			testEvent4.setID(1426225542);
-
+			//creating test event vector
 			testCurrentContent.push_back(testEvent1);
 			testCurrentContent.push_back(testEvent2);
 			testCurrentContent.push_back(testEvent3);
-			testCurrentContent.push_back(testEvent4);
 			
 			int result, expected;
-			/*This is for successful search*/
-			expected = 2;
-			result = search.searchIndexWithID(1426225532,testCurrentContent);
+			/*successful case: 1 search result*/
+			expected = 1;
+			result = searcher.searchIndexWithID(222,testCurrentContent);
 			Assert::AreEqual(expected,result);
-			/* This is for unsuccessful search */
+
+			/*boundary case: unsuccessful search */
 			expected = -1;
-			result = search.searchIndexWithID(000,testCurrentContent);
+			result = searcher.searchIndexWithID(000,testCurrentContent);
+			Assert::AreEqual(expected,result);
+		
+			//creating test event 4
+			testEvent4.setName("event4");
+			testEvent4.setStartDate(11,3,115);
+			testEvent4.setEndDate(12,3,115);
+			testEvent4.setStartTime(2,30);
+			testEvent4.setEndTime(3,10);
+			testEvent4.setIsFloating(false);
+			testEvent4.setID(222);
+			
+			//adding test cevent 4 to the vector
+			testCurrentContent.push_back(testEvent4);
+			
+			/*boundary case: more than 1 search, takes first result */
+			expected = 1;
+			result = searcher.searchIndexWithID(222,testCurrentContent);
 			Assert::AreEqual(expected,result);
 		}
-		TEST_METHOD(searchEventWithName_Test)
+
+		//finds any name occurrences and returns events sorted by date with markers
+		TEST_METHOD(searchNameOccurrence_test)
 		{
 			/*creating testing objects*/
-			Event testEvent1, testEvent2, testEvent3, testEvent4;
-			vector<Event> testCurrentContent;
-			testEvent1.setName("event1");
-			testEvent1.setStartDate(5,3,15);
-			testEvent1.setEndDate(7,3,15);
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
 			testEvent1.setStartTime(5,5);
 			testEvent1.setEndTime(6,6);
 			testEvent1.setIsFloating(false);
 			testEvent1.setID(1426225500);
 
-			testEvent2.setName("event2");
-			testEvent2.setStartDate(6,3,15);
-			testEvent2.setEndDate(8,3,15);
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
 			testEvent2.setID(1426225502);
 
-			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,15);
-			testEvent3.setEndDate(7,3,15);
-			testEvent3.setStartTime(1,30);
-			testEvent3.setEndTime(6,40);
-			testEvent3.setIsFloating(false);
-			testEvent3.setID(1426225532);
+			//creating test floating event 4
+			testEvent3.setName("event999");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225542);
 
-			testEvent4.setName("event345");
-			testEvent4.setStartDate(11,3,15);
-			testEvent4.setEndDate(12,3,15);
-			testEvent4.setStartTime(2,30);
-			testEvent4.setEndTime(3,10);
-			testEvent4.setIsFloating(false);
-			testEvent4.setID(1426225542);
+			//creating marker
+			marker.setName("-MSmsgjyw-");
 
-			testCurrentContent.push_back(testEvent1);
-			testCurrentContent.push_back(testEvent2);
-			testCurrentContent.push_back(testEvent3);
-			testCurrentContent.push_back(testEvent4);
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
 
 			vector<Event> result, expected;
 			/*Successful search returns vector of events*/
 			expected.push_back(testEvent3);
-			expected.push_back(testEvent4);
-			result = search.searchEventWithName("event3",testCurrentContent);
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			result = searcher.searchNameOccurrence("event", testNormalContent, testFloatingContent);
+			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			/* Unsuccessful search returns empty vector */
-			expected.clear();
-			result = search.searchEventWithName("inexistentEvent",testCurrentContent);
+			Assert::AreEqual(expected[2].getName(),result[2].getName());
+
+			/*boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchNameOccurrence("inexistentEvent", testNormalContent, testFloatingContent);
 			Assert::IsTrue(result.empty());
 		}
-		TEST_METHOD(searchExactName_Test)
+
+		//find exact string name match and returns events sorted by date with markers
+		TEST_METHOD(searchNameExact_test)
 		{
 			/*creating testing objects*/
-			Event testEvent1, testEvent2, testEvent3, testEvent4;
-			vector<Event> testCurrentContent;
-			testEvent1.setName("event1");
-			testEvent1.setStartDate(5,3,15);
-			testEvent1.setEndDate(7,3,15);
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
 			testEvent1.setStartTime(5,5);
 			testEvent1.setEndTime(6,6);
 			testEvent1.setIsFloating(false);
 			testEvent1.setID(1426225500);
 
-			testEvent2.setName("event2");
-			testEvent2.setStartDate(6,3,15);
-			testEvent2.setEndDate(8,3,15);
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
 			testEvent2.setID(1426225502);
 
-			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,15);
-			testEvent3.setEndDate(7,3,15);
-			testEvent3.setStartTime(1,30);
-			testEvent3.setEndTime(6,40);
-			testEvent3.setIsFloating(false);
-			testEvent3.setID(1426225532);
+			//creating test floating event 4
+			testEvent3.setName("event999");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225542);
 
-			testEvent4.setName("event3");
-			testEvent4.setStartDate(11,3,15);
-			testEvent4.setEndDate(12,3,15);
-			testEvent4.setStartTime(2,30);
-			testEvent4.setEndTime(3,10);
-			testEvent4.setIsFloating(false);
-			testEvent4.setID(1426225542);
+			//creating marker
+			marker.setName("-MSmsgjyw-");
 
-			testCurrentContent.push_back(testEvent1);
-			testCurrentContent.push_back(testEvent2);
-			testCurrentContent.push_back(testEvent3);
-			testCurrentContent.push_back(testEvent4);
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
 
 			vector<Event> result, expected;
 			/*Successful search returns vector of events*/
 			expected.push_back(testEvent3);
-			expected.push_back(testEvent4);
-			result = search.searchExactString("event3",testCurrentContent);
+			result = searcher.searchNameExact("event999", testNormalContent, testFloatingContent);
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+
+			/*boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchNameExact("inexistentEvent", testNormalContent, testFloatingContent);
+			Assert::IsTrue(result.empty());
+		}
+
+		//finds importance level match
+		TEST_METHOD(searchEventWithImportance_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setImportanceLevel(3);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setImportanceLevel(1);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setImportanceLevel(3);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			vector<Event> result, expected;
+			/*Successful search returns vector of events*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = searcher.searchEventWithImportance(3, testNormalContent);
+			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			/* Unsuccessful search returns empty vector */
-			expected.clear();
-			result = search.searchExactString("inexistentEvent",testCurrentContent);
+
+			/*boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchEventWithImportance(2, testNormalContent);
 			Assert::IsTrue(result.empty());
+		}
+
+		//finds all events with importance level greater than 0
+		TEST_METHOD(searchEventWithAllImportance_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setImportanceLevel(3);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setImportanceLevel(0);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setImportanceLevel(2);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			vector<Event> result, expected;
+			/*successful boundary case: 2 important events*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = searcher.searchEventWithAllImportance(testNormalContent);
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 0 important events*/
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent2);
+			result = searcher.searchEventWithAllImportance(testNormalContent);
+			Assert::IsTrue(result.empty());
+		}
+	};
+	TEST_CLASS(EventOrganiserTest)
+	{
+	public:
+		EventOrganiser organiser;
+
+		//filters normalContent vector for uncompleted events
+		TEST_METHOD(allNormalCurrent_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: 1 uncompleted event*/
+			expected.push_back(testEvent2);
+			result = organiser.allNormalCurrent();
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+
+			/*boundary case: 0 uncompleted events*/
+			testNormalContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			result = organiser.allNormalCurrent();
+			Assert::IsTrue(result.empty());
+		}
+	
+		//filters floatingContent vector for uncompleted events
+		TEST_METHOD(allFloatingCurrent_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("floating");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testFloatContent.push_back(testEvent1);
+			testFloatContent.push_back(testEvent2);
+			testFloatContent.push_back(testEvent3);
+
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: 1 uncompleted event*/
+			expected.push_back(testEvent2);
+			result = organiser.allFloatingCurrent();
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+
+			/*boundary case: 0 uncompleted events*/
+			testFloatContent.clear();
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			result = organiser.allFloatingCurrent();
+			Assert::IsTrue(result.empty());
+		}
+
+
+		//filters normalContent vector for completed events
+		TEST_METHOD(allNormalCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = organiser.allNormalCompleted();
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 0 completed events*/
+			testNormalContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			result = organiser.allNormalCompleted();
+			Assert::IsTrue(result.empty());
+		}
+
+		//filters floatingContent for completed events
+		TEST_METHOD(allFloatingCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("floating");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testFloatContent.push_back(testEvent1);
+			testFloatContent.push_back(testEvent2);
+			testFloatContent.push_back(testEvent3);
+
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = organiser.allFloatingCompleted();
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 0 completed events*/
+			testFloatContent.clear();
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			result = organiser.allFloatingCompleted();
+			Assert::IsTrue(result.empty());
+		}
+
+		//set normalContents by appending current task onto completed task 
+		TEST_METHOD(saveNormal_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+			
+			//setting currentContent stub
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(false);
+			
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+
+			organiser.saveNormal(testNormalContent);
+			
+			expected.push_back(testEvent3);
+			expected.push_back(testEvent1);
+			result = EventStorage::storage().getNormalContent();
+
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 0 completed events, 1 uncompleted*/
+			//setting curretnContent stub
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			//set temp
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+		
+			organiser.saveNormal(testNormalContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+		}
+
+		//set floatingContent by appending current task onto completed task 
+		TEST_METHOD(saveFloating_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testContent;
+
+			//creating test event 1
+			testEvent1.setName("event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("event2");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+			
+			//setting currentContent stub
+			testContent.push_back(testEvent1);
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(false);
+			
+			testContent.clear();
+			testContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: There is existing completed event*/
+			organiser.saveFloating(testContent);
+			
+			expected.push_back(testEvent3);
+			expected.push_back(testEvent1);
+			result = EventStorage::storage().getFloatingContent();
+
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 0 completed events, 1 uncompleted*/
+			//setting curretnContent stub
+			testContent.clear();
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+			//set temp
+			testContent.clear();
+			testContent.push_back(testEvent3);
+		
+			organiser.saveFloating(testContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+		}
+
+		//set normalContents by appending completed task onto current task 
+		TEST_METHOD(saveNormalCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(true);
+			
+			//setting currentContent stub
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+			
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: existing uncompleted event*/
+			organiser.saveNormalCompleted(testNormalContent);
+			
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 1 completed event, 0 uncompleted*/
+			//setting curretnContent stub
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			//set temp
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+		
+			organiser.saveNormalCompleted(testNormalContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+		}
+			
+		//set floatingContent by appending completed task onto current task 
+		TEST_METHOD(saveFloatingCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testContent;
+
+			//creating test event 1
+			testEvent1.setName("event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test event 2
+			testEvent2.setName("event2");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(true);
+			
+			//setting currentContent stub
+			testContent.push_back(testEvent1);
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+			
+			testContent.clear();
+			testContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: There are existing uncompleted events*/
+			organiser.saveFloatingCompleted(testContent);
+			
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*boundary case: 1 completed event, 0 uncompleted*/
+			//setting curretnContent stub
+			testContent.clear();
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+			//set temp
+			testContent.clear();
+			testContent.push_back(testEvent3);
+		
+			organiser.saveFloatingCompleted(testContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
 		}
 	};
 }

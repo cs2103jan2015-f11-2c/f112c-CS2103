@@ -326,6 +326,7 @@ vector<Event> EventOrganiser::allFloatingCompleted(){
 	return results;
 }
 
+//set normalContents by appending current task onto completed task 
 void EventOrganiser::saveNormal(vector<Event> normalCurrent){
 	vector<Event> tempNormalCompleted = allNormalCompleted();
 	normalCurrent.insert( normalCurrent.end(), tempNormalCompleted.begin(), tempNormalCompleted.end() );

@@ -56,7 +56,7 @@ public:
 	vector<Event> allNormalCompleted();
 	vector<Event> allFloatingCompleted();
 
-	//appends completed task and set
+	//appends completed task and set contents
 	void saveNormal(vector<Event> normalCurrent);//, vector<Event> normalCompleted);
 	void saveFloating(vector<Event> floatingCurrent);//, vector<Event> floatingCompleted);
 	void saveNormalCompleted(vector<Event> normalCompleted);
