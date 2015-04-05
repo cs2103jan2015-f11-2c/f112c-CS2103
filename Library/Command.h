@@ -7,10 +7,9 @@
 #include <fstream>
 #include <sstream>
 #include "EventFacade.h"
+#include "LogicLog.h"
 
 using std::find;
-using std::ofstream;
-using std::ostringstream;
 
 
 class Command {
@@ -36,16 +35,12 @@ public:
 	Event getEventFromID(vector<Event> eventVec, int id);
 	Event createInvalidEvent();
 
-	//logging methods
-	void log(string logString);
-	void log(int logInt);
-	void log(string logString, int logInt);
 
 protected:
 	bool isFloating;
 	bool isExecuted;
 	bool isUndoable;
-	vector<string> logStrings;
+	LogicLog logger;
 };
 
 
