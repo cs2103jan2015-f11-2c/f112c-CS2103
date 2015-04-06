@@ -99,7 +99,6 @@ private:
 	vector<tm> _tempMainDisplayLabel;
 
 	int _newID;
-	int _lastCompletedID;
 	string _weekMonthOrNothing;
 
 	vector<EVENT_STRING> _mainDisplayStrings;
@@ -202,8 +201,6 @@ public:
 
 	void setIsClash(int,int,int,std::vector<int>);
 
-	void removeLastCompleted(std::vector<Event>&);
-
 	//Pre-condition : Vector passed in must be empty
 	//This vector will become size 1 containing the NO_EVENTS_MESSAGE
 	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
@@ -226,6 +223,7 @@ public:
 	bool isToday(tm);
 	
 	bool isTomorrow(tm);
+
 
 	//Pre-condition: Dates passed in to be in 12-hr formatt - e.g. 12:30pm
 	bool isAllDay(Event);
