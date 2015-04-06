@@ -118,8 +118,13 @@ AddCommand::AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentSho
 
 void AddCommand::execute() {
 	isFloating = userEvent.getIsFloating();
-	eventFacade->addEvent(userEvent);
-	eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	eventsToShow = eventFacade->addEvent(userEvent);
+	if (isFloating) {
+		return;
+	} else {
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
+
 	isExecuted = true;
 	logger.log(LogicLog::EXECUTED + LogicLog::ADD);
 }
