@@ -3,6 +3,7 @@
 //Variables that cannot be initialized in LogicUpdater.h
 const int LogicUpdater::GARBAGE_INT = -12345;
 const int LogicUpdater::INVALID_NUMBER = -1;
+const int LogicUpdater::ZERO = 0;
 const string LogicUpdater::EMPTY_STRING = "";
 const int LogicUpdater::SHIFT_BY_ONE = 1;
 const int LogicUpdater::MAX_LENGTH_EVENT_NAME = 42;
@@ -60,6 +61,8 @@ LogicUpdater::LogicUpdater() {
 	_mainDisplayLabel.clear();
 	_floatingDisplayStrings.clear();
 	_feedbackDisplayStrings.clear();
+
+	_lastCompletedID = ZERO;
 }
 
 vector<Event> LogicUpdater::getNormalEvents() {
@@ -212,6 +215,8 @@ vector<tm> LogicUpdater::getTempMainDisplayLabel() {
 //===================================================================================================================================================================
 
 void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
+	removeLastCompleted(normalEvents);
+	removeLastCompleted(floatingEvents);
 	_newID = id;
 	setWeekMonthOrNothing (weekMonthOrNothing);
 	setFeedbackStrings(feedback);
@@ -238,14 +243,17 @@ void LogicUpdater::setFloatingEvents(vector<Event> events) {
 
 void LogicUpdater::floatingEventsToString() {
 	_floatingDisplayStrings.clear();
+	
 
 	if (_floatingEvents.empty()) {
 		setNoEventsMessage(_floatingDisplayStrings);
 	} else {
+		int countCompleted = ZERO;
+
 		for (int i = 0; i < _floatingEvents.size(); i++) {
 			EVENT_STRING temp;
 			initializeEventString(temp);
-		
+
 			ostringstream outDate;
 			outDate << (i + SHIFT_BY_ONE) << FULL_STOP;
 			temp.dateString = outDate.str();
@@ -253,12 +261,19 @@ void LogicUpdater::floatingEventsToString() {
 			ostringstream outEvent;
 			outEvent << _floatingEvents[i].getName();
 			temp.eventString = outEvent.str();
-		
+
 			temp.isCompleted = _floatingEvents[i].getIsCompleted();
+			if (temp.isCompleted) {
+				_lastCompletedID = _floatingEvents[i].getID();
+				countCompleted++;
+			}
 			temp.importanceLevel = _floatingEvents[i].getImportanceLevel();
 			temp.isNew = setIsNew(_floatingEvents[i]);
-		
+
 			_floatingDisplayStrings.push_back(temp);
+		}
+		if (countCompleted == ZERO) {
+			_lastCompletedID = ZERO;
 		}
 	}
 	assert(_floatingDisplayStrings.size()>=1);
@@ -352,10 +367,11 @@ void LogicUpdater::normalEventsToString() {
 	}
 
 	std::vector<int> indexOfMarkers;
-	int newEventStartTime = 0;
-	int newEventEndTime = 0;
+	int newEventStartTime = ZERO;
+	int newEventEndTime = ZERO;
 	int newEventIndex = INVALID_NUMBER;
 	int indexForNormalEvents = getTotalFloatingEvents();
+	int countCompleted = ZERO;
 
 	for (int i = 0; i < _normalEvents.size(); i++) {
 		EVENT_STRING toBePushed;
@@ -377,6 +393,10 @@ void LogicUpdater::normalEventsToString() {
 			//Set normal event
 			toBePushed.isNew = setIsNew(_normalEvents[i]);
 			toBePushed.isCompleted = _normalEvents[i].getIsCompleted();
+			if (toBePushed.isCompleted) {
+				_lastCompletedID = _normalEvents[i].getID();
+				countCompleted++;
+			}
 			toBePushed.importanceLevel = _normalEvents[i].getImportanceLevel();
 			toBePushed.dateString = setNormalEventDateString(_normalEvents[i],++indexForNormalEvents);
 			toBePushed.eventString = setNormalEventEventString(_normalEvents[i]);			
@@ -390,6 +410,10 @@ void LogicUpdater::normalEventsToString() {
 
 		_mainDisplayStrings.push_back(toBePushed);
 	}
+	if (countCompleted == ZERO) {
+		_lastCompletedID = ZERO;
+	}
+
 	//isClash is set after the last event too
 	indexOfMarkers.push_back(_normalEvents.size());
 	
@@ -510,6 +534,24 @@ void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int n
 		if (setNewItemClash) {
 			_mainDisplayStrings[newEventIndex].isClash = true;
 		}
+}
+
+void LogicUpdater::removeLastCompleted(std::vector<Event>& eventVec) {
+	for (int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getID() == _lastCompletedID) {
+			eventVec.erase(eventVec.begin() + i);
+		}
+	}
+
+	bool isMarker = true;
+	for (int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getName() != NEW_DAY_MESSAGE) {
+			isMarker = false;
+		}
+	}
+	if (isMarker == true) {
+		eventVec.clear();
+	}
 }
 
 void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {

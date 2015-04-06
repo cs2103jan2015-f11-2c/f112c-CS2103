@@ -4,7 +4,7 @@
  * The former form is being used by the setter for checking and updating purposes while the latter is being used for direct and easier display to user. 
  *
  * @author A0111230J
- * @author wj
+ * @author A0111089L
  */
 
 
@@ -42,6 +42,7 @@ public:
 */
 	static const int GARBAGE_INT;
 	static const int INVALID_NUMBER;
+	static const int ZERO;
 	static const string EMPTY_STRING;
 	static const int SHIFT_BY_ONE;
 	static const int MAX_LENGTH_EVENT_NAME;
@@ -98,6 +99,7 @@ private:
 	vector<tm> _tempMainDisplayLabel;
 
 	int _newID;
+	int _lastCompletedID;
 	string _weekMonthOrNothing;
 
 	vector<EVENT_STRING> _mainDisplayStrings;
@@ -109,7 +111,7 @@ private:
 
 /*
 * =================================================================================================================================================================== 
-* Public getters & respectie APIs
+* Public getters & respective APIs
 * ===================================================================================================================================================================
 */
 public:
@@ -199,6 +201,8 @@ public:
 	std::string setNormalEventEventString(Event);
 
 	void setIsClash(int,int,int,std::vector<int>);
+
+	void removeLastCompleted(std::vector<Event>&);
 
 	//Pre-condition : Vector passed in must be empty
 	//This vector will become size 1 containing the NO_EVENTS_MESSAGE
