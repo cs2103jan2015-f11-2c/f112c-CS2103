@@ -54,6 +54,28 @@ Event Command::getEventFromID(vector<Event> eventVec, int id) {
 	return createInvalidEvent();
 }
 
+vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
+	vector<tm> userTM, confirmedTM;
+	userTM.push_back(userEvent.getStartDate());
+	userTM.push_back(userEvent.getEndDate());
+
+	if (userTM[0].tm_year >= currentShowingTM[0].tm_year &&
+		userTM[0].tm_mon >= currentShowingTM[0].tm_mon &&
+		userTM[0].tm_mday >= currentShowingTM[0].tm_mday &&
+		userTM[1].tm_year <= currentShowingTM[1].tm_year &&
+		userTM[1].tm_mon <= currentShowingTM[1].tm_mon &&
+		userTM[1].tm_mday <= currentShowingTM[1].tm_mday) {
+			confirmedTM = currentShowingTM;
+	} else {
+		confirmedTM = userTM;
+	}
+
+	Event dummyEvent;
+	dummyEvent.setStartEndDate(confirmedTM);
+
+	return eventFacade->showDates(dummyEvent);
+}
+
 void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
 	switch (numResults) {
 		case SIZE_ZERO: { //no partial match
@@ -86,16 +108,18 @@ Event Command::createInvalidEvent() {
 
 
 //Add Command
-AddCommand::AddCommand(EventFacade* eventStorage, Event e) {
+AddCommand::AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentShowing) {
 	eventFacade = eventStorage;
 	userEvent = e;
+	currentShowingTM = currentShowing;
 	isExecuted = false;
 	isUndoable = true;
 }
 
 void AddCommand::execute() {
-	eventsToShow = eventFacade->addEvent(userEvent);
 	isFloating = userEvent.getIsFloating();
+	eventFacade->addEvent(userEvent);
+	eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	isExecuted = true;
 	logger.log(LogicLog::EXECUTED + LogicLog::ADD);
 }

@@ -30,6 +30,7 @@ public:
 	bool getIsUndoable();
 	int getNumEvents(vector<Event> eventVec);
 	Event getEventFromID(vector<Event> eventVec, int id);
+	vector<Event> getShowEventVector(Event userEvent, vector<tm> currentShowingTM);
 	void checkPartialMatches(int numResults, vector<Event> tempEvents);
 	void chooseExactMatches(Event& userEvent);
 	Event createInvalidEvent();
@@ -50,9 +51,10 @@ protected:
 class AddCommand : public Command {
 private:
 	Event userEvent;
+	vector<tm> currentShowingTM;
 
 public:
-	AddCommand(EventFacade* eventStorage, Event e);
+	AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentShowing);
 	void execute();
 	Event getEvent();
 	void undo();
