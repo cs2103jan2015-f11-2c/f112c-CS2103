@@ -56,7 +56,7 @@ bool Logic::executeUserInput(string input) {
 	string nameOfEvent = parserPtr->getNameOfEvent();
 	bool isDone = true;
 
-	Command* commandPtr = queueCommand(executor, commandType, userEvent, nameOfEvent);
+	Command* commandPtr = queueCommand(commandType, userEvent, nameOfEvent);
 	try {
 		setUpdater(commandPtr, commandType, userEvent, nameOfEvent);
 	} catch (bool isProperCommand) {
@@ -70,7 +70,7 @@ bool Logic::executeUserInput(string input) {
 }
 
 //create command object, call executor to execute it
-Command* Logic::queueCommand(Executor& executor, Parser::commandType command, Event userEvent, string nameOfEvent) {
+Command* Logic::queueCommand(Parser::commandType command, Event userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 
 	try {
@@ -199,22 +199,39 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 	try {
 		bool isDone = true;
+		vector<Event> normalEvents, floatingEvents;
 
 		switch (command) {
-		case Parser::ADD: 
-		case Parser::ADDFLOAT: {		
-			vector<Event> normalEvents, floatingEvents;
-
-			setOneEventVector(normalEvents, floatingEvents, commandPtr, updater);
+		case Parser::ADD: {
+			normalEvents = commandPtr->getEventVector();
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents, updater);
+			Event dummyEvent;
+			dummyEvent.setStartEndDate(tmVec);
+			Command* tempCmd = queueCommand(Parser::SHOWFLOAT, dummyEvent, EMPTY_STRING);
+			floatingEvents = tempCmd->getEventVector();
+			
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
-			if (command == Parser::ADD) {
-				if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
-					feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
-				} else {
-					feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
-				}
+			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
+			} else {
+				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
 			}
+
+			int id = userEvent.getID();
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, LogicUpdater::EMPTY_STRING);
+			break;
+						  }
+
+		case Parser::ADDFLOAT: {		
+			floatingEvents = commandPtr->getEventVector();
+			vector<tm> tmVec = updater.getTempMainDisplayLabel();
+			Event dummyEvent;
+			dummyEvent.setStartEndDate(tmVec);
+			Command* tempCmd = queueCommand(Parser::SHOW, dummyEvent, EMPTY_STRING);
+			normalEvents = tempCmd->getEventVector();
+			
+			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 			int id = userEvent.getID();
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, LogicUpdater::EMPTY_STRING);

@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <cassert>
 
 using std::cout;
 using std::cin;
@@ -59,6 +60,7 @@ public:
 
 	//setters
 	void setName(string nameToSet);
+	void setStartEndDate(vector<tm> tmVec);
 	void setStartDate(int day, int month, int year);
 	void setEndDate(int day, int month, int year);
 	void setStartTime(int hour, int minute);

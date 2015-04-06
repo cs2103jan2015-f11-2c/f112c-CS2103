@@ -126,6 +126,12 @@ void Event::setName(string nameToSet) {
 	name = nameToSet;
 }
 
+void Event::setStartEndDate(vector<tm> tmVec) {
+	assert(tmVec.size() == 2);
+	startDateTime = tmVec[0];
+	endDateTime = tmVec[1];
+}
+
 void Event::setStartDate(int day, int month, int year) {
 	startDateTime.tm_mday = day;
 	startDateTime.tm_mon = month;
