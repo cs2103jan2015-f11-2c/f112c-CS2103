@@ -960,9 +960,7 @@ private: bool checkAndExecuteUIHandledCommands(std::string input){
 //Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
 //it proceeds to call functions to display the relevant information to the various displays on the UI 
 private: void passCommandToLogic(std::string input){
-			 std::string inputInLowerCase = toLowerCase(input);
-
-			 bool isExecuted = lGPtr->executeUserInput(inputInLowerCase);
+			 bool isExecuted = lGPtr->executeUserInput(input);
 			 log("Logic command executed & returns:", convertToStd(isExecuted.ToString()));
 
 			 if(isExecuted){
