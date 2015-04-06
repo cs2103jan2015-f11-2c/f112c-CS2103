@@ -39,6 +39,7 @@ public:
 protected:
 	EventFacade* eventFacade;
 	vector<Event> eventsToShow;
+	vector<tm> currentShowingTM;
 	bool isFloating;
 	bool isExecuted;
 	bool isUndoable;
@@ -51,7 +52,6 @@ protected:
 class AddCommand : public Command {
 private:
 	Event userEvent;
-	vector<tm> currentShowingTM;
 
 public:
 	AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentShowing);
@@ -69,7 +69,7 @@ private:
 	Event userEvent;
 
 public:
-	CompleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
+	CompleteCommand(EventFacade* eventStorage, int eventID, Event userEvent, vector<tm> currentShowing);
 	void execute();
 	Event getEvent();
 	void undo();
@@ -87,7 +87,7 @@ private:
 	Event userEvent;
 
 public:
-	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent);
+	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent, vector<tm> currentShowing);
 	void execute();
 	Event getEvent();
 	void undo();
@@ -105,7 +105,7 @@ private:
 	Event eventToEdit, editedEvent;
 
 public:
-	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited);
+	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited, vector<tm> currentShowing);
 	void execute();
 	Event getEvent();
 	void undo();

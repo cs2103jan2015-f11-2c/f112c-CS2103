@@ -134,17 +134,19 @@ Event AddCommand::getEvent() {
 }
 
 void AddCommand::undo() {
-	eventsToShow = eventFacade->deleteEvent(userEvent.getID(), userEvent);
+	eventFacade->deleteEvent(userEvent.getID(), userEvent);
+	eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 }
 
 
 
 
 //Complete Command
-CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e) {
+CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
 	eventFacade = eventStorage;
 	id = eventID;
 	userEvent = e;
+	currentShowingTM = currentShowing;
 	isExecuted = false;
 	isUndoable = true;
 }
@@ -192,13 +194,19 @@ Event CompleteCommand::getEvent() {
 
 void CompleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		eventsToShow = eventFacade->uncompleteEvent(userEvent.getID(), userEvent);
+		eventFacade->uncompleteEvent(userEvent.getID(), userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
 }
 
 void CompleteCommand::completeImmediately() {
 	isFloating = userEvent.getIsFloating();
-	eventsToShow = eventFacade->completeEvent(id, userEvent);
+	if (isFloating) {
+		eventsToShow = eventFacade->completeEvent(id, userEvent);
+	} else {
+		eventFacade->completeEvent(id, userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
 	isExecuted = true;
 }
 
@@ -210,7 +218,8 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		userEvent = tempEvents[1];
-		eventsToShow = eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
+		eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
 	isExecuted = true;
 }
@@ -219,10 +228,11 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 
 
 //Delete Command
-DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e) {
+DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
 	eventFacade = eventStorage;
 	id = eventID;
 	userEvent = e;
+	currentShowingTM = currentShowing;
 	isExecuted = false;
 	isUndoable = true;
 }
@@ -270,13 +280,19 @@ Event DeleteCommand::getEvent() {
 
 void DeleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		eventsToShow = eventFacade->addEvent(userEvent);
+		eventFacade->addEvent(userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
 }
 
 void DeleteCommand::deleteImmediately() {
 	isFloating = userEvent.getIsFloating();
-	eventsToShow = eventFacade->deleteEvent(id, userEvent);
+	if (isFloating) {
+		eventsToShow = eventFacade->deleteEvent(id, userEvent);
+	} else {
+		eventFacade->deleteEvent(id, userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
 	isExecuted = true;
 }
 
@@ -288,7 +304,8 @@ void DeleteCommand::deleteExact(vector<Event> tempEvents) {
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		userEvent = tempEvents[1];
-		eventsToShow = eventFacade->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
+		eventFacade->deleteEvent(tempEvents[1].getID(), tempEvents[1]);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
 	isExecuted = true;
 }
@@ -297,11 +314,12 @@ void DeleteCommand::deleteExact(vector<Event> tempEvents) {
 
 
 //Edit Command
-EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited) {
+EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited, vector<tm> currentShowing) {
 	eventFacade = eventStorage;
 	id = eventID;
 	eventToEdit = toEdit;
 	editedEvent = edited;
+	currentShowingTM = currentShowing;
 	isExecuted = false;
 	isUndoable = true;
 }
@@ -350,13 +368,20 @@ Event EditCommand::getEvent() {
 void EditCommand::undo() {
 	if (eventToEdit.getID() != INVALID_NUMBER) {
 		eventFacade->deleteEvent(editedEvent.getID(), editedEvent);
-		eventsToShow = eventFacade->addEvent(eventToEdit);
+		eventFacade->addEvent(eventToEdit);
+		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
 	}
 }
 
 void EditCommand::editImmediately() {
 	isFloating = eventToEdit.getIsFloating();
-	eventsToShow = eventFacade->editEvent(id, eventToEdit, editedEvent);
+	if (isFloating) {
+		eventsToShow = eventFacade->editEvent(id, eventToEdit, editedEvent);
+	} else {
+		eventFacade->editEvent(id, eventToEdit, editedEvent);
+		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+	}
+
 	editedEvent = getEventFromID(eventsToShow, id);
 	isExecuted = true;
 }
@@ -369,7 +394,8 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		eventToEdit = tempEvents[1];
-		eventsToShow = eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+		eventFacade->editEvent(eventToEdit.getID(), eventToEdit, editedEvent);
+		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
 	}
 	editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
 	isExecuted = true;

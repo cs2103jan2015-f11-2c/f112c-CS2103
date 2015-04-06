@@ -91,7 +91,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event userEvent, strin
 				eventToComplete = updater.getEventFromID(id);
 			}
 
-			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete);
+			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::COMPLETE);
 			return executor.execute(completeCommand);
 			break;
@@ -106,7 +106,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event userEvent, strin
 				eventToDelete = updater.getEventFromID(id);
 			}
 
-			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete);
+			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::DELETE);
 			return executor.execute(deleteCommand);
 							  }
@@ -120,7 +120,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event userEvent, strin
 				eventToEdit = updater.getEventFromID(id);
 			}
 
-			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent);
+			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::EDIT);
 			return executor.execute(editCommand);
 						   }
