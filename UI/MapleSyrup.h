@@ -47,6 +47,7 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
 	private: System::Windows::Forms::Button^  redoButton;
+
 	private: System::Windows::Forms::Button^  undoButton;
 
 	public:
@@ -1378,6 +1379,7 @@ private: Void log(std::string label, std::string commands){
 			 outFile.close();
 		 }
 //===================================================================================================================================================================
+
 
 
 

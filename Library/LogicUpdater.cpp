@@ -31,8 +31,8 @@ const string LogicUpdater::LABEL_TODAY = "[Today]";
 const string LogicUpdater::LABEL_TOMORROW = "[Tomorrow]";
 const string LogicUpdater::LABEL_MONTH = "[Month]";
 const string LogicUpdater::LABEL_WEEK = "[Week]";
-const string LogicUpdater::LABEL_ALLDAY = "   All Day   ";
-const string LogicUpdater::LABEL_DUE = "*DUE* ";
+const string LogicUpdater::LABEL_ALLDAY = "    All Day    ";
+const string LogicUpdater::LABEL_DUE = "*DUE*   ";
 
 const string LogicUpdater::BLANK_SPACE = " " ;
 const string LogicUpdater::TAB = "\t";
@@ -746,10 +746,14 @@ std::string LogicUpdater::intToTime (int timeInInt) {
 		afterTwelve = true;
 	} else if (hours == 12) {
 		afterTwelve = true;
-	} else {
-		oss << "0";	
 	}
-	oss << hours;
+
+	if (hours >= 10){
+		oss << hours;
+	} else{
+		oss << "0";
+		oss << hours;
+	}
 
 	oss << ":";
 

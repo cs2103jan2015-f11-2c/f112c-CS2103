@@ -224,7 +224,6 @@ public:
 	
 	bool isTomorrow(tm);
 
-
 	//Pre-condition: Dates passed in to be in 12-hr formatt - e.g. 12:30pm
 	bool isAllDay(Event);
 

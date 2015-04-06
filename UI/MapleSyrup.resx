@@ -4304,7 +4304,7 @@
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
   </data>
   <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
+    <value>134, 22</value>
   </data>
   <data name="dayToolStripMenuItem.Text" xml:space="preserve">
     <value>Day</value>
@@ -4316,7 +4316,7 @@
     <value>False</value>
   </data>
   <data name="weekToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
+    <value>134, 22</value>
   </data>
   <data name="weekToolStripMenuItem.Text" xml:space="preserve">
     <value>Week</value>
@@ -4328,7 +4328,7 @@
     <value>False</value>
   </data>
   <data name="monthToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
+    <value>134, 22</value>
   </data>
   <data name="monthToolStripMenuItem.Text" xml:space="preserve">
     <value>Month</value>
@@ -4340,7 +4340,7 @@
     <value>False</value>
   </data>
   <data name="allToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
+    <value>134, 22</value>
   </data>
   <data name="allToolStripMenuItem.Text" xml:space="preserve">
     <value>All</value>
@@ -4349,13 +4349,13 @@
     <value>False</value>
   </data>
   <data name="archiveToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 22</value>
+    <value>109, 22</value>
   </data>
   <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
-    <value>Archive</value>
+    <value>Done</value>
   </data>
   <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 114</value>
+    <value>110, 114</value>
   </data>
   <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
     <value>showDropDown</value>
@@ -4368,6 +4368,15 @@
   </metadata>
   <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 70</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
+    <value>helpDropDown</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="introductionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>152, 22</value>
@@ -4392,15 +4401,6 @@
   </data>
   <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
     <value>Shortcuts</value>
-  </data>
-  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 70</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
-    <value>helpDropDown</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
