@@ -375,6 +375,7 @@ void EditCommand::undo() {
 
 void EditCommand::editImmediately() {
 	isFloating = eventToEdit.getIsFloating();
+
 	if (isFloating) {
 		eventsToShow = eventFacade->editEvent(id, eventToEdit, editedEvent);
 	} else {

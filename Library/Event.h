@@ -48,6 +48,7 @@ public:
 	string getName();
 	struct tm getStartDate();
 	struct tm getEndDate();
+	vector<tm> getAllTM();
 	bool getIsFloating();
 	bool getIsDeadline();
 	bool getIsCompleted();

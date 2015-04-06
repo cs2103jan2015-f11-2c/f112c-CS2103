@@ -88,6 +88,13 @@ struct tm Event::getEndDate() {
 	return endDateTime;
 }
 
+vector<tm> Event::getAllTM() {
+	vector<tm> tmVec;
+	tmVec.push_back(startDateTime);
+	tmVec.push_back(endDateTime);
+	return tmVec;
+}
+
 bool Event::getIsFloating() {
 	return isFloating;
 }
