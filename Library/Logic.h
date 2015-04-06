@@ -45,7 +45,7 @@ public:
 	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);
-	vector<tm> getTmVecFromEvents(vector<Event> normalEvents, LogicUpdater updater);
+	vector<tm> getTmVecFromEvents(vector<Event> normalEvents);
 	void deleteParserPtr();
 
 
