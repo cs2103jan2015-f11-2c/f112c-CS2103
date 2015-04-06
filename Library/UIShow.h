@@ -37,7 +37,7 @@ public:
 	static const std::string SHOW_WEEK;
 	static const std::string SHOW_MONTH;
 	static const std::string SHOW_ALL;
-	static const std::string SHOW_ARCHIVE;
+	static const std::string SHOW_DONE;
 	static const std::string SHOW_FLOAT;
 
 	static const std::string WORD_COMMANDS;
@@ -63,7 +63,7 @@ public:
 	std::string getShowWeek();
 	std::string getShowMonth();
 	std::string getShowAll();
-	std::string getShowArchive();
+	std::string getShowDone();
 	std::string getShowFloat();
 
 	//Pre-condition : function setCurrentCommand must be executed first before this function is being called

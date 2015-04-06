@@ -16,7 +16,7 @@ const std::string UIShow::SHOW_DAY = "show today";
 const std::string UIShow::SHOW_WEEK = "show week";
 const std::string UIShow::SHOW_MONTH = "show month";
 const std::string UIShow::SHOW_ALL = "show all";
-const std::string UIShow::SHOW_ARCHIVE = "show archive";
+const std::string UIShow::SHOW_DONE = "show done";
 const std::string UIShow::SHOW_FLOAT = "show floating";
 
 const std::string UIShow::WORD_COMMANDS = "Commands";
@@ -45,8 +45,8 @@ std::string UIShow::getShowAll(){
 	return SHOW_ALL;
 }
 
-std::string UIShow::getShowArchive(){
-	return SHOW_ARCHIVE;
+std::string UIShow::getShowDone(){
+	return SHOW_DONE;
 }
 
 std::string UIShow::getShowFloat(){
@@ -61,10 +61,21 @@ std::string UIShow::getCurrentCommand(){
 std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
 	assert(!currentMainDisplayLabel.empty());
 	assert(mainDisplayDate.size() == 2);
+	
+	/*
+	try {
+		if ( mainDisplayDate[0].tm_mday<0 ){
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+			throw "msg";
+	}
+	} catch (std::string str){
+		return str;
+	}
+	*/
+	
+	//exception 0 <= tm_mday <= 30
+	//exception 0 <= tm_mon <= 11
+	//exception 70 <= tm_year <= 1100
 	
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";

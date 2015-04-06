@@ -1149,8 +1149,8 @@ private: System::Void allToolStripMenuItem_Click(System::Object^  sender, System
 		 }
 
 private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-			 std::string loadCommand = showPtr->getShowArchive();
-			 log("Called UIShow.getShowArchive", "");
+			 std::string loadCommand = showPtr->getShowDone();
+			 log("Called UIShow.getShowDone", "");
 			 executeUserInput(loadCommand);
 		 }
 

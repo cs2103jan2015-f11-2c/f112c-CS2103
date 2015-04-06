@@ -313,7 +313,7 @@ void LogicUpdater::setMainDisplayLabel (vector<tm> label) {
 		std::string dateInString = setSingleDayString(label[0]);
 		_mainDisplayLabel += commandToday + dateInString;
 	} else if (isSingleDay(label) && isTomorrow (label[0])) {
-		string commandTomorrow = LABEL_TODAY + BLANK_SPACE;
+		string commandTomorrow = LABEL_TOMORROW + BLANK_SPACE;
 		std::string dateInString = setSingleDayString(label[0]);
 		_mainDisplayLabel += commandTomorrow + dateInString;
 	} else if (isSingleDay(label)){
