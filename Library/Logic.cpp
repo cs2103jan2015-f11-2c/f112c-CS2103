@@ -77,7 +77,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event userEvent, strin
 		switch (command) {
 		case Parser::ADD:
 		case Parser::ADDFLOAT: {
-			Command* addCommand = new AddCommand(&eventFacade, userEvent);
+			Command* addCommand = new AddCommand(&eventFacade, userEvent, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::ADD);
 			return executor.execute(addCommand);
 							   }
