@@ -7,7 +7,6 @@ const int Command::SIZE_ONE = 1;
 const int Command::SIZE_TWO = 2;
 
 
-
 vector<Event> Command::getEventVector() {
 	return eventsToShow;
 }
@@ -54,8 +53,11 @@ Event Command::getEventFromID(vector<Event> eventVec, int id) {
 	return createInvalidEvent();
 }
 
+//if userEvent dates fall within the dates currently being shown, maintain the current date range being shown, otherwise use the date range of userEvent
 vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
-	vector<tm> userTM, confirmedTM;
+	assert(currentShowingTM.size() == SIZE_TWO);
+	
+	vector<tm> userTM, tmRangeToShow;
 	userTM.push_back(userEvent.getStartDate());
 	userTM.push_back(userEvent.getEndDate());
 
@@ -65,15 +67,15 @@ vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentSho
 		userTM[1].tm_year <= currentShowingTM[1].tm_year &&
 		userTM[1].tm_mon <= currentShowingTM[1].tm_mon &&
 		userTM[1].tm_mday <= currentShowingTM[1].tm_mday) {
-			confirmedTM = currentShowingTM;
+			tmRangeToShow = currentShowingTM;
 	} else {
-		confirmedTM = userTM;
+		tmRangeToShow = userTM;
 	}
 
-	Event dummyEvent;
-	dummyEvent.setStartEndDate(confirmedTM);
+	Event eventWithShowRange;
+	eventWithShowRange.setStartEndDate(tmRangeToShow);
 
-	return eventFacade->showDates(dummyEvent);
+	return eventFacade->showDates(eventWithShowRange);
 }
 
 void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
@@ -92,9 +94,13 @@ void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
 	}
 }
 
+//used when user wants to change an event by typing its name, but there are several events with the same name
 void Command::chooseExactMatches(Event& userEvent) {
 	eventsToShow = eventFacade->findNameOccurrence(userEvent.getName());
+	
+	//setting userEvent to have invalid id indicates this command cannot be added to the undoStack
 	userEvent = createInvalidEvent();
+	
 	isExecuted = false;
 }
 
