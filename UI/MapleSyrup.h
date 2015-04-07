@@ -48,6 +48,7 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  commandsToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
 	private: System::Windows::Forms::Button^  redoButton;
+	private: System::Windows::Forms::PictureBox^  navigationPic;
 
 	private: System::Windows::Forms::Button^  undoButton;
 
@@ -148,6 +149,7 @@ namespace UI {
 			this->introductionToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->navigationPic = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
@@ -157,6 +159,7 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->BeginInit();
 			this->showDropDown->SuspendLayout();
 			this->helpDropDown->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPic))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -222,6 +225,7 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->display, resources->GetString(L"display.ToolTip"));
 			this->display->Enter += gcnew System::EventHandler(this, &MapleSyrup::display_Enter);
 			this->display->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::display_KeyDown);
+			this->display->Leave += gcnew System::EventHandler(this, &MapleSyrup::display_Leave);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -434,6 +438,12 @@ namespace UI {
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::shortcutsToolStripMenuItem_Click);
 			// 
+			// navigationPic
+			// 
+			resources->ApplyResources(this->navigationPic, L"navigationPic");
+			this->navigationPic->Name = L"navigationPic";
+			this->navigationPic->TabStop = false;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -441,6 +451,7 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->Controls->Add(this->navigationPic);
 			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->helpButton);
@@ -479,6 +490,7 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->searchIcon))->EndInit();
 			this->showDropDown->ResumeLayout(false);
 			this->helpDropDown->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPic))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -971,8 +983,6 @@ private: void passCommandToLogic(std::string input){
 			 }
 		 }
 
-
-
 std::string toLowerCase(std::string word){
 	for (int i=0;i<word.size();i++){
 		 word[i] = tolower(word[i]);
@@ -1353,7 +1363,13 @@ private: void executeNextKey(){
 
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 display->SelectionStart = 0;
+			 navigationPic->Visible = true;
 		 }
+
+private: System::Void display_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPic->Visible = false;
+		 }
+
 
 private: System::Void floatingTasksDisplay_Enter(System::Object^  sender, System::EventArgs^  e) {
 			floatingTasksDisplay->SelectionStart = 0;
@@ -1401,6 +1417,7 @@ private: Void log(std::string label, std::string commands){
 			 outFile.close();
 		 }
 //===================================================================================================================================================================
+
 
 
 
