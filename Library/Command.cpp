@@ -210,8 +210,7 @@ void CompleteCommand::completeImmediately() {
 	if (isFloating) {
 		eventsToShow = eventFacade->completeEvent(id, userEvent);
 	} else {
-		eventFacade->completeEvent(id, userEvent);
-		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		eventsToShow = eventFacade->completeEvent(id, userEvent);
 	}
 	isExecuted = true;
 }
@@ -224,8 +223,7 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		userEvent = tempEvents[1];
-		eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
-		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		eventsToShow = eventFacade->completeEvent(tempEvents[1].getID(), tempEvents[1]);
 	}
 	isExecuted = true;
 }

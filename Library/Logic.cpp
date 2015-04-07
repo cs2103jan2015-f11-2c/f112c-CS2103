@@ -276,13 +276,13 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				feedback = LogicUpdater::COMPLETED_MESSAGE + doneEvent.getName();
 			}
 			if (!doneEvent.getIsFloating()) {
-				if (isSameDate(doneEvent.getStartDate(),userEvent.getEndDate())) {
+				if (isSameDate(doneEvent.getStartDate(),doneEvent.getEndDate())) {
 					feedback += COMMA_SPACE + updater.setSingleDayString(doneEvent.getStartDate());
 				} else {
 					feedback += COMMA_SPACE + updater.setMultipleDaysString(doneEvent.getStartDate(),doneEvent.getEndDate());
 				}
 			}
-
+			
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }
@@ -468,7 +468,7 @@ void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Co
 
 	} else {
 		normal = commandPtr->getEventVector();
-
+		
 		tmVec = getTmVecFromEvents(normal);
 		Event dummyEvent;
 		dummyEvent.setStartEndDate(tmVec);
