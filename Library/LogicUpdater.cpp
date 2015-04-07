@@ -211,7 +211,6 @@ vector<tm> LogicUpdater::getTempMainDisplayLabel() {
 	return _tempMainDisplayLabel;
 }
 //===================================================================================================================================================================
-
 void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
 	_newID = id;
 	setWeekMonthOrNothing (weekMonthOrNothing);
@@ -301,7 +300,6 @@ std::string LogicUpdater::setMultipleDaysString(tm start,tm end) {
 
 	return multipleDaysString;
 }
-
 
 void LogicUpdater::setMainDisplayLabel (vector<tm> label) {
 	assert(label.size()==2);

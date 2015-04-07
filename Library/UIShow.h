@@ -90,33 +90,33 @@ public:
 	//e.g. It takes in Mar. It will return show Feb
 	std::string generateCurrentCommand(std::string, std::vector<tm>);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
 	//Pass in the date and the number of days to be shifted. It will return the shifted tm
 	//Can accept any int (positive and negative)
 	tm shiftDate(tm, int);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100)  
 	std::string generateShowWeekForNext(tm);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
 	std::string generateShowMonthForNext(tm);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100)  
 	std::string generateShowWeekForBack(tm);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
 	std::string generateShowMonthForBack(tm);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 1970 <= year <= 3000 )
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 1971 < year < 3000 )
 	//[WARNING - assertion failure if date is invalid]
 	//Pass in the date in dd/MM/YYYY form
 	//Returns date in dd Month YYYY std::string form
 	std::string generateDateString(std::string);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100) 
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
 	std::string convertFromTmToStr(tm);
 
-	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100 )
 	//Pass in the 2 dates in tm type
 	//Return number of days between these 2 dates. 
 	//[Remarks - All return numbers will be non-negative regardless the order of dates passed in] 
@@ -124,7 +124,7 @@ public:
 
 	void initializeTime(tm);
 	//Pre-condition : size of vector should be 2
-	//				  Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 <= year <= 1100 )
+	//				  Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100 )
 	bool checkIsSingleDate(std::vector<tm>);
 	
 	//Pre-condition : string must not be empty

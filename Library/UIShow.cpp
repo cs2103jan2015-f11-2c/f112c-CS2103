@@ -28,8 +28,8 @@ const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
 const std::string UIShow::LABEL_WEEK = "[Week]";
 const std::string UIShow::LABEL_MONTH = "[Month]";
 
-const std::string UIShow::MESSAGE_YEAR_BEFORE_1970 = "Error: Unable to display date before year 1970";
-const std::string UIShow::MESSAGE_YEAR_AFTER_3000 = "Error: Unable to display date after year 3000";
+const std::string UIShow::MESSAGE_YEAR_BEFORE_1970 = "Error: Unable to display date before year 1971";
+const std::string UIShow::MESSAGE_YEAR_AFTER_3000 = "Error: Unable to display date after year 2999";
 const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date(s) Selected / Date(s) out of range";
 
 std::string UIShow::getShowDay(){
@@ -330,11 +330,11 @@ std::string UIShow::generateDateString(std::string date){
 
 	int dateYearInt = stringToInt(dateYear);
 
-	if(dateYearInt<1970){
+	if(dateYearInt<=1970){
 		throw MESSAGE_YEAR_BEFORE_1970;
 	}
 
-	if(dateYearInt>3000){
+	if(dateYearInt>=3000){
 		throw MESSAGE_YEAR_AFTER_3000;
 	}
 	
@@ -438,11 +438,11 @@ std::string UIShow::intToMonth (int monthInNum){
 }
 
 void UIShow::checkValidityOftm(tm date){
-	if(date.tm_year<70){
+	if(date.tm_year<=70){
 		throw MESSAGE_YEAR_BEFORE_1970;
 	}
 
-	if(date.tm_year>1100){
+	if(date.tm_year>=1100){
 		throw MESSAGE_YEAR_AFTER_3000;
 	}
 	
