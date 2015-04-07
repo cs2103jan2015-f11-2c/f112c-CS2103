@@ -72,10 +72,10 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 	
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
-	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newCommand = generateShowWeekForNext(mainDisplayDate[1]);
 		return newCommand;
-	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+	} else if (currentMainDisplayLabel.size()>=7 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
 		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
 		std::string newCommand = generateShowMonthForNext(mainDisplayDate[0]);
 		return newCommand;
@@ -103,10 +103,10 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
-	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newCommand = generateShowWeekForBack(mainDisplayDate[1]);
 		return newCommand;
-	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
 		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
 		std::string newCommand = generateShowMonthForBack(mainDisplayDate[0]);
 		return newCommand;
