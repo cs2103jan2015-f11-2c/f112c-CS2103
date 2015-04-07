@@ -4,14 +4,18 @@ const std::string ParserProcessor::LOCKUP_USED_INFORMATION = "USED";
 
 const std::string ParserProcessor::PROCESS_ADD_EVENT = "processAddEvent";
 const std::string ParserProcessor::PROCESS_EDIT_EVENT = "processEditEvent";
-const std::string ParserProcessor::IDENTIFY_EVENT_NAME = "identifyEventName";
-const std::string ParserProcessor::IDENTIFY_DATE = "identifyDate";
-const std::string ParserProcessor::IDENTIFY_DAY = "identifyDay";
-const std::string ParserProcessor::IDENTIFY_TIME = "identifyTime";
 const std::string ParserProcessor::ADD_EVENT_CORRECTOR = "addEventCorrector";
 const std::string ParserProcessor::EDIT_EVENT_CORRECTOR = "editEventCorrector";
 const std::string ParserProcessor::EVENT_MK_TIME_CORRECTOR = "eventMkTimeCorrector";
 const std::string ParserProcessor::PROCESS_SHOW_EVENT = "processShowEvent";
+const std::string ParserProcessor::IDENTIFY_EVENT_NAME = "Event name identified";
+const std::string ParserProcessor::IDENTIFY_DATE = "Date identified";
+const std::string ParserProcessor::IDENTIFY_DAY = "Day identified";
+const std::string ParserProcessor::IDENTIFY_TIME = "Time identified";
+const std::string ParserProcessor::IDENTIFY_DEADLINE = "Deadline identified";
+const std::string ParserProcessor::IDENTIFY_IMPORTANCE = "Importance identified";
+const std::string ParserProcessor::SYSTEM_SHOW = "System show identified";
+const std::string ParserProcessor::SHOW_YEAR = "Show by year identified";
 
 ParserProcessor::ParserProcessor() {
 	keywordMonths[0] = "jan";
@@ -198,11 +202,10 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 //Checks the string at the current index of the fragmented string vector for the presence of a ';' to indicate an event name.
 //Sets the name of event to that name if found, removing the ';' at the end. Returns nameFound as true if found.
 bool ParserProcessor::identifyEventName(int index) {
-	logger.logParserEnterFunc(IDENTIFY_EVENT_NAME);
-
 	if (fragmentedWords[index].find(";") != std::string::npos) {
 		tempEventStore.setName(fragmentedWords[index].substr(0,fragmentedWords[index].find_last_of(";")));
 		nameFound = true;
+		logger.logParserIdentified(IDENTIFY_EVENT_NAME);
 		fragmentedWords[index] = LOCKUP_USED_INFORMATION;
 	}
 	return nameFound;
@@ -212,8 +215,6 @@ bool ParserProcessor::identifyEventName(int index) {
 //If found, further operations are done to determine the date set of (day, month and year) based off these keywords.
 //The Event's start date and end date will be assigned based on the date set found. Returns matchFound as true if found.
 bool ParserProcessor::identifyDay(int index) {
-	logger.logParserEnterFunc(IDENTIFY_DAY);
-
 	Conversion convertor;
 	int tempIndex = 0;
 	int currentDay = 0, currentWeekDay = 0, inputWeekDay = 0, numWdaysApart = 0;
@@ -225,6 +226,7 @@ bool ParserProcessor::identifyDay(int index) {
 			tempIndex = index;
 			strDay = keywordDay[j];
 			matchFound = true;
+			logger.logParserIdentified(IDENTIFY_DAY);
 			
 			//assigning start and end date according to what keyword was found
 			if (strDay == "today" || strDay == "tdy") {
@@ -286,8 +288,6 @@ bool ParserProcessor::identifyDay(int index) {
 //A date set will consist of (day, month, year). The Event's start date and end date will be assigned based on the date set found.
 //Returns matchFound is true if a date is found.
 bool ParserProcessor::identifyDate(int index) {
-	logger.logParserEnterFunc(IDENTIFY_DATE);
-
 	Conversion convertor;
 	int indexShift = 0, tempIndex = 0;
 	int tempInt = 0, day = 0, month = 0, year = 0, dayTo = 0;
@@ -299,6 +299,7 @@ bool ParserProcessor::identifyDate(int index) {
 			tempIndex = index;
 			strMonth = keywordMonths[j];
 			matchFound = true;
+			logger.logParserIdentified(IDENTIFY_DATE);
 			
 			//Retrieving one set of (day, month, year) from input data
 			year = checkYear(tempIndex,&indexShift);
@@ -400,6 +401,7 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift) {
 					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					tempInt = tempStoi;
 					toFound = true;
+					logger.logParserIdentified(IDENTIFY_DATE);
 				} catch (std::invalid_argument& e) {
 				}
 			}
@@ -446,7 +448,6 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo) {
 //A time set will consist of (hour, minute). The Event's start time and end time will be assigned based on the time set found.
 //Returns matchFound is true if a time is found.
 bool ParserProcessor::identifyTime(int index) {
-	logger.logParserEnterFunc(IDENTIFY_TIME);
 
 	int tempIndex = 0, firstTimeInteger = 0, indexShift = 0;
 	timeSet hourMin;
@@ -462,6 +463,7 @@ bool ParserProcessor::identifyTime(int index) {
 				afterTwelve = true;
 			}
 			matchFound = true;
+			logger.logParserIdentified(IDENTIFY_TIME);
 
 			//Retrieving one time set of (hour, minute) from the input data
 			firstTimeInteger = extractFirstTimeInteger(tempIndex,&indexShift);
@@ -595,6 +597,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					tempInt = tempStoi;
 					toFound = true;
+					logger.logParserIdentified(IDENTIFY_TIME);
 
 					if (tempInt >= 100) {   //For time input in the form of combined hour & minute. E.g. 930 1045 1230
 						toMinute = tempInt%100;
@@ -699,6 +702,7 @@ bool ParserProcessor::identifyDeadline(int index) {
 	if (fragmentedWords[index] == "due" || fragmentedWords[index] == "by") {
 		tempEventStore.setIsDeadline(true);
 		deadlineFound = true;
+		logger.logParserIdentified(IDENTIFY_DEADLINE);
 		if (!endDayFound) {
 			endDayFound = true;
 		} else {
@@ -731,6 +735,7 @@ bool ParserProcessor::identifyImportance(int index) {
 			}
 		}
 		importanceFound = true;
+		logger.logParserIdentified(IDENTIFY_IMPORTANCE);
 		tempEventStore.setImportanceLevel(levelImportance);
 	}
 	return matchFound;
@@ -1062,6 +1067,9 @@ bool ParserProcessor::checkShowByYear(int tempIndex) {
 			systemShowYear = true;
 		}
 	}
+	if(systemShowYear){
+		logger.logParserIdentified(SHOW_YEAR);
+	}
 	return systemShowYear;
 }
 
@@ -1127,6 +1135,9 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex) {
 		tempEventStore.setName("specificimportance");
 		systemShowOthers = true;
 	}
+	if(systemShowOthers || systemShowWeek || systemShowMonth){
+		logger.logParserIdentified(SYSTEM_SHOW);
+	}
 	return (systemShowOthers || systemShowWeek || systemShowMonth);
 }
 	
@@ -1148,6 +1159,7 @@ bool ParserProcessor::identifyShowDay(int index) {
 			tempIndex = index;
 			strDay = keywordDay[j];
 			matchFound = true;
+			logger.logParserIdentified(IDENTIFY_DAY);
 			
 			//assigning start and end date according to what keyword was found
 			if (strDay == "today" || strDay == "tdy") {
@@ -1229,6 +1241,7 @@ bool ParserProcessor::identifyShowDate(int index) {
 	for (unsigned int j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++) {
 		if (fragmentedWords[index].find(keywordMonths[j]) != std::string::npos) {
 			matchFound = true;
+			logger.logParserIdentified(IDENTIFY_DATE);
 			if (!oneMatchFound) {
 				oneMatchFound = true;
 			} else if (!twoMatchFound) {
@@ -1344,6 +1357,7 @@ int ParserProcessor::checkShowDayTo(int tempIndex, int* indexShift) {
 					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					tempInt = tempStoi;
 					toFound = true;
+					logger.logParserIdentified(IDENTIFY_DATE);
 					twoMatchFound = true;
 					userShowRangeOfDays = true;
 					userShowDay = false;

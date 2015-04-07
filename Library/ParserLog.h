@@ -16,6 +16,7 @@ public:
 
 	void logParserStart(std::string);
 	void logParserEnterFunc(std::string);
+	void logParserIdentified(std::string);
 	void logParserError(std::string);
 	void logParserSuccess(std::string);
 	void logParserFailure(std::string);

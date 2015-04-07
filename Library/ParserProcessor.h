@@ -14,14 +14,18 @@ class ParserProcessor {
 private:
 	static const std::string PROCESS_ADD_EVENT;
 	static const std::string PROCESS_EDIT_EVENT;
-	static const std::string IDENTIFY_EVENT_NAME;
-	static const std::string IDENTIFY_DAY;
-	static const std::string IDENTIFY_DATE;
-	static const std::string IDENTIFY_TIME;
 	static const std::string ADD_EVENT_CORRECTOR;
 	static const std::string EDIT_EVENT_CORRECTOR;
 	static const std::string EVENT_MK_TIME_CORRECTOR;
 	static const std::string PROCESS_SHOW_EVENT;
+	static const std::string IDENTIFY_EVENT_NAME;
+	static const std::string IDENTIFY_DAY;
+	static const std::string IDENTIFY_DATE;
+	static const std::string IDENTIFY_TIME;
+	static const std::string IDENTIFY_DEADLINE;
+	static const std::string IDENTIFY_IMPORTANCE;
+	static const std::string SYSTEM_SHOW;
+	static const std::string SHOW_YEAR;
 
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;

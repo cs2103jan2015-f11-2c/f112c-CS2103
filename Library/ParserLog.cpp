@@ -19,6 +19,13 @@ void ParserLog::logParserEnterFunc(std::string functionName) {
 	writeFile.close();
 }
 
+void ParserLog::logParserIdentified(std::string functionName) {
+	std::ofstream writeFile;
+	writeFile.open(textfilename,std::ios::app);
+	writeFile << functionName << std::endl;
+	writeFile.close();
+}
+
 void ParserLog::logParserError(std::string errorCode) {
 	std::ofstream writeFile;
 	writeFile.open(textfilename,std::ios::app);
@@ -29,13 +36,13 @@ void ParserLog::logParserError(std::string errorCode) {
 void ParserLog::logParserSuccess(std::string input) {
 	std::ofstream writeFile;
 	writeFile.open(textfilename,std::ios::app);
-	writeFile << "Successfully parsed input \"" << input << "\"" << std::endl;
+	writeFile << "Successfully parsed input \"" << input << "\"" << std::endl << std::endl;
 	writeFile.close();
 }
 
 void ParserLog::logParserFailure(std::string input) {
 	std::ofstream writeFile;
 	writeFile.open(textfilename,std::ios::app);
-	writeFile << "Failed to parse input \"" << input << "\"" << std::endl;
+	writeFile << "Failed to parse input \"" << input << "\"" << std::endl << std::endl;
 	writeFile.close();
 }
