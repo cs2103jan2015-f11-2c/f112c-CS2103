@@ -1,13 +1,1 @@
 Clear All Log Files: All log files cleared
-Program starts at: 06 Apr,Monday, 20:22:22
-executeUserInput: show floating
-Logic command executed & returns: True
-Floating displayed: Successful
-Main displayed: Successful
-Main label displayed: [Today] 6 April, Monday
-executeUserInput: show today
-Logic command executed & returns: True
-Feedback displayed: showing today
-Floating displayed: Successful
-Main displayed: Successful
-Main label displayed: [Today] 6 April, Monday

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <assert.h>
 #include <cctype>
+#include <stdexcept>
 
 #include "Logic.h"
 #include "UICommandSuggestion.h"
@@ -1220,6 +1221,7 @@ private: void closeCalendar(){
 //It receives the start and end date to be displayed from calendar and pass them to UIShow.h to generate a proper command
 //It moves on to pass this command to function executeUserInput for executition
 private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
+			 
 			 //Start date
 			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
 			 std::string startDate = convertToStd(tempStartDate);
@@ -1230,9 +1232,16 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 
 			 log("Calendar date(s) selected & sent to UIShow:", startDate + " to " + endDate);
 
+			 try{
 			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
 
 			 executeUserInput(command);
+			 }
+			 catch (const std::string& errorMsg){
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
+
 		 }
 //===================================================================================================================================================================
 

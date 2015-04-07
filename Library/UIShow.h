@@ -18,6 +18,7 @@
 #include <vector>
 #include <sstream>
 #include <assert.h>
+#include <stdexcept>
 
 class UIShow
 {
@@ -48,6 +49,12 @@ public:
 
 	static const std::string LABEL_WEEK;
 	static const std::string LABEL_MONTH;
+
+	static const std::string MESSAGE_YEAR_BEFORE_1970;
+	static const std::string MESSAGE_YEAR_AFTER_3000;
+	static const std::string MESSAGE_INVALID_DATE;
+
+	
 
 private:
 	std::string _currentCommand;

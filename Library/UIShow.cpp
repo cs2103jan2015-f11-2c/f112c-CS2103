@@ -28,6 +28,9 @@ const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
 const std::string UIShow::LABEL_WEEK = "[Week]";
 const std::string UIShow::LABEL_MONTH = "[Month]";
 
+const std::string UIShow::MESSAGE_YEAR_BEFORE_1970 = "Error: Unable to display date before year 1970";
+const std::string UIShow::MESSAGE_YEAR_AFTER_3000 = "Error: Unable to display date after year 3000";
+const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date Selected";
 
 std::string UIShow::getShowDay(){
 	return SHOW_DAY;
@@ -133,7 +136,7 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
 	std::string startDateString = generateDateString(startDate);
 	std::string endDateString = generateDateString(endDate);
-	 
+
 	std::string command = COMMAND_SHOW + " " + startDateString  + " to " + endDateString;
 	return command;
 }
@@ -297,6 +300,9 @@ std::string UIShow::generateDateString(std::string date){
 
 	int dateDayInt = stringToInt(dateDay);
 	
+	if(dateDayInt<1 || dateDayInt>31){
+		throw MESSAGE_INVALID_DATE;
+	}
 	index++;
 
 	std::string dateMonth = "";
@@ -306,6 +312,10 @@ std::string UIShow::generateDateString(std::string date){
 
 	int dateMonthInt = stringToInt(dateMonth);
 	
+	if(dateMonthInt<1 || dateMonthInt>12){
+		throw MESSAGE_INVALID_DATE;
+	}
+
 	std::string dateMonthString = intToMonth(dateMonthInt-1);
 
 	index++;
@@ -317,12 +327,17 @@ std::string UIShow::generateDateString(std::string date){
 
 	int dateYearInt = stringToInt(dateYear);
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	if(dateYearInt<1970){
+		throw MESSAGE_YEAR_BEFORE_1970;
+	}
+
+	if(dateYearInt>3000){
+		throw MESSAGE_YEAR_AFTER_3000;
+	}
 	
 	std::string dateString =  dateDay + dateMonthString + " " + dateYear;
 	return dateString;
+
 }
 
 std::string UIShow::convertFromTmToStr(tm date){
