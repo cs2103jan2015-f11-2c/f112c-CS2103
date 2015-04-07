@@ -208,7 +208,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);	
 
-			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
+			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName();
 			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
 				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
 			} else {
@@ -224,7 +224,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser::ADDFLOAT: {		
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
-			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
+			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName();
 			int id = userEvent.getID();
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
@@ -269,13 +269,22 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
 			if (command == Parser::DELETE_) { //for delete
 				Event deletedEvent = commandPtr->getEvent();
-				string feedback = deletedEvent.getName() + LogicUpdater::DELETED_MESSAGE;
+
+				string feedback = LogicUpdater::DELETED_MESSAGE + deletedEvent.getName();
+				/*if (!deletedEvent.getIsFloating()) {
+					if (isSameDate(deletedEvent.getStartDate(),userEvent.getEndDate())) {
+						feedback += COLON_SPACE + updater.setSingleDayString(deletedEvent.getStartDate());
+					} else {
+						feedback += COLON_SPACE + updater.setMultipleDaysString(deletedEvent.getStartDate(),deletedEvent.getEndDate());
+					}
+				}*/
 
 				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
 				return;
+
 			} else { //for complete
 				Event completedEvent = commandPtr->getEvent();
-				string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
+				string feedback = LogicUpdater::COMPLETED_MESSAGE + completedEvent.getName();
 
 				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 				return;
