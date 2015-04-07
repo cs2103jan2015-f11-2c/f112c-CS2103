@@ -28,9 +28,10 @@ const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
 const std::string UIShow::LABEL_WEEK = "[Week]";
 const std::string UIShow::LABEL_MONTH = "[Month]";
 
-const std::string UIShow::MESSAGE_YEAR_BEFORE_1970 = "Error: Unable to display date before year 1971";
-const std::string UIShow::MESSAGE_YEAR_AFTER_3000 = "Error: Unable to display date after year 2999";
+const std::string UIShow::MESSAGE_YEAR_BEFORE_1971 = "Error: Unable to display date before year 1971";
+const std::string UIShow::MESSAGE_YEAR_AFTER_2999 = "Error: Unable to display date after year 2999";
 const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date(s) Selected / Date(s) out of range";
+const std::string UIShow::MESSAGE_START_LATER_THAN_END = "Error: Invalid Date(s) - Start date is later than End date";
 
 std::string UIShow::getShowDay(){
 	return SHOW_DAY;
@@ -293,11 +294,14 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 
 std::string UIShow::generateDateString(std::string date){
 	int index=0;
-	int i=0;
 	
 	std::string dateDay = "";
-	for (;std::isdigit(date[index]);index++){
+	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateDay += date[index];
+	}
+
+	if(dateDay.empty()){
+		throw MESSAGE_INVALID_DATE;
 	}
 
 	int dateDayInt = stringToInt(dateDay);
@@ -309,12 +313,16 @@ std::string UIShow::generateDateString(std::string date){
 	index++;
 
 	std::string dateMonth = "";
-	for (;std::isdigit(date[index]);index++){
+	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateMonth += date[index];
 	}
 
+	if(dateMonth.empty()){
+		throw MESSAGE_INVALID_DATE;
+	}
+
 	int dateMonthInt = stringToInt(dateMonth);
-	
+
 	if(dateMonthInt<1 || dateMonthInt>12){
 		throw MESSAGE_INVALID_DATE;
 	}
@@ -324,23 +332,26 @@ std::string UIShow::generateDateString(std::string date){
 	index++;
 
 	std::string dateYear = "";
-	for (;std::isdigit(date[index]);index++){
+	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateYear += date[index];
+	}
+
+	if(dateYear.empty()){
+		throw MESSAGE_INVALID_DATE;
 	}
 
 	int dateYearInt = stringToInt(dateYear);
 
 	if(dateYearInt<=1970){
-		throw MESSAGE_YEAR_BEFORE_1970;
+		throw MESSAGE_YEAR_BEFORE_1971;
 	}
 
 	if(dateYearInt>=3000){
-		throw MESSAGE_YEAR_AFTER_3000;
+		throw MESSAGE_YEAR_AFTER_2999;
 	}
 	
 	std::string dateString =  dateDay + dateMonthString + " " + dateYear;
 	return dateString;
-
 }
 
 std::string UIShow::convertFromTmToStr(tm date){
@@ -401,7 +412,7 @@ std::string UIShow::intToString (int num){
 int UIShow::stringToInt (std::string str){
 	assert(!str.empty());
 
-	int outNum;
+	int outNum = 0;
 	std::istringstream in(str);
 	in >> outNum;
 	return outNum;
@@ -439,11 +450,11 @@ std::string UIShow::intToMonth (int monthInNum){
 
 void UIShow::checkValidityOftm(tm date){
 	if(date.tm_year<=70){
-		throw MESSAGE_YEAR_BEFORE_1970;
+		throw MESSAGE_YEAR_BEFORE_1971;
 	}
 
 	if(date.tm_year>=1100){
-		throw MESSAGE_YEAR_AFTER_3000;
+		throw MESSAGE_YEAR_AFTER_2999;
 	}
 	
 	if(date.tm_mday<1 || date.tm_mday>31){

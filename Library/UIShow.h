@@ -50,11 +50,10 @@ public:
 	static const std::string LABEL_WEEK;
 	static const std::string LABEL_MONTH;
 
-	static const std::string MESSAGE_YEAR_BEFORE_1970;
-	static const std::string MESSAGE_YEAR_AFTER_3000;
+	static const std::string MESSAGE_YEAR_BEFORE_1971;
+	static const std::string MESSAGE_YEAR_AFTER_2999;
 	static const std::string MESSAGE_INVALID_DATE;
-
-	
+	static const std::string MESSAGE_START_LATER_THAN_END;
 
 private:
 	std::string _currentCommand;
@@ -128,8 +127,13 @@ public:
 	bool checkIsSingleDate(std::vector<tm>);
 	
 	//Pre-condition : string must not be empty
+	//[WARNING- if the string is made up of digits & non-digits, function will only return the first instances of digits 
+	//e.g. 8765hello432, function will return 8765]
+	//[WARNING- if the string is made up of non-digits at the front, function will return 0 
+	//e.g. hello432, function will return 0]
 	int stringToInt(std::string);
 
+	//Pre-condition : input integer cannot be negative
 	std::string intToString(int);
 
 	std::string intToMonth(int);
