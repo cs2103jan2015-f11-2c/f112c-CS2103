@@ -27,12 +27,19 @@ private:
 	static const std::string SYSTEM_SHOW;
 	static const std::string SHOW_YEAR;
 
+	static const std::string CONVERT_NORMAL_TO_FLOAT;
+
 	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
 	static const int NUMBER_OF_KEYWORDS_DAYS = 11;
 	static const int NUMBER_OF_DAYSINAWEEK = 7;
+
 	static const std::string LOCKUP_USED_INFORMATION;
 	
+	static const int LOWER_RANGE_YEAR = 1970;
+	static const int HIGHER_RANGE_YEAR = 3000;
+	static const int TM_YEAR_ADJUSTMENT = 1900;
+
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];
 	std::string keywordDay[NUMBER_OF_KEYWORDS_DAYS];
@@ -48,6 +55,7 @@ private:
 	bool toFound;
 	bool deadlineFound;
 	bool importanceFound;
+	bool normalToFloat;
 
 	//boolean variables for Show command
 	//to check if Show is a range of days 
@@ -80,6 +88,7 @@ public:
 	Event processAddEvent(std::vector<std::string>);
 	Event processEditEvent(std::vector<std::string>);
 	
+	bool identifyNormaltoFloat(int);
 	bool identifyEventName(int);
 	bool identifyDay(int);
 

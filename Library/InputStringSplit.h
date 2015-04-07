@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <cassert>
+#include <assert.h>
 #include <cctype>
 #include "ParserExceptions.h"
 #include "ParserLog.h"
@@ -24,6 +24,8 @@ public:
 	static const std::string FRAGMENT_ADD_STRING;
 	static const std::string FRAGMENT_EDIT_STRING;
 	static const std::string FRAGMENT_SHOW_STRING;
+
+	static const std::string CONVERT_NORMAL_TO_FLOAT;
 
 	InputStringSplit();
 

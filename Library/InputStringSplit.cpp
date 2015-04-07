@@ -9,6 +9,8 @@ const std::string InputStringSplit::FRAGMENT_ADD_STRING = "fragmentAddString";
 const std::string InputStringSplit::FRAGMENT_EDIT_STRING = "fragmentEditString";
 const std::string InputStringSplit::FRAGMENT_SHOW_STRING = "fragmentShowString";
 
+const std::string InputStringSplit::CONVERT_NORMAL_TO_FLOAT = "to>>>float";
+
 InputStringSplit::InputStringSplit(){
 }
 
@@ -16,6 +18,7 @@ InputStringSplit::InputStringSplit(){
 //Throws exception if no input is found. Returns the extracted string.
 std::string InputStringSplit::extractFirstWord(std::string input){
 	logger.logParserEnterFunc(EXTRACT_FIRST_WORD);
+	assert(!input.empty());
 
 	bool missingInput = true;
 	for (unsigned int i = 0; i < input.size() && missingInput; i++){
@@ -34,7 +37,7 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 	for(unsigned int i = 0; i < tempStr.size(); i++){
 		tempStr[i] = std::tolower(tempStr[i]);
 	}
-	//assert string not empty
+	assert(!tempStr.empty());
 	return tempStr;
 }
 
@@ -42,6 +45,7 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 //Throws exception if no input is found after the spacing. Returns the extracted string.
 std::string InputStringSplit::extractDetails(std::string input){
 	logger.logParserEnterFunc(EXTRACT_DETAILS);
+	assert(!input.empty());
 
 	bool missingInput = true;
 	for (unsigned int i = 0; i < input.size() && missingInput; i++){
@@ -67,7 +71,7 @@ std::string InputStringSplit::extractDetails(std::string input){
 	}
 
 	std::string tempStr = input.substr(strCutIndex);
-	//assert string not empty
+	assert(!tempStr.empty());
 	return tempStr;
 }
 
@@ -75,6 +79,7 @@ std::string InputStringSplit::extractDetails(std::string input){
 //Throws exception if no event name/ event index is found or if too many information is provided. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractDelDoneEventName(std::string input){
 	logger.logParserEnterFunc(EXTRACT_DEL_DONE_EVENT_NAME);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -97,7 +102,7 @@ std::string InputStringSplit::extractDelDoneEventName(std::string input){
 		}
 	}
 	tempStr = input.substr(0,strCutIndex);
-	//assert string not empty
+	assert(!tempStr.empty());
 	return tempStr;
 }
 
@@ -105,6 +110,7 @@ std::string InputStringSplit::extractDelDoneEventName(std::string input){
 //Throws exception if no event name/ event index is found. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractEditEventName(std::string input){
 	logger.logParserEnterFunc(EXTRACT_EDIT_EVENT_NAME);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -112,26 +118,27 @@ std::string InputStringSplit::extractEditEventName(std::string input){
 	}
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find_first_of(" ");
-	std::string tempString = input.substr(0,strCutIndex);
+	std::string tempStr = input.substr(0,strCutIndex);
 	
 	try {
-		int index = std::stoi(tempString);
+		int index = std::stoi(tempStr);
 	} catch (std::invalid_argument& e){
 		strCutIndex = input.find_first_of(";");
 		if(strCutIndex == std::string::npos){
 			logger.logParserError(ParserExceptions::ERROR_MISSING_INDEX);
 			throw ParserExceptions(ParserExceptions::ERROR_MISSING_INDEX);
 		}
-		tempString = input.substr(0,strCutIndex);
+		tempStr = input.substr(0,strCutIndex);
 	}
-	//assert not empty string
-	return tempString;
+	assert(!tempStr.empty());
+	return tempStr;
 }
 
 //Removes the event name/index from the input string. Throws exception if input is empty, or if there is no additional information after the event name/index
 //Returns the remaining string after removing the event name/event index.
 std::string InputStringSplit::removeEditEventName(std::string input, std::string eventName){
 	logger.logParserEnterFunc(REMOVE_EDIT_EVENT_NAME);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -139,17 +146,22 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 	}
 	std::string::size_type strCutIndex;
 	strCutIndex = input.find(eventName);
-	if(strCutIndex == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-	}
+	//if(strCutIndex == std::string::npos){
+	//	logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	//	throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	//}
 	strCutIndex = input.find_first_not_of(" ;",strCutIndex+eventName.size());
-	if(strCutIndex == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	//if(strCutIndex == std::string::npos){
+	//	logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	//	throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+	//}
+	std::string tempStr;
+	if(strCutIndex != std::string::npos){
+		tempStr = input.substr(strCutIndex);
+	} else {
+		tempStr = CONVERT_NORMAL_TO_FLOAT;
 	}
-	std::string tempStr = input.substr(strCutIndex);
-	//assert not empty string
+	assert(!tempStr.empty());
 	return tempStr;
 }
 
@@ -157,6 +169,7 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 //( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or no event name. Returns a vector of strings.
 std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	logger.logParserEnterFunc(FRAGMENT_ADD_STRING);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -199,7 +212,7 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 			input = input.substr(strCutIndex);
 		}
 	}
-	//assert vector not empty
+	assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }
 
@@ -207,6 +220,7 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 //finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
 std::vector<std::string> InputStringSplit::fragmentEditString(std::string input){
 	logger.logParserEnterFunc(FRAGMENT_EDIT_STRING);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -255,7 +269,7 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 			input = input.substr(strCutIndex);
 		}
 	}
-	//assert vector not empty
+	assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }	
 
@@ -263,6 +277,7 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 //finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
 std::vector<std::string> InputStringSplit::fragmentShowString(std::string input){
 	logger.logParserEnterFunc(FRAGMENT_SHOW_STRING);
+	assert(!input.empty());
 
 	if(input.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
@@ -296,6 +311,6 @@ std::vector<std::string> InputStringSplit::fragmentShowString(std::string input)
 			input = input.substr(strCutIndex);
 		}
 	}
-	//assert vector not empty
+	assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }
