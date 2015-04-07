@@ -16,7 +16,8 @@ namespace UnitTest
 		TEST_METHOD(Command_getNumEvents_Test)
 		{
 			//dummy command
-			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent);
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
 
 			Event floating, normalName, normal;
 			floating.setIsFloating(true);
@@ -55,7 +56,8 @@ namespace UnitTest
 		TEST_METHOD(Command_getEventFromID_Test)
 		{
 			//dummy command
-			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent);
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
 
 			Event floating, normalName, normal;
 			floating.setIsFloating(true);
@@ -101,7 +103,8 @@ namespace UnitTest
 		TEST_METHOD(Command_createInvalidEvent_Test)
 		{
 			//dummy command
-			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent);
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
 
 			Event invalidEvent = commandPtr->createInvalidEvent();
 			Assert::AreEqual(invalidEvent.getID(), -1);
