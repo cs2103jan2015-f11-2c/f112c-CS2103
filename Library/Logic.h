@@ -25,7 +25,7 @@ private:
 public:
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
-	static const string COLON_SPACE;
+	static const string COMMA_SPACE;
 	static const char CHAR_OPEN_SQUARE_BRACKET;
 	static const char CHAR_CLOSE_SQUARE_BRACKET;
 

@@ -3,7 +3,7 @@
 
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
-const string Logic::COLON_SPACE = ": ";
+const string Logic::COMMA_SPACE = ", ";
 const char Logic::CHAR_OPEN_SQUARE_BRACKET = '[';
 const char Logic::CHAR_CLOSE_SQUARE_BRACKET = ']';
 
@@ -208,11 +208,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);	
 
-			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName();
+			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName() + COMMA_SPACE;
 			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
-				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
+				feedback += updater.setSingleDayString(userEvent.getStartDate());
 			} else {
-				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+				feedback += updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
 			}
 
 			int id = userEvent.getID();
@@ -267,28 +267,23 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			//successful complete/delete
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+
+			Event doneEvent = commandPtr->getEvent();
+			string feedback;
 			if (command == Parser::DELETE_) { //for delete
-				Event deletedEvent = commandPtr->getEvent();
-
-				string feedback = LogicUpdater::DELETED_MESSAGE + deletedEvent.getName();
-				/*if (!deletedEvent.getIsFloating()) {
-					if (isSameDate(deletedEvent.getStartDate(),userEvent.getEndDate())) {
-						feedback += COLON_SPACE + updater.setSingleDayString(deletedEvent.getStartDate());
-					} else {
-						feedback += COLON_SPACE + updater.setMultipleDaysString(deletedEvent.getStartDate(),deletedEvent.getEndDate());
-					}
-				}*/
-
-				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
-				return;
-
+				feedback = LogicUpdater::DELETED_MESSAGE + doneEvent.getName();
 			} else { //for complete
-				Event completedEvent = commandPtr->getEvent();
-				string feedback = LogicUpdater::COMPLETED_MESSAGE + completedEvent.getName();
-
-				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
-				return;
+				feedback = LogicUpdater::COMPLETED_MESSAGE + doneEvent.getName();
 			}
+			if (!doneEvent.getIsFloating()) {
+				if (isSameDate(doneEvent.getStartDate(),userEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(doneEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(doneEvent.getStartDate(),doneEvent.getEndDate());
+				}
+			}
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }
 
@@ -326,9 +321,17 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			//successful edit 
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+			
 			Event oldEvent = commandPtr->getEvent();
 			int id = oldEvent.getID();
-			string feedback = oldEvent.getName() + LogicUpdater::EDITED_MESSAGE;
+			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
+			if (!oldEvent.getIsFloating()) {
+				if (isSameDate(oldEvent.getStartDate(),userEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(oldEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(oldEvent.getStartDate(),oldEvent.getEndDate());
+				}
+			}
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
@@ -362,9 +365,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			string feedback = LogicUpdater::SHOW_MESSAGE;
 			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
-				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
+				feedback += updater.setSingleDayString(userEvent.getStartDate());
 			} else {
-				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+				feedback += updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
 			}
 			removeLabel(feedback);
 
