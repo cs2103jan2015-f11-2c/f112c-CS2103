@@ -70,7 +70,6 @@
     <ClCompile Include="EventModifier.cpp" />
     <ClCompile Include="LogicUpdater.cpp" />
     <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventArchive.cpp" />
     <ClCompile Include="EventLog.cpp" />
     <ClCompile Include="EventOrganiser.cpp" />
     <ClCompile Include="EventStorage.cpp" />
@@ -94,7 +93,6 @@
     <ClInclude Include="EventModifier.h" />
     <ClInclude Include="LogicUpdater.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="EventArchive.h" />
     <ClInclude Include="EventLog.h" />
     <ClInclude Include="EventOrganiser.h" />
     <ClInclude Include="EventStorage.h" />

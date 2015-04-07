@@ -790,5 +790,7 @@ namespace UnitTest
 			result = EventStorage::storage().getFloatingContent();
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 		}
+
+
 	};
 }

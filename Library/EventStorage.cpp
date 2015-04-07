@@ -6,6 +6,8 @@ const string EventStorage::backupFile = "myBackup.txt";
 //CONSTRUCTOR, DESTRUCTOR
 EventStorage::EventStorage(void)
 {
+	isRead = true;
+	lastID = 0;
 	startUpFiles();
 }
 
@@ -18,7 +20,7 @@ EventStorage::~EventStorage(void)
 //If read successful, copy to backupFile (set: isRead = true)
 //If read fails, load backupFile and copy backup to currentFile (set: isRead = false)
 void EventStorage::startUpFiles(){
-	logger.logStoragePosition("Syncing with storages...");
+	logger.log(EventLog::STORAGE + EventLog::START_UP);
 	checkFileExist();
 	readToContent(currentFile);
 	if(isRead){
@@ -64,7 +66,7 @@ void EventStorage::readToContent(string fileName){
 				importNormal(in, tempEvent);
 			} catch(const string &e){
 				isRead = false;
-				logger.logStorageStringData("READING ERROR IN", e);
+				logger.log(EventLog::READING_ERROR + e);
 			}
 		} else if(textLine == (LABEL_ISFLOATING + "1")){  //floatingEvent
 			try{
@@ -72,7 +74,7 @@ void EventStorage::readToContent(string fileName){
 				importFloat(in, tempEvent);
 			} catch(const string &e){
 				isRead = false;
-				logger.logStorageStringData("READING ERROR IN", e);
+				logger.log(EventLog::READING_ERROR + e);
 			}
 		}
 		delete tempEvent;
@@ -237,7 +239,9 @@ void EventStorage::importID(std::istream& in, Event* tempEvent){
 	string id;
 	getline(in, id);
 	if(id.substr(0,LABEL_ID.size()) == LABEL_ID){
-		tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
+		int ID = (atoi((id.substr(LABEL_ID.size())).c_str()));
+		setLastID(ID);
+		tempEvent->setID(ID);
 	} else{
 		throw LABEL_ID;
 	}
@@ -250,6 +254,57 @@ void EventStorage::importSpace(std::istream& in){
 		throw BLANK;
 	}
 }
+
+void EventStorage::setLastID(int ID){
+	if(ID > lastID){
+		lastID = ID;
+	}
+}
+
+int EventStorage::getLastID(){
+	return lastID;
+}
+
+
+/*
+void EventStorage::createNormalEvent(Event* tempEvent, string name, string id, string deadline, string importance, string startHour, string startMin, string startDay, 
+								string startMonth, string startYear, string endHour, string endMin, string endDay, string endMonth, string endYear, string completed){
+
+	tempEvent->setIsFloating(false); 
+	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
+	
+	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
+	tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
+	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
+	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
+
+	tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()),atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
+	
+	tempEvent->setStartDate(atoi((startDay.substr(LABEL_STARTDAY.size())).c_str()),atoi((startMonth.substr(LABEL_STARTMONTH.size())).c_str()),
+		atoi((startYear.substr(LABEL_STARTYEAR.size())).c_str()));
+	
+	tempEvent->setEndTime(atoi((endHour.substr(LABEL_ENDHOUR.size())).c_str()),atoi((endMin.substr(LABEL_ENDMIN.size())).c_str()));
+	
+	tempEvent->setEndDate(atoi((endDay.substr(LABEL_ENDDAY.size())).c_str()),atoi((endMonth.substr(LABEL_ENDMONTH.size())).c_str()),
+		atoi((endYear.substr(LABEL_ENDYEAR.size())).c_str()));
+	
+	normalContent.push_back(*tempEvent);
+}
+
+void EventStorage::createFloatingEvent(Event* tempEvent, string name, string id, string deadline, string importance, string completed){
+	
+	
+	tempEvent->setIsFloating(true);
+	tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));			
+	tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
+	tempEvent->setIsCompleted(conversion.stringToBool((completed.substr(LABEL_ISCOMPLETED.size()))));
+	tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
+	tempEvent->setID(atoi((id.substr(LABEL_ID.size())).c_str()));
+
+	floatingContent.push_back(*tempEvent);
+}
+*/
+
 
 void EventStorage::exportNormal(std::ostream& out){
 	for(auto i=0;i<normalContent.size();i++){
@@ -279,12 +334,12 @@ void EventStorage::exportFloating(std::ostream& out){
 
 //getters
 vector<Event> EventStorage::getNormalContent(){
-	logger.logStorageIntData("getNormalContent",normalContent.size());
+	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, normalContent.size());
 	return normalContent;
 }
 
 vector<Event> EventStorage::getFloatingContent(){
-	logger.logStorageIntData("getfloatingContent",floatingContent.size());
+	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, floatingContent.size());
 	return floatingContent;
 }
 

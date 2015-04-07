@@ -23,9 +23,9 @@ public:
 	
 	//Search Methods
 	vector<Event> searchNormalNameOccurrence(string eventName);
-	vector<Event> searchNormalNameExact(string eventName);
-
 	vector<Event> searchCompletedNameOccurrence(string eventName);
+
+	vector<Event> searchNormalNameExact(string eventName);
 	vector<Event> searchCompletedNameExact(string eventName);
 
 	vector<Event> searchLevelImportance(int level);

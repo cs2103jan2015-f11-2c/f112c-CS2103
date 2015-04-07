@@ -27,11 +27,50 @@ public:
 	static const string EDIT;
 	static const string COMPLETE;
 	static const string UNCOMPLETE;
+	static const string FLOAT_TO_NORMAL;
+	static const string NORMAL_TO_FLOAT;
+
+	/*EventFacade*/
+	static const string FACADE;
+
+	/*EventSearch*/
+	static const string SEARCH;
+	static const string SEARCH_NAME_OCCURRENCE;
+	static const string SEARCH_NAME_EXACT;
+	static const string SEARCH_LEVEL_IMPORTANCE;
+	static const string SEARCH_ALL_IMPORTANCE;
+	static const string SEARCH_INDEX_WITH_ID;
+
+	/*EventOrgansier*/
+	static const string ORGANISER;
+	static const string SHOW_DATES;
+	static const string SHOW_ALL_NORMAL_CURRENT;
+	static const string SHOW_ALL_NORMAL_COMPLETED;
+	static const string SHOW_ALL_FLOATING_CURRENT;
+	static const string SHOW_ALL_FLOATING_COMPLETED;
+	static const string SHOW_EVENTS;
+	static const string SHOW_DATES_FROM_NORMAL_CONTENT;
+	static const string DATE_RANGE;
+	static const string SHOW_DATE_RANGE;
+
+	/*EventStorage*/
+	static const string STORAGE;
+	static const string START_UP;
+	static const string READING_ERROR;
+	static const string GET_NORMAL_CONTENT;
+	static const string GET_FLOATING_CONTENT;
+	static const string DATA_READ;
+	static const string DATA_ID;
+
+	static const string NORMAL;
+	static const string FLOATING;
+	static const string EXIT;
+	
 
 
-	void logStoragePosition(string functionName);
-	void logStorageIntData(string location, int data);
-	void logStorageStringData(string location, string data);
+	void log(string functionName);
+	void log(string location, int data);
+	void log(int data);
 
 };
 

@@ -6,16 +6,6 @@ const int EventOrganiser::TOTAL_MONTHS_IN_A_YEAR = 12;
 const int EventOrganiser::UNIQUE_ID = -123;
 const string EventOrganiser::MARKER_CODE = "-MSmsgjyw-";
 
-//For logging
-const string EventOrganiser::SHOW_ALL_NORMAL_CURRENT = "showAllNormalCurrent";
-const string EventOrganiser::SHOW_ALL_NORMAL_COMPLETED = "showAllNormalCompleted";
-const string EventOrganiser::SHOW_ALL_FLOATING_CURRENT = "showAllFloatingCurrent";
-const string EventOrganiser::SHOW_ALL_FLOATING_COMPLETED = "showAllFloatingCompleted";
-const string EventOrganiser::SHOW_EVENTS = "showEvents";
-const string EventOrganiser::SHOW_DATES_FROM_NORMAL_CONTENT = "showDatesFromNormalContent";
-const string EventOrganiser::DATE_RANGE = "dateRange";
-const string EventOrganiser::SHOW_DATE_RANGE = "showDateRange";
-
 EventOrganiser::EventOrganiser(void)
 {
 }
@@ -28,33 +18,31 @@ EventOrganiser::~EventOrganiser(void)
 vector<Event> EventOrganiser::showAllNormalCurrent(){
 	vector<Event> tempContent =	allNormalCurrent();
 	tempContent = showEvents(tempContent);
-	logger.logStorageIntData(SHOW_ALL_NORMAL_CURRENT,tempContent.size());
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_CURRENT, tempContent.size());
 	return tempContent;
 }
 
 vector<Event> EventOrganiser::showAllNormalCompleted(){
 	vector<Event> tempContent = allNormalCompleted();
 	tempContent = showEvents(tempContent);
-	logger.logStorageIntData(SHOW_ALL_NORMAL_COMPLETED,tempContent.size());
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, tempContent.size());
 	return tempContent;
 }
 
-
 //returns all floating events
 vector<Event> EventOrganiser::showAllFloatingCurrent(){
-	logger.logStoragePosition(SHOW_ALL_FLOATING_CURRENT);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_CURRENT);
 	return allFloatingCurrent();
 }
 
 vector<Event> EventOrganiser::showAllFloatingCompleted(){
-	logger.logStoragePosition(SHOW_ALL_FLOATING_COMPLETED);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_COMPLETED);
 	return allFloatingCompleted();
 }
 
-
 //show event Vector items, sorted and marked
 vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
-	logger.logStorageIntData(SHOW_EVENTS,eventsToShow.size());
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_EVENTS, eventsToShow.size());
 	
 	Event eventWithStartEndTime = dateRange(eventsToShow);
 	eventsToShow = showDateRange(eventWithStartEndTime,eventsToShow);
@@ -63,7 +51,7 @@ vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
 
 //show events from current content within range, sorted and marked
 vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEndTimes){
-	logger.logStoragePosition(SHOW_DATES_FROM_NORMAL_CONTENT);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATES_FROM_NORMAL_CONTENT);
 
 	vector<Event> tempContent = allNormalCurrent();
 	tempContent = showDateRange(eventWithStartEndTimes, tempContent);
@@ -72,7 +60,7 @@ vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEnd
 
 //Finds the earliest and latest day among all events in normalContent
 Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
-	logger.logStoragePosition(DATE_RANGE);
+	logger.log(EventLog::ORGANISER + EventLog::DATE_RANGE);
 	struct tm earliestDate, latestDate;
 	Event returnEvent;
 
@@ -92,7 +80,7 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 
 //shows date range for vector items, sorted and marked
 vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter){
-	logger.logStoragePosition(SHOW_DATE_RANGE);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATE_RANGE);
 	vector<Event> returnVector;
 	vector<struct tm> wantedEventDates;
 	vector<struct tm> exisitngEventDates;
@@ -149,7 +137,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 		}
 	}
 	returnVector = sortMarker(returnVector);
-	logger.logStorageIntData("leaving showDateRange",returnVector.size());
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATE_RANGE + EventLog::EXIT);
 	return returnVector;
 }
 
@@ -278,6 +266,26 @@ int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 	return difference;
 }
 
+vector<Event> EventOrganiser::sortFloatingByID(vector<Event> floating){
+	Event temp;
+
+	if(floating.size()<=1){
+		return floating;
+	} else{
+		for(auto i=0;i<(floating.size()-1);i++){
+			for(int j=i+1;j<floating.size();j++){
+				if(floating[i].getID() > floating[j].getID()){ 
+					temp = floating[i];
+					floating[i] = floating[j];
+					floating[j] = temp;
+				}
+			}
+		}
+	}
+	return floating;
+}
+
+//Filters and Getters
 vector<Event> EventOrganiser::allNormalCurrent(){
 	vector<Event> tempContent = EventStorage::storage().getNormalContent();
 	vector<Event> results;
@@ -287,6 +295,7 @@ vector<Event> EventOrganiser::allNormalCurrent(){
 			results.push_back(tempContent[i]);
 		}
 	}
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_CURRENT, results.size());
 	return results;
 }
 
@@ -299,6 +308,9 @@ vector<Event> EventOrganiser::allFloatingCurrent(){
 			results.push_back(tempContent[i]);
 		}
 	}
+
+	results = sortFloatingByID(results);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_CURRENT, results.size());
 	return results;
 }
 
@@ -311,6 +323,7 @@ vector<Event> EventOrganiser::allNormalCompleted(){
 			results.push_back(tempContent[i]);
 		}
 	}
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, results.size());
 	return results;
 }
 
@@ -323,10 +336,12 @@ vector<Event> EventOrganiser::allFloatingCompleted(){
 			results.push_back(tempContent[i]);
 		}
 	}
+
+	results = sortFloatingByID(results);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_COMPLETED, results.size());
 	return results;
 }
 
-//set normalContents by appending current task onto completed task 
 void EventOrganiser::saveNormal(vector<Event> normalCurrent){
 	vector<Event> tempNormalCompleted = allNormalCompleted();
 	normalCurrent.insert( normalCurrent.end(), tempNormalCompleted.begin(), tempNormalCompleted.end() );

@@ -16,9 +16,6 @@
     <ClCompile Include="EventStorage.cpp">
       <Filter>Source Files\Storage</Filter>
     </ClCompile>
-    <ClCompile Include="EventArchive.cpp">
-      <Filter>Source Files\Storage</Filter>
-    </ClCompile>
     <ClCompile Include="ParserProcessor.cpp">
       <Filter>Source Files\Parser</Filter>
     </ClCompile>
@@ -74,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventArchive.h">
-      <Filter>Header Files\Storage</Filter>
     </ClInclude>
     <ClInclude Include="EventLog.h">
       <Filter>Header Files\Storage</Filter>

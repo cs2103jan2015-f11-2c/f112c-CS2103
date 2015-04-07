@@ -19,6 +19,8 @@ private:
 	EventLog logger;
 
 
+
+
 public:
 	/*Constructor, Destructor*/
 	EventModifier(void);
@@ -30,24 +32,26 @@ public:
 	void addfloat(Event newEvent);
 
 	/*Delete Method*/
-	vector<Event> del(int eventID, Event eventToBeDeleted);
+	vector<Event> del(Event deletedEvent);
 	vector<Event> deletefloat(int index);
 	vector<Event> deleteNormal(int index);
 
 	/*Edit Method*/
-	vector<Event> edit(int eventID, Event eventToBeEdited, Event editedEvent);	
-	vector<Event> editNormal(int index, Event editedEvent);
-	vector<Event> editFloating(int index, Event editedEvent);
-	
+	vector<Event> edit(Event beforeEdit, Event afterEdit);	
+	vector<Event> editNormal(int index, Event afterEdit);
+	vector<Event> editFloating(int index, Event afterEdit);
+	vector<Event> editFloatingToNormal(int index, Event afterEdit);
+	vector<Event> editNormalToFloating(int index, Event afterEdit);
+
 	/*Complete Method*/
-	vector<Event> complete(int eventID, Event completedEvent);
-	vector<Event> completeNormal(int index, int eventID);
+	vector<Event> complete(Event completedEvent);
+	vector<Event> completeNormal(int index, Event completedEvent);
 	vector<Event> completeFloat(int index);
-	vector<Event> markCompleted(int eventID, vector<Event> completedEventDates);
+	vector<Event> markCompleted(Event completedEvent, vector<Event> completedEventDate);
 	
 	/*Uncomplete Method*/
-	vector<Event> uncomplete(int eventID, Event UncompletedEvent);
-	vector<Event> uncompleteNormal(int index, int eventID);
+	vector<Event> uncomplete(Event uncompletedEvent);
+	vector<Event> uncompleteNormal(int index);
 	vector<Event> uncompleteFloat(int index);
 
 	/*delete/edit/complete support methods*/

@@ -37,7 +37,7 @@ vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 
 //Support method --- finds string name match
 vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
-	logger.logStoragePosition("searchNameOccurrence");
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + eventName);
 	
 	//search through names
 	floating = searchEventWithName(eventName, floating);
@@ -45,20 +45,18 @@ vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> 
 
 	floating = combineResults(floating, normal);
 
-	logger.logStoragePosition("leaving searchNameOccurrence");
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + EventLog::EXIT, floating.size());
 	return floating;
 }
 
 //Support method --- finds string name match
 vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> eventVectorToSearch){
-	logger.logStorageStringData("searching for name occurrence", eventName);
+
 	vector<Event> returnVector;
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		int position = eventVectorToSearch[i].getName().find(eventName);
-		logger.logStorageIntData("searching vector... found at: ",position);
 		if(position > NOT_FOUND){
-			logger.logStoragePosition("pushed");
 			returnVector.push_back(eventVectorToSearch[i]);
 		}
 	}
@@ -89,44 +87,38 @@ vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 
 //Support method --- find exact string name match
 vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> normal, vector<Event> floating){
-	logger.logStoragePosition("searchNameExact");
-	
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + eventName);	
 
 	floating = searchExactString(eventName, floating);
 	normal = searchExactString(eventName, normal);
 
 	floating = combineResults(floating, normal);
 
-	logger.logStoragePosition("leaving checkExactString");
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + EventLog::EXIT, floating.size());
 	return floating;
 }
 
 vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eventVectorToSearch){
-	logger.logStorageStringData("searching For Exact EventName", eventName);
 	vector<Event> returnVector;
 
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventName == eventVectorToSearch[i].getName()){
-			logger.logStorageIntData("searching.. exact::",i);
 			returnVector.push_back(eventVectorToSearch[i]);
 		}
 	}
 	return returnVector;
 }
 
-
 //search level of importance
 vector<Event> EventSearch::searchLevelImportance(int level){
-	logger.logStorageIntData("searching for this level of importance" ,level);
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
 	
 	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
 	vector<Event> normalEvents = organiser.allNormalCurrent();
-	//try{
+//che help if level > 3 set to 3 and thow exception to log
 	floatingEvents = searchEventWithImportance(level, floatingEvents);
 	normalEvents = searchEventWithImportance(level, normalEvents);
-	//} catch(exception&){
-	// if level more than 3, = 3
-	//}
+
 	return combineResults(floatingEvents, normalEvents);
 }
 
@@ -155,7 +147,7 @@ vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> ve
 
 //search method finds all important events
 vector<Event> EventSearch::searchAllImportance(){
-	logger.logStoragePosition("searchALLImportance");
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_ALL_IMPORTANCE);
 	vector<Event> returnVector;
 	
 	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
@@ -189,10 +181,10 @@ vector<Event> EventSearch::combineResults(vector<Event> floatingEvents, vector<E
 
 //find index in internal storages with ID (DEL / EDIT SUPPORT)
 int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
-	logger.logStorageIntData("searching For this EventID",eventID);
+	logger.log(EventLog::SEARCH_INDEX_WITH_ID, eventID);
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getID() == eventID){
-			logger.logStorageIntData("searching current content... index:",i);
+			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
 			return i;
 		}
 	} 

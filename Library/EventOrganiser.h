@@ -11,23 +11,13 @@ private:
 	static const int UNIQUE_ID;
 	static const string MARKER_CODE;
 	
-	//For logging
-	static const string SHOW_ALL_NORMAL_CURRENT;
-	static const string SHOW_ALL_NORMAL_COMPLETED;
-	static const string SHOW_ALL_FLOATING_CURRENT;
-	static const string SHOW_ALL_FLOATING_COMPLETED;
-	static const string SHOW_EVENTS;
-	static const string SHOW_DATES_FROM_NORMAL_CONTENT;
-	static const string DATE_RANGE;
-	static const string SHOW_DATE_RANGE;
-
 	EventLog logger;
 
 public:
 	EventOrganiser(void);
 	~EventOrganiser(void);
 	
-	//Show All methods
+	//Show normal methods
 	vector<Event> showAllNormalCurrent();
 	vector<Event> showAllNormalCompleted();
 
@@ -49,16 +39,17 @@ public:
 	vector<Event> sortEventVectorByDate(vector<Event> eventsToSort);
 	vector<Event> sortEventVectorByEndDate(vector<Event> eventsToSort);
 	int findTimeDiff(tm startDay, tm endDay);
-	
+
 	//filter complete / uncompleted 
+	vector<Event> sortFloatingByID(vector<Event> floating);
 	vector<Event> allNormalCurrent();
 	vector<Event> allFloatingCurrent();
 	vector<Event> allNormalCompleted();
 	vector<Event> allFloatingCompleted();
 
-	//appends completed task and set contents
+	//appends completed task and set
 	void saveNormal(vector<Event> normalCurrent);//, vector<Event> normalCompleted);
-	void saveFloating(vector<Event> floatingCurrent);//, vector<Event> floatingCompleted);
+	void saveFloating(vector<Event> floatingCurrent);//, vector<Event> floatingCompleted);	
 	void saveNormalCompleted(vector<Event> normalCompleted);
 	void saveFloatingCompleted(vector<Event> floatingCompleted);
 };
