@@ -65,12 +65,15 @@ public:
 	static const std::string SUGGESTION_ADD_1;
 	static const std::string SUGGESTION_ADD_2;
 	static const std::string SUGGESTION_ADD_3;
+	static const std::string SUGGESTION_ADD_4;
 
 	static const std::string SUGGESTION_DELETE_1;
 	static const std::string SUGGESTION_DELETE_2;
 
 	static const std::string SUGGESTION_EDIT_1;
 	static const std::string SUGGESTION_EDIT_2;
+	static const std::string SUGGESTION_EDIT_3;
+	static const std::string SUGGESTION_EDIT_4;
 
 	static const std::string SUGGESTION_SEARCH_1;
 	static const std::string SUGGESTION_SEARCH_2;
