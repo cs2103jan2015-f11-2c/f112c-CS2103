@@ -341,9 +341,13 @@ int ParserProcessor::checkYear(int tempIndex, int* indexShift) {
 		try {
 			auto tempStoi = std::stoi(fragmentedWords[tempIndex+1]);
 			tempInt = tempStoi;
-			if (tempInt > 2000) {
-				year = tempInt - 1900;
-				fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
+			if(tempInt > 1300){
+				if (tempInt >= 1970 && tempInt <= 3000) {
+					year = tempInt - 1900;
+					fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
+				} else {
+					throw ParserExceptions(ParserExceptions::ERROR_INVALID_YEAR);
+				}
 			}
 		} catch (std::invalid_argument& e) {
 		}
@@ -1008,33 +1012,37 @@ bool ParserProcessor::checkShowByYear(int tempIndex) {
 	try {      //Check if first word is a year integer. E.g. 2015
 		auto tempStoi = std::stoi(firstWord);
 		tempInt = tempStoi;
-		if (tempInt > 2000) {
-			if (year == tempInt-1900) {
-				tempEventStore.setStartDate(day,month,year);
-				tempEventStore.setEndDate(31,11,year);
-			} else {
-				year = tempInt-1900;
-				tempEventStore.setStartDate(1,0,year);
-				tempEventStore.setEndDate(31,11,year);
-			}
-			systemShowYear = true;
-			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-			tempIndex++;
-			if (fragmentedWords.size() > tempIndex) {      
-				if (fragmentedWords[tempIndex] == "to") {    //Check if it is a range between 2 year inputs. E.g. 2015-2016  2015 to 2016
-					try {
-						tempIndex++;
-						if (fragmentedWords.size() > tempIndex) {
-							auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-							tempInt = tempStoi;
-							fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-							if (tempInt > 2000) {
-								tempEventStore.setEndDate(31,11,tempInt-1900);
-							} 
+		if(tempInt > 1300){
+			if (tempInt >= 1970 && tempInt <= 3000) {
+				if (year == tempInt-1900) {
+					tempEventStore.setStartDate(day,month,year);
+					tempEventStore.setEndDate(31,11,year);
+				} else {
+					year = tempInt-1900;
+					tempEventStore.setStartDate(1,0,year);
+					tempEventStore.setEndDate(31,11,year);
+				}
+				systemShowYear = true;
+				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+				tempIndex++;
+				if (fragmentedWords.size() > tempIndex) {      
+					if (fragmentedWords[tempIndex] == "to") {    //Check if it is a range between 2 year inputs. E.g. 2015-2016  2015 to 2016
+						try {
+							tempIndex++;
+							if (fragmentedWords.size() > tempIndex) {
+								auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+								tempInt = tempStoi;
+								fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+								if (tempInt > 2000) {
+									tempEventStore.setEndDate(31,11,tempInt-1900);
+								} 
+							}
+						} catch (std::invalid_argument& e) {
 						}
-					} catch (std::invalid_argument& e) {
 					}
 				}
+			} else {
+				throw ParserExceptions(ParserExceptions::ERROR_INVALID_YEAR);
 			}
 		}
 	} catch (std::invalid_argument &e) {  //Check if it is system show year, which shows current year

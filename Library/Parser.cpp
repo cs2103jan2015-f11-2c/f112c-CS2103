@@ -280,5 +280,8 @@ std::string Parser::createFeedback(std::string errorCode) {
 	if (errorCode == ParserExceptions::ERROR_DUE_TOO_MANY_TIMES) {
 		tempFeedback = "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
 	}
+	if (errorCode == ParserExceptions::ERROR_INVALID_YEAR) {
+		tempFeedback = "Error: Year input out of range. Accepted range: 1970 - 3000";
+	}
 	return tempFeedback;
 }

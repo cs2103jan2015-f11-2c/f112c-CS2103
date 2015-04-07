@@ -29,6 +29,7 @@ public:
 	static const std::string ERROR_NO_SHOW;
 	static const std::string ERROR_DUE_TOO_MANY_DATES;
 	static const std::string ERROR_DUE_TOO_MANY_TIMES;
+	static const std::string ERROR_INVALID_YEAR;
 	
 	ParserExceptions(std::string);
 
