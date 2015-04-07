@@ -86,7 +86,7 @@ namespace UnitTest
 			back.tm_year = 115;
 			testResult = show.countNumDays(front,back);
 
-			expectedResult = 2;
+			expectedResult = -2;
 			Assert::AreEqual(expectedResult,testResult);
 
 			//Case 2.1 : Boundary test (year) - front year within boundary of 71
@@ -99,10 +99,10 @@ namespace UnitTest
 			back.tm_year = 115;
 			testResult = show.countNumDays(front,back);
 
-			expectedResult = 16445;
+			expectedResult = 16080;
 
 			Assert::AreEqual(expectedResult,testResult);
-
+			
 			//Case 2.2 : Boundary test (year) - front year below boundary of 71
 			front.tm_mon = 1; 
 			front.tm_mday = 1;
@@ -119,7 +119,7 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//Case 2.3 : Boundary test (year) - back year within boundary of 1099
 			front.tm_mon = 1; 
 			front.tm_mday = 1;
@@ -130,9 +130,9 @@ namespace UnitTest
 			back.tm_year = 1099;
 			testResult = show.countNumDays(front,back);
 
-			expectedResult = 359773;
+			expectedResult = 359408;
 			Assert::AreEqual(expectedResult,testResult);
-
+			
 			//Case 2.4 : Boundary test (year) - back year above boundary of 1099
 			front.tm_mon = 1; 
 			front.tm_mday = 1;
@@ -141,7 +141,6 @@ namespace UnitTest
 			back.tm_mon = 1;  
 			back.tm_mday = 10;
 			back.tm_year = 1100;
-			testResult = show.countNumDays(front,back);
 
 			expectedErrorString = "Error: Unable to display date after year 2999";
 			try{
@@ -150,34 +149,21 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//Case 3.1 : Safely within boundary - month value 0
 			front.tm_mon = 0; 
-			front.tm_mday = 0;
+			front.tm_mday = 1;
 			front.tm_year = 115;
 			
 			back.tm_mon = 0;  
-			back.tm_mday = 2;
+			back.tm_mday = 5;
 			back.tm_year = 115;
 			testResult = show.countNumDays(front,back);
 
-			expectedResult = 2;
+			expectedResult = 4;
 			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.2 : Boundary test (month) - after adjustment year 71
-			front.tm_mon = -538; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
 			
-			back.tm_mon = 0;  
-			back.tm_mday = 0;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 16405;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.3 : Boundary test (month) - after adjustment year below 71
+			//Case 3.2 : Boundary test (month) - after adjustment year below 71
 			front.tm_mon = -549; 
 			front.tm_mday = 0;
 			front.tm_year = 115;
@@ -185,47 +171,15 @@ namespace UnitTest
 			back.tm_mon = 0;  
 			back.tm_mday = 0;
 			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
 
-			expectedErrorString = "Error: Unable to display date before year 1971";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
 			try{
 			testResult = show.countNumDays(front,back);
 			}
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
-			//Case 3.4 : Boundary test (month) - after adjustment year at 1099 
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
 			
-			back.tm_mon = 11831;  
-			back.tm_mday = 2;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedResult = 360100;
-			Assert::AreEqual(expectedResult,testResult);
-
-			//Case 3.5 : Boundary test (month) - after adjustment year above 1099 
-			front.tm_mon = 0; 
-			front.tm_mday = 0;
-			front.tm_year = 115;
-			
-			back.tm_mon = 11832;  
-			back.tm_mday = 2;
-			back.tm_year = 115;
-			testResult = show.countNumDays(front,back);
-
-			expectedErrorString = "Error: Unable to display date after year 2999";
-			try{
-			testResult = show.countNumDays(front,back);
-			}
-			catch(const std::string& testErrorString){
-				Assert::AreEqual(expectedErrorString,testErrorString);
-			}
-
 		}
 
 		TEST_METHOD(UIShow_isSingleDay_Test){
@@ -549,9 +503,9 @@ namespace UnitTest
 			Assert::AreEqual(expectedResult,testResult);
 
 			//maximum int number
-			testInput = 18446744073709551615;
+			testInput = 2147483647;
 			testResult = show.intToString(testInput);
-			expectedResult = "18446744073709551615";
+			expectedResult = "2147483647";
 			Assert::AreEqual(expectedResult,testResult);
 
 			//minimum int number
@@ -591,15 +545,15 @@ namespace UnitTest
 			Assert::AreEqual(expectedResult,testResult);
 
 			//minimum int number
-			testInput = "-18446744073709551615";
+			testInput = "-2147483647";
 			testResult = show.stringToInt(testInput);
-			expectedResult = -18446744073709551615;
+			expectedResult = -2147483647;
 			Assert::AreEqual(expectedResult,testResult);
 
 			//maximum int number
-			testInput = "18446744073709551615";
+			testInput = "2147483647";
 			testResult = show.stringToInt(testInput);
-			expectedResult = 18446744073709551615;
+			expectedResult = 2147483647;
 			Assert::AreEqual(expectedResult,testResult);
 		
 		}
@@ -683,10 +637,9 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//boundary test - mday < 31
 			input = "32/8/2015";
-			testResult = show.generateDateString(input);
 			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
 			try{
 				testResult = show.generateDateString(input);
@@ -694,7 +647,7 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+		
 			//no mon
 			input = "8//2015";
 			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
@@ -714,10 +667,9 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//boundary test - mon > 12
 			input = "8/13/2015";
-			testResult = show.generateDateString(input);
 			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
 			try{
 				testResult = show.generateDateString(input);
@@ -725,7 +677,7 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//no year
 			input = "8/8/";
 			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
@@ -737,7 +689,7 @@ namespace UnitTest
 			}
 
 			//boundary test - year < 1971
-			input = "8/0/1970";
+			input = "8/1/1970";
 			expectedErrorString = "Error: Unable to display date before year 1971";
 			try{
 				testResult = show.generateDateString(input);
@@ -745,10 +697,9 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
-
+			
 			//boundary test - year > 2999
-			input = "8/13/3000";
-			testResult = show.generateDateString(input);
+			input = "8/1/3000";
 			expectedErrorString = "Error: Unable to display date after year 2999";
 			try{
 				testResult = show.generateDateString(input);
@@ -756,6 +707,7 @@ namespace UnitTest
 			catch(const std::string& testErrorString){
 				Assert::AreEqual(expectedErrorString,testErrorString);
 			}
+			
 		}
 
 		TEST_METHOD(UIShow_generteCurrentCommand_Test){
@@ -770,50 +722,6 @@ namespace UnitTest
 			//vector<tm> normal case - maximum days difference
 			//vector<tm> normal case - no day difference
 			//vector<tm> front later than back
-		}
-
-
-	};
-
-
-	//Unit test for UIcommandSuggest class
-	TEST_CLASS(UIcommandSuggestTest)
-	{
-	public:
-		UICommandSuggestion comdSuggest;
-
-		TEST_METHOD(UICommandSuggestion_getComdType_Test){
-			UICommandSuggestion::ComdType expectedResult;
-			UICommandSuggestion::ComdType testResult;
-			std::string input;
-
-			//normal case add
-			input = "add";
-			testResult = comdSuggest.getComdType(input);
-			expectedResult = UICommandSuggestion::ADD_;
-
-			Assert::AreEqual(expectedResult,testResult);
-
-			//normal case ad
-			input = "ad";
-			testResult = comdSuggest.getComdType(input);
-			expectedResult = UICommandSuggestion::UNDISPLAY_;
-
-			Assert::AreEqual(expectedResult,testResult);
-
-			//boundary empty string
-			input = "";
-			testResult = comdSuggest.getComdType(input);
-			expectedResult = UICommandSuggestion::INVALID_;
-
-			Assert::AreEqual(expectedResult,testResult);
-
-			//boundary very large string
-			input = "qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiop[qwertyuiopqwertyuio";
-			testResult = comdSuggest.getComdType(input);
-			expectedResult = UICommandSuggestion::INVALID_;
-
-			Assert::AreEqual(expectedResult,testResult);
 		}
 
 	};

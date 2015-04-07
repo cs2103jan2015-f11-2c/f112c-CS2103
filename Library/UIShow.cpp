@@ -410,7 +410,7 @@ std::string UIShow::intToString (int num){
 }
 
 int UIShow::stringToInt (std::string str){
-	assert(!str.empty());
+	//assert(!str.empty());
 
 	int outNum = 0;
 	std::istringstream in(str);

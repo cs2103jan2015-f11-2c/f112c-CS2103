@@ -1,0 +1,83 @@
+showAllFloatingEvents
+showAllFloatingCurrent
+getfloatingContent 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0
+showDates
+showDatesFromNormalContent
+getNormalContent 0
+showDateRange
+leaving showDateRange 0

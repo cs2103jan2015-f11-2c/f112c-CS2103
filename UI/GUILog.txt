@@ -1,1 +1,118 @@
 Clear All Log Files: All log files cleared
+Program starts at: 07 Apr,Tuesday, 23:16:25
+executeUserInput: show floating
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 7 April 2015, Tuesday
+executeUserInput: show today
+Logic command executed & returns: True
+Feedback displayed: showing: 7 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 7 April 2015, Tuesday
+Calendar date(s) selected & sent to UIShow: 22/4/2015 12:00:00 AM to 22/4/2015 11:59:59 PM
+executeUserInput: show 22apr 2015 to 22apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 22 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 22 April 2015, Wednesday
+Calendar date(s) selected & sent to UIShow: 14/4/2015 12:00:00 AM to 30/4/2015 11:59:59 PM
+executeUserInput: show 14apr 2015 to 30apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April - 30 April 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 14 April - 30 April 2015
+Calendar date(s) selected & sent to UIShow: 14/4/2015 12:00:00 AM to 24/4/2015 11:59:59 PM
+executeUserInput: show 14apr 2015 to 24apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April - 24 April 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 14 April - 24 April 2015
+Calendar date(s) selected & sent to UIShow: 2/5/2015 12:00:00 AM to 2/5/2015 11:59:59 PM
+executeUserInput: show 2may 2015 to 2may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 2 May 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 2 May 2015, Saturday
+Calendar date(s) selected & sent to UIShow: 4/5/2015 12:00:00 AM to 29/5/2015 11:59:59 PM
+executeUserInput: show 4may 2015 to 29may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May - 29 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May - 29 May 2015
+Calendar date(s) selected & sent to UIShow: 11/5/2015 12:00:00 AM to 28/5/2015 11:59:59 PM
+executeUserInput: show 11may 2015 to 28may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May - 28 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May - 28 May 2015
+Calendar date(s) selected & sent to UIShow: 4/5/2015 12:00:00 AM to 29/5/2015 11:59:59 PM
+executeUserInput: show 4may 2015 to 29may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May - 29 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May - 29 May 2015
+Calendar date(s) selected & sent to UIShow: 3/5/2015 12:00:00 AM to 28/5/2015 11:59:59 PM
+executeUserInput: show 3may 2015 to 28may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 3 May - 28 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 3 May - 28 May 2015
+Calendar date(s) selected & sent to UIShow: 4/5/2015 12:00:00 AM to 20/5/2015 11:59:59 PM
+executeUserInput: show 4may 2015 to 20may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May - 20 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May - 20 May 2015
+Calendar date(s) selected & sent to UIShow: 11/5/2015 12:00:00 AM to 20/5/2015 11:59:59 PM
+executeUserInput: show 11may 2015 to 20may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May - 20 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May - 20 May 2015
+Calendar date(s) selected & sent to UIShow: 11/5/2015 12:00:00 AM to 27/5/2015 11:59:59 PM
+executeUserInput: show 11may 2015 to 27may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May - 27 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May - 27 May 2015
+Calendar date(s) selected & sent to UIShow: 4/5/2015 12:00:00 AM to 27/5/2015 11:59:59 PM
+executeUserInput: show 4may 2015 to 27may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May - 27 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May - 27 May 2015
+Calendar date(s) selected & sent to UIShow: 4/5/2015 12:00:00 AM to 27/5/2015 11:59:59 PM
+executeUserInput: show 4may 2015 to 27may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May - 27 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May - 27 May 2015
+Calendar date(s) selected & sent to UIShow: 11/5/2015 12:00:00 AM to 27/5/2015 11:59:59 PM
+executeUserInput: show 11may 2015 to 27may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May - 27 May 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May - 27 May 2015
+Calendar date(s) selected & sent to UIShow: 11/5/2015 12:00:00 AM to 4/6/2015 11:59:59 PM
+executeUserInput: show 11may 2015 to 4jun 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May - 4 June 2015
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May - 4 June 2015
