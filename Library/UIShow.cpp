@@ -30,7 +30,7 @@ const std::string UIShow::LABEL_MONTH = "[Month]";
 
 const std::string UIShow::MESSAGE_YEAR_BEFORE_1970 = "Error: Unable to display date before year 1970";
 const std::string UIShow::MESSAGE_YEAR_AFTER_3000 = "Error: Unable to display date after year 3000";
-const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date Selected";
+const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date(s) Selected / Date(s) out of range";
 
 std::string UIShow::getShowDay(){
 	return SHOW_DAY;
@@ -65,20 +65,9 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 	assert(!currentMainDisplayLabel.empty());
 	assert(mainDisplayDate.size() == 2);
 	
-	/*
-	try {
-		if ( mainDisplayDate[0].tm_mday<0 ){
-
-			throw "msg";
-	}
-	} catch (std::string str){
-		return str;
-	}
-	*/
-	
-	//exception 0 <= tm_mday <= 30
-	//exception 0 <= tm_mon <= 11
-	//exception 70 <= tm_year <= 1100
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
 	
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
@@ -107,9 +96,9 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 	assert(!currentMainDisplayLabel.empty());
 	assert(mainDisplayDate.size() == 2);
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
 
 	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
 		return "";
@@ -146,9 +135,12 @@ void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector
 }
 
 std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
 	
 	if (currentMainDisplayLabel == WORD_COMMANDS){
 		return WORD_COMMANDS;
@@ -189,14 +181,13 @@ tm UIShow::shiftDate(tm date, int numDaysToShift){
 
 	std::mktime(newDatePtr);
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
-
 	struct tm newDate;
 	newDate.tm_mday = newDatePtr->tm_mday;
 	newDate.tm_mon = newDatePtr->tm_mon;
 	newDate.tm_year = newDatePtr->tm_year;
+
+	//exception
+	checkValidityOftm(newDate);
 	
 	return newDate;
 }
@@ -214,9 +205,15 @@ std::string UIShow::generateShowWeekForNext(tm endDate){
 	front.tm_mday += 1;
 	std::mktime(&front);
 
+	//exception
+	checkValidityOftm(front);
+
 	back = front;
 	back.tm_mday += 6;
 	std::mktime(&back);
+
+	//exception
+	checkValidityOftm(back);
 
 	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
 
@@ -233,9 +230,8 @@ std::string UIShow::generateShowMonthForNext(tm startDate){
 	nextMonth.tm_mon ++;
 	std::mktime(&nextMonth);
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	//exception
+	checkValidityOftm(nextMonth);
 
 	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
 	std::string yearString = intToString(nextMonth.tm_year + 1900);
@@ -258,9 +254,13 @@ std::string UIShow::generateShowWeekForBack(tm endDate){
 	back.tm_mday -= 7;
 	std::mktime(&back);
 
+	checkValidityOftm(back);
+
 	front = back;
 	front.tm_mday -= 6;
 	std::mktime(&front);
+
+	checkValidityOftm(front);
 
 	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
 
@@ -268,23 +268,25 @@ std::string UIShow::generateShowWeekForBack(tm endDate){
 }
 
 std::string UIShow::generateShowMonthForBack(tm startDate){
+	//exception
+	checkValidityOftm(startDate);
+
 	time_t now;
-	struct tm nextMonth;
+	struct tm backMonth;
 
 	time(&now);
-	nextMonth = *localtime(&now);
-	nextMonth = startDate;
-	nextMonth.tm_mon --;
-	std::mktime(&nextMonth);
+	backMonth = *localtime(&now);
+	backMonth = startDate;
+	backMonth.tm_mon --;
+	std::mktime(&backMonth);
 
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	//exception
+	checkValidityOftm(backMonth);
 
-	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
-	std::string yearString = intToString(nextMonth.tm_year + 1900);
+	std::string backMonthString = intToMonth(backMonth.tm_mon);
+	std::string yearString = intToString(backMonth.tm_year + 1900);
 
-	std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+	std::string newCommand = COMMAND_SHOW + " " + backMonthString + " " + yearString;
 		
 	return newCommand;
 }
@@ -303,6 +305,7 @@ std::string UIShow::generateDateString(std::string date){
 	if(dateDayInt<1 || dateDayInt>31){
 		throw MESSAGE_INVALID_DATE;
 	}
+
 	index++;
 
 	std::string dateMonth = "";
@@ -341,9 +344,8 @@ std::string UIShow::generateDateString(std::string date){
 }
 
 std::string UIShow::convertFromTmToStr(tm date){
-	//exception 1 <= month day <=31
-	//exception 1 <= month <= 12
-	//exception year
+	//exception
+	checkValidityOftm(date);
 
 	std::string dateString = "";
 
@@ -356,13 +358,14 @@ std::string UIShow::convertFromTmToStr(tm date){
 }
 
 int UIShow::countNumDays(tm startDay, tm endDay){
+	//exception
+	checkValidityOftm(startDay);
+	checkValidityOftm(endDay);
+
 	initializeTime(startDay);
 	initializeTime(endDay);
 	std::time_t start = std::mktime(&startDay);
 	std::time_t end = std::mktime(&endDay);
-
-	// if 70<=tm_year<=1100
-	// throw exception
 
 	int dayDifference = std::difftime(end,start)/(60*60*24);
 
@@ -434,7 +437,23 @@ std::string UIShow::intToMonth (int monthInNum){
 	}
 }
 
+void UIShow::checkValidityOftm(tm date){
+	if(date.tm_year<70){
+		throw MESSAGE_YEAR_BEFORE_1970;
+	}
 
+	if(date.tm_year>1100){
+		throw MESSAGE_YEAR_AFTER_3000;
+	}
+	
+	if(date.tm_mday<1 || date.tm_mday>31){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	if(date.tm_mon<0 || date.tm_mon>11){
+		throw MESSAGE_INVALID_DATE;
+	}
+}
 
 
 

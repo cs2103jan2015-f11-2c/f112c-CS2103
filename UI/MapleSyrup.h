@@ -1238,6 +1238,7 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 			 executeUserInput(command);
 			 }
 			 catch (const std::string& errorMsg){
+				 log("Error from calendar date(s) selection:",errorMsg);
 				 String^ errorMsgInSys = convertToSys(errorMsg);
 				 MessageBox::Show(errorMsgInSys);
 			 }
@@ -1321,19 +1322,33 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 		 }
 
 private: void executeBackKey(){
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
-			 log("Called UIShow.displayBack", "");
-			 executeUserInput(newShowCommand);
+			 try{
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+				log("Called UIShow.displayBack", "");
+				executeUserInput(newShowCommand);
+			 }
+			 catch (const std::string& errorMsg){
+				 log("Error from UIShow.displayBack:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
 		 }
 
 private: void executeNextKey(){
-			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
-			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
-			 std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
-			 log("Called UIShow.displayNext", "");
-			 executeUserInput(newShowCommand);
+			 try{
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+				log("Called UIShow.displayNext", "");
+				executeUserInput(newShowCommand);
+			 }
+			 catch (const std::string& errorMsg){
+				 log("Error from UIShow.displayNext:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
 		 }
 
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
