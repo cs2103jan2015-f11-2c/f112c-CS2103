@@ -332,7 +332,8 @@ std::string LogicUpdater::setSingleDayString(tm label) {
 	string dayOfMonth = intToString(label.tm_mday);
 	string month = intToMonth(label.tm_mon);
 	string dayOfWeek = intToDayOfWeek(label.tm_wday);
-	string dateInString = dayOfMonth + BLANK_SPACE + month + COMMA + BLANK_SPACE + dayOfWeek;
+	string year = intToString(label.tm_year + 1900);
+	string dateInString = dayOfMonth + BLANK_SPACE + month + BLANK_SPACE + year + COMMA + BLANK_SPACE + dayOfWeek;
 	return dateInString;
 }
 
