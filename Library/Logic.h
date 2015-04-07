@@ -16,6 +16,10 @@ private:
 	EventFacade eventFacade;
 	LogicUpdater updater;
 	Executor executor;
+
+	int lastID;
+	string lastShowType;
+
 	LogicLog logger;
 
 public:

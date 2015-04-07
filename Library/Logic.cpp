@@ -214,7 +214,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			int id = userEvent.getID();
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						  }
 
@@ -224,7 +224,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 			int id = userEvent.getID();
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 							   }
 
@@ -240,7 +240,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
-						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 						return;
 				}
 
@@ -249,7 +249,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
-					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 					return;
 				}
 			}
@@ -274,7 +274,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				Event completedEvent = commandPtr->getEvent();
 				string feedback = completedEvent.getName() + LogicUpdater::COMPLETED_MESSAGE;
 
-				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+				updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 				return;
 			}
 			break;
@@ -290,7 +290,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if ( (!floatingEvents.empty() && floatingEvents[0].getName() == nameOfEvent) |
 					(!normalEvents.empty() && normalEvents[1].getName() == nameOfEvent) ) {
 						vector<tm> tmVec = getTmVecFromEvents(normalEvents);
-						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 						return;
 				}
 
@@ -299,7 +299,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
-					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 					return;
 				}
 			}
@@ -318,7 +318,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			int id = oldEvent.getID();
 			string feedback = oldEvent.getName() + LogicUpdater::EDITED_MESSAGE;
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						   }
 
@@ -326,7 +326,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
-			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							 }
 
@@ -335,19 +335,24 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser:: SHOWMONTH: {
 			normalEvents = commandPtr->getEventVector();
 			floatingEvents = updater.getFloatingEvents();
-			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
+			string feedback = LogicUpdater::SHOW_MESSAGE;
+			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
+			} else {
+				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+			}
 			vector<tm> tmVec;
 			tmVec.push_back(userEvent.getStartDate());
 			tmVec.push_back(userEvent.getEndDate());
-			string showType = LogicUpdater::EMPTY_STRING;
+			lastShowType = LogicUpdater::EMPTY_STRING;
 			if (command == Parser::SHOWWEEK) {
-				showType = LogicUpdater::WORD_WEEK;
+				lastShowType = LogicUpdater::WORD_WEEK;
 			}
 			if (command == Parser::SHOWMONTH) {
-				showType = LogicUpdater::WORD_MONTH;
+				lastShowType = LogicUpdater::WORD_MONTH;
 			}
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, showType);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 								 }
 
@@ -359,7 +364,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 			
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 									}
 
@@ -372,7 +377,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			floatingEvents = commandPtr->getEventVector();
 			vector<tm> tmVec = updater.getTempMainDisplayLabel();
 
-			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 								}
 
@@ -392,7 +397,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				feedback = LogicUpdater::REDO_MESSAGE;
 			}		
 
-			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, LogicUpdater::EMPTY_STRING);
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 						   }
 
