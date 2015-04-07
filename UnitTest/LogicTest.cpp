@@ -47,6 +47,28 @@ namespace UnitTest
 			second.tm_mon = 1;
 			second.tm_year = 115;
 			Assert::AreEqual(logic.isSameDate(first, second), true);
+
+
+			//test partition of only day different
+
+
+			//test partition of only month different
+
+
+			//test partition of only year different
+
+
+			//test partition of day and month different
+
+
+			//test partition of day and year different
+
+
+			//test partition of month and year different
+
+
+			//test partition of day and month and year different
+
 		}
 
 	};
