@@ -4,6 +4,8 @@
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
 const string Logic::COLON_SPACE = ": ";
+const char Logic::CHAR_OPEN_SQUARE_BRACKET = '[';
+const char Logic::CHAR_CLOSE_SQUARE_BRACKET = ']';
 
 
 //CONSTRUCTOR, DESTRUCTOR
@@ -204,7 +206,8 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		switch (command) {
 		case Parser::ADD: {
 			vector<tm> tmVec;
-			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);		
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);	
+
 			string feedback = userEvent.getName() + LogicUpdater::ADDED_MESSAGE;
 			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
 				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
@@ -335,15 +338,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser:: SHOWMONTH: {
 			normalEvents = commandPtr->getEventVector();
 			floatingEvents = updater.getFloatingEvents();
-			string feedback = LogicUpdater::SHOW_MESSAGE;
-			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
-				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
-			} else {
-				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
-			}
+
 			vector<tm> tmVec;
 			tmVec.push_back(userEvent.getStartDate());
 			tmVec.push_back(userEvent.getEndDate());
+
 			lastShowType = LogicUpdater::EMPTY_STRING;
 			if (command == Parser::SHOWWEEK) {
 				lastShowType = LogicUpdater::WORD_WEEK;
@@ -351,6 +350,14 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			if (command == Parser::SHOWMONTH) {
 				lastShowType = LogicUpdater::WORD_MONTH;
 			}
+
+			string feedback = LogicUpdater::SHOW_MESSAGE;
+			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+				feedback += COLON_SPACE + updater.setSingleDayString(userEvent.getStartDate());
+			} else {
+				feedback += COLON_SPACE + updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+			}
+			removeLabel(feedback);
 
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
@@ -559,5 +566,18 @@ int Logic::convertNameToID(string name) {
 		}
 	} else {
 		return INVALID_NUMBER;
+	}
+}
+
+void Logic::removeLabel(string& feedback) {
+	for (int i = 0; i < feedback.size(); i++) {
+		if (feedback[i] == CHAR_OPEN_SQUARE_BRACKET) {
+			feedback.erase(feedback.begin() + i);
+			while (feedback[i] != CHAR_CLOSE_SQUARE_BRACKET) {
+				feedback.erase(feedback.begin() + i);
+			}
+			feedback.erase(feedback.begin() + i);
+			feedback.erase(feedback.begin() + i);
+		}
 	}
 }

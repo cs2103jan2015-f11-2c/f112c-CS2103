@@ -23,9 +23,11 @@ private:
 	LogicLog logger;
 
 public:
-	static const int Logic::INVALID_NUMBER;
-	static const string Logic::EMPTY_STRING;
-	static const string Logic::COLON_SPACE;
+	static const int INVALID_NUMBER;
+	static const string EMPTY_STRING;
+	static const string COLON_SPACE;
+	static const char CHAR_OPEN_SQUARE_BRACKET;
+	static const char CHAR_CLOSE_SQUARE_BRACKET;
 
 
 	//constructor, destructor
@@ -58,6 +60,7 @@ public:
 	bool isNumber(string s);
 	bool isSameDate(tm date1, tm date2);
 	int convertNameToID(string input);
+	void removeLabel(string& feedback);
 };
 
 #endif
