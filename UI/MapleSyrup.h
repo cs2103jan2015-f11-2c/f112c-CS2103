@@ -1052,7 +1052,7 @@ private: void unDisplaySuggestion(){
 //This function is triggered whenever there is a textchange in the commandBox
 //Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 /*
+			 
 			 std::string temp = convertToStd(commandBox->Text);
 			 
 			 std::string tempCommand = toLowerCase(temp);
@@ -1093,7 +1093,7 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 				 break;
 										  }
 			 }
-			 */
+			
 		 }
 //===================================================================================================================================================================
 

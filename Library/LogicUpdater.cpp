@@ -273,6 +273,9 @@ void LogicUpdater::floatingEventsToString() {
 }
 
 std::string LogicUpdater::setMultipleDaysString(tm start,tm end) {
+	std::mktime(&start);
+	std::mktime(&end);
+	
 	if(start.tm_year == end.tm_year && start.tm_mon == end.tm_mon){
 		assert(start.tm_mday < end.tm_mday);
 	} else if(start.tm_year == end.tm_year){
@@ -280,7 +283,7 @@ std::string LogicUpdater::setMultipleDaysString(tm start,tm end) {
 	} else {
 		assert(start.tm_year <= end.tm_year);
 	}
-
+	
 	std::string multipleDaysString = "";
 
 	if (isDisplayMonth(start,end)) {
@@ -310,6 +313,8 @@ std::string LogicUpdater::setMultipleDaysString(tm start,tm end) {
 
 void LogicUpdater::setMainDisplayLabel (vector<tm> label) {
 	assert(label.size()==2);
+	std::mktime(&label[0]);
+	std::mktime(&label[1]);
 
 	_mainDisplayLabel.clear();
 
@@ -336,6 +341,8 @@ void LogicUpdater::setWeekMonthOrNothing(string identity) {
 }
 
 std::string LogicUpdater::setSingleDayString(tm label) {
+	std::mktime(&label);
+
 	string dayOfMonth = intToString(label.tm_mday);
 	string month = intToMonth(label.tm_mon);
 	string dayOfWeek = intToDayOfWeek(label.tm_wday);
@@ -450,7 +457,7 @@ std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int event
 	outDate << OPEN_SQUARE_BRACKET;
 	if (eventToBeSet.getIsDeadline()) {
 		outDate << LABEL_DUE;
-		int endTime = getEndTime(eventToBeSet);
+		int endTime = getStartTime(eventToBeSet);
 		outDate << intToTime(endTime);
 	} else if (isAllDay(eventToBeSet)) {
 		outDate << LABEL_ALLDAY;
@@ -568,6 +575,8 @@ bool LogicUpdater::setIsNew(Event toBeSet) {
 
 bool LogicUpdater::isSingleDay(vector<tm> label) {
 	assert(label.size()==2);
+	std::mktime(&label[0]);
+	std::mktime(&label[1]);
 
 	bool isSingle = false;
 	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon && label[0].tm_year == label[1].tm_year) {
@@ -579,6 +588,8 @@ bool LogicUpdater::isSingleDay(vector<tm> label) {
 
 bool LogicUpdater::isToday(tm date) {
 	bool isDateToday = false;
+
+	std::mktime(&date);
 
 	//Initialize date to today
 	time_t now = time(0);
@@ -593,6 +604,8 @@ bool LogicUpdater::isToday(tm date) {
 
 bool LogicUpdater::isTomorrow(tm date) {
 	bool isDateTomorrow = false;
+
+	std::mktime(&date);
 
 	//Initialize date to tomorrow
 	time_t now = time(0);
@@ -624,6 +637,9 @@ bool LogicUpdater::isAllDay(Event eventToDisplay) {
 }
 
 bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
 	if(frontDate.tm_year == backDate.tm_year && frontDate.tm_mon == backDate.tm_mon){
 		assert(frontDate.tm_mday < backDate.tm_mday);
 	} else if(frontDate.tm_year == backDate.tm_year){
@@ -631,6 +647,7 @@ bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate) {
 	} else {
 		assert(frontDate.tm_year <= backDate.tm_year);
 	}
+
 
 	bool isMonth = false;
 
@@ -646,6 +663,8 @@ bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate) {
 bool LogicUpdater::isFirstDayOfMonth(tm frontDate) {
 	bool isFirstDay = false;
 	
+	std::mktime(&frontDate);
+
 	int monthBefore = frontDate.tm_mon;
 
 	assert(frontDate.tm_mday>=1 && frontDate.tm_mday<=31); 
@@ -665,6 +684,8 @@ bool LogicUpdater::isFirstDayOfMonth(tm frontDate) {
 
 bool LogicUpdater::isLastDayOfMonth(tm backDate) {
 	bool isLastDay = false;
+
+	std::mktime(&backDate);
 	
 	int monthBefore = backDate.tm_mon;
 
@@ -687,6 +708,9 @@ bool LogicUpdater::isLastDayOfMonth(tm backDate) {
 bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate) {
 	bool isWeek  = false;
 
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
 	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && countNumDays(frontDate,backDate) == 6 ) {
 		isWeek = true;
 	}
@@ -699,6 +723,7 @@ bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate) {
 }
 
 bool LogicUpdater::isFirstDayOfWeek(tm frontDate) {
+	std::mktime(&frontDate);
 	assert(frontDate.tm_wday>=0 && frontDate.tm_wday<=6);
 
 	bool isFirstDay = false;
@@ -711,6 +736,7 @@ bool LogicUpdater::isFirstDayOfWeek(tm frontDate) {
 }
 
 bool LogicUpdater::isLastDayOfWeek(tm backDate) {
+	std::mktime(&backDate);
 	assert(backDate.tm_wday>=0 && backDate.tm_wday<=6);
 
 	bool isLastDay = false;
@@ -723,6 +749,9 @@ bool LogicUpdater::isLastDayOfWeek(tm backDate) {
 }
 
 bool LogicUpdater::isSameMonth(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
 	bool sameMonth = false;
 
 	if (frontDate.tm_mon == backDate.tm_mon) {
@@ -733,6 +762,9 @@ bool LogicUpdater::isSameMonth(tm frontDate,tm backDate) {
 }
 
 bool LogicUpdater::isSameYear(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
 	bool sameYear = false;
 
 	if (frontDate.tm_year == backDate.tm_year) {
@@ -836,6 +868,8 @@ std::string LogicUpdater::intToMonth (int monthInNum) {
 }
 
 std::string LogicUpdater::tmToString(tm date){
+	std::mktime(&date);
+
 	assert(date.tm_mday>=1 && date.tm_mday<=31); 
 	assert(date.tm_mon>=0 && date.tm_mon<=11);
 	assert(date.tm_year<3000 && date.tm_year>70);
