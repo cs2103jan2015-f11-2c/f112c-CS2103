@@ -581,6 +581,7 @@ int Logic::convertNameToID(string name) {
 	}
 }
 
+//removes label enclosed by "[]" from input string
 void Logic::removeLabel(string& feedback) {
 	for (int i = 0; i < feedback.size(); i++) {
 		if (feedback[i] == CHAR_OPEN_SQUARE_BRACKET) {
