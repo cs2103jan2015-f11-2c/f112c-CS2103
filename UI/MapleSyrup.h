@@ -179,6 +179,7 @@ namespace UI {
 			this->commandBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->commandBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->commandBox->BackColor = System::Drawing::Color::White;
+			this->commandBox->Cursor = System::Windows::Forms::Cursors::IBeam;
 			resources->ApplyResources(this->commandBox, L"commandBox");
 			this->commandBox->ForeColor = System::Drawing::SystemColors::InfoText;
 			this->commandBox->Name = L"commandBox";
@@ -1049,7 +1050,9 @@ private: void unDisplaySuggestion(){
 //This function is triggered whenever there is a textchange in the commandBox
 //Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+			 /*
 			 std::string temp = convertToStd(commandBox->Text);
+			 
 			 std::string tempCommand = toLowerCase(temp);
 
 			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
@@ -1088,6 +1091,7 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 				 break;
 										  }
 			 }
+			 */
 		 }
 //===================================================================================================================================================================
 

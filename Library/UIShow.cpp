@@ -71,8 +71,14 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 	checkValidityOftm(mainDisplayDate[0]);
 	checkValidityOftm(mainDisplayDate[1]);
 	
-	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
-		return "";
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
 	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newCommand = generateShowWeekForNext(mainDisplayDate[1]);
 		return newCommand;
@@ -102,8 +108,14 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 	checkValidityOftm(mainDisplayDate[0]);
 	checkValidityOftm(mainDisplayDate[1]);
 
-	if (currentMainDisplayLabel == WORD_COMMANDS || currentMainDisplayLabel == WORD_HELP_INTRO || currentMainDisplayLabel == WORD_SEARCH_MODE || currentMainDisplayLabel == WORD_SHORTCUTS){
-		return "";
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
 	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newCommand = generateShowWeekForBack(mainDisplayDate[1]);
 		return newCommand;
