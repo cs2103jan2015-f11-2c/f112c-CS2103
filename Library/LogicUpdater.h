@@ -51,6 +51,7 @@ public:
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
+	static const string COMPLETED_MESSAGE;
 	static const string SHOW_MESSAGE;
 	static const string EVENT_NOT_FOUND_MESSAGE;
 	static const string PARTIAL_EVENT_FOUND_MESSAGE;
@@ -58,7 +59,7 @@ public:
 	static const string NEW_DAY_MESSAGE;
 	static const string UNDO_MESSAGE;
 	static const string REDO_MESSAGE;
-	static const string COMPLETED_MESSAGE;
+	static const string FILE_NOT_READ_MESSAGE;
 
 	static const string WORD_TODAY;
 	static const string WORD_TOMORROW;

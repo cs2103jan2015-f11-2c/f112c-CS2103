@@ -20,6 +20,7 @@ const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "More than 1 result found, ple
 const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";
 const string LogicUpdater::UNDO_MESSAGE = "undo";
 const string LogicUpdater::REDO_MESSAGE = "redo";
+const string LogicUpdater::FILE_NOT_READ_MESSAGE = "memory corrupted, automatically reverted to last usable state";
 
 const string LogicUpdater::WORD_TODAY = "Today";
 const string LogicUpdater::WORD_TOMORROW = "Tomorrow";

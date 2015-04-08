@@ -11,6 +11,7 @@ const char Logic::CHAR_CLOSE_SQUARE_BRACKET = ']';
 //CONSTRUCTOR, DESTRUCTOR
 Logic::Logic(void) {
 	parserPtr = NULL;
+	lastID = eventFacade.getDataID() + Command::SIZE_ONE;
 }
 
 Logic::~Logic() {
@@ -51,12 +52,22 @@ vector<tm> Logic::getTempMainDisplayLabel() {
 //EXECUTORS
 //called by UI with original user input string, returns true if command executed thoroughly (e.g. if command is invalid, return false)
 bool Logic::executeUserInput(string input) {
+	bool isDone = true;
+
+	try {
+		if (!eventFacade.dataRead()) {
+			updater.setFeedbackStrings(LogicUpdater::FILE_NOT_READ_MESSAGE);
+			throw false;
+		}
+	} catch (bool) {
+		return !isDone;
+	}
+
 	parserPtr = new Parser(input);
 
 	Parser::commandType commandType = parserPtr->getCommandType();
 	Event userEvent = parserPtr->getEvent();
 	string nameOfEvent = parserPtr->getNameOfEvent();
-	bool isDone = true;
 
 	Command* commandPtr = queueCommand(commandType, userEvent, nameOfEvent);
 	try {
