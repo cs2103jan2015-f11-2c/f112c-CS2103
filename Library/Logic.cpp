@@ -473,7 +473,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec) {
 	if (commandPtr->getIsFloating()) {
 		floating = commandPtr->getEventVector();
-
+		
 		tmVec = updater.getTempMainDisplayLabel();
 		Event dummyEvent;
 		dummyEvent.setStartEndDate(tmVec);

@@ -200,8 +200,10 @@ Event CompleteCommand::getEvent() {
 
 void CompleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		eventFacade->uncompleteEvent(userEvent);
-		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		eventsToShow = eventFacade->addEvent(userEvent);
+		if (!isFloating) {
+			eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		}
 	}
 }
 
@@ -284,8 +286,10 @@ Event DeleteCommand::getEvent() {
 
 void DeleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		eventFacade->addEvent(userEvent);
-		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		eventsToShow = eventFacade->addEvent(userEvent);
+		if (!isFloating) {
+			eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		}
 	}
 }
 
