@@ -99,7 +99,7 @@ bool EventFacade::dataRead(){
 	return EventStorage::storage().getIsRead();
 }
 
-int EventFacade::dataID(){
+int EventFacade::getDataID(){
 	logger.log(EventLog::FACADE + EventLog::DATA_ID);
 	return EventStorage::storage().getLastID();
 }

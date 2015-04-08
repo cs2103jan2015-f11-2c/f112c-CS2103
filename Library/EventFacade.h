@@ -36,7 +36,7 @@ public:
 
 	/*To EventStorage*/
 	bool dataRead();
-	int dataID();
+	int getDataID();
 
 private:
 
