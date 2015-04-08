@@ -50,6 +50,7 @@ namespace UI {
 	private: System::Windows::Forms::Button^  redoButton;
 	private: System::Windows::Forms::PictureBox^  navigationPic;
 
+
 	private: System::Windows::Forms::Button^  undoButton;
 
 	public:
@@ -475,10 +476,13 @@ namespace UI {
 			this->Controls->Add(this->display);
 			this->Controls->Add(this->calenderTop);
 			this->ForeColor = System::Drawing::Color::Black;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->HelpButton = true;
 			this->KeyPreview = true;
+			this->MaximizeBox = false;
 			this->Name = L"MapleSyrup";
 			this->ShowIcon = false;
+			this->SizeGripStyle = System::Windows::Forms::SizeGripStyle::Show;
 			this->Load += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Load);
 			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyDown);
 			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::MapleSyrup_KeyUp);
@@ -518,7 +522,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			clearAllLogFiles();
 			initializeAndUndisplayAll();
 			initializeShortcut();
-			loadData();
+			loadData();	
 }
 
 //Pre-condition : None
