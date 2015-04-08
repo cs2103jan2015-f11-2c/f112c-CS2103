@@ -18,6 +18,7 @@
 
 
 //Logic references
+#include "LogicUpdater.h"
 
 //Parser references
 

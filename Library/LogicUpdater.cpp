@@ -212,6 +212,8 @@ vector<tm> LogicUpdater::getTempMainDisplayLabel() {
 }
 //===================================================================================================================================================================
 void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
+	//put in assertion to check validity of normalEvents, floatingEvents & label
+
 	_newID = id;
 	setWeekMonthOrNothing (weekMonthOrNothing);
 	setFeedbackStrings(feedback);
@@ -406,6 +408,7 @@ void LogicUpdater::normalEventsToString() {
 std::string LogicUpdater::setMarkerEventString(Event marker, int index) {
 	ostringstream out;
 
+	assert(index>=0);
 	if (index != 0) {
 		out << LEAVE_A_LINE;
 	}
@@ -433,6 +436,7 @@ std::string LogicUpdater::setMarkerEventString(Event marker, int index) {
 }
 
 std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int eventIndex) {
+	assert(eventIndex >= 1);
 	ostringstream outDate;
 	
 	outDate << eventIndex << ".";
@@ -459,6 +463,7 @@ std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int event
 }
 
 std::string LogicUpdater::setNormalEventEventString(Event eventToBeSet) {
+	
 	ostringstream outEvent;
 
 	std::string nameOfEvent = eventToBeSet.getName();
@@ -638,8 +643,9 @@ bool LogicUpdater::isFirstDayOfMonth(tm frontDate) {
 	
 	int monthBefore = frontDate.tm_mon;
 
-	assert(frontDate.tm_mday>=0 && frontDate.tm_mday<=31); 
-	assert(monthBefore>=0 && monthBefore<=11); 
+	assert(frontDate.tm_mday>=1 && frontDate.tm_mday<=31); 
+	assert(frontDate.tm_mon>=0 && frontDate.tm_mon<=11);
+	assert(frontDate.tm_year<3000 && frontDate.tm_year>70);
 
 	frontDate.tm_mday--;
 	std::mktime(&frontDate);
@@ -657,8 +663,10 @@ bool LogicUpdater::isLastDayOfMonth(tm backDate) {
 	
 	int monthBefore = backDate.tm_mon;
 
-	assert(backDate.tm_mday>=0 && backDate.tm_mday<=31); 
-	assert(monthBefore>=0 && monthBefore<=11); 
+	assert(backDate.tm_mday>=1 && backDate.tm_mday<=31); 
+	assert(backDate.tm_mon>=0 && backDate.tm_mon<=11);
+	assert(backDate.tm_year<3000 && backDate.tm_year>70);
+
 
 	backDate.tm_mday++;
 	std::mktime(&backDate);
@@ -823,8 +831,9 @@ std::string LogicUpdater::intToMonth (int monthInNum) {
 }
 
 std::string LogicUpdater::tmToString(tm date){
-	assert(date.tm_mday>=0 && date.tm_mday<=31); 
-	assert(date.tm_mon>=0 && date.tm_mon<=11); 
+	assert(date.tm_mday>=1 && date.tm_mday<=31); 
+	assert(date.tm_mon>=0 && date.tm_mon<=11);
+	assert(date.tm_year<3000 && date.tm_year>70);
 
 	string startDayOfMonth = intToString(date.tm_mday);
 	string startMonth = intToMonth(date.tm_mon);
