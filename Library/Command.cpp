@@ -125,6 +125,7 @@ AddCommand::AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentSho
 void AddCommand::execute() {
 	isFloating = userEvent.getIsFloating();
 	eventsToShow = eventFacade->addEvent(userEvent);
+	logger.log(eventsToShow.size());
 	if (isFloating) {
 		return;
 	} else {
@@ -386,16 +387,13 @@ void EditCommand::undo() {
 }
 
 void EditCommand::editImmediately() {
-	isFloating = eventToEdit.getIsFloating();
-
-	if (isFloating) {
-		eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
-	} else {
-		eventFacade->editEvent(eventToEdit, editedEvent);
+	eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
+	editedEvent = getEventFromID(eventsToShow, id);
+	isFloating = editedEvent.getIsFloating();
+	if (!isFloating) {
 		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
 	}
 
-	editedEvent = getEventFromID(eventsToShow, id);
 	isExecuted = true;
 }
 
