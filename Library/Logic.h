@@ -47,7 +47,7 @@ public:
 
 	//main executors
 	bool executeUserInput(string input);
-	Command* queueCommand(Parser::commandType command, Event userEvent, string nameOfEvent);
+	Command* queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent);
 	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);

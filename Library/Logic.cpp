@@ -83,7 +83,7 @@ bool Logic::executeUserInput(string input) {
 }
 
 //create command object, call executor to execute it
-Command* Logic::queueCommand(Parser::commandType command, Event userEvent, string nameOfEvent) {
+Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 
 	try {
@@ -230,7 +230,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			int id = userEvent.getID();
-
+			
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						  }
