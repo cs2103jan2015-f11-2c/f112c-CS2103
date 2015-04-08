@@ -782,7 +782,7 @@ void ParserProcessor::addEventCorrector() {
 		}
 		if (!startDayFound && startTimeFound) {
 			tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
-			tempEventStore.setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+			tempEventStore.setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
 			tempEventStore.setEndTime(tempTime.tm_hour,tempTime.tm_min);
 			startDayFound = true;
 		}
