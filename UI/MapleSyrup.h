@@ -324,8 +324,9 @@ namespace UI {
 			// 
 			// redoButton
 			// 
-			this->redoButton->BackColor = System::Drawing::Color::White;
+			this->redoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->redoButton, L"redoButton");
+			this->redoButton->ForeColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			this->redoButton->Name = L"redoButton";
 			this->redoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
@@ -334,8 +335,9 @@ namespace UI {
 			// 
 			// undoButton
 			// 
-			this->undoButton->BackColor = System::Drawing::Color::White;
+			this->undoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			resources->ApplyResources(this->undoButton, L"undoButton");
+			this->undoButton->ForeColor = System::Drawing::SystemColors::GradientInactiveCaption;
 			this->undoButton->Name = L"undoButton";
 			this->undoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
