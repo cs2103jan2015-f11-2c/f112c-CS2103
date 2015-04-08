@@ -26,6 +26,7 @@ public:
 	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
 	static const string COMMA_SPACE;
+	static const string EXCLAMATION_MARK;
 	static const char CHAR_OPEN_SQUARE_BRACKET;
 	static const char CHAR_CLOSE_SQUARE_BRACKET;
 
@@ -59,6 +60,7 @@ public:
 	bool isProperCommand(Parser::commandType commandType);
 	bool isNumber(string s);
 	bool isSameDate(tm date1, tm date2);
+	string showTypeToString(Parser::commandType cmd, int importance);
 	int convertNameToID(string input);
 	void removeLabel(string& feedback);
 };

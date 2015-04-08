@@ -4,6 +4,7 @@
 const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
 const string Logic::COMMA_SPACE = ", ";
+const string Logic::EXCLAMATION_MARK = "!";
 const char Logic::CHAR_OPEN_SQUARE_BRACKET = '[';
 const char Logic::CHAR_CLOSE_SQUARE_BRACKET = ']';
 
@@ -283,6 +284,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
 
 			Event doneEvent = commandPtr->getEvent();
+			tm start = doneEvent.getStartDate(), end = doneEvent.getEndDate();
+			mktime(&start); mktime(&end);
+
 			string feedback;
 			if (command == Parser::DELETE_) { //for delete
 				feedback = LogicUpdater::DELETED_MESSAGE + doneEvent.getName();
@@ -290,10 +294,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				feedback = LogicUpdater::COMPLETED_MESSAGE + doneEvent.getName();
 			}
 			if (!doneEvent.getIsFloating()) {
-				if (isSameDate(doneEvent.getStartDate(),doneEvent.getEndDate())) {
-					feedback += COMMA_SPACE + updater.setSingleDayString(doneEvent.getStartDate());
+				if (isSameDate(start, end)) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(start);
 				} else {
-					feedback += COMMA_SPACE + updater.setMultipleDaysString(doneEvent.getStartDate(),doneEvent.getEndDate());
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(start, end);
 				}
 			}
 			
@@ -338,15 +342,15 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			
 			Event oldEvent = commandPtr->getEvent();
 			int id = oldEvent.getID();
+			tm start = oldEvent.getStartDate(), end = oldEvent.getEndDate();
+			mktime(&start); mktime(&end);
+			
 			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
 			if (!oldEvent.getIsFloating()) {
-				if (isSameDate(oldEvent.getStartDate(),oldEvent.getEndDate())) {
-					feedback += COMMA_SPACE + updater.setSingleDayString(oldEvent.getStartDate());
+				if (isSameDate(start, end)) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(start);
 				} else {
-					tm one = oldEvent.getStartDate(), two = oldEvent.getEndDate();
-					mktime(&one);
-					mktime(&two);
-					feedback += COMMA_SPACE + updater.setMultipleDaysString(one,two);
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(start, end);
 				}
 			}
 
@@ -397,7 +401,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser::SHOWCOMPLETE:
 		case Parser::SHOWIMPORTANT: {
 			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
-			string feedback = LogicUpdater::SHOW_MESSAGE + nameOfEvent;
+			string feedback = showTypeToString(command, userEvent.getImportanceLevel());
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 			
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
@@ -577,6 +581,32 @@ bool Logic::isSameDate(tm date1, tm date2) {
 	return(date1.tm_mday == date2.tm_mday &&
 		date1.tm_mon == date2.tm_mon &&
 		date1.tm_year == date2.tm_year);
+}
+
+string Logic::showTypeToString(Parser::commandType cmd, int importance) {
+	switch (cmd) {
+	case Parser::SHOWALL: {
+		return LogicUpdater::SHOWALL_MESSAGE;
+						  }
+
+	case Parser::SHOWALLIMPORTANT: {
+		return LogicUpdater::SHOWALLIMPORTANT_MESSAGE;
+								   }
+
+	case Parser::SHOWCOMPLETE: {
+		return LogicUpdater::SHOWCOMPLETE_MESSAGE;
+							   }
+
+	case Parser::SHOWIMPORTANT: {
+		string cmdString = LogicUpdater::SHOWIMPORTANT_MESSAGE;
+		int countImportance = 0;
+		while (countImportance != importance) {
+			cmdString += EXCLAMATION_MARK;
+			countImportance++;
+		}
+		return cmdString;
+								}
+	}
 }
 
 //returns id of event if found in updater, -1 otherwise
