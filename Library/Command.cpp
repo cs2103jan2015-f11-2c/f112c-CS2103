@@ -376,8 +376,12 @@ Event EditCommand::getEvent() {
 void EditCommand::undo() {
 	if (eventToEdit.getID() != INVALID_NUMBER) {
 		eventFacade->deleteEvent(editedEvent);
-		eventFacade->addEvent(eventToEdit);
-		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+		if (isFloating) {
+			eventsToShow = eventFacade->addEvent(eventToEdit);
+		} else {
+			eventFacade->addEvent(eventToEdit);
+			eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+		}
 	}
 }
 
