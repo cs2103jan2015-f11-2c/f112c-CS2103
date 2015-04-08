@@ -18,7 +18,6 @@ InputStringSplit::InputStringSplit(){
 //Throws exception if no input is found. Returns the extracted string.
 std::string InputStringSplit::extractFirstWord(std::string input){
 	logger.logParserEnterFunc(EXTRACT_FIRST_WORD);
-	assert(!input.empty());
 
 	bool missingInput = true;
 	for (unsigned int i = 0; i < input.size() && missingInput; i++){
@@ -30,13 +29,15 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
-
+	
 	std::string::size_type strCutIndex;
-	strCutIndex = input.find_first_of(" ");
+	strCutIndex = input.find_first_not_of(" ");
+	strCutIndex = input.find_first_of(" ",strCutIndex);
 	std::string tempStr = input.substr(0,strCutIndex);
 	for(unsigned int i = 0; i < tempStr.size(); i++){
 		tempStr[i] = std::tolower(tempStr[i]);
 	}
+	
 	assert(!tempStr.empty());
 	return tempStr;
 }
