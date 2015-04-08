@@ -343,7 +343,10 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				if (isSameDate(oldEvent.getStartDate(),oldEvent.getEndDate())) {
 					feedback += COMMA_SPACE + updater.setSingleDayString(oldEvent.getStartDate());
 				} else {
-					feedback += COMMA_SPACE + updater.setMultipleDaysString(oldEvent.getStartDate(),oldEvent.getEndDate());
+					tm one = oldEvent.getStartDate(), two = oldEvent.getEndDate();
+					mktime(&one);
+					mktime(&two);
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(one,two);
 				}
 			}
 
