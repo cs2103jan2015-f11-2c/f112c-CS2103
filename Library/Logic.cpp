@@ -49,7 +49,7 @@ vector<tm> Logic::getTempMainDisplayLabel() {
 }
 
 
-//EXECUTORS
+//MAIN EXECUTORS
 //called by UI with original user input string, returns true if command executed thoroughly (e.g. if command is invalid, return false)
 bool Logic::executeUserInput(string input) {
 	bool isDone = true;
@@ -90,6 +90,9 @@ Command* Logic::queueCommand(Parser::commandType command, Event userEvent, strin
 		switch (command) {
 		case Parser::ADD:
 		case Parser::ADDFLOAT: {
+			userEvent.setID(lastID);
+			lastID++;
+
 			Command* addCommand = new AddCommand(&eventFacade, userEvent, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::ADD);
 			return executor.execute(addCommand);
