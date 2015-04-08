@@ -150,7 +150,7 @@ vector<Event> EventModifier::editFloatingToNormal(int index, Event afterEdit){
 	} else if((afterEdit.getStartDate().tm_mday == DEFAULT) && (afterEdit.getStartDate().tm_hour != DEFAULT)){ //Given only have time, day = TODAY
 		(tempContents[index]).setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
 		(tempContents[index]).setStartTime(afterEdit.getStartDate().tm_hour,afterEdit.getStartDate().tm_min);
-		(tempContents[index]).setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+		(tempContents[index]).setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
 		(tempContents[index]).setEndTime(afterEdit.getEndDate().tm_hour,afterEdit.getEndDate().tm_min);
 	}
 
