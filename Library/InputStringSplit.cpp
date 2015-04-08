@@ -121,9 +121,13 @@ std::string InputStringSplit::extractEditEventName(std::string input){
 	strCutIndex = input.find_first_of(" ");
 	std::string tempStr = input.substr(0,strCutIndex);
 	
-	try {
-		int index = std::stoi(tempStr);
-	} catch (std::invalid_argument& e){
+	bool isNumber = true;
+	for(unsigned int i = 0; i < tempStr.size(); i++){
+		if(!isdigit(tempStr[i])){
+			isNumber = false;
+		}
+	}
+	if(!isNumber){
 		strCutIndex = input.find_first_of(";");
 		if(strCutIndex == std::string::npos){
 			logger.logParserError(ParserExceptions::ERROR_MISSING_INDEX);
