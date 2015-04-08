@@ -1,3 +1,5 @@
+#pragma warning(disable:4996)
+
 #include "ParserProcessor.h"
 
 const std::string ParserProcessor::LOCKUP_USED_INFORMATION = "USED";
@@ -21,17 +23,28 @@ const std::string ParserProcessor::CONVERT_NORMAL_TO_FLOAT = "to>>>float";
 
 ParserProcessor::ParserProcessor() {
 	keywordMonths[0] = "jan";
-	keywordMonths[1] = "feb";
-	keywordMonths[2] = "mar";
-	keywordMonths[3] = "apr";
-	keywordMonths[4] = "may";
-	keywordMonths[5] = "jun";
-	keywordMonths[6] = "jul";
-	keywordMonths[7] = "aug";
-	keywordMonths[8] = "sep";
-	keywordMonths[9] = "oct";
-	keywordMonths[10] = "nov";
-	keywordMonths[11] = "dec";
+	keywordMonths[1] = "january";
+	keywordMonths[2] = "feb";
+	keywordMonths[3] = "february";
+	keywordMonths[4] = "mar";
+	keywordMonths[5] = "march";
+	keywordMonths[6] = "apr";
+	keywordMonths[7] = "april";
+	keywordMonths[8] = "may";
+	keywordMonths[9] = "jun";
+	keywordMonths[10] = "june";
+	keywordMonths[11] = "jul";
+	keywordMonths[12] = "july";
+	keywordMonths[13] = "aug";
+	keywordMonths[14] = "august";
+	keywordMonths[15] = "sep";
+	keywordMonths[16] = "september";
+	keywordMonths[17] = "oct";
+	keywordMonths[18] = "october";
+	keywordMonths[19] = "nov";
+	keywordMonths[20] = "november";
+	keywordMonths[21] = "dec";
+	keywordMonths[22] = "december";
 	
 	keywordTime[0] = "am";
 	keywordTime[1] = "pm";
@@ -41,12 +54,19 @@ ParserProcessor::ParserProcessor() {
 	keywordDay[2] = "tomorrow";
 	keywordDay[3] = "tmr";
 	keywordDay[4] = "mon";
-	keywordDay[5] = "tues";
-	keywordDay[6] = "wed";
-	keywordDay[7] = "thurs";
-	keywordDay[8] = "fri";
-	keywordDay[9] = "sat";
-	keywordDay[10] = "sun";
+	keywordDay[5] = "monday";
+	keywordDay[6] = "tues";
+	keywordDay[7] = "tuesday";
+	keywordDay[8] = "wed";
+	keywordDay[9] = "wednesday";
+	keywordDay[10] = "thurs";
+	keywordDay[11] = "thursday";
+	keywordDay[12] = "fri";
+	keywordDay[13] = "friday";
+	keywordDay[14] = "sat";
+	keywordDay[15] = "saturday";
+	keywordDay[16] = "sun";
+	keywordDay[17] = "sunday";
 
 	matchFound = false;
 	startDayFound = false;
@@ -55,6 +75,8 @@ ParserProcessor::ParserProcessor() {
 	endTimeFound = false;
 	afterTwelve = false;
 	nameFound = false;
+	firstTriggerKeyword = false;
+	nameIndex = INVALID_NUMBER;
 	toFound = false;
 	deadlineFound = false;
 	importanceFound = false;
@@ -83,35 +105,42 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 	logger.logParserEnterFunc(PROCESS_ADD_EVENT);
 
 	fragmentedWords = fragmentedWords_;
+	int shiftedIndex = 0;
 	
 	try {
-		//Check for event name first, adding events require a compulsory event name
-		unsigned int i = 0;
-		identifyEventName(i);
-		if (!nameFound) {
-			logger.logParserError(ParserExceptions::ERROR_NO_NAME);
-			throw ParserExceptions(ParserExceptions::ERROR_NO_NAME);
-		}
-
 		//Check within the vector of strings for keywords to identify day/date, time, deadline, importance
-		for (i = 1; i < fragmentedWords.size(); i++) {
-			matchFound = identifyDeadline(i);
-			matchFound = identifyDay(i);
-			matchFound = identifyDate(i);
-			matchFound = identifyTime(i);
-			matchFound = identifyImportance(i);
+		unsigned int i = 0;
+		for (i = 0; i < fragmentedWords.size(); i++) {
+			shiftedIndex = identifyDeadline(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyImportance(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyDay(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyDate(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyTime(i);
+			identifyEventName(shiftedIndex);
 			matchFound = false;
 		}
 
+		tempEventStore.setName(setEventName(nameIndex));
+		if(!startDayFound && !startTimeFound && !deadlineFound && !importanceFound && !nameFound && !firstTriggerKeyword){
+			nameFound = true;
+			logger.logParserIdentified(IDENTIFY_EVENT_NAME);
+			nameIndex = fragmentedWords.size()-1;
+			tempEventStore.setName(setEventName(nameIndex));
+		}
+
 		//Check Exception Cases:
-		//Case 1: no name, no day, no time input at all
-		if (!nameFound && !startDayFound && !startTimeFound) {
-			logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
-			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
+		//Case 1: no event name
+		if(tempEventStore.getName() == ""){
+			logger.logParserError(ParserExceptions::ERROR_NO_NAME);
+			throw ParserExceptions(ParserExceptions::ERROR_NO_NAME);
 		}
 		//Case 2: name is found. additional input detected after event name but not read in at all
 		if (nameFound && !startDayFound && !startTimeFound && !importanceFound) {
-			if (fragmentedWords.size() > 1) {
+			if (fragmentedWords.size() > nameIndex+1) {
 				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
 				throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);	
 			}
@@ -119,12 +148,12 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 		//Case 3: due/deadline keyword found but no date or time input
 		if (deadlineFound) {
 			if (!endDayFound && !endTimeFound) {
-				logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
-				throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+				logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+				throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 			}
 		}
 		//Case 4: some data are unused, means there might be wrong formatting or too many information entered
-		for (i = 0; i < fragmentedWords.size(); i++) {
+		for (i = nameIndex+1; i < fragmentedWords.size(); i++) {
 			try {
 				auto tempInt = std::stoi(fragmentedWords[i]);
 				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
@@ -156,7 +185,8 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 	logger.logParserEnterFunc(PROCESS_EDIT_EVENT);
 
 	fragmentedWords = fragmentedWords_;
-	
+	int shiftedIndex = 0;
+
 	try {
 		//Check if it if changing from normal to floating
 		unsigned int i = 0;
@@ -164,21 +194,27 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 			i++;
 		}
 
-		//Check for any event name
-		if(i < fragmentedWords.size()){
-			if (identifyEventName(i)) {
-				i++;
-			}
-		}
-		
 		//Check within the vector of strings for keywords to identify day/date, time, importance
 		for (; i < fragmentedWords.size(); i++) {
-			matchFound = identifyDay(i);
-			matchFound = identifyDate(i);
-			matchFound = identifyTime(i);
-			matchFound = identifyImportance(i);
-			logger.logParserEnterFunc("hi3");
+			shiftedIndex = identifyDeadline(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyImportance(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyDay(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyDate(i);
+			identifyEventName(shiftedIndex);
+			shiftedIndex = identifyTime(i);
+			identifyEventName(shiftedIndex);
 			matchFound = false;
+		}
+
+		tempEventStore.setName(setEventName(nameIndex));
+		if(!startDayFound && !startTimeFound && !deadlineFound && !importanceFound && !firstTriggerKeyword && !normalToFloat){
+			nameFound = true;
+			logger.logParserIdentified(IDENTIFY_EVENT_NAME);
+			nameIndex = fragmentedWords.size()-1;
+			tempEventStore.setName(setEventName(nameIndex));
 		}
 
 		//Check Exception Cases:
@@ -188,7 +224,7 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 			throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
 		}
 		//Case 2: some data are unused, means there might be wrong formatting or too many information entered
-		for (i = 0; i < fragmentedWords.size(); i++) {
+		for (i = nameIndex+1; i < fragmentedWords.size(); i++) {
 			try {
 				auto tempInt = std::stoi(fragmentedWords[i]);
 				logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
@@ -199,7 +235,6 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 	} catch (ParserExceptions& e) {
 		throw e;
 	}
-	logger.logParserEnterFunc("hi4");
 	//System-based correction to the input data to confirm the details to be editted in the Event before returning it
 	try {
 		editEventCorrector();
@@ -218,34 +253,54 @@ bool ParserProcessor::identifyNormaltoFloat(int index){
 	return normalToFloat;
 }
 
-//Checks the string at the current index of the fragmented string vector for the presence of a ';' to indicate an event name.
-//Sets the name of event to that name if found, removing the ';' at the end. Returns nameFound as true if found.
-bool ParserProcessor::identifyEventName(int index) {
-	if (fragmentedWords[index].find(";") != std::string::npos) {
-		tempEventStore.setName(fragmentedWords[index].substr(0,fragmentedWords[index].find_last_of(";")));
-		nameFound = true;
+
+void ParserProcessor::identifyEventName(int shiftedIndex){
+	if(matchFound && !nameFound && !firstTriggerKeyword){
 		logger.logParserIdentified(IDENTIFY_EVENT_NAME);
-		fragmentedWords[index] = LOCKUP_USED_INFORMATION;
+		nameFound = true;
+		firstTriggerKeyword = true;
+		nameIndex = shiftedIndex;
 	}
-	return nameFound;
 }
+
+//Sets the name of event to that name if found, removing the ';' at the end. Returns nameFound as true if found.
+std::string ParserProcessor::setEventName(int index) {
+	if(nameIndex == INVALID_NUMBER){
+		return "";
+	}
+	std::string tempName = "";
+	for(int i = 0; i <= index; i++){
+		if(i == index){
+			tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+		} else {
+			tempName = tempName + fragmentedWords[i];
+		}
+	}
+	return tempName;
+}
+
 
 //Checks the string at the current index of the fragmented string vector for the presence of keywords of weekdays/today/tomorrow.
 //If found, further operations are done to determine the date set of (day, month and year) based off these keywords.
 //The Event's start date and end date will be assigned based on the date set found. Returns matchFound as true if found.
-bool ParserProcessor::identifyDay(int index) {
+int ParserProcessor::identifyDay(int index) {
 	Conversion convertor;
-	int tempIndex = 0;
+	int tempIndex = index;
 	int currentDay = 0, currentWeekDay = 0, inputWeekDay = 0, numWdaysApart = 0;
 	std::string strDay;
+	std::string lowerCaseString;
 
 	//Find the presence of keywords based on weekdays (tdy,tmr,mon,tues....)
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS && !matchFound; j++) {
-		if (fragmentedWords[index].find(keywordDay[j]) != std::string::npos) {
-			tempIndex = index;
+		lowerCaseString = fragmentedWords[index];
+		for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+			lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+		}
+		if(findExactWord(lowerCaseString,keywordDay[j])){
 			strDay = keywordDay[j];
 			matchFound = true;
 			logger.logParserIdentified(IDENTIFY_DAY);
+			tempIndex--;
 			
 			//assigning start and end date according to what keyword was found
 			if (strDay == "today" || strDay == "tdy") {
@@ -279,7 +334,6 @@ bool ParserProcessor::identifyDay(int index) {
 				} else if (inputWeekDay <= currentWeekDay) {
 					numWdaysApart = inputWeekDay -(currentWeekDay - NUMBER_OF_DAYSINAWEEK);
 				}
-				tempIndex--;
 				//checking for next which will add one extra week
 				if (tempIndex >= 0) {
 					if (fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt") {
@@ -299,23 +353,30 @@ bool ParserProcessor::identifyDay(int index) {
 			}
 		}
 	}
-	return matchFound;
+	if(tempIndex < 0){
+		tempIndex = INVALID_NUMBER;
+	}
+	return tempIndex;
 }
 
 //Checks the string at the current index of the fragmented string vector for the presence of any keywords of months. 
 //If found, further operations are performed to extract the day, month and year from the surrounding strings in the vector to complete a date set.
 //A date set will consist of (day, month, year). The Event's start date and end date will be assigned based on the date set found.
 //Returns matchFound is true if a date is found.
-bool ParserProcessor::identifyDate(int index) {
+int ParserProcessor::identifyDate(int index) {
 	Conversion convertor;
-	int indexShift = 0, tempIndex = 0;
+	int indexShift = 0, tempIndex = index;
 	int tempInt = 0, day = 0, month = 0, year = 0, dayTo = 0;
 	std::string strMonth;
+	std::string lowerCaseString;
 	
 	//finding the keywords of months within the current string in the fragmented string vector 
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++) {
-		if (fragmentedWords[index].find(keywordMonths[j]) != std::string::npos) {
-			tempIndex = index;
+		lowerCaseString = fragmentedWords[index];
+		for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+			lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+		}
+		if (findExactWord(lowerCaseString,keywordMonths[j])){
 			strMonth = keywordMonths[j];
 			matchFound = true;
 			logger.logParserIdentified(IDENTIFY_DATE);
@@ -328,7 +389,7 @@ bool ParserProcessor::identifyDate(int index) {
 			month = convertor.monthToInt(strMonth);
 
 			//Confirming first set of (day, month, year)
-			if ((day > convertor.determineLastDayOfMth(month,year)) || (day < 1)) {
+			if ((day > convertor.determineLastDayOfMth(month,year)) || (day == 0)) {
 				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
 				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
 			}
@@ -338,7 +399,7 @@ bool ParserProcessor::identifyDate(int index) {
 			tempIndex += indexShift;
 
 			//Confirming second set of (day, month, year)
-			if ((day > convertor.determineLastDayOfMth(month,year)) || (day < 1)) {
+			if ((day > convertor.determineLastDayOfMth(month,year)) || (day == 0)) {
 				logger.logParserError(ParserExceptions::ERROR_UNKNOWN_DATE);
 				throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_DATE);
 			}
@@ -347,7 +408,10 @@ bool ParserProcessor::identifyDate(int index) {
 			assignDate(day,month,year,dayTo);
 		}
 	}
-	return matchFound;
+	if(tempIndex < 0){
+		tempIndex = INVALID_NUMBER;
+	}
+	return tempIndex;
 }
 
 //Checking for and extracting year integer. If not found, current year is used instead.
@@ -383,21 +447,14 @@ int ParserProcessor::checkDay(int tempIndex, int* indexShift) {
 	int tempInt = 0;
 	*indexShift = tempIndex;
 	
-	try {
-		auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-		tempInt = tempStoi;
-	} catch (...) {
-		tempIndex--;
-		if (tempIndex >= 0) {
-			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-				tempInt = tempStoi;
-			} catch (...) {
-				logger.logParserError(ParserExceptions::ERROR_MISSING_DAY);
-				throw ParserExceptions(ParserExceptions::ERROR_MISSING_DAY);
-			}
+	tempIndex--;
+	if (tempIndex >= 0) {
+		try {
+			auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+			tempInt = tempStoi;
+		} catch (...) {
+			tempInt = INVALID_NUMBER;
 		}
 	}
 	*indexShift = tempIndex - *indexShift;
@@ -421,7 +478,9 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift) {
 					tempInt = tempStoi;
 					toFound = true;
 					logger.logParserIdentified(IDENTIFY_DATE);
+					tempIndex--;
 				} catch (...) {
+					tempInt = INVALID_NUMBER;
 				}
 			}
 		}
@@ -433,7 +492,7 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift) {
 //Inserts the Start day and End day into the temporary Event based on the day, month and year that was found.
 //Takes into account whether start day and end day have already been found, and assign accordingly. Throws exception if there are too many dates.
 void ParserProcessor::assignDate(int day, int month, int year, int dayTo) {
-	if (toFound) {
+	if (toFound && dayTo != INVALID_NUMBER) {
 		if (!startDayFound && !endDayFound) {
 			startDayFound = true;
 			tempEventStore.setStartDate(dayTo,month,year);
@@ -447,18 +506,20 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo) {
 			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 		}
-	} else if (!startDayFound) {
-		startDayFound = true;
-		tempEventStore.setStartDate(day,month,year);
-	} else if (!endDayFound) {
-		endDayFound = true;
-		tempEventStore.setEndDate(day,month,year);
-	} else if (tempEventStore.getIsDeadline()) {
-		logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
-		throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
-	} else {
-		logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
-		throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+	} else if (day != INVALID_NUMBER){
+		if (!startDayFound) {
+			startDayFound = true;
+			tempEventStore.setStartDate(day,month,year);
+		} else if (!endDayFound) {
+			endDayFound = true;
+			tempEventStore.setEndDate(day,month,year);
+		} else if (tempEventStore.getIsDeadline()) {
+			logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
+		} else {
+			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
+			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+		}
 	}
 }
 
@@ -466,18 +527,22 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo) {
 //If found, further operations are performed to extract the hour and minutes from the surrounding strings in the vector to complete a time set.
 //A time set will consist of (hour, minute). The Event's start time and end time will be assigned based on the time set found.
 //Returns matchFound is true if a time is found.
-bool ParserProcessor::identifyTime(int index) {
+int ParserProcessor::identifyTime(int index) {
 
-	int tempIndex = 0, firstTimeInteger = 0, indexShift = 0;
+	int tempIndex = index, firstTimeInteger = 0, indexShift = 0;
 	timeSet hourMin;
 	timeSet toHourMin;
 	hourMin.hour = 0; hourMin.minute = 0;
 	toHourMin.hour = 0; toHourMin.minute = 0;
+	std::string lowerCaseString;
 	
 	//finding the keywords of time within the current string in the fragmented string vector
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_TIME && !matchFound; j++) {
-		if (fragmentedWords[index].find(keywordTime[j]) != std::string::npos) {
-			tempIndex = index;
+		lowerCaseString = fragmentedWords[index];
+		for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+			lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+		}
+		if (findExactWord(lowerCaseString,keywordTime[j])){
 			if (keywordTime[j] == "pm") {
 				afterTwelve = true;
 			}
@@ -500,7 +565,10 @@ bool ParserProcessor::identifyTime(int index) {
 			afterTwelve = false;
 		}
 	}
-	return matchFound;
+	if(tempIndex < 0){
+		tempIndex = INVALID_NUMBER;
+	}
+	return tempIndex;
 }
 
 //Extracting first integer found either in the same string as the keyword or a string before the keyword
@@ -509,21 +577,14 @@ int ParserProcessor::extractFirstTimeInteger(int tempIndex, int* indexShift) {
 	int firstTimeInteger = 0;
 	*indexShift = tempIndex; 
 
-	try {
-		auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-		firstTimeInteger = tempStoi;
-	} catch (...) {
-		tempIndex--;
-		if (tempIndex >= 0) {
-			try {
-				auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
-				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-				firstTimeInteger = tempStoi;
-			} catch (...) {
-				logger.logParserError(ParserExceptions::ERROR_MISSING_HOUR_MIN);
-				throw ParserExceptions(ParserExceptions::ERROR_MISSING_HOUR_MIN);
-			}
+	tempIndex--;
+	if (tempIndex >= 0) {
+		try {
+			auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
+			firstTimeInteger = tempStoi;
+		} catch (...) {
+			firstTimeInteger = INVALID_NUMBER;
 		}
 	} 
 	*indexShift = tempIndex - *indexShift;
@@ -560,6 +621,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMin(int tempIndex, int firs
 		}
 	} else if (firstTimeInteger < 100) {  //For time input in the form of split hour & minute. E.g. 9 30  10 45  12 30
 		tempIndex--;
+		/*
 		if (tempIndex >= 0) {
 			try {
 				hour = std::stoi(fragmentedWords[tempIndex]);
@@ -571,9 +633,10 @@ ParserProcessor::timeSet ParserProcessor::extractHourMin(int tempIndex, int firs
 				minute = 0;
 			}
 		} else {
+		*/
 			hour = firstTimeInteger;
 			minute = 0;
-		}
+		//}
 		if (minute > 60) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
@@ -639,7 +702,8 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 							}
 						}
 					} else if (tempInt < 100) {   //For time input in the form of split hour & minute. E.g. 9 30  10 45  12 30
-						tempIndex--;
+						//tempIndex--;
+						/*
 						if (tempIndex >= 0) {
 							try {
 								toHour = std::stoi(fragmentedWords[tempIndex]);
@@ -650,9 +714,10 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 								toMinute = 0;
 							}
 						} else {
+						*/
 							toHour = tempInt;
 							toMinute = 0;
-						}
+						//}
 						if (toMinute > 60) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
@@ -671,7 +736,10 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 							}
 						}
 					}
+					tempIndex--;
 				} catch (...) {
+					toHour = INVALID_NUMBER;
+					toMinute = INVALID_NUMBER;
 				}
 			}
 		}
@@ -685,7 +753,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 //Inserts the Start time and End time into the temporary Event based on the timeSet retrieved from the data.
 //Takes into account whether start time and end time have already been found, and assign accordingly. Throws exception if there are too many times.
 void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcessor::timeSet toHourMin) {
-	if (toFound) {
+	if (toFound && toHourMin.hour != INVALID_NUMBER && toHourMin.minute != INVALID_NUMBER) {
 		if (!startTimeFound && !endTimeFound) {
 			startTimeFound = true;
 			tempEventStore.setStartTime(toHourMin.hour,toHourMin.minute);
@@ -699,26 +767,34 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 		}
-	} else if (!startTimeFound) {
-		startTimeFound = true;
-		tempEventStore.setStartTime(hourMin.hour,hourMin.minute);
-	} else if (!endTimeFound) {				
-		endTimeFound = true;
-		tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
-	} else if (tempEventStore.getIsDeadline()) {
-		logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
-		throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
-	} else {
-		logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
-		throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+	} else if(hourMin.hour != INVALID_NUMBER && hourMin.minute != INVALID_NUMBER){
+		if (!startTimeFound) {
+			startTimeFound = true;
+			tempEventStore.setStartTime(hourMin.hour,hourMin.minute);
+		} else if (!endTimeFound) {				
+			endTimeFound = true;
+			tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+		} else if (tempEventStore.getIsDeadline()) {
+			logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+		} else {
+			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+		}
 	}
 }
 
 //Checks the string at the current index of the fragmented string vector for the keyword "due", indicating a deadline event.
 //Sets the temporary Event isDeadline to true, and toggles the startDayFound and startTimeFound to true to prevent more than 2 day & time input. 
 //Returns matchFound as true if found. 
-bool ParserProcessor::identifyDeadline(int index) {
-	if (fragmentedWords[index] == "due" || fragmentedWords[index] == "by") {
+int ParserProcessor::identifyDeadline(int index) {
+	int tempIndex = index;
+	std::string lowerCaseString;
+	lowerCaseString = fragmentedWords[index];
+	for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+		lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+	}
+	if (findExactWord(lowerCaseString,"due") || findExactWord(lowerCaseString,"by")) {
 		tempEventStore.setIsDeadline(true);
 		deadlineFound = true;
 		logger.logParserIdentified(IDENTIFY_DEADLINE);
@@ -733,14 +809,19 @@ bool ParserProcessor::identifyDeadline(int index) {
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 		}
 		matchFound = true;
+		tempIndex--;
 	}
-	return matchFound;
+	if(tempIndex < 0){
+		tempIndex = INVALID_NUMBER;
+	}
+	return tempIndex;
 }
 
 //Checks the string at the current index of the fragmented string vector for the presence of a '!' to indicate importance.
 //Determine the level of importance and sets the temporary Event importance level. Throws exception if importance is of wrong format.
 //Returns matchFound as true if found.
-bool ParserProcessor::identifyImportance(int index) {
+int ParserProcessor::identifyImportance(int index) {
+	int tempIndex = index;
 	std::string tempStr = fragmentedWords[index];
 	int levelImportance = 0;
 	if(!tempStr.empty()){
@@ -749,17 +830,22 @@ bool ParserProcessor::identifyImportance(int index) {
 			for (unsigned int i = 0; i < tempStr.size(); i++) {
 				if (tempStr.at(i) == '!') {
 					levelImportance++;
-				} else {
-					logger.logParserError(ParserExceptions::ERROR_UNUSED_INFORMATION);
-					throw ParserExceptions(ParserExceptions::ERROR_UNUSED_INFORMATION);
+				} else if(i != tempStr.size()-1){
+					matchFound = false;
 				}
 			}
-			importanceFound = true;
-			logger.logParserIdentified(IDENTIFY_IMPORTANCE);
-			tempEventStore.setImportanceLevel(levelImportance);
+			if(matchFound){
+				tempIndex--;
+				importanceFound = true;
+				logger.logParserIdentified(IDENTIFY_IMPORTANCE);
+				tempEventStore.setImportanceLevel(levelImportance);
+			}
 		}
 	}
-	return matchFound;
+	if(tempIndex < 0){
+		tempIndex = INVALID_NUMBER;
+	}
+	return tempIndex;
 }
 
 //Function corrects missing/wrong start day, end day, start time and end time in the temporary Event based on 
@@ -1450,4 +1536,23 @@ void ParserProcessor::showEventCorrector() {
 	}
 	tempEventStore.setStartTime(0,0);
 	tempEventStore.setEndTime(0,0);
+}
+
+bool ParserProcessor::findExactWord(std::string input, std::string keyWord){
+	bool isExact = true;
+	unsigned int i;
+	for(i = 0; i < input.size() && i < keyWord.size(); i++){
+		if(input[i] != keyWord[i]){
+			isExact = false;
+		}
+	}
+	if(isExact){
+		if(i != keyWord.size() || i != input.size()){
+			isExact= false;
+			if(input[i] == ' ' && i == input.size()-1){
+				isExact = true;
+			}
+		}
+	}
+	return isExact;
 }

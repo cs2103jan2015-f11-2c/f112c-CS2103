@@ -125,29 +125,29 @@ Event Conversion::stringToEvent(std::string){
 
 
 int Conversion::monthToInt (std::string month){
-	if(month == "jan"){
+	if(month == "jan" || month == "january"){
 		return 0;
-	} else if(month == "feb"){
+	} else if(month == "feb" || month == "february"){
 		return 1;
-	} else if(month == "mar"){
+	} else if(month == "mar" || month == "march"){
 		return 2;
-	} else if(month == "apr"){
+	} else if(month == "apr" || month == "april"){
 		return 3;
 	} else if(month == "may"){
 		return 4;
-	} else if(month == "jun"){
+	} else if(month == "jun" || month == "june"){
 		return 5;
-	} else if(month == "jul"){
+	} else if(month == "jul" || month == "july"){
 		return 6;
-	} else if(month == "aug"){
+	} else if(month == "aug" || month == "august"){
 		return 7;
-	} else if(month == "sep"){
+	} else if(month == "sep" || month == "september"){
 		return 8;
-	} else if(month == "oct"){
+	} else if(month == "oct" || month == "october"){
 		return 9;
-	} else if(month == "nov"){
+	} else if(month == "nov" || month == "november"){
 		return 10;
-	} else if(month == "dec"){
+	} else if(month == "dec" || month == "december"){
 		return 11;
 	} else {
 		return -1;
@@ -207,19 +207,19 @@ std::string Conversion::intToDayOfWeek (int dayInNum){
 }
 
 int Conversion::dayOfWeekToInt (std::string day){
-	if(day == "sun"){
+	if(day == "sun" || day == "sunday"){
 		return 0;
-	} else if (day == "mon"){
+	} else if (day == "mon" || day == "monday"){
 		return 1;
-	} else if (day == "tues"){
+	} else if (day == "tues" || day == "tuesday"){
 		return 2;
-	} else if (day == "wed"){
+	} else if (day == "wed" || day == "wednesday"){
 		return 3;
-	} else if (day == "thurs"){
+	} else if (day == "thurs" || day == "thursday"){
 		return 4;
-	} else if (day == "fri"){
+	} else if (day == "fri" || day == "friday"){
 		return 5;
-	} else if (day == "sat"){
+	} else if (day == "sat" || day == "saturday"){
 		return 6;
 	} else{
 		return -1;

@@ -29,9 +29,9 @@ private:
 
 	static const std::string CONVERT_NORMAL_TO_FLOAT;
 
-	static const int NUMBER_OF_KEYWORDS_MONTHS = 12;
+	static const int NUMBER_OF_KEYWORDS_MONTHS = 23;
 	static const int NUMBER_OF_KEYWORDS_TIME = 2;
-	static const int NUMBER_OF_KEYWORDS_DAYS = 11;
+	static const int NUMBER_OF_KEYWORDS_DAYS = 18;
 	static const int NUMBER_OF_DAYSINAWEEK = 7;
 
 	static const std::string LOCKUP_USED_INFORMATION;
@@ -39,6 +39,7 @@ private:
 	static const int LOWER_RANGE_YEAR = 1970;
 	static const int HIGHER_RANGE_YEAR = 3000;
 	static const int TM_YEAR_ADJUSTMENT = 1900;
+	static const int INVALID_NUMBER = -1;
 
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];
@@ -52,6 +53,8 @@ private:
 	bool endTimeFound;
 	bool afterTwelve;
 	bool nameFound;
+	bool firstTriggerKeyword;
+	int nameIndex;
 	bool toFound;
 	bool deadlineFound;
 	bool importanceFound;
@@ -88,25 +91,28 @@ public:
 	Event processAddEvent(std::vector<std::string>);
 	Event processEditEvent(std::vector<std::string>);
 	
-	bool identifyNormaltoFloat(int);
-	bool identifyEventName(int);
-	bool identifyDay(int);
+	bool findExactWord(std::string,std::string);
 
-	bool identifyDate(int);
+	bool identifyNormaltoFloat(int);
+	int identifyDay(int);
+
+	int identifyDate(int);
 	int checkYear(int,int*);
 	int checkDay(int,int*);
 	int checkDayTo(int,int*);
 	void assignDate(int,int,int,int);
 
-	bool identifyTime(int);
+	int identifyTime(int);
 	int extractFirstTimeInteger(int,int*);
 	timeSet extractHourMin(int,int,int*);
 	timeSet extractHourMinTo(int,int*);
 	void assignTime(timeSet,timeSet);
 
-	bool identifyDeadline(int);
-	bool identifyImportance(int);
+	int identifyDeadline(int);
+	int identifyImportance(int);
 
+	void identifyEventName(int);
+	std::string setEventName(int);
 	void addEventCorrector();
 	void checkStartBeforeEnd();
 	void editEventCorrector();
