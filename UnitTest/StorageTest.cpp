@@ -15,7 +15,7 @@ namespace UnitTest
 		EventSearch searcher;
 
 		//finds event index in currentContent vector with event ID
-		TEST_METHOD(searchIndexWithID_Test)
+		TEST_METHOD(EventSearch_searchIndexWithID_Test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, testEvent4;
@@ -83,7 +83,7 @@ namespace UnitTest
 		}
 
 		//finds any name occurrences and returns events sorted by date with markers
-		TEST_METHOD(searchNameOccurrence_test)
+		TEST_METHOD(EventSearch_searchCurrentNameOccurrence_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, marker;
@@ -99,18 +99,20 @@ namespace UnitTest
 			testEvent1.setID(1426225500);
 
 			//creating test event 2
-			testEvent2.setName("3");
+			testEvent2.setName("event3");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
 			testEvent2.setID(1426225502);
 
 			//creating test floating event 4
+			/*test case: ignore completed*/
 			testEvent3.setName("event999");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225542);
+			testEvent3.setIsCompleted(true);
 
 			//creating marker
 			marker.setName("-MSmsgjyw-");
@@ -120,24 +122,29 @@ namespace UnitTest
 			testNormalContent.push_back(testEvent2);
 			testFloatingContent.push_back(testEvent3);
 
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
 			vector<Event> result, expected;
-			/*Successful search returns vector of events*/
-			expected.push_back(testEvent3);
+			/*test case: Successful search returns vector of events*/
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
 			expected.push_back(marker);
 			expected.push_back(testEvent1);
-			result = searcher.searchNameOccurrence("event", testNormalContent, testFloatingContent);
+			result = searcher.searchCurrentNameOccurrence("event");
 			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
 			Assert::AreEqual(expected[2].getName(),result[2].getName());
+			Assert::AreEqual(expected[3].getName(),result[3].getName());
 
-			/*boundary case: Unsuccessful search returns empty vector */
-			result = searcher.searchNameOccurrence("inexistentEvent", testNormalContent, testFloatingContent);
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchCurrentNameOccurrence("inexistentEvent");
 			Assert::IsTrue(result.empty());
 		}
 
 		//find exact string name match and returns events sorted by date with markers
-		TEST_METHOD(searchNameExact_test)
+		TEST_METHOD(EventSearch_searchCurrentNameExact_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3, marker;
@@ -153,7 +160,7 @@ namespace UnitTest
 			testEvent1.setID(1426225500);
 
 			//creating test event 2
-			testEvent2.setName("3");
+			testEvent2.setName("event111");
 			testEvent2.setStartDate(6,3,115);
 			testEvent2.setEndDate(8,3,115);
 			testEvent2.setStartTime(5,30);
@@ -162,9 +169,11 @@ namespace UnitTest
 			testEvent2.setID(1426225502);
 
 			//creating test floating event 4
+			/*test case: ignore completed*/
 			testEvent3.setName("event999");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225542);
+			testEvent3.setIsCompleted(true);
 
 			//creating marker
 			marker.setName("-MSmsgjyw-");
@@ -174,24 +183,29 @@ namespace UnitTest
 			testNormalContent.push_back(testEvent2);
 			testFloatingContent.push_back(testEvent3);
 
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
 			vector<Event> result, expected;
-			/*Successful search returns vector of events*/
-			expected.push_back(testEvent3);
-			result = searcher.searchNameExact("event999", testNormalContent, testFloatingContent);
+			/*test case: Successful search returns vector of events*/
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			result = searcher.searchCurrentNameExact("event111");
 			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
 
-			/*boundary case: Unsuccessful search returns empty vector */
-			result = searcher.searchNameExact("inexistentEvent", testNormalContent, testFloatingContent);
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchCurrentNameExact("inexistentEvent");
 			Assert::IsTrue(result.empty());
 		}
 
 		//finds importance level match
-		TEST_METHOD(searchEventWithImportance_test)
+		TEST_METHOD(EventSearch_searchLevelImportance_test)
 		{
 			/*creating testing objects*/
-			Event testEvent1, testEvent2, testEvent3;
-			vector<Event> testNormalContent;
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
 
 			//creating test event 1
 			testEvent1.setName("This is event1");
@@ -214,40 +228,44 @@ namespace UnitTest
 			testEvent2.setImportanceLevel(1);
 
 			//creating test event 3
+			/*test case: finding floating importance*/
 			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
-			testEvent3.setEndDate(7,3,115);
-			testEvent3.setStartTime(1,30);
-			testEvent3.setEndTime(6,40);
-			testEvent3.setIsFloating(false);
+			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setImportanceLevel(3);
 
 			//creating test event vector
 			testNormalContent.push_back(testEvent1);
 			testNormalContent.push_back(testEvent2);
-			testNormalContent.push_back(testEvent3);
+			testFloatingContent.push_back(testEvent3);
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");			
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
 
 			vector<Event> result, expected;
-			/*Successful search returns vector of events*/
-			expected.push_back(testEvent1);
+			/*test case: Successful search returns vector of events*/
 			expected.push_back(testEvent3);
-			result = searcher.searchEventWithImportance(3, testNormalContent);
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			result = searcher.searchLevelImportance(3);
 			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
 
-			/*boundary case: Unsuccessful search returns empty vector */
-			result = searcher.searchEventWithImportance(2, testNormalContent);
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchLevelImportance(2);
 			Assert::IsTrue(result.empty());
 		}
 
 		//finds all events with importance level greater than 0
-		TEST_METHOD(searchEventWithAllImportance_test)
+		TEST_METHOD(EventSearch_searchAllImportance_test)
 		{
 			/*creating testing objects*/
-			Event testEvent1, testEvent2, testEvent3;
-			vector<Event> testNormalContent;
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
 
 			//creating test event 1
 			testEvent1.setName("This is event1");
@@ -270,33 +288,39 @@ namespace UnitTest
 			testEvent2.setImportanceLevel(0);
 
 			//creating test event 3
+			/*test case: finding floating importance*/
 			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
-			testEvent3.setEndDate(7,3,115);
-			testEvent3.setStartTime(1,30);
-			testEvent3.setEndTime(6,40);
-			testEvent3.setIsFloating(false);
+			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
-			testEvent3.setImportanceLevel(2);
+			testEvent3.setImportanceLevel(3);
 
 			//creating test event vector
 			testNormalContent.push_back(testEvent1);
 			testNormalContent.push_back(testEvent2);
-			testNormalContent.push_back(testEvent3);
+			testFloatingContent.push_back(testEvent3);
+			
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
 
 			vector<Event> result, expected;
-			/*successful boundary case: 2 important events*/
-			expected.push_back(testEvent1);
+			/*test successful boundary case: 2 important events*/
 			expected.push_back(testEvent3);
-			result = searcher.searchEventWithAllImportance(testNormalContent);
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			result = searcher.searchAllImportance();
 			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
 
-			/*boundary case: 0 important events*/
+			/*test boundary case: 0 important events*/
 			testNormalContent.clear();
-			testNormalContent.push_back(testEvent2);
-			result = searcher.searchEventWithAllImportance(testNormalContent);
+			testFloatingContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+			result = searcher.searchAllImportance();
 			Assert::IsTrue(result.empty());
 		}
 	};
@@ -306,7 +330,7 @@ namespace UnitTest
 		EventOrganiser organiser;
 
 		//filters normalContent vector for uncompleted events
-		TEST_METHOD(allNormalCurrent_test)
+		TEST_METHOD(EventOrganiser_allNormalCurrent_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -364,7 +388,7 @@ namespace UnitTest
 		}
 	
 		//filters floatingContent vector for uncompleted events
-		TEST_METHOD(allFloatingCurrent_test)
+		TEST_METHOD(EventOrganiser_allFloatingCurrent_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -411,7 +435,7 @@ namespace UnitTest
 
 
 		//filters normalContent vector for completed events
-		TEST_METHOD(allNormalCompleted_test)
+		TEST_METHOD(EventOrgansier_allNormalCompleted_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -471,7 +495,7 @@ namespace UnitTest
 		}
 
 		//filters floatingContent for completed events
-		TEST_METHOD(allFloatingCompleted_test)
+		TEST_METHOD(EventOrganiser_allFloatingCompleted_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -519,7 +543,7 @@ namespace UnitTest
 		}
 
 		//set normalContents by appending current task onto completed task 
-		TEST_METHOD(saveNormal_test)
+		TEST_METHOD(EventOrganiser_saveNormal_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -594,7 +618,7 @@ namespace UnitTest
 		}
 
 		//set floatingContent by appending current task onto completed task 
-		TEST_METHOD(saveFloating_test)
+		TEST_METHOD(EventOrganiser_saveFloating_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -656,7 +680,7 @@ namespace UnitTest
 		}
 
 		//set normalContents by appending completed task onto current task 
-		TEST_METHOD(saveNormalCompleted_test)
+		TEST_METHOD(EventOrganiser_saveNormalCompleted_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;
@@ -730,7 +754,7 @@ namespace UnitTest
 		}
 			
 		//set floatingContent by appending completed task onto current task 
-		TEST_METHOD(saveFloatingCompleted_test)
+		TEST_METHOD(EventOrganiser_saveFloatingCompleted_test)
 		{
 			/*creating testing objects*/
 			Event testEvent1, testEvent2, testEvent3;

@@ -13,8 +13,8 @@ public:
 	
 	//Main APIs
 	//2 main checks for multiple uncompleted event names
-	vector<Event> searchNormalNameOccurrence(string eventName);
-	vector<Event> searchNormalNameExact(string eventName);
+	vector<Event> searchCurrentNameOccurrence(string eventName);
+	vector<Event> searchCurrentNameExact(string eventName);
 
 	//2 main checks for multiple completed event names
 	vector<Event> searchCompletedNameOccurrence(string eventName);	
@@ -38,8 +38,8 @@ private:
 	EventLog logger;
 
 	//Support methods for APIs
-	vector<Event> searchNameExact(string eventName, vector<Event> normal, vector<Event> floating);
 	vector<Event> searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating);
+	vector<Event> searchNameExact(string eventName, vector<Event> normal, vector<Event> floating);
 	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchExactString(string eventName, vector<Event> eventVectorToSearch);
 	vector<Event> searchEventWithImportance(int level, vector<Event> vectorToSearch);	

@@ -39,12 +39,12 @@ vector<Event> EventFacade::uncompleteEvent(Event uncompletedEvent){
 /*To EventSearch*/
 vector<Event> EventFacade::findNameOccurrence(string eventName){
 	logger.log(EventLog::FACADE + EventLog::SEARCH_NAME_OCCURRENCE);
-	return searcher.searchNormalNameOccurrence(eventName);
+	return searcher.searchCurrentNameOccurrence(eventName);
 }
 
 vector<Event> EventFacade::findNameExact(string eventName){
 	logger.log(EventLog::FACADE + EventLog::SEARCH_NAME_EXACT);
-	return searcher.searchNormalNameExact(eventName);
+	return searcher.searchCurrentNameExact(eventName);
 }
 
 vector<Event> EventFacade::findCompletedNameOccurrence(string eventName){

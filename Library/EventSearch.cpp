@@ -15,7 +15,7 @@ EventSearch::~EventSearch()
 
 //Main APIs
 //checking API 1 --- search event with matching string name and returns sorted with marker
-vector<Event> EventSearch::searchNormalNameOccurrence(string eventName){
+vector<Event> EventSearch::searchCurrentNameOccurrence(string eventName){
 	//get events from internal storages
 	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
 	vector<Event> normalCurrent = organiser.allNormalCurrent();
@@ -24,8 +24,7 @@ vector<Event> EventSearch::searchNormalNameOccurrence(string eventName){
 	return toLogic;
 }
 
-//checking API 1 --- search event with exact string name and returns sorted with marker
-vector<Event> EventSearch::searchNormalNameExact(string eventName){
+vector<Event> EventSearch::searchCurrentNameExact(string eventName){
 	
 	//get events from internal storages
 	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
@@ -46,7 +45,6 @@ vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	return toLogic;
 }
 
-//checking API 2 --- search normal with exact string name and returns sorted with marker
 vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 
 	//get events from internal storages
