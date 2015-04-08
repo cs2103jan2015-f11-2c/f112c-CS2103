@@ -403,11 +403,13 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 		eventToEdit = tempEvents[0];
 		eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
 		editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
+		isFloating = editedEvent.getIsFloating();
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		eventToEdit = tempEvents[1];
 		eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
 		editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
+		isFloating = editedEvent.getIsFloating();
 		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
 	
