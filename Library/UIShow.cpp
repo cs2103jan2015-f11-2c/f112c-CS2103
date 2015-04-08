@@ -21,8 +21,9 @@ const std::string UIShow::SHOW_FLOAT = "show floating";
 
 const std::string UIShow::WORD_COMMANDS = "Commands";
 const std::string UIShow::WORD_HELP_INTRO = "Help Introduction";
-const std::string UIShow::WORD_HELP = "Help";
+const std::string UIShow::WORD_HELP = "help";
 const std::string UIShow::WORD_SEARCH_MODE = "Search Mode";
+const std::string UIShow::WORD_SEARCH = "search";
 const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
 
 const std::string UIShow::LABEL_WEEK = "[Week]";
@@ -148,20 +149,20 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
 		return WORD_HELP;
 	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
-		return WORD_SEARCH_MODE;
+		return WORD_SEARCH;
 	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
 		return WORD_SHORTCUTS;
-	} else if (currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
 		std::string newShowCommand = SHOW_WEEK + currentMainDisplayLabel.substr(6);
 		return newShowCommand;
-	} else if (currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+	} else if (currentMainDisplayLabel.size()>=7 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
 		std::string newShowCommand = SHOW_MONTH + currentMainDisplayLabel.substr(7);
 		return newShowCommand;
 	} else {
 		std::string newShowCommand = "";
 
 		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
-		
+
 		if ( isSingleDate ){
 			newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]);
 		} else {

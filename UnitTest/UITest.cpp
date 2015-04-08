@@ -743,16 +743,188 @@ namespace UnitTest
 			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
 			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
 
-			//[week] - complete
-			//[week] - incomplete
+			time_t now;
+			tm front;
+			tm back;
+			
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+			
+			vector<tm> testVector;
+			std::string testMainDisplayLabel;
 
-			//[month] - complete
-			//[month] - incomplete
+			std::string testResult;
+			std::string expectedResult;
+			
 
-			//vector<tm> normal case - 5 days difference
-			//vector<tm> normal case - maximum days difference
+			//Correct case: Generate through identifying [Week]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Week]";
+			expectedResult = "show 3feb 2015 to 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//Correct case: Generate through identifying [Month]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Month]";
+			expectedResult = "show jan 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm> normal case 
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 17;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 2feb 2015 to 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm>  - large days difference, year hit 70
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 21;
+			back.tm_mon = 2;
+			back.tm_year = 73;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			std::string expectedErrorString = "Error: Unable to display date before year 1971";
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit below 70
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 586;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit more than 3000
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 590;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
 			//vector<tm> normal case - no day difference
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
 			//vector<tm> front later than back
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 117;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2019 to 9feb 2017";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+			
+			
 		}
 
 		TEST_METHOD(UIShow_generateDateString_Test){
@@ -861,17 +1033,170 @@ namespace UnitTest
 		}
 
 		TEST_METHOD(UIShow_generteCurrentCommand_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
 
-			//[week] - complete
-			//[week] - incomplete
+			time_t now;
+			tm front;
+			tm back;
+			
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+			
+			vector<tm> testVector;
+			std::string testMainDisplayLabel;
 
-			//[month] - complete
-			//[month] - incomplete
+			std::string testResult;
+			std::string expectedResult;
 
-			//vector<tm> normal case - 5 days difference
-			//vector<tm> normal case - maximum days difference
-			//vector<tm> normal case - no day difference
+			//Case 1 : generate based on the word in main display label
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "Help Introduction";
+			expectedResult = "help";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Correct case: Generate through identifying [Week]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Week] 10Feb - 16Feb 2015";
+			expectedResult = "show week 10Feb - 16Feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Correct case: Generate through identifying [Month]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Month] 10Feb - 16Feb 2015";
+			expectedResult = "show month 10Feb - 16Feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> normal case - single date 
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> normal case - 2 different dates
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 17;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2015 to 17feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm>  - boundary test - 1st Jan 1971
+			front.tm_mday = 1;
+			front.tm_mon = 0;
+			front.tm_year = 71;
+
+			back.tm_mday = 21;
+			back.tm_mon = 2;
+			back.tm_year = 73;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 1jan 1971 to 21mar 1973";
+
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVector.clear();
+
+			//vector<tm>  - boundary test - 31st Dec 2999
+			front.tm_mday = 10;
+			front.tm_mon = 5;
+			front.tm_year = 1099;
+
+			back.tm_mday = 31;
+			back.tm_mon = 11;
+			back.tm_year = 1099;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10jun 2999 to 31dec 2999";
+
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVector.clear();
+
 			//vector<tm> front later than back
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 117;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2017 to 10feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
 		}
 
 	};

@@ -45,6 +45,7 @@ public:
 	static const std::string WORD_HELP_INTRO;
 	static const std::string WORD_HELP;
 	static const std::string WORD_SEARCH_MODE;
+	static const std::string WORD_SEARCH;
 	static const std::string WORD_SHORTCUTS;
 
 	static const std::string LABEL_WEEK;
