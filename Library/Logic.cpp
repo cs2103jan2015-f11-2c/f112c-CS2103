@@ -340,7 +340,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			int id = oldEvent.getID();
 			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
 			if (!oldEvent.getIsFloating()) {
-				if (isSameDate(oldEvent.getStartDate(),userEvent.getEndDate())) {
+				if (isSameDate(oldEvent.getStartDate(),oldEvent.getEndDate())) {
 					feedback += COMMA_SPACE + updater.setSingleDayString(oldEvent.getStartDate());
 				} else {
 					feedback += COMMA_SPACE + updater.setMultipleDaysString(oldEvent.getStartDate(),oldEvent.getEndDate());
