@@ -171,8 +171,8 @@ void CompleteCommand::execute() {
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
 		logger.log(LogicLog::CASE_0 + LogicLog::COMPLETE);
-		userEvent = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
 		numResults = getNumEvents(tempEvents);
 
 		checkPartialMatches(numResults, tempEvents);
@@ -260,7 +260,7 @@ void DeleteCommand::execute() {
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		userEvent = createInvalidEvent();
 		numResults = getNumEvents(tempEvents);
-
+		
 		checkPartialMatches(numResults, tempEvents);
 		return;
 					}
@@ -345,8 +345,8 @@ void EditCommand::execute() {
 	switch (numResults) {
 	case SIZE_ZERO: { //no exact match
 		logger.log(LogicLog::CASE_0 + LogicLog::EDIT);
-		eventToEdit = createInvalidEvent();
 		tempEvents = eventFacade->findNameOccurrence(eventToEdit.getName());
+		eventToEdit = createInvalidEvent();
 		numResults = tempEvents.size();
 		
 		checkPartialMatches(numResults, tempEvents);
