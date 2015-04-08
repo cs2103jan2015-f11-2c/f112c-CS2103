@@ -6,13 +6,6 @@
 #include "EventModifier.h"
 
 class EventFacade{
-private:
-
-	EventModifier modifier;
-	EventOrganiser organiser;
-	EventSearch searcher;
-	EventLog logger;
-
 public:
 	/*Constructor, Destructor*/
 	EventFacade(void);
@@ -45,15 +38,12 @@ public:
 	bool dataRead();
 	int dataID();
 
-	/*To be done*/
-	//unit testing
-	//exception for reading
-	//extra txt file?	
-	//vector<Event> searchAllComponents(string infoToSearch, vector<Event> contentToSearch);
+private:
 
-	//get largest ID.
-
-
+	EventModifier modifier;
+	EventOrganiser organiser;
+	EventSearch searcher;
+	EventLog logger;
 };
 
 #endif

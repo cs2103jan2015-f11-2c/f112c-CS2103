@@ -6,6 +6,27 @@
 #include "EventOrganiser.h"
 
 class EventSearch{
+public:
+	//Constructor, Destructor
+	EventSearch(void);
+	~EventSearch(void);
+	
+	//Main APIs
+	//2 main checks for multiple uncompleted event names
+	vector<Event> searchNormalNameOccurrence(string eventName);
+	vector<Event> searchNormalNameExact(string eventName);
+
+	//2 main checks for multiple completed event names
+	vector<Event> searchCompletedNameOccurrence(string eventName);	
+	vector<Event> searchCompletedNameExact(string eventName);
+
+	//Importance searches
+	vector<Event> searchLevelImportance(int level);
+	vector<Event> searchAllImportance();
+
+	//Support methods for del and edit
+	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
+
 private:
 	
 	//These are results to improve readability
@@ -16,22 +37,7 @@ private:
 	EventOrganiser organiser;
 	EventLog logger;
 
-public:
-	//Constructor, Destructor
-	EventSearch(void);
-	~EventSearch(void);
-	
-	//Search Methods
-	vector<Event> searchNormalNameOccurrence(string eventName);
-	vector<Event> searchCompletedNameOccurrence(string eventName);
-
-	vector<Event> searchNormalNameExact(string eventName);
-	vector<Event> searchCompletedNameExact(string eventName);
-
-	vector<Event> searchLevelImportance(int level);
-	vector<Event> searchAllImportance();
-
-	//Support methods for search
+	//Support methods for APIs
 	vector<Event> searchNameExact(string eventName, vector<Event> normal, vector<Event> floating);
 	vector<Event> searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating);
 	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
@@ -39,11 +45,6 @@ public:
 	vector<Event> searchEventWithImportance(int level, vector<Event> vectorToSearch);	
 	vector<Event> searchEventWithAllImportance(vector<Event> vectorToSearch);	
 	vector<Event> combineResults(vector<Event> floatingEvents, vector<Event> normalEvents);
-
-	//Support methods for del and edit
-	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
-
-	vector<Event> searchAllComponentsOfEvent(string informationToSearch, vector<Event> contentToSearch);
 
 };
 

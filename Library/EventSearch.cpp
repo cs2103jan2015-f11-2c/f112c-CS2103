@@ -13,8 +13,8 @@ EventSearch::~EventSearch()
 {
 }
 
-//checking methods
-//checking method 1 --- search event with matching string name and returns sorted with marker
+//Main APIs
+//checking API 1 --- search event with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchNormalNameOccurrence(string eventName){
 	//get events from internal storages
 	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
@@ -24,7 +24,18 @@ vector<Event> EventSearch::searchNormalNameOccurrence(string eventName){
 	return toLogic;
 }
 
-//checking method 1 --- search completed with matching string name and returns sorted with marker
+//checking API 1 --- search event with exact string name and returns sorted with marker
+vector<Event> EventSearch::searchNormalNameExact(string eventName){
+	
+	//get events from internal storages
+	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
+	vector<Event> normalCurrent = organiser.allNormalCurrent();
+
+	vector<Event> toLogic = searchNameExact(eventName, normalCurrent, floatingCurrent);
+	return toLogic;
+}
+
+//checking API 2 --- search completed with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	
 	//get events from internal storages
@@ -35,7 +46,59 @@ vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	return toLogic;
 }
 
-//Support method --- finds string name match
+//checking API 2 --- search normal with exact string name and returns sorted with marker
+vector<Event> EventSearch::searchCompletedNameExact(string eventName){
+
+	//get events from internal storages
+	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+
+	vector<Event> toLogic = searchNameExact(eventName, normalCompleted, floatingCompleted);
+	return toLogic;
+}
+
+//API 3 --- search level of importance
+vector<Event> EventSearch::searchLevelImportance(int level){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
+	
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+//che help if level > 3 set to 3 and thow exception to log
+	floatingEvents = searchEventWithImportance(level, floatingEvents);
+	normalEvents = searchEventWithImportance(level, normalEvents);
+
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//API 4 --- search method finds all important events
+vector<Event> EventSearch::searchAllImportance(){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_ALL_IMPORTANCE);
+	vector<Event> returnVector;
+	
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+
+	floatingEvents = searchEventWithAllImportance(floatingEvents);
+	normalEvents = searchEventWithAllImportance(normalEvents);	
+
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//find index in internal storages with ID (DEL / EDIT SUPPORT)
+int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
+	logger.log(EventLog::SEARCH_INDEX_WITH_ID, eventID);
+	for(auto i=0;i<eventVectorToSearch.size();i++){
+		if(eventVectorToSearch[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
+			return i;
+		}
+	} 
+	return NOT_FOUND;
+}
+
+
+//SUPPORT METHODS
+//Support method for API 1 --- finds string name match
 vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + eventName);
 	
@@ -49,7 +112,6 @@ vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> 
 	return floating;
 }
 
-//Support method --- finds string name match
 vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> eventVectorToSearch){
 
 	vector<Event> returnVector;
@@ -63,29 +125,7 @@ vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> e
 	return returnVector;
 }
 
-//checking method 2 --- search event with exact string name and returns sorted with marker
-vector<Event> EventSearch::searchNormalNameExact(string eventName){
-	
-	//get events from internal storages
-	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
-	vector<Event> normalCurrent = organiser.allNormalCurrent();
-
-	vector<Event> toLogic = searchNameExact(eventName, normalCurrent, floatingCurrent);
-	return toLogic;
-}
-
-//checking method 2 --- search normal with exact string name and returns sorted with marker
-vector<Event> EventSearch::searchCompletedNameExact(string eventName){
-
-	//get events from internal storages
-	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
-	vector<Event> normalCompleted = organiser.allNormalCompleted();
-
-	vector<Event> toLogic = searchNameExact(eventName, normalCompleted, floatingCompleted);
-	return toLogic;
-}
-
-//Support method --- find exact string name match
+//Support method for API 2 --- find exact string name match
 vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> normal, vector<Event> floating){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + eventName);	
 
@@ -109,20 +149,7 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 	return returnVector;
 }
 
-//search level of importance
-vector<Event> EventSearch::searchLevelImportance(int level){
-	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
-	
-	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
-	vector<Event> normalEvents = organiser.allNormalCurrent();
-//che help if level > 3 set to 3 and thow exception to log
-	floatingEvents = searchEventWithImportance(level, floatingEvents);
-	normalEvents = searchEventWithImportance(level, normalEvents);
-
-	return combineResults(floatingEvents, normalEvents);
-}
-
-//Support method --- finds importance match
+//Support method for API 3--- finds importance match
 vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> vectorToSearch){
 
 	vector<Event> returnVector;
@@ -145,21 +172,7 @@ vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> ve
 	return returnVector;
 }
 
-//search method finds all important events
-vector<Event> EventSearch::searchAllImportance(){
-	logger.log(EventLog::SEARCH + EventLog::SEARCH_ALL_IMPORTANCE);
-	vector<Event> returnVector;
-	
-	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
-	vector<Event> normalEvents = organiser.allNormalCurrent();
-
-	floatingEvents = searchEventWithAllImportance(floatingEvents);
-	normalEvents = searchEventWithAllImportance(normalEvents);	
-
-	return combineResults(floatingEvents, normalEvents);
-}
-
-//Support method --- finds all events with importance level > 0
+//Support method for API 4 --- finds all events with importance level > 0
 vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSearch){
 
 	vector<Event> returnVector;
@@ -172,62 +185,9 @@ vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSe
 	return returnVector;
 }
 
-//support method
+//Support method
 vector<Event> EventSearch::combineResults(vector<Event> floatingEvents, vector<Event> normalEvents){
 	normalEvents = organiser.showEvents(normalEvents);
 	floatingEvents.insert( floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
 	return floatingEvents;
 }
-
-//find index in internal storages with ID (DEL / EDIT SUPPORT)
-int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
-	logger.log(EventLog::SEARCH_INDEX_WITH_ID, eventID);
-	for(auto i=0;i<eventVectorToSearch.size();i++){
-		if(eventVectorToSearch[i].getID() == eventID){
-			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
-			return i;
-		}
-	} 
-	return NOT_FOUND;
-}
-
-
-
-
-//search all vector and all component of events save into events of vector results
-vector<Event> EventSearch::searchAllComponentsOfEvent(string informationToSearch, vector<Event> contentToSearch){
-	vector<Event> searchResults;
-	bool isFound=false;
-
-	for(int i=0;i<contentToSearch.size();i++){
-		if(contentToSearch[i].getName().find(informationToSearch) != std::string::npos)
-			isFound = true;
-		if(contentToSearch[i].getStartDate().tm_year == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getStartDate().tm_mon == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getStartDate().tm_mday == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getStartDate().tm_hour == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getStartDate().tm_min == atoi(informationToSearch.c_str())) //necessary??
-			isFound = true;
-		if(contentToSearch[i].getEndDate().tm_year == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getEndDate().tm_mon == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getEndDate().tm_mday == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getEndDate().tm_hour == atoi(informationToSearch.c_str()))
-			isFound = true;
-		if(contentToSearch[i].getEndDate().tm_min == atoi(informationToSearch.c_str()))
-			isFound = true;
-
-			if(isFound){
-			searchResults.push_back(contentToSearch[i]);
-			}
-		isFound=false;
-	}
-	return searchResults;
-}
-

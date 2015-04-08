@@ -14,9 +14,6 @@ using std::ios;
 using std::endl;
 
 class EventLog {
-private:
-	static const std::string LOG_FILE_NAME;
-
 public:
 	EventLog();
 	
@@ -66,11 +63,13 @@ public:
 	static const string FLOATING;
 	static const string EXIT;
 	
-
-
+	//Methods
 	void log(string functionName);
 	void log(string location, int data);
 	void log(int data);
+
+private:
+	static const std::string LOG_FILE_NAME;
 
 };
 
