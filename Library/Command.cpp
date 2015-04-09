@@ -26,7 +26,7 @@ bool Command::getIsUndoable() {
 int Command::getNumEvents(vector<Event> eventVec) {
 	//remove marker events
 	for (unsigned int i = 0; i < eventVec.size(); i++) {
-		if (eventVec[i].getID() < 0) {
+		if (eventVec[i].getID() < SIZE_ZERO) {
 			eventVec.erase(eventVec.begin() + i);
 		}
 	}
@@ -60,17 +60,17 @@ Event Command::getEventFromID(vector<Event> eventVec, int id) {
 //if userEvent dates fall within the dates currently being shown, maintain the current date range being shown, otherwise use the date range of userEvent
 vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
 	assert(currentShowingTM.size() == SIZE_TWO);
-	
+
 	vector<tm> userTM, tmRangeToShow;
 	userTM.push_back(userEvent.getStartDate());
 	userTM.push_back(userEvent.getEndDate());
 
-	if (userTM[0].tm_year >= currentShowingTM[0].tm_year &&
-		userTM[0].tm_mon >= currentShowingTM[0].tm_mon &&
-		userTM[0].tm_mday >= currentShowingTM[0].tm_mday &&
-		userTM[1].tm_year <= currentShowingTM[1].tm_year &&
-		userTM[1].tm_mon <= currentShowingTM[1].tm_mon &&
-		userTM[1].tm_mday <= currentShowingTM[1].tm_mday) {
+	if (userTM[SIZE_ZERO].tm_year >= currentShowingTM[SIZE_ZERO].tm_year &&
+		userTM[SIZE_ZERO].tm_mon >= currentShowingTM[SIZE_ZERO].tm_mon &&
+		userTM[SIZE_ZERO].tm_mday >= currentShowingTM[SIZE_ZERO].tm_mday &&
+		userTM[SIZE_ONE].tm_year <= currentShowingTM[SIZE_ONE].tm_year &&
+		userTM[SIZE_ONE].tm_mon <= currentShowingTM[SIZE_ONE].tm_mon &&
+		userTM[SIZE_ONE].tm_mday <= currentShowingTM[SIZE_ONE].tm_mday) {
 			tmRangeToShow = currentShowingTM;
 
 	} else {
@@ -85,24 +85,24 @@ vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentSho
 
 void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
 	switch (numResults) {
-		case SIZE_ZERO: { //no partial match
-			eventsToShow.push_back(createInvalidEvent());
-			isExecuted = true;
-			return;
-						}
+	case SIZE_ZERO: { //no partial match
+		eventsToShow.push_back(createInvalidEvent());
+		isExecuted = true;
+		return;
+					}
 
-		default: { //at least 1 partial match
-			eventsToShow = tempEvents;
-			isExecuted = false;
-			return;
-				 }
+	default: { //at least 1 partial match
+		eventsToShow = tempEvents;
+		isExecuted = false;
+		return;
+			 }
 	}
 }
 
 //used when user wants to change an event by typing its name, but there are several events with the same name
 void Command::chooseExactMatches(Event& userEvent) {
 	eventsToShow = eventFacade->findNameOccurrence(userEvent.getName());
-	
+
 	//setting userEvent to have invalid id indicates this command cannot be added to the undoStack
 	userEvent = createInvalidEvent();
 	assert(userEvent.getID() == INVALID_NUMBER);
@@ -130,7 +130,7 @@ AddCommand::AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentSho
 void AddCommand::execute() {
 	isFloating = userEvent.getIsFloating();
 	eventsToShow = eventFacade->addEvent(userEvent);
-	
+
 	if (isFloating) {
 		return;
 	} else {
@@ -176,7 +176,7 @@ void CompleteCommand::execute() {
 
 	switch (numResults) {
 
-	//no exact match
+		//no exact match
 	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::COMPLETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
@@ -187,7 +187,7 @@ void CompleteCommand::execute() {
 		return;
 					}
 
-	//1 exact match
+					//1 exact match
 	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::COMPLETE);
 		completeExact(tempEvents);
@@ -195,7 +195,7 @@ void CompleteCommand::execute() {
 		return;
 				   }
 
-	//more than 1 exact match
+				   //more than 1 exact match
 	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::COMPLETE);
 		chooseExactMatches(userEvent);
@@ -231,12 +231,12 @@ void CompleteCommand::completeImmediately() {
 void CompleteCommand::completeExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
-		userEvent = tempEvents[0];
-		eventsToShow = eventFacade->completeEvent(tempEvents[0]);
+		userEvent = tempEvents[SIZE_ZERO];
+		eventsToShow = eventFacade->completeEvent(tempEvents[SIZE_ZERO]);
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
-		userEvent = tempEvents[1];
-		eventsToShow = eventFacade->completeEvent(tempEvents[1]);
+		userEvent = tempEvents[SIZE_ONE];
+		eventsToShow = eventFacade->completeEvent(tempEvents[SIZE_ONE]);
 	}
 
 	isExecuted = true;
@@ -268,18 +268,18 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 
-	//no exact match
+		//no exact match
 	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		userEvent = createInvalidEvent();
 		numResults = getNumEvents(tempEvents);
-		
+
 		checkPartialMatches(numResults, tempEvents);
 		return;
 					}
 
-	//1 exact match
+					//1 exact match
 	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
 		deleteExact(tempEvents);
@@ -287,7 +287,7 @@ void DeleteCommand::execute() {
 		return;
 				   }
 
-	//more than 1 exact match
+				   //more than 1 exact match
 	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
 		chooseExactMatches(userEvent);
@@ -370,18 +370,18 @@ void EditCommand::execute() {
 
 	switch (numResults) {
 
-	//no exact match
+		//no exact match
 	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::EDIT);
 		tempEvents = eventFacade->findNameOccurrence(eventToEdit.getName());
 		eventToEdit = createInvalidEvent();
 		numResults = tempEvents.size();
-		
+
 		checkPartialMatches(numResults, tempEvents);
 		return;
 					}
-	
-	//1 exact match
+
+					//1 exact match
 	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::EDIT);
 		editExact(tempEvents);
@@ -389,7 +389,7 @@ void EditCommand::execute() {
 		return;
 				   }
 
-	//more than 1 exact match
+				   //more than 1 exact match
 	default:{ 
 		logger.log(LogicLog::DEFAULT + LogicLog::EDIT);
 		chooseExactMatches(eventToEdit);
@@ -425,7 +425,7 @@ void EditCommand::editImmediately() {
 	if (!isFloating) {
 		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
-	
+
 	isExecuted = true;
 	isEdited = true;
 }
@@ -447,7 +447,7 @@ void EditCommand::redoEdit() {
 	eventsToShow = eventFacade->deleteEvent(eventToEdit);
 	eventsToShow = eventFacade->addEvent(editedEvent);
 	isFloating = editedEvent.getIsFloating();
-	
+
 	if (!isFloating) {
 		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}

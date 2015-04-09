@@ -1,7 +1,6 @@
 #include "Logic.h"
 
 
-const int Logic::INVALID_NUMBER = -1;
 const string Logic::EMPTY_STRING = "";
 const string Logic::COMMA_SPACE = ", ";
 const string Logic::EXCLAMATION_MARK = "!";
@@ -56,12 +55,11 @@ bool Logic::executeUserInput(string input) {
 	bool isDone = true;
 
 	try {
-		if (!eventFacade.dataRead()) {
-			updater.setFeedbackStrings(LogicUpdater::FILE_NOT_READ_MESSAGE);
-			throw false;
+		throw isDataRead();
+	} catch (bool isRead) {
+		if (isRead == false) {
+			return !isDone;
 		}
-	} catch (bool) {
-		return !isDone;
 	}
 
 	parserPtr = new Parser(input);
@@ -81,6 +79,14 @@ bool Logic::executeUserInput(string input) {
 	deleteParserPtr();
 
 	return isDone;
+}
+
+bool Logic::isDataRead() {
+	if (!eventFacade.dataRead()) {
+		updater.setFeedbackStrings(LogicUpdater::FILE_NOT_READ_MESSAGE);
+		return false;
+	}
+	return true;
 }
 
 //create command object, call executor to execute it
@@ -104,7 +110,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, stri
 
 			Event eventToComplete;
 			eventToComplete.setName(nameOfEvent);
-			if (id != INVALID_NUMBER) {
+			if (id != Command::INVALID_NUMBER) {
 				eventToComplete = updater.getEventFromID(id);
 			}
 
@@ -119,7 +125,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, stri
 
 			Event eventToDelete;
 			eventToDelete.setName(nameOfEvent);
-			if (id != INVALID_NUMBER) {
+			if (id != Command::INVALID_NUMBER) {
 				eventToDelete = updater.getEventFromID(id);
 			}
 
@@ -133,7 +139,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, stri
 
 			Event eventToEdit;
 			eventToEdit.setName(nameOfEvent);
-			if (id != INVALID_NUMBER) {
+			if (id != Command::INVALID_NUMBER) {
 				eventToEdit = updater.getEventFromID(id);
 			}
 
@@ -231,7 +237,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			int id = userEvent.getID();
-			
+
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						  }
@@ -263,7 +269,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				}
 
 				//case 2: at least 1 partial match
-				if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
+				if (!tempEvents.empty() && tempEvents[0].getID() != Command::INVALID_NUMBER) {
 					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
@@ -273,7 +279,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			//no event found
-			if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
+			if (!tempEvents.empty() && tempEvents[0].getID() == Command::INVALID_NUMBER) {
 				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
 				updater.setFeedbackStrings(feedback);
 				throw !isDone;
@@ -299,7 +305,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 					feedback += COMMA_SPACE + updater.setMultipleDaysString(start, end);
 				}
 			}
-			
+
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }
@@ -319,7 +325,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 				}
 
 				//case 2: at least 1 partial match
-				if (!tempEvents.empty() && tempEvents[0].getID() != INVALID_NUMBER) {
+				if (!tempEvents.empty() && tempEvents[0].getID() != Command::INVALID_NUMBER) {
 					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
 					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
 
@@ -329,7 +335,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			}
 
 			//no event found 
-			if (!tempEvents.empty() && tempEvents[0].getID() == INVALID_NUMBER) {
+			if (!tempEvents.empty() && tempEvents[0].getID() == Command::INVALID_NUMBER) {
 				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
 				updater.setFeedbackStrings(feedback);
 				throw false;
@@ -338,11 +344,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			//successful edit 
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
-			
+
 			Event oldEvent = commandPtr->getEvent();
 			int id = oldEvent.getID();
 			tm start = oldEvent.getStartDate(), end = oldEvent.getEndDate();
-			
+
 			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
 			if (!oldEvent.getIsFloating()) {
 				if (isSameDate(start, end)) {
@@ -401,7 +407,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
 			string feedback = showTypeToString(command, userEvent.getImportanceLevel());
 			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
-			
+
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 									}
@@ -421,7 +427,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::UNDO:
 		case Parser::REDO: {
-			if (commandPtr->getEvent().getID() == INVALID_NUMBER) {
+			if (commandPtr->getEvent().getID() == Command::INVALID_NUMBER) {
 				if (command == Parser::UNDO) {
 					updater.setFeedbackStrings(LogicUpdater::NO_MORE_UNDO_MESSAGE);
 				} else {
@@ -464,7 +470,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 	if (original.empty()) {
 		return;
 	}
-	
+
 	unsigned int i = 0;
 	//push all floating events from original into floating vector
 	while (original[i].getIsFloating()) {
@@ -483,7 +489,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec) {
 	if (commandPtr->getIsFloating()) {
 		floating = commandPtr->getEventVector();
-		
+
 		tmVec = updater.getTempMainDisplayLabel();
 		Event dummyEvent;
 		dummyEvent.setStartEndDate(tmVec);
@@ -492,7 +498,7 @@ void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Co
 
 	} else {
 		normal = commandPtr->getEventVector();
-		
+
 		tmVec = getTmVecFromEvents(normal);
 		Event dummyEvent;
 		dummyEvent.setStartEndDate(tmVec);
@@ -615,16 +621,16 @@ int Logic::convertNameToID(string name) {
 		int index = std::stoi(name);
 
 		if (index == Command::SIZE_ZERO) {
-			return INVALID_NUMBER;
+			return Command::INVALID_NUMBER;
 		}
 
 		if (index > updater.getTotalNumEvents()) {
-			return INVALID_NUMBER;
+			return Command::INVALID_NUMBER;
 		} else {
 			return updater.getIDFromIndex(index);
 		}
 	} else {
-		return INVALID_NUMBER;
+		return Command::INVALID_NUMBER;
 	}
 }
 

@@ -23,7 +23,6 @@ private:
 	LogicLog logger;
 
 public:
-	static const int INVALID_NUMBER;
 	static const string EMPTY_STRING;
 	static const string COMMA_SPACE;
 	static const string EXCLAMATION_MARK;
@@ -48,6 +47,7 @@ public:
 
 	//main executors
 	bool executeUserInput(string input);
+	bool isDataRead();
 	Command* queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent);
 	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
