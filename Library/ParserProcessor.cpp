@@ -520,6 +520,8 @@ void ParserProcessor::assignDate(int day, int month, int year, int dayTo) {
 			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DATES);
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
 		}
+	} else {
+		matchFound = false;
 	}
 }
 
@@ -619,24 +621,10 @@ ParserProcessor::timeSet ParserProcessor::extractHourMin(int tempIndex, int firs
 				hour = 0;
 			}
 		}
-	} else if (firstTimeInteger < 100) {  //For time input in the form of split hour & minute. E.g. 9 30  10 45  12 30
+	} else if (firstTimeInteger < 100) {  //For time input with hour only
 		tempIndex--;
-		/*
-		if (tempIndex >= 0) {
-			try {
-				hour = std::stoi(fragmentedWords[tempIndex]);
-				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-				minute = firstTimeInteger;
-				tempIndex--;
-			} catch (const std::invalid_argument& e) {  //For time input in hours only, no minute. E.g. 9  10  12
-				hour = firstTimeInteger;
-				minute = 0;
-			}
-		} else {
-		*/
-			hour = firstTimeInteger;
-			minute = 0;
-		//}
+		hour = firstTimeInteger;
+		minute = 0;
 		if (minute > 60) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
@@ -701,23 +689,9 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 								toHour = 0;
 							}
 						}
-					} else if (tempInt < 100) {   //For time input in the form of split hour & minute. E.g. 9 30  10 45  12 30
-						//tempIndex--;
-						/*
-						if (tempIndex >= 0) {
-							try {
-								toHour = std::stoi(fragmentedWords[tempIndex]);
-								fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
-								toMinute = tempInt;
-							} catch (const std::invalid_argument& e) {   //For time input in hours only, no minute. E.g. 9  10  12
-								toHour = tempInt;
-								toMinute = 0;
-							}
-						} else {
-						*/
-							toHour = tempInt;
-							toMinute = 0;
-						//}
+					} else if (tempInt < 100) {   //For time input with hour only
+						toHour = tempInt;
+						toMinute = 0;
 						if (toMinute > 60) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
@@ -768,19 +742,41 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
 		}
 	} else if(hourMin.hour != INVALID_NUMBER && hourMin.minute != INVALID_NUMBER){
-		if (!startTimeFound) {
-			startTimeFound = true;
-			tempEventStore.setStartTime(hourMin.hour,hourMin.minute);
-		} else if (!endTimeFound) {				
-			endTimeFound = true;
-			tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
-		} else if (tempEventStore.getIsDeadline()) {
-			logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
-			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+		if (endDayFound){
+			if (!startTimeFound && endTimeFound){
+				struct tm tempTime = tempEventStore.getEndDate();
+				tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
+				startTimeFound = true;
+				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+			}
+			if(!startTimeFound){
+				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+				endTimeFound = true;
+			}
+			if(startTimeFound && !endTimeFound){
+				endTimeFound = true;
+				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+			} else if(startTimeFound && endTimeFound){
+				logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+				throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			}
 		} else {
-			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
-			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			if (!startTimeFound) {
+				startTimeFound = true;
+				tempEventStore.setStartTime(hourMin.hour,hourMin.minute);
+			} else if (!endTimeFound) {				
+				endTimeFound = true;
+				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
+			} else if (tempEventStore.getIsDeadline()) {
+				logger.logParserError(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+				throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
+			} else {
+				logger.logParserError(ParserExceptions::ERROR_TOO_MANY_TIMES);
+				throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			}
 		}
+	} else {
+		matchFound = false;
 	}
 }
 
@@ -878,7 +874,7 @@ void ParserProcessor::addEventCorrector() {
 		tempEventStore.setIsFloating(true);
 	}
 	//Full day events, set Start time to 0am and End time to 11.59pm
-	if (startDayFound && !startTimeFound) {
+	if (startDayFound && !endDayFound && !startTimeFound) {
 		tempEventStore.setStartTime(0,0);
 		tempEventStore.setEndTime(23,59);
 	}
@@ -896,7 +892,7 @@ void ParserProcessor::addEventCorrector() {
 		tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
 	}
 	//Event with Start time only, sets End time to an hour after Start time by default
-	if (startTimeFound && !endTimeFound) {
+	if (!endDayFound && startTimeFound && !endTimeFound) {
 		struct tm tempTime = tempEventStore.getStartDate();
 		if ((tempTime.tm_hour)+1 == 24 && tempTime.tm_min == 0) {   //Corrects any 12am timing to 11.59pm to prevent spilling over to next day
 			tempEventStore.setEndTime(23,59);					  //Because day ends at 11.59pm and new day starts at 12am
@@ -905,9 +901,15 @@ void ParserProcessor::addEventCorrector() {
 		}
 		endTimeFound = true;
 	}
-	//Multiple day events with Start time only, sets End time to 11.59pm of the last day
-	if (endDayFound && !endTimeFound) {
+	//Multiple day events with End time only, sets Start time to 12am of the first day
+	if (endDayFound && startTimeFound && !endTimeFound){
 		tempEventStore.setEndTime(23,59);
+		endTimeFound = true;
+	}
+	//Multiple day events with End time only, sets Start time to 12am of the first day
+	if (endDayFound && endTimeFound && !startTimeFound) {
+		tempEventStore.setStartTime(0,0);
+		startTimeFound = true;
 	}
 	//Corrects any 12am timing to 11.59pm to prevent spilling over to next day, because day ends at 11.59pm and new day starts at 12am
 	if (startTimeFound && endTimeFound) {
