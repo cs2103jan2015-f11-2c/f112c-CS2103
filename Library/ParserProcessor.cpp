@@ -232,6 +232,12 @@ Event ParserProcessor::processEditEvent(std::vector<std::string> fragmentedWords
 			} catch (...) {
 			}
 		}
+		//Case 3: cannot convert to deadline events from non deadline
+		if (deadlineFound){
+			logger.logParserError(ParserExceptions::ERROR_NO_EDIT_TO_DEADLINE);
+			throw ParserExceptions(ParserExceptions::ERROR_NO_EDIT_TO_DEADLINE); 
+		}
+
 	} catch (ParserExceptions& e) {
 		throw e;
 	}
@@ -332,13 +338,14 @@ int ParserProcessor::identifyDay(int index) {
 				if (inputWeekDay > currentWeekDay) {
 					numWdaysApart = inputWeekDay - currentWeekDay;
 				} else if (inputWeekDay <= currentWeekDay) {
-					numWdaysApart = inputWeekDay -(currentWeekDay - NUMBER_OF_DAYSINAWEEK);
+					numWdaysApart = inputWeekDay - (currentWeekDay - NUMBER_OF_DAYSINAWEEK);
 				}
 				//checking for next which will add one extra week
 				if (tempIndex >= 0) {
 					if (fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt") {
 						numWdaysApart = numWdaysApart + NUMBER_OF_DAYSINAWEEK;
 					}
+					tempIndex--;
 				}
 				if (!startDayFound) {
 					startDayFound = true;

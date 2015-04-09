@@ -283,5 +283,8 @@ std::string Parser::createFeedback(std::string errorCode) {
 	if (errorCode == ParserExceptions::ERROR_INVALID_YEAR) {
 		tempFeedback = "Error: Year input out of range. Accepted range: 1971 - 2999";
 	}
+	if (errorCode == ParserExceptions::ERROR_NO_EDIT_TO_DEADLINE) {
+		tempFeedback = "Error: Cannot edit to deadline events";
+	}
 	return tempFeedback;
 }

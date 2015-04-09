@@ -30,6 +30,7 @@ public:
 	static const std::string ERROR_DUE_TOO_MANY_DATES;
 	static const std::string ERROR_DUE_TOO_MANY_TIMES;
 	static const std::string ERROR_INVALID_YEAR;
+	static const std::string ERROR_NO_EDIT_TO_DEADLINE;
 	
 	ParserExceptions(std::string);
 

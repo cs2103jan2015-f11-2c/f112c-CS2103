@@ -19,6 +19,7 @@ const std::string ParserExceptions::ERROR_NO_SHOW = "PS015";
 const std::string ParserExceptions::ERROR_DUE_TOO_MANY_DATES = "PS016";
 const std::string ParserExceptions::ERROR_DUE_TOO_MANY_TIMES = "PS017";
 const std::string ParserExceptions::ERROR_INVALID_YEAR = "PS018";
+const std::string ParserExceptions::ERROR_NO_EDIT_TO_DEADLINE = "PS019";
 
 ParserExceptions::ParserExceptions(std::string errorCode) {
 	exceptionCode = errorCode;
