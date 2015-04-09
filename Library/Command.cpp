@@ -47,7 +47,11 @@ int Command::getNumEvents(vector<Event> eventVec) {
 Event Command::getEventFromID(vector<Event> eventVec, int id) {
 	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() == id) {
-			return eventVec[i];
+			if (eventVec[i].getIsFloating()) {
+				return eventVec[i];
+			} else {
+				return eventFacade->findEventWithID(id);
+			}
 		}
 	}
 	return createInvalidEvent();
