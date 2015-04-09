@@ -201,7 +201,7 @@ Event CompleteCommand::getEvent() {
 
 void CompleteCommand::undo() {
 	if (userEvent.getID() != INVALID_NUMBER) {
-		eventsToShow = eventFacade->addEvent(userEvent);
+		eventsToShow = eventFacade->uncompleteEvent(userEvent);
 		if (!isFloating) {
 			eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 		}
