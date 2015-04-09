@@ -72,6 +72,7 @@ vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentSho
 		userTM[1].tm_mon <= currentShowingTM[1].tm_mon &&
 		userTM[1].tm_mday <= currentShowingTM[1].tm_mday) {
 			tmRangeToShow = currentShowingTM;
+
 	} else {
 		tmRangeToShow = userTM;
 	}
@@ -426,9 +427,10 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 void EditCommand::redoEdit() {
 	eventsToShow = eventFacade->deleteEvent(eventToEdit);
 	eventsToShow = eventFacade->addEvent(editedEvent);
-	isFloating = eventToEdit.getIsFloating();
+	isFloating = editedEvent.getIsFloating();
+	
 	if (!isFloating) {
-		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
 }
 
