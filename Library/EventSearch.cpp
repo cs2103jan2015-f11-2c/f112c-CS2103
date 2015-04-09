@@ -99,6 +99,7 @@ Event EventSearch::searchEventWithID(int eventID){
 
 	vector<Event> normalEvents = organiser.allNormalCurrent();
 	Event noResults;
+	noResults.setID(-1);
 
 	for(auto i=0;i<normalEvents.size();i++){
 		if(normalEvents[i].getID() == eventID){
