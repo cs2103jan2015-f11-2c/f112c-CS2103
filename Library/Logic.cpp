@@ -422,6 +422,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 		case Parser::UNDO:
 		case Parser::REDO: {
 			if (commandPtr->getEvent().getID() == INVALID_NUMBER) {
+				if (command == Parser::UNDO) {
+					updater.setFeedbackStrings(LogicUpdater::NO_MORE_UNDO_MESSAGE);
+				} else {
+					updater.setFeedbackStrings(LogicUpdater::NO_MORE_REDO_MESSAGE);
+				}
 				throw false;
 			}
 

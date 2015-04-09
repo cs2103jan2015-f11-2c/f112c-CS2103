@@ -63,6 +63,8 @@ public:
 	static const string NEW_DAY_MESSAGE;
 	static const string UNDO_MESSAGE;
 	static const string REDO_MESSAGE;
+	static const string NO_MORE_UNDO_MESSAGE;
+	static const string NO_MORE_REDO_MESSAGE;
 	static const string FILE_NOT_READ_MESSAGE;
 
 	static const string WORD_TODAY;
