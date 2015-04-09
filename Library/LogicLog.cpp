@@ -24,7 +24,7 @@ const string LogicLog::DEFAULT = "entered default for ";
 const string LogicLog::UNDOSTACK_SIZE = "undoStack size ";
 const string LogicLog::REDOSTACK_SIZE = "redoStack size ";
 const string LogicLog::SUCCEEDED = " succeeded";
-const string LogicLog::FAILED = " failed";
+const string LogicLog::ERROR = "error";
 
 
 void LogicLog::log(string logString) {

@@ -48,8 +48,8 @@ public:
 	//main api
 	bool executeUserInput(string input);
 	bool isDataRead();
-	Command* queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent);
-	void setUpdater(Command* commandPtr, Parser::commandType, Event userEvent, string nameOfEvent);
+	Command* queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent);
+	void setUpdater(Command* commandPtr, Parser::CommandType, Event userEvent, string nameOfEvent);
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);
 	vector<tm> getTmVecFromEvents(vector<Event> normalEvents);
@@ -57,11 +57,11 @@ public:
 
 
 	//supporting methods
-	bool isProperCommand(Parser::commandType commandType);
+	bool isProperCommand(Parser::CommandType commandType);
 	bool isNumber(string s);
 	bool isSameDate(tm date1, tm date2);
 	int convertNameToID(string input);
-	string showTypeToString(Parser::commandType cmd, int importance);	
+	string showTypeToString(Parser::CommandType cmd, int importance);	
 	void removeLabel(string& feedback);
 	void setNewID(Event& userEvent);
 	Event createTempEvent(string name, int id);

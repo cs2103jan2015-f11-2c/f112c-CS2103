@@ -40,7 +40,7 @@ public:
 	static const string UNDOSTACK_SIZE;
 	static const string REDOSTACK_SIZE;
 	static const string SUCCEEDED;
-	static const string FAILED;
+	static const string ERROR;
 
 	void log(string logString);
 	void log(int logInt);

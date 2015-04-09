@@ -67,7 +67,7 @@ bool Logic::executeUserInput(string input) {
 
 	parserPtr = new Parser(input);
 
-	Parser::commandType commandType = parserPtr->getCommandType();
+	Parser::CommandType commandType = parserPtr->getCommandType();
 	Event userEvent = parserPtr->getEvent();
 	string nameOfEvent = parserPtr->getNameOfEvent();
 
@@ -94,7 +94,7 @@ bool Logic::isDataRead() {
 }
 
 //creates pointer to command object, call executor to execute it
-Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent) {
+Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 
 	try {
@@ -200,7 +200,7 @@ Command* Logic::queueCommand(Parser::commandType command, Event& userEvent, stri
 }
 
 //update new information for UI to display
-void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event userEvent, string nameOfEvent) {
+void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 
 	try {
@@ -265,7 +265,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			//no event found
 			if (!tempEvents.empty() && tempEvents[Command::SIZE_ZERO].getID() == Command::INVALID_NUMBER) {
 				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
-				
+
 				updater.setFeedbackStrings(feedback);
 				throw !isDone;
 			}
@@ -422,14 +422,14 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 		case Parser::REDO: {
 			if (commandPtr->getEvent().getID() == Command::INVALID_NUMBER) {
-					updater.setFeedbackStrings(LogicUpdater::NO_MORE_REDO_MESSAGE);
+				updater.setFeedbackStrings(LogicUpdater::NO_MORE_REDO_MESSAGE);
 				throw !isDone;
 			}
 
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
 			string feedback = LogicUpdater::REDO_MESSAGE;
-			
+
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 						   }
@@ -523,7 +523,7 @@ void Logic::deleteParserPtr() {
 
 
 //SUPPORTING METHODS
-bool Logic::isProperCommand(Parser::commandType commandType) {
+bool Logic::isProperCommand(Parser::CommandType commandType) {
 	return ( (commandType == Parser::ADD) |
 		(commandType == Parser::ADDFLOAT) |
 		(commandType == Parser::COMPLETE) |
@@ -575,7 +575,7 @@ bool Logic::isSameDate(tm date1, tm date2) {
 		date1.tm_year == date2.tm_year);
 }
 
-string Logic::showTypeToString(Parser::commandType cmd, int importance) {
+string Logic::showTypeToString(Parser::CommandType cmd, int importance) {
 	switch (cmd) {
 	case Parser::SHOWALL: {
 		return LogicUpdater::SHOWALL_MESSAGE;
@@ -598,6 +598,10 @@ string Logic::showTypeToString(Parser::commandType cmd, int importance) {
 		}
 		return cmdString;
 								}
+
+	default: {
+		return LogicLog::ERROR;
+			 }
 	}
 }
 
