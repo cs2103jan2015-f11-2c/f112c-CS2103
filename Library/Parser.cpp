@@ -27,7 +27,7 @@ Parser::~Parser(void)
 }
 
 	//GETTERS
-Parser::commandType Parser::getCommandType() {
+Parser::CommandType Parser::getCommandType() {
 	return typeOfCommand;
 }
 

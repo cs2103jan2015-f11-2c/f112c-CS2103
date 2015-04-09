@@ -19,7 +19,7 @@ public:
 	Parser(std::string);
 	~Parser(void);
 
-	enum commandType {
+	enum CommandType {
 		ADDFLOAT, 
 		ADD, 
 		DELETE_, 
@@ -47,7 +47,7 @@ private:
 	InputStringSplit splitter;
 	ParserProcessor processor;
 
-	Parser::commandType typeOfCommand;
+	Parser::CommandType typeOfCommand;
 	std::string command;
 	std::string details;
 	std::string original;
@@ -59,7 +59,7 @@ private:
 
 public:
 	//getters
-	Parser::commandType getCommandType();
+	Parser::CommandType getCommandType();
 	std::string getCommand();
 	std::string getDetails();
 	std::string getOriginal();
