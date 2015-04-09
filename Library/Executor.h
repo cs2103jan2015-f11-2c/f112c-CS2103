@@ -16,6 +16,7 @@ private:
 
 public:
 	Executor();
+	~Executor();
 
 	//methods for executing commands
 	Command* execute(Command* command);

@@ -1,6 +1,7 @@
 #include "Executor.h"
 
 
+//CONSTRUCTOR, DESTRUCTOR
 Executor::Executor() {
 	while (!undoStack.empty()) {
 		undoStack.pop();
@@ -11,6 +12,22 @@ Executor::Executor() {
 	}
 }
 
+Executor::~Executor() {
+	while (!undoStack.empty()) {
+		delete undoStack.top();
+		undoStack.top() = NULL;
+		undoStack.pop();
+	}
+
+	while (!redoStack.empty()) {
+		delete redoStack.top();
+		redoStack.top() = NULL;
+		redoStack.pop();
+	}
+}
+
+
+//MAIN METHODS
 Command* Executor::execute(Command* command) {
 	command->execute();
 
@@ -19,6 +36,7 @@ Command* Executor::execute(Command* command) {
 	}
 
 	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
 	return command;
 }
 

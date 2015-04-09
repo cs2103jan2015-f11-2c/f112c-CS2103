@@ -45,7 +45,7 @@ public:
 	vector<tm> getTempMainDisplayLabel();
 
 
-	//main executors
+	//main api
 	bool executeUserInput(string input);
 	bool isDataRead();
 	Command* queueCommand(Parser::commandType command, Event& userEvent, string nameOfEvent);
@@ -56,13 +56,15 @@ public:
 	void deleteParserPtr();
 
 
-	//others
+	//supporting methods
 	bool isProperCommand(Parser::commandType commandType);
 	bool isNumber(string s);
 	bool isSameDate(tm date1, tm date2);
-	string showTypeToString(Parser::commandType cmd, int importance);
 	int convertNameToID(string input);
+	string showTypeToString(Parser::commandType cmd, int importance);	
 	void removeLabel(string& feedback);
+	void setNewID(Event& userEvent);
+	Event createTempEvent(string name, int id);
 };
 
 #endif
