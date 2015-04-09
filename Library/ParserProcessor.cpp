@@ -748,12 +748,10 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 				tempEventStore.setStartTime(tempTime.tm_hour,tempTime.tm_min);
 				startTimeFound = true;
 				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
-			}
-			if(!startTimeFound){
+			} else if(!startTimeFound){
 				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
 				endTimeFound = true;
-			}
-			if(startTimeFound && !endTimeFound){
+			} else if(startTimeFound && !endTimeFound){
 				endTimeFound = true;
 				tempEventStore.setEndTime(hourMin.hour,hourMin.minute);
 			} else if(startTimeFound && endTimeFound){
@@ -874,7 +872,7 @@ void ParserProcessor::addEventCorrector() {
 		tempEventStore.setIsFloating(true);
 	}
 	//Full day events, set Start time to 0am and End time to 11.59pm
-	if (startDayFound && !endDayFound && !startTimeFound) {
+	if (startDayFound && !startTimeFound && !endTimeFound) {
 		tempEventStore.setStartTime(0,0);
 		tempEventStore.setEndTime(23,59);
 	}
@@ -979,13 +977,23 @@ void ParserProcessor::editEventCorrector() {
 		tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
 	}
 	//Event with Start time only, sets End time to an hour after Start time by default
-	if (startTimeFound && !endTimeFound) {
+	if (startTimeFound && !endDayFound && !endTimeFound) {
 		struct tm tempTime = tempEventStore.getStartDate();
 		if (tempTime.tm_hour+1 == 24 && tempTime.tm_min == 0) {
 			tempEventStore.setEndTime(23,59);
 		} else {
 			tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
 		}
+	}
+	//Multiple day events with End time only, sets Start time to 12am of the first day
+	if (endDayFound && startTimeFound && !endTimeFound){
+		tempEventStore.setEndTime(23,59);
+		endTimeFound = true;
+	}
+	//Multiple day events with End time only, sets Start time to 12am of the first day
+	if (endDayFound && endTimeFound && !startTimeFound) {
+		tempEventStore.setStartTime(0,0);
+		startTimeFound = true;
 	}
 	//Corrects any spill over timing mistake of the user input to update the End day to the next day. E.g. 10pm-3am -> tdy to tmr 10pm-3am
 	struct tm tempEventStartDate = tempEventStore.getStartDate();
