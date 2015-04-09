@@ -103,6 +103,7 @@ class EditCommand : public Command {
 private:
 	int id;
 	Event eventToEdit, editedEvent;
+	bool isEdited;
 
 public:
 	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited, vector<tm> currentShowing);
@@ -112,6 +113,7 @@ public:
 
 	void editImmediately();
 	void editExact(vector<Event> tempEvents);
+	void redoEdit();
 };
 
 
