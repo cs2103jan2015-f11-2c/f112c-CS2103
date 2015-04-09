@@ -285,7 +285,6 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 
 			Event doneEvent = commandPtr->getEvent();
 			tm start = doneEvent.getStartDate(), end = doneEvent.getEndDate();
-			mktime(&start); mktime(&end);
 
 			string feedback;
 			if (command == Parser::DELETE_) { //for delete
@@ -343,7 +342,6 @@ void Logic::setUpdater(Command* commandPtr, Parser::commandType command, Event u
 			Event oldEvent = commandPtr->getEvent();
 			int id = oldEvent.getID();
 			tm start = oldEvent.getStartDate(), end = oldEvent.getEndDate();
-			mktime(&start); mktime(&end);
 			
 			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
 			if (!oldEvent.getIsFloating()) {
@@ -517,9 +515,6 @@ vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents) {
 				tmVec = currentShowingTM;
 		} 
 	}
-
-	mktime(&tmVec[0]);
-	mktime(&tmVec[1]);
 
 	return tmVec;
 }

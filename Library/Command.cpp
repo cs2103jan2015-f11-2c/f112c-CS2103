@@ -47,6 +47,7 @@ int Command::getNumEvents(vector<Event> eventVec) {
 Event Command::getEventFromID(vector<Event> eventVec, int id) {
 	for (unsigned int i = 0; i < eventVec.size(); i++) {
 		if (eventVec[i].getID() == id) {
+			logger.log(eventVec[i].getIsFloating());
 			return eventVec[i];
 		}
 	}
@@ -375,22 +376,25 @@ Event EditCommand::getEvent() {
 }
 
 void EditCommand::undo() {
-	if (eventToEdit.getID() != INVALID_NUMBER) {
-		eventFacade->deleteEvent(editedEvent);
-		if (eventToEdit.getIsFloating()) {
-			eventsToShow = eventFacade->addEvent(eventToEdit);
-		} else {
-			eventFacade->addEvent(eventToEdit);
-			eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
-		}
-		isFloating = eventToEdit.getIsFloating();
+	if (eventToEdit.getID() == INVALID_NUMBER) {
+		return;
 	}
+
+	eventFacade->deleteEvent(editedEvent);
+	if (eventToEdit.getIsFloating()) {
+		eventsToShow = eventFacade->addEvent(eventToEdit);
+	} else {
+		eventFacade->addEvent(eventToEdit);
+		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+	}
+	isFloating = eventToEdit.getIsFloating();
 }
 
 void EditCommand::editImmediately() {
 	eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
-	editedEvent = getEventFromID(eventsToShow, id);
+	editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
 	isFloating = editedEvent.getIsFloating();
+	
 	if (!isFloating) {
 		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
@@ -399,7 +403,7 @@ void EditCommand::editImmediately() {
 }
 
 void EditCommand::editExact(vector<Event> tempEvents) {
-	if (tempEvents.size() == 1) { //1 floating match => event will be at index 0
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
 		eventToEdit = tempEvents[0];
 	} else { //1 normal match => event will be at index 1
