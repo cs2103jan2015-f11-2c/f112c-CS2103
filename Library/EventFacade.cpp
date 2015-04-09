@@ -67,6 +67,11 @@ vector<Event> EventFacade::findAllImportance(){
 	return searcher.searchAllImportance();
 }
 
+Event EventFacade::findEventWithID(int eventID){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_EVENT_WITH_ID);
+	return searcher.searchEventWithID;
+}
+
 /*To EventOrganiser*/
 vector<Event> EventFacade::showDates(Event eventWithStartEndTimes){
 	logger.log(EventLog::FACADE + EventLog::SHOW_DATES);

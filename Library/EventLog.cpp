@@ -19,6 +19,7 @@ const string EventLog::SEARCH_NAME_EXACT = "searchNameExact ";
 const string EventLog::SEARCH_LEVEL_IMPORTANCE = "searchLevelImportance ";
 const string EventLog::SEARCH_ALL_IMPORTANCE = "searchAllImportance ";
 const string EventLog::SEARCH_INDEX_WITH_ID = "searchIndexWithID ";
+const string EventLog::SEARCH_EVENT_WITH_ID = "searchEventWithID ";
 
 
 const string EventLog::ORGANISER = "EventOrgansier ";

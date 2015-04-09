@@ -26,6 +26,7 @@ public:
 	vector<Event> findCompletedNameExact(string eventName);
 	vector<Event> findLevelImportance(int level);
 	vector<Event> findAllImportance();
+	Event findEventWithID(int eventID);
 
 	/*To EventOrganiser*/
 	vector<Event> showDates(Event eventWithStartEndTimes);

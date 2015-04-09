@@ -84,7 +84,7 @@ vector<Event> EventSearch::searchAllImportance(){
 
 //find index in internal storages with ID (DEL / EDIT SUPPORT)
 int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
-	logger.log(EventLog::SEARCH_INDEX_WITH_ID, eventID);
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_INDEX_WITH_ID, eventID);
 	for(auto i=0;i<eventVectorToSearch.size();i++){
 		if(eventVectorToSearch[i].getID() == eventID){
 			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
@@ -92,6 +92,21 @@ int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearc
 		}
 	} 
 	return NOT_FOUND;
+}
+
+Event EventSearch::searchEventWithID(int eventID){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_EVENT_WITH_ID, eventID);
+
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+	Event noResults;
+
+	for(auto i=0;i<normalEvents.size();i++){
+		if(normalEvents[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_EVENT_WITH_ID + EventLog::EXIT, i);
+			return normalEvents[i];
+		}
+	} 
+	return noResults;
 }
 
 

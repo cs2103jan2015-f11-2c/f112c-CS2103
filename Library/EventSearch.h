@@ -26,6 +26,8 @@ public:
 
 	//Support methods for del and edit
 	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
+	
+	Event searchEventWithID(int eventID);
 
 private:
 	
