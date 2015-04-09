@@ -377,12 +377,13 @@ Event EditCommand::getEvent() {
 void EditCommand::undo() {
 	if (eventToEdit.getID() != INVALID_NUMBER) {
 		eventFacade->deleteEvent(editedEvent);
-		if (isFloating) {
+		if (eventToEdit.getIsFloating()) {
 			eventsToShow = eventFacade->addEvent(eventToEdit);
 		} else {
 			eventFacade->addEvent(eventToEdit);
 			eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
 		}
+		isFloating = eventToEdit.getIsFloating();
 	}
 }
 
@@ -401,19 +402,12 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == 1) { //1 floating match => event will be at index 0
 		isFloating = true;
 		eventToEdit = tempEvents[0];
-		eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
-		editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
-		isFloating = editedEvent.getIsFloating();
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		eventToEdit = tempEvents[1];
-		eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
-		editedEvent = getEventFromID(eventsToShow, eventToEdit.getID());
-		isFloating = editedEvent.getIsFloating();
-		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
 	
-	isExecuted = true;
+	editImmediately();
 }
 
 
