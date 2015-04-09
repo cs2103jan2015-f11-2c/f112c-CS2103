@@ -75,7 +75,7 @@ std::string InputStringSplit::extractDetails(std::string input){
 	assert(!tempStr.empty());
 	return tempStr;
 }
-
+/*
 //Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
 //Throws exception if no event name/ event index is found or if too many information is provided. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractDelDoneEventName(std::string input){
@@ -86,29 +86,10 @@ std::string InputStringSplit::extractDelDoneEventName(std::string input){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
-	std::string::size_type strCutIndex;
-	std::string tempStr;
-	strCutIndex = input.find_last_of(" ");
-	/*
-	if(strCutIndex == std::string::npos){
-		strCutIndex = input.find_first_of(" ");
-		if(strCutIndex != std::string::npos){
-			logger.logParserError(ParserExceptions::ERROR_TOO_MANY_DEL);
-			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DEL);
-		}
-		try	{
-			auto tempStoi = std::stoi(input.substr(0,strCutIndex));
-		} catch (std::invalid_argument& e){
-			logger.logParserError(ParserExceptions::ERROR_MISSING_INDEX);
-			throw ParserExceptions(ParserExceptions::ERROR_MISSING_INDEX);
-		}
-	}
-	*/
-	tempStr = input.substr(0,strCutIndex);
-	assert(!tempStr.empty());
+	
 	return tempStr;
 }
-
+*/
 //Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
 //Throws exception if no event name/ event index is found. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractEditEventName(std::string input){
@@ -121,18 +102,7 @@ std::string InputStringSplit::extractEditEventName(std::string input){
 	}
 	std::string::size_type strCutIndex;
 	std::string tempStr;
-	/*
-	strCutIndex = input.find_first_of(" ");
-	std::string tempStr = input.substr(0,strCutIndex);
 	
-	bool isNumber = true;
-	for(unsigned int i = 0; i < tempStr.size(); i++){
-		if(!isdigit(tempStr[i])){
-			isNumber = false;
-		}
-	}
-	if(!isNumber){
-	*/
 	strCutIndex = input.find_last_of(";");
 	if(strCutIndex == std::string::npos){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INDEX);
@@ -213,7 +183,15 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 					strCutIndex = 0;
 				}
 				strCutIndex = input.find_first_not_of("0123456789",strCutIndex);
-				fragmentedWords.push_back(input.substr(0,strCutIndex));
+				if(strCutIndex != std::string::npos){
+					if(input[strCutIndex] == ' '){
+						fragmentedWords.push_back(input.substr(0,strCutIndex+1));
+					} else {
+						fragmentedWords.push_back(input.substr(0,strCutIndex));
+					}
+				} else {
+					fragmentedWords.push_back(input.substr(0,strCutIndex));
+				}
 			}
 			if(dotFound){
 				dotCounter++;

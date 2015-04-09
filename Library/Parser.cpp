@@ -130,7 +130,7 @@ void Parser::determineAddCommand() {
 
 void Parser::determineDelCommand() {
 	try {
-		nameOfEvent = splitter.extractDelDoneEventName(details);
+		nameOfEvent = details;
 		typeOfCommand = Parser::DELETE_;
 	} catch (ParserExceptions& e) {
 		throw e;
@@ -184,7 +184,7 @@ void Parser::determineShowCommand() {
 
 void Parser::determineCompleteCommand() {
 	try {
-		nameOfEvent = splitter.extractDelDoneEventName(details);
+		nameOfEvent = details;
 		typeOfCommand = Parser::COMPLETE;
 	} catch (ParserExceptions& e) {
 		throw e;
