@@ -398,11 +398,10 @@ void EditCommand::editImmediately() {
 	eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
 	editedEvent = getEventFromID(eventsToShow, id);
 	isFloating = editedEvent.getIsFloating();
-	
 	if (!isFloating) {
 		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
 	}
-
+	
 	isExecuted = true;
 	isEdited = true;
 }
@@ -410,10 +409,11 @@ void EditCommand::editImmediately() {
 void EditCommand::editExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
-		eventToEdit = tempEvents[0];
+		eventToEdit = tempEvents[SIZE_ZERO];
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
-		eventToEdit = tempEvents[1];
+		id = tempEvents[SIZE_ONE].getID();
+		
 	}
 	id = eventToEdit.getID();
 	editImmediately();
