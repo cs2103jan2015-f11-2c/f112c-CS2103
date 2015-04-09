@@ -8,6 +8,9 @@ const string LogicUpdater::EMPTY_STRING = "";
 const int LogicUpdater::SHIFT_BY_ONE = 1;
 const int LogicUpdater::MAX_LENGTH_EVENT_NAME = 42;
 
+const string LogicUpdater::SET_FLOATING = "set floating events";
+const string LogicUpdater::SET_NORMAL = "set normal events";
+
 const string LogicUpdater::NO_EVENTS_MESSAGE = "Currently no task";
 const string LogicUpdater::ADDED_MESSAGE = "added: ";
 const string LogicUpdater::EDITED_MESSAGE = "edited: ";
@@ -225,7 +228,9 @@ void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatin
 	setWeekMonthOrNothing (weekMonthOrNothing);
 	setFeedbackStrings(feedback);
 	setFloatingEvents(floatingEvents);
+	_logger.log(SET_FLOATING + LogicLog::SUCCEEDED);
 	setNormalEvents(normalEvents, label);
+	_logger.log(SET_NORMAL + LogicLog::SUCCEEDED);
 }
 
 void LogicUpdater::setFeedbackStrings(string newFeedback) {

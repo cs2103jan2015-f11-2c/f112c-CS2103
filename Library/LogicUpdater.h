@@ -47,6 +47,9 @@ public:
 	static const int SHIFT_BY_ONE;
 	static const int MAX_LENGTH_EVENT_NAME;
 
+	static const string SET_FLOATING;
+	static const string SET_NORMAL;
+
 	static const string NO_EVENTS_MESSAGE;
 	static const string ADDED_MESSAGE;
 	static const string EDITED_MESSAGE;
@@ -113,6 +116,8 @@ private:
 	vector<EVENT_STRING> _floatingDisplayStrings;
 	vector<string> _feedbackDisplayStrings;
 	vector<string> _errorStrings;
+
+	LogicLog _logger;
 //===================================================================================================================================================================
 
 /*

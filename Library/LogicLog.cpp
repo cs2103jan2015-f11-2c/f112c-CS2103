@@ -23,6 +23,8 @@ const string LogicLog::CASE_1 = "entered case 1 for ";
 const string LogicLog::DEFAULT = "entered default for ";
 const string LogicLog::UNDOSTACK_SIZE = "undoStack size ";
 const string LogicLog::REDOSTACK_SIZE = "redoStack size ";
+const string LogicLog::SUCCEEDED = " succeeded";
+const string LogicLog::FAILED = " failed";
 
 
 void LogicLog::log(string logString) {

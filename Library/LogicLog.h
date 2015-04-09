@@ -39,6 +39,8 @@ public:
 	static const string DEFAULT;
 	static const string UNDOSTACK_SIZE;
 	static const string REDOSTACK_SIZE;
+	static const string SUCCEEDED;
+	static const string FAILED;
 
 	void log(string logString);
 	void log(int logInt);
