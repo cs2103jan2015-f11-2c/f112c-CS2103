@@ -69,7 +69,7 @@ vector<Event> EventFacade::findAllImportance(){
 
 Event EventFacade::findEventWithID(int eventID){
 	logger.log(EventLog::FACADE + EventLog::SEARCH_EVENT_WITH_ID);
-	return searcher.searchEventWithID;
+	return searcher.searchEventWithID(eventID);
 }
 
 /*To EventOrganiser*/

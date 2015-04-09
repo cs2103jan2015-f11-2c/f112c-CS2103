@@ -413,7 +413,7 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		id = tempEvents[SIZE_ONE].getID();
-		
+		eventToEdit = eventFacade->findEventWithID(id);
 	}
 	id = eventToEdit.getID();
 	editImmediately();
