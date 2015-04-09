@@ -1,3 +1,10 @@
+//==================================================================================================
+//EventSearch class handles all searching methods. It ultilises EventOrganiser to obtain the
+//necessary filtered data and to format the data by date.
+//
+//
+//
+//==================================================================================================
 #pragma once
 
 #ifndef EVENTSEARCH_H
@@ -7,7 +14,6 @@
 
 class EventSearch{
 public:
-	//Constructor, Destructor
 	EventSearch(void);
 	~EventSearch(void);
 	
@@ -24,10 +30,11 @@ public:
 	vector<Event> searchLevelImportance(int level);
 	vector<Event> searchAllImportance();
 
+	//general search method
+	Event searchEventWithID(int eventID);
+	
 	//Support methods for del and edit
 	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
-	
-	Event searchEventWithID(int eventID);
 
 private:
 	

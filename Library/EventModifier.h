@@ -1,3 +1,27 @@
+//==================================================================================================
+//EventModifier is a class that deals with the modification of an event or its attributes that will
+//affect storage. The internal and external storages are then updated according to the action executed.
+//
+//EventModifier comprises of 5 main methods:
+// 1)Adding an event
+// 2)Deleting an event
+// 3)Editing an event
+// 4)completing an event
+// 5)uncompleting an event
+//
+//The returning vectors solely varies according to the type of event modified:
+//		Event Modified			::			Output
+//	Current Normal Event		:: returns uncompleted events within the start and end date of the modified event.
+//	Current Floating Event		:: returns all uncompleted floating events.
+//	Completed Normal Event		:: returns completed events within the start and end date of the modified event.
+//	Completed Floating Event	:: returns all completed floating events.
+//
+//
+//sample usage:
+//	EventModifier modifier;
+//		modifier.add(event);
+//		//returns vector<Event>
+//==================================================================================================
 #pragma once
 
 #ifndef EVENTMODIFIER_H
@@ -9,10 +33,10 @@
 
 class EventModifier{
 public:
-	/*Constructor, Destructor*/
 	EventModifier(void);
 	~EventModifier(void);
-
+	
+	/*Main Methods*/
 	vector<Event> add(Event newEvent);
 	vector<Event> del(Event deletedEvent);
 	vector<Event> edit(Event beforeEdit, Event afterEdit);	

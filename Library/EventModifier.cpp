@@ -43,6 +43,7 @@ void EventModifier::addNormal(Event newEvent){
 	organiser.saveNormal(tempContents);
 }
 
+//==================================================================================================
 //Delete method
 vector<Event> EventModifier::del(Event deletedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::DELETE);
@@ -61,10 +62,6 @@ vector<Event> EventModifier::del(Event deletedEvent){
 	}
 	return toLogic;
 }
-
-//int extractID(Event displayedEvent){
-//
-//}
 
 vector<Event> EventModifier::deleteNormal(int index){
 	
@@ -90,6 +87,7 @@ vector<Event> EventModifier::deletefloat(int index){
 	return toLogic;
 }
 
+//==================================================================================================
 //Edit method
 vector<Event> EventModifier::edit(Event beforeEdit, Event afterEdit){
 	logger.log(EventLog::MODIFIER + EventLog::EDIT + beforeEdit.getName());
@@ -231,6 +229,7 @@ vector<Event> EventModifier::editNormalToFloating(int index, Event afterEdit){
 	return tempContents;
 }
 
+//==================================================================================================
 //Complete method
 vector<Event> EventModifier::complete(Event completedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::COMPLETE);
@@ -285,6 +284,7 @@ vector<Event> EventModifier::completeFloat(int index){
 	return tempContents;
 }
 
+//==================================================================================================
 //Uncomplete Method
 vector<Event> EventModifier::uncomplete(Event uncompletedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::UNCOMPLETE);
@@ -327,6 +327,7 @@ vector<Event> EventModifier::uncompleteFloat(int index){
 	return organiser.allFloatingCurrent();
 }
 
+//==================================================================================================
 //support methods
 int EventModifier::findNormalIndex(int eventID){
 	vector<Event> tempContents = organiser.allNormalCurrent();

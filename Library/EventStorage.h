@@ -1,3 +1,32 @@
+//==================================================================================================
+//EventStorage class is responsible for the internal and external storages. 
+//It adopts the singleton pattern to ensure that only one storage object is created to prevent 
+//data corruption and duplicates.
+//
+//Hence, only an instance of storage will be distributed when needed.
+//		sample usages to request for instance:
+//			EventStorage::storage().getNormalContent();
+//			Output: internal storage (normalContent)
+//
+//External storages are held in 2 text files:
+//	1)myCurrent 
+//	2)myBackUp
+//
+//myBackup:
+//The backup file is written upon starting up of the program after successfully reading the main text file(myCurrent)
+//In the event that the user accidentally deleted or corrupted the main text file that deem it unreadable.
+//the program will automatically load the backup file.
+//The user would however, be refrained from editting the backup copy.
+//
+//Internal storages are held in 2 vectors:
+//	1) normalContent
+//	2) floatingContent
+//
+//
+//
+//
+//
+//==================================================================================================
 #pragma once
 
 #ifndef EVENTSTORAGE_H
@@ -22,7 +51,6 @@ const string BLANK = "Blank Space";
 
 class EventStorage{
 public:
-	
 	//Returns a new storage instance if one does not exist. 
 	//else, it simply returns a reference to created storage. 
 	static EventStorage& storage(){

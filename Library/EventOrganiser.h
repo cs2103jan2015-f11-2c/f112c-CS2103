@@ -1,3 +1,19 @@
+//==================================================================================================
+//EventOrganiser handles organisation and formatting of data from EventStorage. 
+//
+//There are 4 main types of functions in this class:
+//	Firstly, it filters events from the internal storage vectors into 4 categories 
+//	i.e Current Normal, Current Floating, Completed Normal, Completed Floating.
+//
+//	Secondly, it sorts the events according to date and time and separates them with a marker.
+//
+//	Thirdly, it shows(sorted and marked) the events or dates of concern. 
+//
+//	Lastly, it merges the completed and uncompleted events and saves them in the internal and external 
+//	storages through EventStorage.
+//
+//==================================================================================================
+
 #pragma once
 
 #ifndef EVENTORGANISER_H

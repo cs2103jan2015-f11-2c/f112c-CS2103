@@ -45,6 +45,7 @@ vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
 	
 	Event eventWithStartEndTime = dateRange(eventsToShow);
 	eventsToShow = showDateRange(eventWithStartEndTime,eventsToShow);
+
 	return eventsToShow;
 }
 
@@ -54,6 +55,7 @@ vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEnd
 
 	vector<Event> tempContent = allNormalCurrent();
 	tempContent = showDateRange(eventWithStartEndTimes, tempContent);
+
 	return tempContent;
 }
 
@@ -68,6 +70,7 @@ vector<Event> EventOrganiser::allNormalCurrent(){
 			results.push_back(tempContent[i]);
 		}
 	}
+
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_CURRENT, results.size());
 	return results;
 }
@@ -96,6 +99,7 @@ vector<Event> EventOrganiser::allNormalCompleted(){
 			results.push_back(tempContent[i]);
 		}
 	}
+
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, results.size());
 	return results;
 }
@@ -204,7 +208,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	return returnVector;
 }
 
-//returns a vector of days for wanted date range.
+//returns a vector of days for the wanted range of dates.
 vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	
 	struct tm tempStartDate = showEventDates.getStartDate();
@@ -258,7 +262,7 @@ vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	return datesToShow;
 }
 
-//brings marker up to before events
+//shift marker up to before events
 vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 	vector<Event> returnVector;
 	vector<Event> tempVector;
@@ -277,7 +281,7 @@ vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 	return returnVector;	
 }
 
-//Finds the earliest and latest day among all events in normalContent
+//Finds the earliest and latest day among all events in a vector of Events
 Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 	logger.log(EventLog::ORGANISER + EventLog::DATE_RANGE);
 	struct tm earliestDate, latestDate;
@@ -298,7 +302,8 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 }
 
 //Sorting methods
-vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
+//sort events by start date, earliest to latest
+vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){ 
 	Event temp;
 	
 	if(eventsToSort.size()<=1){
@@ -318,7 +323,8 @@ vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
 	return eventsToSort;
 }
 
-vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){ //sort events be endDate, earliest to latest
+ //sort events by end date, earliest to latest
+vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){
 	Event temp;
 	
 	if(eventsToSort.size()<=1){
@@ -338,6 +344,7 @@ vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSor
 	return eventsToSort;
 }
 
+//time difference in seconds
 int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 	time_t start = mktime(&startDay);
 	time_t end = mktime(&endDay);
@@ -346,6 +353,7 @@ int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 	return difference;
 }
 
+//sorts floating with ID in ascending order 
 vector<Event> EventOrganiser::sortFloatingByID(vector<Event> floating){
 	Event temp;
 
