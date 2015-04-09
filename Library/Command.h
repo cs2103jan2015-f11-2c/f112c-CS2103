@@ -186,19 +186,6 @@ public:
 
 
 
-class ShowDueCommand : public Command {
-private:
-
-public:
-	ShowDueCommand(EventFacade* eventStorage);
-	void execute();
-	Event getEvent();
-	void undo();
-};
-
-
-
-
 class ShowFloatCommand : public Command {
 private:
 

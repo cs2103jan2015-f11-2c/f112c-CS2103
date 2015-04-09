@@ -105,7 +105,7 @@ void Command::chooseExactMatches(Event& userEvent) {
 	
 	//setting userEvent to have invalid id indicates this command cannot be added to the undoStack
 	userEvent = createInvalidEvent();
-	
+	assert(userEvent.getID() == INVALID_NUMBER);
 	isExecuted = false;
 }
 
@@ -164,8 +164,8 @@ CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e
 }
 
 void CompleteCommand::execute() {
-	//if id found in current display, delete immediately
-	if (id > 0) {
+	//if id found in current display, complete immediately
+	if (id > SIZE_ZERO) {
 		completeImmediately();
 		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
 		return;
@@ -175,7 +175,9 @@ void CompleteCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case SIZE_ZERO: { //no exact match
+
+	//no exact match
+	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::COMPLETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		userEvent = createInvalidEvent();
@@ -185,14 +187,16 @@ void CompleteCommand::execute() {
 		return;
 					}
 
-	case SIZE_ONE: { //1 exact match
+	//1 exact match
+	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::COMPLETE);
 		completeExact(tempEvents);
 		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
 		return;
 				   }
 
-	default: { //more than 1 exact match
+	//more than 1 exact match
+	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::COMPLETE);
 		chooseExactMatches(userEvent);
 		return;
@@ -220,6 +224,7 @@ void CompleteCommand::completeImmediately() {
 	} else {
 		eventsToShow = eventFacade->completeEvent(userEvent);
 	}
+
 	isExecuted = true;
 }
 
@@ -233,6 +238,7 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 		userEvent = tempEvents[1];
 		eventsToShow = eventFacade->completeEvent(tempEvents[1]);
 	}
+
 	isExecuted = true;
 }
 
@@ -261,7 +267,9 @@ void DeleteCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case SIZE_ZERO: { //no exact match
+
+	//no exact match
+	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
 		userEvent = createInvalidEvent();
@@ -271,14 +279,16 @@ void DeleteCommand::execute() {
 		return;
 					}
 
-	case SIZE_ONE: { //1 exact match
+	//1 exact match
+	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
 		deleteExact(tempEvents);
 		logger.log(LogicLog::EXECUTED + LogicLog::DELETE);
 		return;
 				   }
 
-	default: { //more than 1 exact match
+	//more than 1 exact match
+	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
 		chooseExactMatches(userEvent);
 		return;
@@ -307,20 +317,22 @@ void DeleteCommand::deleteImmediately() {
 		eventFacade->deleteEvent(userEvent);
 		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
+
 	isExecuted = true;
 }
 
 void DeleteCommand::deleteExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
-		userEvent = tempEvents[0];
-		eventsToShow = eventFacade->deleteEvent(tempEvents[0]);
+		userEvent = tempEvents[SIZE_ZERO];
+		eventsToShow = eventFacade->deleteEvent(tempEvents[SIZE_ZERO]);
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
-		userEvent = tempEvents[1];
-		eventFacade->deleteEvent(tempEvents[1]);
+		userEvent = tempEvents[SIZE_ONE];
+		eventFacade->deleteEvent(tempEvents[SIZE_ONE]);
 		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
+
 	isExecuted = true;
 }
 
@@ -341,10 +353,13 @@ EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, E
 }
 
 void EditCommand::execute() {
-	if (id > 0) {
+	//if id found in current display, edit immediately
+	if (id > SIZE_ZERO) {
 		if (isEdited == false) {
+			//for first time edit
 			editImmediately();
 		} else {
+			//for redoing edit command that has previously been executed and undone
 			redoEdit();
 		}
 		return;
@@ -354,7 +369,9 @@ void EditCommand::execute() {
 	int numResults = getNumEvents(tempEvents);
 
 	switch (numResults) {
-	case SIZE_ZERO: { //no exact match
+
+	//no exact match
+	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::EDIT);
 		tempEvents = eventFacade->findNameOccurrence(eventToEdit.getName());
 		eventToEdit = createInvalidEvent();
@@ -363,15 +380,17 @@ void EditCommand::execute() {
 		checkPartialMatches(numResults, tempEvents);
 		return;
 					}
-
-	case SIZE_ONE: { //1 exact match
+	
+	//1 exact match
+	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::EDIT);
 		editExact(tempEvents);
 		logger.log(LogicLog::EXECUTED + LogicLog::EDIT);
 		return;
 				   }
 
-	default:{ //more than 1 exact match
+	//more than 1 exact match
+	default:{ 
 		logger.log(LogicLog::DEFAULT + LogicLog::EDIT);
 		chooseExactMatches(eventToEdit);
 		return;
@@ -546,25 +565,6 @@ Event ShowCompletedCommand::getEvent() {
 }
 
 void ShowCompletedCommand::undo() {
-}
-
-
-
-
-//Show Due Command
-ShowDueCommand::ShowDueCommand(EventFacade* eventStorage) {
-	eventFacade = eventStorage;
-	isUndoable = false;
-}
-
-void ShowDueCommand::execute() {
-}
-
-Event ShowDueCommand::getEvent() {
-	return createInvalidEvent();
-}
-
-void ShowDueCommand::undo() {
 }
 
 
