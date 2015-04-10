@@ -146,8 +146,10 @@ Event AddCommand::getEvent() {
 }
 
 void AddCommand::undo() {
-	eventFacade->deleteEvent(userEvent);
-	eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	eventsToShow = eventFacade->deleteEvent(userEvent);
+	if (!userEvent.getIsFloating()) {
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
 }
 
 
