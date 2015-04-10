@@ -66,7 +66,6 @@ public:
 	std::string getOriginal();
 	Event getEvent();
 	std::string getNameOfEvent();
-	int errorCounter;
 
 	//main methods
 	void processInput();

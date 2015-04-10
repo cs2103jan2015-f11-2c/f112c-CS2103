@@ -31,7 +31,6 @@ public:
 
 	std::string extractFirstWord(std::string);
 	std::string extractDetails(std::string);
-	//std::string extractDelDoneEventName(std::string);
 	std::string extractEditEventName(std::string);
 	std::string removeEditEventName(std::string, std::string);
 	std::vector<std::string> fragmentAddString(std::string);

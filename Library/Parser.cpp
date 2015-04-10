@@ -63,12 +63,10 @@ void Parser::processInput() {
 		tokenizeOriginalString();
 		determineCommandType();
 		logger.logParserSuccess(original);
-		errorCounter = 0;
 	} catch (ParserExceptions& e) {
 		tempEventStore.setFeedback(createFeedback(e.getExceptionCode()));
 		typeOfCommand = Parser::ERROR_;
 		logger.logParserFailure(original);
-		errorCounter++;
 	}
 }
 
