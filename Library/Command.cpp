@@ -60,11 +60,11 @@ Event Command::getEventFromID(vector<Event> eventVec, int id) {
 //if userEvent dates fall within the dates currently being shown, maintain the current date range being shown, otherwise use the date range of userEvent
 vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
 	assert(currentShowingTM.size() == SIZE_TWO);
-
+	
 	vector<tm> userTM, tmRangeToShow;
 	userTM.push_back(userEvent.getStartDate());
 	userTM.push_back(userEvent.getEndDate());
-
+	
 	if (userTM[SIZE_ZERO].tm_year >= currentShowingTM[SIZE_ZERO].tm_year &&
 		userTM[SIZE_ZERO].tm_mon >= currentShowingTM[SIZE_ZERO].tm_mon &&
 		userTM[SIZE_ZERO].tm_mday >= currentShowingTM[SIZE_ZERO].tm_mday &&
@@ -254,9 +254,7 @@ UncompleteCommand::UncompleteCommand(EventFacade* eventStorage, vector<Event> ev
 }
 
 void UncompleteCommand::execute() {
-	removeRepeated();
-
-	int numResults = eventsToShow.size();
+	int numResults = getNumEvents(eventsToShow);
 
 	switch (numResults) {
 
@@ -271,8 +269,13 @@ void UncompleteCommand::execute() {
 	//1 exact match
 	case SIZE_ONE: {
 		logger.log(LogicLog::CASE_1 + LogicLog::UNCOMPLETE);
+		
 		userEvent = eventsToShow[SIZE_ZERO];
+		if (userEvent.getID() <= INVALID_NUMBER) {
+			userEvent = eventsToShow[SIZE_ONE];
+		}
 		uncompleteImmediately();
+
 		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
 		return;
 				   }
@@ -304,31 +307,6 @@ void UncompleteCommand::uncompleteImmediately() {
 	}
 
 	isExecuted = true;
-}
-
-void UncompleteCommand::removeRepeated() {
-	if (eventsToShow.empty()) {
-		return;
-	}
-	
-	vector<int> idVec;
-	vector<Event> afterRemovingRepeated;
-	for (unsigned int i = 0; i < eventsToShow.size(); i++) {
-		if ( find(idVec.begin(), idVec.end(), eventsToShow[i].getID()) == idVec.end() ) {
-			if (eventsToShow[i].getIsFloating()) {
-				afterRemovingRepeated.push_back(eventsToShow[i]);
-			} else {
-				idVec.push_back(eventsToShow[i].getID());
-			}
-		}
-	}
-	
-	for (unsigned int i = 0; i < idVec.size(); i++) {
-		Event repeatedEvent = eventFacade->findEventWithID(idVec[i]);
-		afterRemovingRepeated.push_back(repeatedEvent);
-	}
-	
-	//eventsToShow = afterRemovingRepeated;
 }
 
 

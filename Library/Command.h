@@ -93,7 +93,6 @@ public:
 	void undo();
 
 	void uncompleteImmediately();
-	void removeRepeated();
 };
 
 

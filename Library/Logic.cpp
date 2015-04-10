@@ -531,7 +531,7 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 	if (original.empty()) {
 		return;
 	}
-
+	
 	unsigned int i = Command::SIZE_ZERO;
 	//push all floating events from original into floating vector
 	while (original[i].getIsFloating()) {

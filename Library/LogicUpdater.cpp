@@ -221,18 +221,24 @@ vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {
 		return resultEvents;
 	}
 
-	for (int i = 0; i < getTotalFloatingEvents(); i++) {
+	for (unsigned int i = 0; i < getTotalFloatingEvents(); i++) {
 		if (_floatingEvents[i].getName() == name) {
 			resultEvents.push_back(_floatingEvents[i]);
 		}
 	}
 
-	for (int i = 0; i < getTotalNormalEvents(); i++) {
-		if (_normalEvents[i].getName() == name) {
+	for (unsigned int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getName() == name | _normalEvents[i].getName() == NEW_DAY_MESSAGE) {
 			resultEvents.push_back(_normalEvents[i]);
 		}
 	}
 
+	for (unsigned int i = 0; i < resultEvents.size() - 1; i++) {
+		if (resultEvents[i].getName() == NEW_DAY_MESSAGE && resultEvents[i + 1].getName() == NEW_DAY_MESSAGE) {
+			resultEvents.erase(resultEvents.begin() + i);
+		}
+	}
+	
 	return resultEvents;
 }
 
