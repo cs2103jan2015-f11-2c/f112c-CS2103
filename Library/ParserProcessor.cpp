@@ -77,6 +77,7 @@ ParserProcessor::ParserProcessor() {
 	nameFound = false;
 	firstTriggerKeyword = false;
 	nameIndex = INVALID_NUMBER;
+	semiColonIndex = INVALID_NUMBER;
 	toFound = false;
 	deadlineFound = false;
 	importanceFound = false;
@@ -106,7 +107,6 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 
 	fragmentedWords = fragmentedWords_;
 	int shiftedIndex = 0;
-	int semiColonIndex = INVALID_NUMBER;
 
 	for(unsigned int j = 0; j < fragmentedWords.size(); j++){
 		if(fragmentedWords[j].find(";") != std::string::npos){
@@ -117,7 +117,7 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 	try {
 		//Check within the vector of strings for keywords to identify day/date, time, deadline, importance
 		unsigned int i = 0;
-		for (i = semiColonIndex; i < fragmentedWords.size(); i++) {
+		for (i = semiColonIndex+1; i < fragmentedWords.size(); i++) {
 			shiftedIndex = identifyDeadline(i);
 			identifyEventName(shiftedIndex);
 			shiftedIndex = identifyImportance(i);
@@ -284,7 +284,11 @@ std::string ParserProcessor::setEventName(int index) {
 	std::string tempName = "";
 	for(int i = 0; i <= index; i++){
 		if(i == index){
-			tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+			if(i == semiColonIndex){
+				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ;")+1);
+			} else {
+				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+			}
 		} else {
 			tempName = tempName + fragmentedWords[i];
 		}
