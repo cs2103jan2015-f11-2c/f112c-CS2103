@@ -77,6 +77,7 @@ ParserProcessor::ParserProcessor() {
 	nameFound = false;
 	firstTriggerKeyword = false;
 	nameIndex = INVALID_NUMBER;
+	semiColonIndex = INVALID_NUMBER;
 	toFound = false;
 	deadlineFound = false;
 	importanceFound = false;
@@ -106,11 +107,17 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 
 	fragmentedWords = fragmentedWords_;
 	int shiftedIndex = 0;
-	
+
+	for(unsigned int j = 0; j < fragmentedWords.size(); j++){
+		if(fragmentedWords[j].find(";") != std::string::npos){
+			semiColonIndex = j;
+		}
+	}
+
 	try {
 		//Check within the vector of strings for keywords to identify day/date, time, deadline, importance
 		unsigned int i = 0;
-		for (i = 0; i < fragmentedWords.size(); i++) {
+		for (i = semiColonIndex+1; i < fragmentedWords.size(); i++) {
 			shiftedIndex = identifyDeadline(i);
 			identifyEventName(shiftedIndex);
 			shiftedIndex = identifyImportance(i);
@@ -277,7 +284,11 @@ std::string ParserProcessor::setEventName(int index) {
 	std::string tempName = "";
 	for(int i = 0; i <= index; i++){
 		if(i == index){
-			tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+			if(i == semiColonIndex){
+				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ;")+1);
+			} else {
+				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+			}
 		} else {
 			tempName = tempName + fragmentedWords[i];
 		}
@@ -588,8 +599,12 @@ int ParserProcessor::extractFirstTimeInteger(int tempIndex, int* indexShift) {
 
 	tempIndex--;
 	if (tempIndex >= 0) {
+		std::string tempTimeString = fragmentedWords[tempIndex];
+		if(tempTimeString.find(".") != std::string::npos){
+			tempTimeString = tempTimeString.substr(0,tempTimeString.find(".")) + tempTimeString.substr(tempTimeString.find(".")+1);
+		}
 		try {
-			auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+			auto tempStoi = std::stoi(tempTimeString);
 			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			firstTimeInteger = tempStoi;
 		} catch (...) {
@@ -669,8 +684,12 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 		if (fragmentedWords[tempIndex] == "to") {
 			tempIndex--;
 			if (tempIndex >= 0) {
+				std::string tempTimeString = fragmentedWords[tempIndex];
+				if(tempTimeString.find(".") != std::string::npos){
+					tempTimeString = tempTimeString.substr(0,tempTimeString.find(".")) + tempTimeString.substr(tempTimeString.find(".")+1);
+				}
 				try {
-					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+					auto tempStoi = std::stoi(tempTimeString);
 					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					tempInt = tempStoi;
 					toFound = true;

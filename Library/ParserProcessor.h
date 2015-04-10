@@ -55,6 +55,7 @@ private:
 	bool nameFound;
 	bool firstTriggerKeyword;
 	int nameIndex;
+	int semiColonIndex;
 	bool toFound;
 	bool deadlineFound;
 	bool importanceFound;
