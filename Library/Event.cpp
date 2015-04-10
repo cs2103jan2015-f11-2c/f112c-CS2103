@@ -134,7 +134,6 @@ void Event::setName(string nameToSet) {
 }
 
 void Event::setStartEndDate(vector<tm> tmVec) {
-	assert(tmVec.size() == 2);
 	startDateTime = tmVec[0];
 	endDateTime = tmVec[1];
 }

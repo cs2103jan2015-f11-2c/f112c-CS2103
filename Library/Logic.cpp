@@ -359,7 +359,8 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 		case Parser:: SHOWWEEK:
 		case Parser:: SHOWMONTH: {
 			normalEvents = commandPtr->getEventVector();
-			floatingEvents = updater.getFloatingEvents();
+			Command* tempCmd = queueCommand(Parser::SHOWFLOAT, userEvent, nameOfEvent);
+			floatingEvents = tempCmd->getEventVector();
 
 			vector<tm> tmVec;
 			tmVec.push_back(userEvent.getStartDate());
@@ -465,6 +466,14 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 			return;
 		}
 	}
+
+	//if no floating events found, queue show float command
+	if (floating.empty()) {
+		Event dummyEvent;
+		Command* tempCmd = queueCommand(Parser::SHOWFLOAT, dummyEvent, EMPTY_STRING);
+		floating = tempCmd->getEventVector();
+	}
+
 	//remaining events are normal, push them into normal vector
 	for (; i < original.size(); i++) {
 		normal.push_back(original[i]);
@@ -486,7 +495,6 @@ void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Co
 
 		tmVec = getTmVecFromEvents(normal);
 		Event dummyEvent;
-		dummyEvent.setStartEndDate(tmVec);
 		Command* tempCmd = queueCommand(Parser::SHOWFLOAT, dummyEvent, EMPTY_STRING);
 		floating = tempCmd->getEventVector();
 	}
