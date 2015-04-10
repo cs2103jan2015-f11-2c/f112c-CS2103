@@ -22,6 +22,8 @@ public:
 	Command* execute(Command* command);
 	Command* undo();
 	Command* redo();
+
+	void clearRedo();
 };
 
 #endif

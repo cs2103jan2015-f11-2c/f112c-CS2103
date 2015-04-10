@@ -80,7 +80,6 @@ bool Logic::executeUserInput(string input) {
 		}
 	}
 
-	checkToClearRedo(commandType);
 	deleteParserPtr();
 
 	return isDone;
@@ -236,6 +235,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 
 			int id = userEvent.getID();
 
+			clearRedo();
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						  }
@@ -246,6 +246,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName();
 			int id = userEvent.getID();
 
+			clearRedo();
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 							   }
@@ -310,6 +311,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 				}
 			}
 
+			clearRedo();
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }
@@ -368,6 +370,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 				}
 			}
 
+			clearRedo();
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
 			break;
 						   }
@@ -541,9 +544,6 @@ vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents) {
 	return tmVec;
 }
 
-void Logic::checkToClearRedo(Parser::CommandType cmd) {
-}
-
 void Logic::deleteParserPtr() {
 	delete parserPtr;
 	parserPtr = NULL;
@@ -671,6 +671,11 @@ void Logic::removeLabel(string& feedback) {
 void Logic::setNewID(Event& userEvent) {
 	userEvent.setID(lastID);
 	lastID++;
+}
+
+
+void Logic::clearRedo() {
+	executor.clearRedo();
 }
 
 //returns temporary event with name taken from user input, if id is found in updater it returns the exact event

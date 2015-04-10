@@ -74,3 +74,9 @@ Command* Executor::redo() {
 	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
 	return commandPtr;
 }
+
+void Executor::clearRedo() {
+	while (!redoStack.empty()) {
+		redoStack.pop();
+	}
+}

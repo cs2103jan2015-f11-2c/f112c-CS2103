@@ -53,7 +53,6 @@ public:
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);
 	vector<tm> getTmVecFromEvents(vector<Event> normalEvents);
-	void checkToClearRedo(Parser::CommandType cmd);
 	void deleteParserPtr();
 
 
@@ -65,6 +64,7 @@ public:
 	string showTypeToString(Parser::CommandType cmd, int importance);	
 	void removeLabel(string& feedback);
 	void setNewID(Event& userEvent);
+	void clearRedo();
 	Event createTempEvent(string name, int id);
 };
 
