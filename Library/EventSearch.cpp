@@ -99,7 +99,7 @@ Event EventSearch::searchEventWithID(int eventID){
 
 	vector<Event> normalEvents = organiser.allNormalCurrent();
 	Event noResults;
-	noResults.setID(-1);
+	noResults.setID(NOT_FOUND);
 
 	for(auto i=0;i<normalEvents.size();i++){
 		if(normalEvents[i].getID() == eventID){
@@ -110,6 +110,21 @@ Event EventSearch::searchEventWithID(int eventID){
 	return noResults;
 }
 
+Event EventSearch::searchCompletedEventWithID(int eventID){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_COMPLETED_EVENT_WITH_ID, eventID);
+
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+	Event noResults;
+	noResults.setID(NOT_FOUND);
+
+	for(auto i=0;i<normalCompleted.size();i++){
+		if(normalCompleted[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_COMPLETED_EVENT_WITH_ID + EventLog::EXIT, i);
+			return normalCompleted[i];
+		}
+	} 
+	return noResults;
+}
 
 //SUPPORT METHODS
 //Support method for API 1 --- finds string name match

@@ -72,6 +72,11 @@ Event EventFacade::findEventWithID(int eventID){
 	return searcher.searchEventWithID(eventID);
 }
 
+Event EventFacade::findCompletedEventWithID(int eventID){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_COMPLETED_EVENT_WITH_ID);
+	return searcher.searchCompletedEventWithID(eventID);
+}
+
 /*To EventOrganiser*/
 vector<Event> EventFacade::showDates(Event eventWithStartEndTimes){
 	logger.log(EventLog::FACADE + EventLog::SHOW_DATES);

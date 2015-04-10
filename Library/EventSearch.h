@@ -32,7 +32,8 @@ public:
 
 	//general search method
 	Event searchEventWithID(int eventID);
-	
+	Event searchCompletedEventWithID(int eventID);
+
 	//Support methods for del and edit
 	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
 

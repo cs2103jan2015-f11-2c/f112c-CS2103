@@ -38,6 +38,7 @@ public:
 	static const string SEARCH_ALL_IMPORTANCE;
 	static const string SEARCH_INDEX_WITH_ID;
 	static const string SEARCH_EVENT_WITH_ID;
+	static const string SEARCH_COMPLETED_EVENT_WITH_ID;
 
 	/*EventOrgansier*/
 	static const string ORGANISER;
