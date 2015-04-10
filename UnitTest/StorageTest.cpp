@@ -772,7 +772,7 @@ namespace UnitTest
 			testEvent2.setID(1426225502);
 			testEvent2.setIsCompleted(true);
 			
-			//setting currentContent stub
+			//setting floating Content stub
 			testContent.push_back(testEvent1);
 			testContent.push_back(testEvent2);
 			EventStorage::storage().setFloatingContent(testContent);
@@ -783,11 +783,12 @@ namespace UnitTest
 			testEvent3.setID(1426225532);
 			testEvent3.setIsCompleted(true);
 			
+			//setting vector to save
 			testContent.clear();
 			testContent.push_back(testEvent3);
-						
+
 			vector<Event> result, expected;
-			/*boundary case: There are existing uncompleted events*/
+			/*boundary case: There are existing uncompleted events when saving*/
 			organiser.saveFloatingCompleted(testContent);
 			
 			expected.push_back(testEvent1);
@@ -814,7 +815,6 @@ namespace UnitTest
 			result = EventStorage::storage().getFloatingContent();
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 		}
-
 
 	};
 }
