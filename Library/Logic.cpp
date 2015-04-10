@@ -467,13 +467,6 @@ void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vect
 		}
 	}
 
-	//if no floating events found, queue show float command
-	if (floating.empty()) {
-		Event dummyEvent;
-		Command* tempCmd = queueCommand(Parser::SHOWFLOAT, dummyEvent, EMPTY_STRING);
-		floating = tempCmd->getEventVector();
-	}
-
 	//remaining events are normal, push them into normal vector
 	for (; i < original.size(); i++) {
 		normal.push_back(original[i]);
