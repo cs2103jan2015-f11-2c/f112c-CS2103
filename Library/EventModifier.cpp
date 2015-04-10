@@ -234,7 +234,7 @@ vector<Event> EventModifier::editNormalToFloating(int index, Event afterEdit){
 }
 
 void EventModifier::correctDate(Event *tempEvent) {
-	logger.log(EventLog::MODIFIER);
+	logger.log(EventLog::MODIFIER + EventLog::CORRECT_DATE);
 
 	struct tm* time;
 	time = &tempEvent->getStartDate();
@@ -248,7 +248,6 @@ void EventModifier::correctDate(Event *tempEvent) {
 	tempEvent->setEndDate(time->tm_mday,time->tm_mon,time->tm_year);
 	tempEvent->setEndTime(time->tm_hour,time->tm_min);
 	tempEvent->setEndWeekday(time->tm_wday);
-
 }
 
 //==================================================================================================

@@ -2,6 +2,8 @@
 
 const string EventLog::LOG_FILE_NAME = "EventLog.txt";
 
+const string EventLog::FACADE = "EventFacade ";
+
 const string EventLog::MODIFIER = "EventModifier ";
 const string EventLog::ADD = "Add ";
 const string EventLog::DELETE = "Delete ";
@@ -10,8 +12,7 @@ const string EventLog::COMPLETE = "Complete ";
 const string EventLog::UNCOMPLETE = "Uncomplete ";
 const string EventLog::FLOAT_TO_NORMAL = "floatingToNormal ";
 const string EventLog::NORMAL_TO_FLOAT = "normalToFLoating ";
-
-const string EventLog::FACADE = "EventFacade ";
+const string EventLog::CORRECT_DATE = "correctDate ";
 
 const string EventLog::SEARCH = "EventSearch ";
 const string EventLog::SEARCH_NAME_OCCURRENCE = "searchNameOccurrence ";
@@ -21,7 +22,6 @@ const string EventLog::SEARCH_ALL_IMPORTANCE = "searchAllImportance ";
 const string EventLog::SEARCH_INDEX_WITH_ID = "searchIndexWithID ";
 const string EventLog::SEARCH_EVENT_WITH_ID = "searchEventWithID ";
 const string EventLog::SEARCH_COMPLETED_EVENT_WITH_ID = "searchCompletedEventWithID ";
-
 
 const string EventLog::ORGANISER = "EventOrgansier ";
 const string EventLog::SHOW_DATES = "showDates ";

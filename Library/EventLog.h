@@ -1,3 +1,7 @@
+//==================================================================================================
+//EventLog is responsible for writing logs onto a text file(EventLog.txt) for reference and debugging.
+//Combinations of log messages are used liberally throughout the storage component
+//==================================================================================================
 #pragma once
 
 #ifndef EVENTLOG_H
@@ -16,6 +20,9 @@ using std::endl;
 class EventLog {
 public:
 	EventLog();
+
+	/*EventFacade*/
+	static const string FACADE;
 	
 	/*EventModifier*/
 	static const string MODIFIER;
@@ -26,9 +33,7 @@ public:
 	static const string UNCOMPLETE;
 	static const string FLOAT_TO_NORMAL;
 	static const string NORMAL_TO_FLOAT;
-
-	/*EventFacade*/
-	static const string FACADE;
+	static const string CORRECT_DATE;
 
 	/*EventSearch*/
 	static const string SEARCH;
