@@ -106,11 +106,18 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 
 	fragmentedWords = fragmentedWords_;
 	int shiftedIndex = 0;
-	
+	int semiColonIndex = INVALID_NUMBER;
+
+	for(unsigned int j = 0; j < fragmentedWords.size(); j++){
+		if(fragmentedWords[j].find(";") != std::string::npos){
+			semiColonIndex = j;
+		}
+	}
+
 	try {
 		//Check within the vector of strings for keywords to identify day/date, time, deadline, importance
 		unsigned int i = 0;
-		for (i = 0; i < fragmentedWords.size(); i++) {
+		for (i = semiColonIndex; i < fragmentedWords.size(); i++) {
 			shiftedIndex = identifyDeadline(i);
 			identifyEventName(shiftedIndex);
 			shiftedIndex = identifyImportance(i);
