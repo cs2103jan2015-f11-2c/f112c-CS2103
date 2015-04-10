@@ -53,6 +53,7 @@ public:
 	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
 	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);
 	vector<tm> getTmVecFromEvents(vector<Event> normalEvents);
+	void checkToClearRedo(Parser::CommandType cmd);
 	void deleteParserPtr();
 
 

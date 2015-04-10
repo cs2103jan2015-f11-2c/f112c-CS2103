@@ -79,6 +79,8 @@ bool Logic::executeUserInput(string input) {
 			isDone = false;
 		}
 	}
+
+	checkToClearRedo(commandType);
 	deleteParserPtr();
 
 	return isDone;
@@ -537,6 +539,9 @@ vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents) {
 	}
 
 	return tmVec;
+}
+
+void Logic::checkToClearRedo(Parser::CommandType cmd) {
 }
 
 void Logic::deleteParserPtr() {
