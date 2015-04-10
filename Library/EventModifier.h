@@ -66,6 +66,7 @@ private:
 	vector<Event> editFloating(int index, Event afterEdit);
 	vector<Event> editFloatingToNormal(int index, Event afterEdit);
 	vector<Event> editNormalToFloating(int index, Event afterEdit);
+	void correctDate(Event *tempEvent);
 
 	/*Complete Method*/
 	vector<Event> completeNormal(int index, Event completedEvent);

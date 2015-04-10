@@ -152,6 +152,8 @@ vector<Event> EventModifier::editFloatingToNormal(int index, Event afterEdit){
 		(tempContents[index]).setEndTime(afterEdit.getEndDate().tm_hour,afterEdit.getEndDate().tm_min);
 	}
 
+	correctDate(&tempContents[index]);
+
 	del(beforeEdit);  //delete from floatingContent
 	tempContents = add(tempContents[index]);  //add to normalContent		
 	
@@ -198,7 +200,9 @@ vector<Event> EventModifier::editNormal(int index, Event afterEdit){
 	if(afterEdit.getImportanceLevel() != NOT_FOUND){ 
 		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
 	}
-	
+
+	correctDate(&tempContents[index]);
+
 	organiser.saveNormal(tempContents);
 	tempContents = organiser.showDatesFromNormalContent(tempContents[index]);
 	return tempContents;
@@ -227,6 +231,24 @@ vector<Event> EventModifier::editNormalToFloating(int index, Event afterEdit){
 	tempContents = add(tempContents[index]);  //add to floatingContent		
 
 	return tempContents;
+}
+
+void EventModifier::correctDate(Event *tempEvent) {
+	logger.log(EventLog::MODIFIER);
+
+	struct tm* time;
+	time = &tempEvent->getStartDate();
+	mktime(time);
+	tempEvent->setStartDate(time->tm_mday,time->tm_mon,time->tm_year);
+	tempEvent->setStartTime(time->tm_hour,time->tm_min);
+	tempEvent->setStartWeekday(time->tm_wday);
+
+	time = &tempEvent->getEndDate();
+	mktime(time);
+	tempEvent->setEndDate(time->tm_mday,time->tm_mon,time->tm_year);
+	tempEvent->setEndTime(time->tm_hour,time->tm_min);
+	tempEvent->setEndWeekday(time->tm_wday);
+
 }
 
 //==================================================================================================
