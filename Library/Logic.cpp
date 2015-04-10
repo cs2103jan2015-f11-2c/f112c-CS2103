@@ -96,7 +96,8 @@ bool Logic::isDataRead() {
 //creates pointer to command object, call executor to execute it
 Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
-
+	
+	Command* resultCommand;
 	try {
 		switch (command) {
 		case Parser::ADD:
@@ -112,6 +113,10 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 			int id = convertNameToID(nameOfEvent);
 			Event eventToComplete = createTempEvent(nameOfEvent, id);
 
+			if (eventToComplete.getIsCompleted()) {
+				return new NullCommand;
+			}
+
 			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::COMPLETE);
 			return executor.execute(completeCommand);
@@ -121,6 +126,10 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 		case Parser::DELETE_: {
 			int id = convertNameToID(nameOfEvent);
 			Event eventToDelete = createTempEvent(nameOfEvent, id);
+			
+			if (eventToDelete.getIsCompleted()) {
+				return new NullCommand;
+			}
 
 			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::DELETE);
@@ -130,6 +139,10 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 		case Parser::EDIT: {
 			int id = convertNameToID(nameOfEvent);
 			Event eventToEdit = createTempEvent(nameOfEvent, id);
+
+			if (eventToEdit.getIsCompleted()) {
+				return new NullCommand;
+			}
 
 			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::EDIT);
@@ -271,6 +284,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 			}
 
 			//successful complete/delete
+			if (commandPtr->getIsUndoable() == false) { //user tried to change completed event
+				updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+				throw !isDone;
+			}
+
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
 
@@ -328,6 +346,11 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 			}
 
 			//successful edit 
+			if (commandPtr->getIsUndoable() == false) { //user tried to change completed event
+				updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+				throw !isDone;
+			}
+
 			vector<tm> tmVec;
 			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
 
