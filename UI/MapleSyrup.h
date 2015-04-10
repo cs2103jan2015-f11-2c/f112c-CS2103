@@ -1435,6 +1435,9 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 * ===================================================================================================================================================================
 */
 
+private: bool isSearchEnterPressed;
+
+
 private: void noSearchInput(){
 			 String^ NO_SEARCH_INPUT = "No Search Input\n";
 			 display->Text = NO_SEARCH_INPUT;
@@ -1458,6 +1461,8 @@ private: System::Void searchBox_TextChanged(System::Object^  sender, System::Eve
 		 }
 
 private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 isSearchEnterPressed = false;
+
 			 navigationPicSearchBar->Visible = true;
 			 navigationPicSearchBar->BringToFront();
 			 searchBox->Text = "";
@@ -1476,14 +1481,21 @@ private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs
 			 searchBox->Text = "";
 			 std::string currentShowCommand = showPtr->getCurrentCommand();
 
-			  //Reload floating display before search mode
-			 std::string loadCommandFloating = showPtr->getShowFloat();
-			 executeUserInput(loadCommandFloating);
 
-			 //Reload main display before search mode
-			 executeUserInput(currentShowCommand);
+			 if(!isSearchEnterPressed){
+				 //Reload floating display before search mode
+				 std::string loadCommandFloating = showPtr->getShowFloat();
+				 executeUserInput(loadCommandFloating);
 
-			
+				 //Reload main display before search mode
+				 executeUserInput(currentShowCommand);
+			 }
+		 }
+
+private: System::Void searchBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if(e->KeyCode == Keys::Enter) {
+				 isSearchEnterPressed = true;
+			 }
 		 }
 //===================================================================================================================================================================			 
 
@@ -1623,7 +1635,6 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->SendToBack();
 		 }
 
-private: System::Void searchBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-		 }
+
 };
 }
