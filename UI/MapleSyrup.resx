@@ -268,7 +268,7 @@
     <value>On</value>
   </data>
   <data name="display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>242, 97</value>
+    <value>242, 99</value>
   </data>
   <data name="display.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
     <value>Vertical</value>
@@ -304,7 +304,7 @@
     <value>Courier New, 12pt</value>
   </data>
   <data name="floatingTasksDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 98</value>
+    <value>7, 100</value>
   </data>
   <data name="floatingTasksDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>229, 440</value>
@@ -1781,7 +1781,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 66</value>
+    <value>53, 68</value>
   </data>
   <data name="pictureBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2367,7 +2367,7 @@
     <value>NoControl</value>
   </data>
   <data name="floatingIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>102, 66</value>
+    <value>102, 68</value>
   </data>
   <data name="floatingIcon.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -2953,7 +2953,7 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBox8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>152, 66</value>
+    <value>152, 68</value>
   </data>
   <data name="pictureBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>34, 28</value>
@@ -3484,6 +3484,15 @@
   <data name="showDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
   </data>
+  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 114</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
+    <value>showDropDown</value>
+  </data>
+  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="dayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>109, 22</value>
   </data>
@@ -3535,20 +3544,20 @@
   <data name="archiveToolStripMenuItem.Text" xml:space="preserve">
     <value>Done</value>
   </data>
-  <data name="showDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 114</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Name" xml:space="preserve">
-    <value>showDropDown</value>
-  </data>
-  <data name="&gt;&gt;showDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <metadata name="helpDropDown.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>238, 24</value>
   </metadata>
   <data name="helpDropDown.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI Semibold, 9.75pt, style=Bold</value>
+  </data>
+  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 70</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
+    <value>helpDropDown</value>
+  </data>
+  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="introductionToolStripMenuItem.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Transparent</value>
@@ -3576,15 +3585,6 @@
   </data>
   <data name="shortcutsToolStripMenuItem.Text" xml:space="preserve">
     <value>Shortcuts</value>
-  </data>
-  <data name="helpDropDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 70</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Name" xml:space="preserve">
-    <value>helpDropDown</value>
-  </data>
-  <data name="&gt;&gt;helpDropDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="navigationPic.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

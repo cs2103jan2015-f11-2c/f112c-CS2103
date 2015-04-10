@@ -241,6 +241,7 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->searchBox, resources->GetString(L"searchBox.ToolTip"));
 			this->searchBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::searchBox_TextChanged);
 			this->searchBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::searchBox_Enter);
+			this->searchBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::searchBox_KeyDown);
 			this->searchBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::searchBox_Leave);
 			// 
 			// display
@@ -1622,5 +1623,7 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->SendToBack();
 		 }
 
+private: System::Void searchBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		 }
 };
 }
