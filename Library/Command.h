@@ -87,13 +87,13 @@ private:
 	Event userEvent;
 
 public:
-	UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing);
+	UncompleteCommand(EventFacade* eventStorage, vector<Event> events, vector<tm> currentShowing);
 	void execute();
 	Event getEvent();
 	void undo();
 
 	void uncompleteImmediately();
-	void uncompleteExact(vector<Event> tempEvents);
+	void removeRepeated();
 };
 
 

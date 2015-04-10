@@ -66,6 +66,7 @@ public:
 	void setNewID(Event& userEvent);
 	void clearRedo();
 	Event createTempEvent(string name, int id);
+	vector<Event> getExactMatches(string name);
 };
 
 #endif

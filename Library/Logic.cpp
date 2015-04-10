@@ -124,10 +124,9 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 							   }
 
 		case Parser::UNCOMPLETE: {
-			int id = convertNameToID(nameOfEvent);
-			Event eventToUncomplete = createTempEvent(nameOfEvent, id);
+			vector<Event> resultEvents = getExactMatches(nameOfEvent);
 
-			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, id, eventToUncomplete, updater.getTempMainDisplayLabel());
+			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, resultEvents, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::UNCOMPLETE);
 			return executor.execute(uncompleteCommand);
 								 }
@@ -260,7 +259,6 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 							   }
 
 		case Parser::COMPLETE:
-		case Parser::UNCOMPLETE:
 		case Parser::DELETE_: {
 			vector<Event> tempEvents = commandPtr->getEventVector();
 
@@ -326,6 +324,44 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }
+
+		case Parser::UNCOMPLETE: {
+			vector<Event> tempEvents = commandPtr->getEventVector();
+
+			//more than 1 exact match
+			if (!commandPtr->getIsExecuted()) { 
+				setEventVectors(normalEvents, floatingEvents, tempEvents);
+				vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+				updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+				return;
+			}
+
+			Event uncompletedEvent = commandPtr->getEvent();
+			int id = uncompletedEvent.getID();
+			
+			//no event found 
+			if (id == Command::INVALID_NUMBER) {
+				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+				updater.setFeedbackStrings(feedback);
+				throw !isDone;
+			}
+
+			//successful uncomplete
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+
+			string feedback = LogicUpdater::UNCOMPLETED_MESSAGE + uncompletedEvent.getName();
+			if (!uncompletedEvent.getIsFloating()) {
+				if (isSameDate(uncompletedEvent.getStartDate(), uncompletedEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(uncompletedEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(uncompletedEvent.getStartDate(), uncompletedEvent.getEndDate());
+				}
+			}
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
+			break;
+								 }
 
 		case Parser::EDIT: {
 			vector<Event> tempEvents = commandPtr->getEventVector();
@@ -651,7 +687,7 @@ int Logic::convertNameToID(string name) {
 	if (isNumber(name)) {
 		int index = std::stoi(name);
 
-		if (index == Command::SIZE_ZERO) {
+		if (index <= Command::SIZE_ZERO) {
 			return Command::INVALID_NUMBER;
 		}
 
@@ -698,4 +734,17 @@ Event Logic::createTempEvent(string name, int id) {
 		tempEvent = updater.getEventFromID(id);
 	}
 	return tempEvent;
+}
+
+vector<Event> Logic::getExactMatches(string name) {
+	int index = Command::INVALID_NUMBER;
+	if (isNumber(name)) {
+		index = std::stoi(name);
+
+		if (index <= Command::SIZE_ZERO | index > updater.getTotalNumEvents()) {
+			index = Command::INVALID_NUMBER;
+		}
+	}
+
+	return updater.getExactNameMatches(index, name);
 }

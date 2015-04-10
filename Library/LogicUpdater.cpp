@@ -16,6 +16,7 @@ const string LogicUpdater::ADDED_MESSAGE = "added: ";
 const string LogicUpdater::EDITED_MESSAGE = "edited: ";
 const string LogicUpdater::DELETED_MESSAGE = "deleted: ";
 const string LogicUpdater::COMPLETED_MESSAGE = "completed: ";
+const string LogicUpdater::UNCOMPLETED_MESSAGE = "uncompleted: ";
 const string LogicUpdater::SHOW_MESSAGE = "showing: ";
 const string LogicUpdater::SHOWALL_MESSAGE = "showing: all items";
 const string LogicUpdater::SHOWALLIMPORTANT_MESSAGE = "showing: all important items";
@@ -196,6 +197,43 @@ Event LogicUpdater::getEventFromID(int id) {
 			return _normalEvents[i];
 		}
 	}
+}
+
+vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {
+	vector<Event> resultEvents;
+	if (index != INVALID_NUMBER) {
+		if (index <= getTotalFloatingEvents()) {
+			resultEvents.push_back(_floatingEvents[index-1]); 
+		} else {
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+
+			while (count != normalIndex) {
+				if (_normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			resultEvents.push_back(_normalEvents[count]);
+		}
+		return resultEvents;
+	}
+
+	for (int i = 0; i < getTotalFloatingEvents(); i++) {
+		if (_floatingEvents[i].getName() == name) {
+			resultEvents.push_back(_floatingEvents[i]);
+		}
+	}
+
+	for (int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getName() == name) {
+			resultEvents.push_back(_normalEvents[i]);
+		}
+	}
+
+	return resultEvents;
 }
 
 vector<LogicUpdater::EVENT_STRING> LogicUpdater::getMainDisplayStrings() {

@@ -55,6 +55,7 @@ public:
 	static const string EDITED_MESSAGE;
 	static const string DELETED_MESSAGE;
 	static const string COMPLETED_MESSAGE;
+	static const string UNCOMPLETED_MESSAGE;
 	static const string SHOW_MESSAGE;
 	static const string SHOWALL_MESSAGE;
 	static const string SHOWALLIMPORTANT_MESSAGE;
@@ -146,6 +147,7 @@ public:
 	int getNewID();
 	bool getIsFloatingFromID(int id);
 	Event getEventFromID(int id);
+	vector<Event> getExactNameMatches(int index, string name);
 
 	//YK
 	//Getters for extracting information to display
