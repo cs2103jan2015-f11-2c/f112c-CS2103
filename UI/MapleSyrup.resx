@@ -334,7 +334,7 @@
     <value>Segoe UI, 14.25pt, style=Bold</value>
   </data>
   <data name="mainDisplayLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>242, 59</value>
+    <value>242, 68</value>
   </data>
   <data name="mainDisplayLabel.MaxLength" type="System.Int32, mscorlib">
     <value>100</value>
