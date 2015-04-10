@@ -9,6 +9,11 @@ UICommandSuggestion::UICommandSuggestion(void)
 	setUpsuggestionSearch();
 	setUpsuggestionShow();
 
+	setKeywordCommands();
+	setKeywordDay();
+	setKeywordMonths();
+	setKeywordTime();
+
 	initializeUserActionsIndex();
 }
 
@@ -32,56 +37,86 @@ const std::string UICommandSuggestion::COMMAND_EDI = "edi";
 const std::string UICommandSuggestion::COMMAND_SEARC = "searc";
 const std::string UICommandSuggestion::COMMAND_SHO = "sho";
 
-const std::string UICommandSuggestion::SUGGESTION_ADD_1 = " add Exercise daily; (Ongoing event)";
-const std::string UICommandSuggestion::SUGGESTION_ADD_2 = " add Overseas trip; 17apr 9.30pm - 19apr 11.45pm (Normal event)";
-const std::string UICommandSuggestion::SUGGESTION_ADD_3 = " add Project final report; due 3may 9am (Event with deadline)";
-const std::string UICommandSuggestion::SUGGESTION_ADD_4 = " add Final exam; !!! 5may 10-11.15am (Event with importance)";
+const std::string UICommandSuggestion::BLANK_SPACE = " ";
+const std::string UICommandSuggestion::LEAVE_A_LINE = "\n";
+const std::string UICommandSuggestion::DASH = "-";
+const std::string UICommandSuggestion::SEMI_COLON = ";";
+const std::string UICommandSuggestion::WORD_DUE = "due";
 
-const std::string UICommandSuggestion::SUGGESTION_DELETE_1 = " del 2";
-const std::string UICommandSuggestion::SUGGESTION_DELETE_2 =  " del Study;";
+const std::string UICommandSuggestion::SYMBOL_EVENT = "[Event]";
+const std::string UICommandSuggestion::SYMBOL_INDEX_OF_EVENT = "[Index of Event]";
+const std::string UICommandSuggestion::SYMBOL_DATE = "[Date]";
+const std::string UICommandSuggestion::SYMBOL_NEW_DATE = "[New date]";
+const std::string UICommandSuggestion::SYMBOL_START_DATE = "[Start date]";
+const std::string UICommandSuggestion::SYMBOL_END_DATE = "[End date]";
+const std::string UICommandSuggestion::SYMBOL_START_TIME = "[Start time]";
+const std::string UICommandSuggestion::SYMBOL_END_TIME = "[End time]";
+const std::string UICommandSuggestion::SYMBOL_NEW_EVENT = "[New Event]";
+const std::string UICommandSuggestion::SYMBOL_NEW_START_TIME = "[New start time]";
+const std::string UICommandSuggestion::SYMBOL_NEW_END_TIME = "[New end time]";
 
-const std::string UICommandSuggestion::SUGGESTION_EDIT_1 = " edit Lecture quiz; Final exam; (change name only) ";
-const std::string UICommandSuggestion::SUGGESTION_EDIT_2 =  " edit Lecture quiz; 9am-10am (change time only)" ;
-const std::string UICommandSuggestion::SUGGESTION_EDIT_3 =  " edit Lecture quiz; 22may (change date only)" ;
-const std::string UICommandSuggestion::SUGGESTION_EDIT_4 =  " edit Lecture quiz; Final exam; 22may 9am-10am (multiple changes)" ;
-
-
-const std::string UICommandSuggestion::SUGGESTION_SEARCH_1 = " search CS2103 exam";
-const std::string UICommandSuggestion::SUGGESTION_SEARCH_2 = " search 10feb";
-
-const std::string UICommandSuggestion::SUGGESTION_SHOW_1 = " show apr-may";
-const std::string UICommandSuggestion::SUGGESTION_SHOW_2 = " show 10apr-3may";
-const std::string UICommandSuggestion::SUGGESTION_SHOW_3 = " show tues-fri";
 
 
 void UICommandSuggestion::setUpsuggestionAdd(){
-	_suggestionAdd.push_back(SUGGESTION_ADD_1);
-	_suggestionAdd.push_back(SUGGESTION_ADD_2);
-	_suggestionAdd.push_back(SUGGESTION_ADD_3);
-	_suggestionAdd.push_back(SUGGESTION_ADD_4);
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE + SYMBOL_START_TIME + BLANK_SPACE);
+	_suggestionAdd.push_back(DASH);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_END_TIME + LEAVE_A_LINE);
+
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionAdd.push_back(WORD_DUE);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_DATE + BLANK_SPACE + SYMBOL_END_TIME);
+
+
 }
 
 void UICommandSuggestion::setUpsuggestionDelete(){
-	_suggestionDelete.push_back(SUGGESTION_DELETE_1);
-	_suggestionDelete.push_back(SUGGESTION_DELETE_2);
+	_suggestionDelete.push_back(COMMAND_DELETE);
+	_suggestionDelete.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+	_suggestionDelete.push_back(COMMAND_DELETE);
+	_suggestionDelete.push_back(BLANK_SPACE + SYMBOL_INDEX_OF_EVENT);
 
 }
 void UICommandSuggestion::setUpsuggestionEdit(){
-	_suggestionEdit.push_back(SUGGESTION_EDIT_1);
-	_suggestionEdit.push_back(SUGGESTION_EDIT_2);
-	_suggestionEdit.push_back(SUGGESTION_EDIT_3);
-	_suggestionEdit.push_back(SUGGESTION_EDIT_4);
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_EVENT +LEAVE_A_LINE);
+
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_START_TIME + BLANK_SPACE);
+	_suggestionEdit.push_back(DASH);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_END_TIME + LEAVE_A_LINE);
+
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_INDEX_OF_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_DATE);
 }
 
 void UICommandSuggestion::setUpsuggestionSearch(){
-	_suggestionSearch.push_back(SUGGESTION_SEARCH_1);
-	_suggestionSearch.push_back(SUGGESTION_SEARCH_2);
+	_suggestionSearch.push_back(COMMAND_SEARCH);
+	_suggestionSearch.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+	_suggestionSearch.push_back(COMMAND_SEARCH);
+	_suggestionSearch.push_back(BLANK_SPACE + SYMBOL_DATE);
 }
 
 void UICommandSuggestion::setUpsuggestionShow(){
-	_suggestionShow.push_back(SUGGESTION_SHOW_1);
-	_suggestionShow.push_back(SUGGESTION_SHOW_2);
-	_suggestionShow.push_back(SUGGESTION_SHOW_3);
+	_suggestionShow.push_back(COMMAND_SHOW);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_DATE + LEAVE_A_LINE);
+
+	_suggestionShow.push_back(COMMAND_SHOW);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_START_DATE + BLANK_SPACE);
+	_suggestionShow.push_back(DASH);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_END_DATE);
 }
 
 
@@ -98,7 +133,7 @@ UICommandSuggestion::ComdType UICommandSuggestion::getComdType (std::string comd
 		typeOfComd = SEARCH_;
 	} else if (comdInString == COMMAND_SHOW){
 		typeOfComd = SHOW_;
-	} else if (comdInString == COMMAND_AD || comdInString == COMMAND_DELET || comdInString == COMMAND_EDI || comdInString == COMMAND_SEARC || comdInString == COMMAND_SHO){
+	} else if (comdInString == COMMAND_AD || comdInString == COMMAND_DELET || comdInString == COMMAND_EDI || comdInString == COMMAND_SEARC || comdInString == COMMAND_SHO || comdInString.empty()){
 		typeOfComd = UNDISPLAY_;
 	} else {
 		typeOfComd = INVALID_;
@@ -184,5 +219,85 @@ std::string UICommandSuggestion::getSpecificUserAction(){
 }
 
 
+void UICommandSuggestion::setKeywordCommands(){
+	_keywordCommands.push_back ("add");
+	_keywordCommands.push_back ("del");
+	_keywordCommands.push_back ("delete");
+	_keywordCommands.push_back ("edit");
+	_keywordCommands.push_back ("show");
+	_keywordCommands.push_back ("search");
+	_keywordCommands.push_back ("undo");
+	_keywordCommands.push_back ("redo");
+	_keywordCommands.push_back ("done");
+	_keywordCommands.push_back ("completed");
+	_keywordCommands.push_back ("complete");
+	_keywordCommands.push_back ("uncomplete");
+	_keywordCommands.push_back ("undone");
+	_keywordCommands.push_back ("to");
+	_keywordCommands.push_back ("due");
+	_keywordCommands.push_back ("by");
+	_keywordCommands.push_back ("next");
+	_keywordCommands.push_back ("nxt");
+	_keywordCommands.push_back ("back");
+	_keywordCommands.push_back ("bk");
+}
+
+void UICommandSuggestion::setKeywordMonths(){	
+	_keywordMonths.push_back ("jan");
+	_keywordMonths.push_back ("january");
+	_keywordMonths.push_back ("feb");
+	_keywordMonths.push_back ("february");
+	_keywordMonths.push_back ("mar");
+	_keywordMonths.push_back ("march");
+	_keywordMonths.push_back ("apr");
+	_keywordMonths.push_back ("april");
+	_keywordMonths.push_back ("may");
+	_keywordMonths.push_back ("jun");
+	_keywordMonths.push_back ( "june");
+	_keywordMonths.push_back ( "jul");
+	_keywordMonths.push_back ("july");
+	_keywordMonths.push_back ("aug");
+	_keywordMonths.push_back ("august");
+	_keywordMonths.push_back ( "sep");
+	_keywordMonths.push_back ("september");
+	_keywordMonths.push_back ("oct");
+	_keywordMonths.push_back ("october");
+	_keywordMonths.push_back ("nov");
+	_keywordMonths.push_back ("november");
+	_keywordMonths.push_back ("dec");
+	_keywordMonths.push_back ("december");
+	_keywordMonths.push_back ("week");
+	_keywordMonths.push_back ("wk");
+	_keywordMonths.push_back ("month");
+	_keywordMonths.push_back ("mth");
+	_keywordMonths.push_back ("year");
+	_keywordMonths.push_back ("yr");
+}
+
+void UICommandSuggestion::setKeywordTime(){
+	_keywordTime.push_back ( "am");
+	_keywordTime.push_back ("pm");
+}
+
+void UICommandSuggestion::setKeywordDay(){
+	_keywordDay.push_back ("today");
+	_keywordDay.push_back ("tdy");
+	_keywordDay.push_back ("tomorrow");
+	_keywordDay.push_back ("tmr");
+	_keywordDay.push_back ("mon");
+	_keywordDay.push_back ( "monday");
+	_keywordDay.push_back ("tues");
+	_keywordDay.push_back ( "tuesday");
+	_keywordDay.push_back ("wed");
+	_keywordDay.push_back ("wednesday");
+	_keywordDay.push_back ("thurs");
+	_keywordDay.push_back ("thursday");
+	_keywordDay.push_back ("fri");
+	_keywordDay.push_back ("friday");
+	_keywordDay.push_back ("sat");
+	_keywordDay.push_back ("saturday");
+	_keywordDay.push_back ("sun");
+	_keywordDay.push_back ("sunday");
+}
 
 

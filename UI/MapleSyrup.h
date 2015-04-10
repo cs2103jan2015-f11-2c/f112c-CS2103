@@ -55,6 +55,9 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  nagivationPicfloatingDis;
 	private: System::Windows::Forms::PictureBox^  navigationPicSearchBar;
 	private: System::Windows::Forms::PictureBox^  navigationPicCalendar;
+	private: System::Windows::Forms::RichTextBox^  suggestBar;
+	private: System::Windows::Forms::PictureBox^  pictureBox5;
+
 
 
 
@@ -107,7 +110,7 @@ namespace UI {
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::PictureBox^  searchIcon;
 	private: System::Windows::Forms::TextBox^  commandBox;
-	private: System::Windows::Forms::ListBox^  suggestBar;
+
 	private: System::ComponentModel::IContainer^  components;
 
 
@@ -148,7 +151,6 @@ namespace UI {
 			this->undoButton = (gcnew System::Windows::Forms::Button());
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
-			this->suggestBar = (gcnew System::Windows::Forms::ListBox());
 			this->showDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->dayToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->weekToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -166,6 +168,8 @@ namespace UI {
 			this->nagivationPicfloatingDis = (gcnew System::Windows::Forms::PictureBox());
 			this->navigationPicSearchBar = (gcnew System::Windows::Forms::PictureBox());
 			this->navigationPicCalendar = (gcnew System::Windows::Forms::PictureBox());
+			this->suggestBar = (gcnew System::Windows::Forms::RichTextBox());
+			this->pictureBox5 = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
@@ -181,6 +185,7 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicfloatingDis))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -395,14 +400,6 @@ namespace UI {
 			this->helpButton->UseVisualStyleBackColor = false;
 			this->helpButton->Click += gcnew System::EventHandler(this, &MapleSyrup::helpButton_Click);
 			// 
-			// suggestBar
-			// 
-			this->suggestBar->BackColor = System::Drawing::Color::White;
-			this->suggestBar->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			resources->ApplyResources(this->suggestBar, L"suggestBar");
-			this->suggestBar->Name = L"suggestBar";
-			this->suggestBar->TabStop = false;
-			// 
 			// showDropDown
 			// 
 			this->showDropDown->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
@@ -528,6 +525,22 @@ namespace UI {
 			this->navigationPicCalendar->Name = L"navigationPicCalendar";
 			this->navigationPicCalendar->TabStop = false;
 			// 
+			// suggestBar
+			// 
+			this->suggestBar->BackColor = System::Drawing::Color::White;
+			this->suggestBar->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			resources->ApplyResources(this->suggestBar, L"suggestBar");
+			this->suggestBar->Name = L"suggestBar";
+			this->suggestBar->ReadOnly = true;
+			this->suggestBar->VisibleChanged += gcnew System::EventHandler(this, &MapleSyrup::suggestBar_VisibleChanged);
+			// 
+			// pictureBox5
+			// 
+			this->pictureBox5->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->pictureBox5, L"pictureBox5");
+			this->pictureBox5->Name = L"pictureBox5";
+			this->pictureBox5->TabStop = false;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -535,6 +548,8 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::Color::BurlyWood;
+			this->Controls->Add(this->suggestBar);
+			this->Controls->Add(this->pictureBox5);
 			this->Controls->Add(this->navigationPicSearchBar);
 			this->Controls->Add(this->nagivationPicfloatingDis);
 			this->Controls->Add(this->nagivationPicCombBar);
@@ -549,7 +564,6 @@ namespace UI {
 			this->Controls->Add(this->floatingIcon);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->pictureBox2);
-			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->searchIcon);
 			this->Controls->Add(this->calenderIcon);
 			this->Controls->Add(this->mainDisplayLabel);
@@ -588,6 +602,7 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicfloatingDis))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -1152,21 +1167,47 @@ public: void resetCommandBar(){
 //Display the information in vector suggestion onto suggestBar
 private: void displaySuggestion(std::vector<std::string> suggestion){
 			suggestBar->Visible = true;
-			suggestBar->Items->Clear();
+			suggestBar->Text = "";
 
 			for (unsigned int i = 0; i < suggestion.size();i++){
 					std::string temp = suggestion[i];
-					String^ toAdd = convertToSys(temp);
-					
-					suggestBar->Items->Add(toAdd);
-				}
-		}
+
+					if(temp == UICommandSuggestion::DASH || temp == UICommandSuggestion::SEMI_COLON ||temp == UICommandSuggestion::WORD_DUE){	
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionColor = Color::RoyalBlue;
+						suggestBar->SelectedText = toAdd;
+					} else if (temp == UICommandSuggestion::COMMAND_ADD || temp == UICommandSuggestion::COMMAND_DELETE || temp == UICommandSuggestion::COMMAND_EDIT ||
+					temp == UICommandSuggestion::COMMAND_SEARCH || temp == UICommandSuggestion::COMMAND_SHOW){
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionColor = Color::SlateBlue;
+						suggestBar->SelectedText = toAdd;
+					} else {
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Regular);
+						suggestBar->SelectionColor = Color::DimGray;
+						suggestBar->SelectedText = toAdd;
+					}
+			}
+		 }
+
+private: System::Void suggestBar_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
+			 if (suggestBar->Visible == true){
+				 pictureBox5->Visible = true;
+				 pictureBox5->BringToFront();
+				 suggestBar->BringToFront();
+			 } else {
+				 pictureBox5->Visible = false;
+				 pictureBox5->SendToBack();
+			 }
+		 }
 
 //Pre-condition : None 
 //Clear information in suggestBar and make it invisible
 private: void unDisplaySuggestion(){
 			suggestBar->Visible = false;
-			suggestBar->Items->Clear();
+			suggestBar->Text = "";
 		}
 
 //This function is triggered whenever there is a textchange in the commandBox
@@ -1580,5 +1621,6 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->Visible = false;
 			nagivationPicfloatingDis->SendToBack();
 		 }
+
 };
 }

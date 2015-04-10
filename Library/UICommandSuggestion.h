@@ -39,10 +39,15 @@ public:
 		INVALID_
 	};
 
+//===================================================================================================================================================================
+
 	static const int MIN_ACTION_INDEX = 0;
 	static const int MAX_ACTION_INDEX = 2;
 
-
+	std::vector<std::string> _keywordCommands;
+	std::vector<std::string> _keywordMonths;
+	std::vector<std::string> _keywordTime;
+	std::vector<std::string> _keywordDay;
 
 /*
 * =================================================================================================================================================================== 
@@ -55,12 +60,31 @@ public:
 	static const std::string COMMAND_SEARCH;
 	static const std::string COMMAND_SHOW;
 
-
 	static const std::string COMMAND_AD;
 	static const std::string COMMAND_DELET;
 	static const std::string COMMAND_EDI;
 	static const std::string COMMAND_SEARC;
 	static const std::string COMMAND_SHO;
+
+	static const std::string BLANK_SPACE;
+	static const std::string LEAVE_A_LINE;
+	static const std::string DASH;
+	static const std::string SEMI_COLON;
+	static const std::string WORD_DUE;
+
+	static const std::string SYMBOL_EVENT;
+	static const std::string SYMBOL_INDEX_OF_EVENT;
+	static const std::string SYMBOL_DATE;
+	static const std::string SYMBOL_NEW_DATE;
+	static const std::string SYMBOL_START_DATE;
+	static const std::string SYMBOL_END_DATE;
+	static const std::string SYMBOL_START_TIME;
+	static const std::string SYMBOL_END_TIME;
+	static const std::string SYMBOL_NEW_EVENT;
+	static const std::string SYMBOL_NEW_START_TIME;
+	static const std::string SYMBOL_NEW_END_TIME;
+
+
 //===================================================================================================================================================================
 
 /*
@@ -68,25 +92,7 @@ public:
 * Static variables which contain the respective suggestion information for each command
 * ===================================================================================================================================================================
 */
-	static const std::string SUGGESTION_ADD_1;
-	static const std::string SUGGESTION_ADD_2;
-	static const std::string SUGGESTION_ADD_3;
-	static const std::string SUGGESTION_ADD_4;
 
-	static const std::string SUGGESTION_DELETE_1;
-	static const std::string SUGGESTION_DELETE_2;
-
-	static const std::string SUGGESTION_EDIT_1;
-	static const std::string SUGGESTION_EDIT_2;
-	static const std::string SUGGESTION_EDIT_3;
-	static const std::string SUGGESTION_EDIT_4;
-
-	static const std::string SUGGESTION_SEARCH_1;
-	static const std::string SUGGESTION_SEARCH_2;
-
-	static const std::string SUGGESTION_SHOW_1;
-	static const std::string SUGGESTION_SHOW_2;
-	static const std::string SUGGESTION_SHOW_3;
 //===================================================================================================================================================================
 
 /*
@@ -158,6 +164,11 @@ public:
 	std::string getSpecificUserAction();
 
 //===================================================================================================================================================================
+
+	void setKeywordCommands();
+	void setKeywordMonths();
+	void setKeywordTime();
+	void setKeywordDay();
 
 };
 #endif
