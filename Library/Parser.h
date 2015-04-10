@@ -37,7 +37,8 @@ public:
 		SHOWMONTH,
 		UNDO,
 		REDO,
-		COMPLETE
+		COMPLETE,
+		UNCOMPLETE
 	};
 
 	static const std::string TOKENISE_ORIGINAL_STRING;
@@ -54,7 +55,7 @@ private:
 	Event tempEventStore;
 	std::string nameOfEvent;
 
-	static const int NUMBER_OF_KEYWORDS_COMMANDS = 11;
+	static const int NUMBER_OF_KEYWORDS_COMMANDS = 13;
 	std::string keywordCommands[NUMBER_OF_KEYWORDS_COMMANDS];
 
 public:
@@ -76,6 +77,7 @@ public:
 	void determineEditCommand();
 	void determineShowCommand();
 	void determineCompleteCommand();
+	void determineUncompleteCommand();
 	void determineOtherCommand();
 	bool checkCommandExist();
 	bool checkCommandUndoRedo();

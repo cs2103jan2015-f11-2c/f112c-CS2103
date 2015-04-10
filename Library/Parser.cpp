@@ -15,6 +15,8 @@ Parser::Parser(std::string input)
 	keywordCommands[8] = "done";
 	keywordCommands[9] = "completed";
 	keywordCommands[10] = "complete";
+	keywordCommands[11] = "uncomplete";
+	keywordCommands[12] = "undone";
 	errorCounter = 0;
 
 	logger.logParserStart(input);
@@ -101,6 +103,8 @@ void Parser::determineCommandType() {
 			determineShowCommand();
 		} else if (command == "done" || command == "completed" || command == "complete") {
 			determineCompleteCommand();
+		} else if (command == "uncomplete" || command == "undone"){
+			determineUncompleteCommand();
 		} else if (command == "search" || command == "undo" || command == "redo") {
 			determineOtherCommand();
 		} else {
@@ -183,12 +187,13 @@ void Parser::determineShowCommand() {
 }
 
 void Parser::determineCompleteCommand() {
-	try {
-		nameOfEvent = details;
-		typeOfCommand = Parser::COMPLETE;
-	} catch (ParserExceptions& e) {
-		throw e;
-	}
+	nameOfEvent = details;
+	typeOfCommand = Parser::COMPLETE;
+}
+
+void Parser::determineUncompleteCommand() {
+	nameOfEvent = details;
+	typeOfCommand = Parser::UNCOMPLETE;
 }
 
 void Parser::determineOtherCommand() {

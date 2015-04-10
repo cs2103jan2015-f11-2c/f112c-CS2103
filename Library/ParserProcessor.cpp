@@ -792,7 +792,7 @@ int ParserProcessor::identifyDeadline(int index) {
 	int tempIndex = index;
 	std::string lowerCaseString;
 	lowerCaseString = fragmentedWords[index];
-	for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+	for(unsigned int i = 0; i < lowerCaseString.size() && !deadlineFound; i++){
 		lowerCaseString[i] = std::tolower(lowerCaseString[i]);
 	}
 	if (findExactWord(lowerCaseString,"due") || findExactWord(lowerCaseString,"by")) {
@@ -802,12 +802,12 @@ int ParserProcessor::identifyDeadline(int index) {
 		if (!endDayFound) {
 			endDayFound = true;
 		} else {
-			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_DATES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_DATES);
 		}
 		if (!endTimeFound) {
 			endTimeFound = true;
 		} else {
-			throw ParserExceptions(ParserExceptions::ERROR_TOO_MANY_TIMES);
+			throw ParserExceptions(ParserExceptions::ERROR_DUE_TOO_MANY_TIMES);
 		}
 		matchFound = true;
 		tempIndex--;
@@ -873,67 +873,68 @@ void ParserProcessor::addEventCorrector() {
 			tempEventStore.setEndTime(tempTime.tm_hour,tempTime.tm_min);
 			startDayFound = true;
 		}
-	}
-	//Floating events, set temporary Event isFloating to true
-	if (!startDayFound && !startTimeFound) {
-		tempEventStore.setIsFloating(true);
-	}
-	//Full day events, set Start time to 0am and End time to 11.59pm
-	if (startDayFound && !startTimeFound && !endTimeFound) {
-		tempEventStore.setStartTime(0,0);
-		tempEventStore.setEndTime(23,59);
-	}
-	//Today event, set Start day and End day to the current system day
-	if (!startDayFound && startTimeFound) {
-		int day = now->tm_mday; 
-		int month = now->tm_mon; 
-		int year = now->tm_year;
-		tempEventStore.setStartDate(day,month,year);
-		tempEventStore.setEndDate(day,month,year);
-	}
-	//Single day event, set End day to be equal to the Start day
-	if (!endDayFound) {
-		struct tm tempTime = tempEventStore.getStartDate();
-		tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
-	}
-	//Event with Start time only, sets End time to an hour after Start time by default
-	if (!endDayFound && startTimeFound && !endTimeFound) {
-		struct tm tempTime = tempEventStore.getStartDate();
-		if ((tempTime.tm_hour)+1 == 24 && tempTime.tm_min == 0) {   //Corrects any 12am timing to 11.59pm to prevent spilling over to next day
-			tempEventStore.setEndTime(23,59);					  //Because day ends at 11.59pm and new day starts at 12am
-		} else {
-			tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
+	} else {
+		//Floating events, set temporary Event isFloating to true
+		if (!startDayFound && !startTimeFound) {
+			tempEventStore.setIsFloating(true);
 		}
-		endTimeFound = true;
-	}
-	//Multiple day events with End time only, sets Start time to 12am of the first day
-	if (endDayFound && startTimeFound && !endTimeFound){
-		tempEventStore.setEndTime(23,59);
-		endTimeFound = true;
-	}
-	//Multiple day events with End time only, sets Start time to 12am of the first day
-	if (endDayFound && endTimeFound && !startTimeFound) {
-		tempEventStore.setStartTime(0,0);
-		startTimeFound = true;
-	}
-	//Corrects any 12am timing to 11.59pm to prevent spilling over to next day, because day ends at 11.59pm and new day starts at 12am
-	if (startTimeFound && endTimeFound) {
-		struct tm tempTime = tempEventStore.getEndDate();
-		if (tempTime.tm_hour == 0 && tempTime.tm_min == 0) {
+		//Full day events, set Start time to 0am and End time to 11.59pm
+		if (startDayFound && !startTimeFound && !endTimeFound) {
+			tempEventStore.setStartTime(0,0);
 			tempEventStore.setEndTime(23,59);
 		}
-	}
-	//Corrects any spill over timing mistake of the user input to update the End day to the next day. E.g. tdy 10pm-3am -> tdy to tmr 10pm-3am
-	struct tm tempEventStartDate = tempEventStore.getStartDate();
-	struct tm tempEventEndDate = tempEventStore.getEndDate();
-	if (tempEventStartDate.tm_mday == tempEventEndDate.tm_mday &&
-		tempEventStartDate.tm_mon == tempEventEndDate.tm_mon &&
-		tempEventStartDate.tm_year == tempEventEndDate.tm_year) {
-			if (tempEventEndDate.tm_hour < tempEventStartDate.tm_hour) {
-				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
-			} else if (tempEventEndDate.tm_hour == tempEventStartDate.tm_hour && tempEventEndDate.tm_min < tempEventStartDate.tm_min) {
-				tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+		//Today event, set Start day and End day to the current system day
+		if (!startDayFound && startTimeFound) {
+			int day = now->tm_mday; 
+			int month = now->tm_mon; 
+			int year = now->tm_year;
+			tempEventStore.setStartDate(day,month,year);
+			tempEventStore.setEndDate(day,month,year);
+		}
+		//Single day event, set End day to be equal to the Start day
+		if (!endDayFound) {
+			struct tm tempTime = tempEventStore.getStartDate();
+			tempEventStore.setEndDate(tempTime.tm_mday,tempTime.tm_mon,tempTime.tm_year);
+		}
+		//Event with Start time only, sets End time to an hour after Start time by default
+		if (!endDayFound && startTimeFound && !endTimeFound) {
+			struct tm tempTime = tempEventStore.getStartDate();
+			if ((tempTime.tm_hour)+1 == 24 && tempTime.tm_min == 0) {   //Corrects any 12am timing to 11.59pm to prevent spilling over to next day
+				tempEventStore.setEndTime(23,59);					  //Because day ends at 11.59pm and new day starts at 12am
+			} else {
+				tempEventStore.setEndTime((tempTime.tm_hour)+1,tempTime.tm_min);
 			}
+			endTimeFound = true;
+		}
+		//Multiple day events with End time only, sets Start time to 12am of the first day
+		if (endDayFound && startTimeFound && !endTimeFound){
+			tempEventStore.setEndTime(23,59);
+			endTimeFound = true;
+		}
+		//Multiple day events with End time only, sets Start time to 12am of the first day
+		if (endDayFound && endTimeFound && !startTimeFound) {
+			tempEventStore.setStartTime(0,0);
+			startTimeFound = true;
+		}
+		//Corrects any 12am timing to 11.59pm to prevent spilling over to next day, because day ends at 11.59pm and new day starts at 12am
+		if (startTimeFound && endTimeFound) {
+			struct tm tempTime = tempEventStore.getEndDate();
+			if (tempTime.tm_hour == 0 && tempTime.tm_min == 0) {
+				tempEventStore.setEndTime(23,59);
+			}
+		}
+		//Corrects any spill over timing mistake of the user input to update the End day to the next day. E.g. tdy 10pm-3am -> tdy to tmr 10pm-3am
+		struct tm tempEventStartDate = tempEventStore.getStartDate();
+		struct tm tempEventEndDate = tempEventStore.getEndDate();
+		if (tempEventStartDate.tm_mday == tempEventEndDate.tm_mday &&
+			tempEventStartDate.tm_mon == tempEventEndDate.tm_mon &&
+			tempEventStartDate.tm_year == tempEventEndDate.tm_year) {
+				if (tempEventEndDate.tm_hour < tempEventStartDate.tm_hour) {
+					tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+				} else if (tempEventEndDate.tm_hour == tempEventStartDate.tm_hour && tempEventEndDate.tm_min < tempEventStartDate.tm_min) {
+					tempEventStore.setEndDate(tempEventStartDate.tm_mday+1,tempEventStartDate.tm_mon,tempEventStartDate.tm_year);
+				}
+		}
 	}
 }
 
