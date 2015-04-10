@@ -213,6 +213,23 @@ public:
 
 
 
+class UncompleteCommand : public Command {
+private:
+	int id;
+	Event userEvent;
+
+public:
+	UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void uncompleteImmediately();
+};
+
+
+
+
 class NullCommand : public Command {
 private:
 

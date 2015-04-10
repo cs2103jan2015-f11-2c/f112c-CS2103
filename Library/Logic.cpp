@@ -556,6 +556,7 @@ bool Logic::isProperCommand(Parser::CommandType commandType) {
 	return ( (commandType == Parser::ADD) |
 		(commandType == Parser::ADDFLOAT) |
 		(commandType == Parser::COMPLETE) |
+		(commandType == Parser::UNCOMPLETE) |
 		(commandType == Parser::DELETE_) |
 		(commandType == Parser::EDIT) |
 		(commandType == Parser::SEARCH) |

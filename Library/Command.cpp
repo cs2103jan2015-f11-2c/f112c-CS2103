@@ -616,6 +616,33 @@ void ShowImportanceCommand::undo() {
 
 
 
+UncompleteCommand::UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	id = eventID;
+	userEvent = e;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void UncompleteCommand::execute() {
+	//if id found in current display, uncomplete immediately
+	if (id > SIZE_ZERO) {
+		uncompleteImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
+		return;
+	}
+}
+
+Event UncompleteCommand::getEvent() {
+}
+
+void UncompleteCommand::undo() {
+}
+
+
+
+
 //Null Command
 NullCommand::NullCommand() {
 	isExecuted = false;

@@ -22,6 +22,7 @@ public:
 	static const string EXECUTED;
 	static const string ADD;
 	static const string COMPLETE;
+	static const string UNCOMPLETE;
 	static const string DELETE;
 	static const string EDIT;
 	static const string SHOW;

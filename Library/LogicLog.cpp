@@ -6,6 +6,7 @@ const string LogicLog::CREATED = "created ";
 const string LogicLog::EXECUTED = "executed ";
 const string LogicLog::ADD = "add command";
 const string LogicLog::COMPLETE = "complete command";
+const string LogicLog::UNCOMPLETE = "uncomplete command";
 const string LogicLog::DELETE = "delete command";
 const string LogicLog::EDIT = "edit command";
 const string LogicLog::SHOW = "show command";
