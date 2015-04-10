@@ -221,11 +221,7 @@ void CompleteCommand::undo() {
 
 void CompleteCommand::completeImmediately() {
 	isFloating = userEvent.getIsFloating();
-	if (isFloating) {
-		eventsToShow = eventFacade->completeEvent(userEvent);
-	} else {
-		eventsToShow = eventFacade->completeEvent(userEvent);
-	}
+	eventsToShow = eventFacade->completeEvent(userEvent);
 
 	isExecuted = true;
 }
@@ -234,14 +230,104 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
 		userEvent = tempEvents[SIZE_ZERO];
-		eventsToShow = eventFacade->completeEvent(tempEvents[SIZE_ZERO]);
+	
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
-		userEvent = tempEvents[SIZE_ONE];
-		eventsToShow = eventFacade->completeEvent(tempEvents[SIZE_ONE]);
+		id = tempEvents[SIZE_ONE].getID();
+		userEvent = eventFacade->findEventWithID(id);
+	}
+
+	id = userEvent.getID();
+	completeImmediately();
+}
+
+
+
+
+//Uncomplete Command
+UncompleteCommand::UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	id = eventID;
+	userEvent = e;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void UncompleteCommand::execute() {
+	//if id found in current display, uncomplete immediately
+	if (id > SIZE_ZERO) {
+		uncompleteImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
+		return;
+	}
+
+	vector<Event> tempEvents = eventFacade->findNameExact(userEvent.getName());
+	int numResults = getNumEvents(tempEvents);
+
+	switch (numResults) {
+
+	//no exact match
+	case SIZE_ZERO: {
+		logger.log(LogicLog::CASE_0 + LogicLog::UNCOMPLETE);
+		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
+		numResults = getNumEvents(tempEvents);
+
+		checkPartialMatches(numResults, tempEvents);
+		return;
+					}
+
+	//1 exact match
+	case SIZE_ONE: {
+		logger.log(LogicLog::CASE_1 + LogicLog::UNCOMPLETE);
+		uncompleteExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
+		return;
+				   }
+	
+	//more than 1 exact match
+	default: {
+		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
+		chooseExactMatches(userEvent);
+		return;
+			 }
+	}
+}
+
+Event UncompleteCommand::getEvent() {
+	return userEvent;	
+}
+
+void UncompleteCommand::undo() {
+	
+}
+
+void UncompleteCommand::uncompleteImmediately() {
+	isFloating = userEvent.getIsFloating();
+	if (isFloating) {
+		eventsToShow = eventFacade->uncompleteEvent(userEvent);
+	} else {
+		eventFacade->uncompleteEvent(userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
 	}
 
 	isExecuted = true;
+}
+
+void UncompleteCommand::uncompleteExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		userEvent = tempEvents[SIZE_ZERO];
+
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		id = tempEvents[SIZE_ONE].getID();
+		userEvent = eventFacade->findEventWithID(id);
+	}
+
+	id = userEvent.getID();
+	uncompleteImmediately();
 }
 
 
@@ -270,7 +356,7 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 
-		//no exact match
+	//no exact match
 	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
@@ -281,7 +367,7 @@ void DeleteCommand::execute() {
 		return;
 					}
 
-					//1 exact match
+	//1 exact match
 	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
 		deleteExact(tempEvents);
@@ -289,7 +375,7 @@ void DeleteCommand::execute() {
 		return;
 				   }
 
-				   //more than 1 exact match
+	//more than 1 exact match
 	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
 		chooseExactMatches(userEvent);
@@ -327,15 +413,15 @@ void DeleteCommand::deleteExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
 		userEvent = tempEvents[SIZE_ZERO];
-		eventsToShow = eventFacade->deleteEvent(tempEvents[SIZE_ZERO]);
+
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
-		userEvent = tempEvents[SIZE_ONE];
-		eventFacade->deleteEvent(tempEvents[SIZE_ONE]);
-		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		id = tempEvents[SIZE_ONE].getID();
+		userEvent = eventFacade->findEventWithID(id);
 	}
 
-	isExecuted = true;
+	id = userEvent.getID();
+	deleteImmediately();
 }
 
 
@@ -436,11 +522,13 @@ void EditCommand::editExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
 		eventToEdit = tempEvents[SIZE_ZERO];
+
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		id = tempEvents[SIZE_ONE].getID();
 		eventToEdit = eventFacade->findEventWithID(id);
 	}
+
 	id = eventToEdit.getID();
 	editImmediately();
 }
@@ -611,33 +699,6 @@ Event ShowImportanceCommand::getEvent() {
 }
 
 void ShowImportanceCommand::undo() {
-}
-
-
-
-
-UncompleteCommand::UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
-	eventFacade = eventStorage;
-	id = eventID;
-	userEvent = e;
-	currentShowingTM = currentShowing;
-	isExecuted = false;
-	isUndoable = true;
-}
-
-void UncompleteCommand::execute() {
-	//if id found in current display, uncomplete immediately
-	if (id > SIZE_ZERO) {
-		uncompleteImmediately();
-		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
-		return;
-	}
-}
-
-Event UncompleteCommand::getEvent() {
-}
-
-void UncompleteCommand::undo() {
 }
 
 

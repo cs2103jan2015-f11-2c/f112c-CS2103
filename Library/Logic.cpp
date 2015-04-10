@@ -121,8 +121,16 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::COMPLETE);
 			return executor.execute(completeCommand);
-			break;
 							   }
+
+		case Parser::UNCOMPLETE: {
+			int id = convertNameToID(nameOfEvent);
+			Event eventToUncomplete = createTempEvent(nameOfEvent, id);
+
+			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, id, eventToUncomplete, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::UNCOMPLETE);
+			return executor.execute(uncompleteCommand);
+								 }
 
 		case Parser::DELETE_: {
 			int id = convertNameToID(nameOfEvent);
@@ -252,6 +260,7 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 							   }
 
 		case Parser::COMPLETE:
+		case Parser::UNCOMPLETE:
 		case Parser::DELETE_: {
 			vector<Event> tempEvents = commandPtr->getEventVector();
 
@@ -311,7 +320,9 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 				}
 			}
 
-			clearRedo();
+			if (command != Parser::UNCOMPLETE) {
+				clearRedo();
+			}
 			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
 			break;
 							  }

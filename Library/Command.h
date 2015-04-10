@@ -81,6 +81,24 @@ public:
 
 
 
+class UncompleteCommand : public Command {
+private:
+	int id;
+	Event userEvent;
+
+public:
+	UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void uncompleteImmediately();
+	void uncompleteExact(vector<Event> tempEvents);
+};
+
+
+
+
 class DeleteCommand : public Command {
 private:
 	int id;
@@ -208,23 +226,6 @@ public:
 	void execute();
 	Event getEvent();
 	void undo();
-};
-
-
-
-
-class UncompleteCommand : public Command {
-private:
-	int id;
-	Event userEvent;
-
-public:
-	UncompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing);
-	void execute();
-	Event getEvent();
-	void undo();
-
-	void uncompleteImmediately();
 };
 
 
