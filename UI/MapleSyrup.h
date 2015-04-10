@@ -49,6 +49,16 @@ namespace UI {
 	private: System::Windows::Forms::ToolStripMenuItem^  shortcutsToolStripMenuItem;
 	private: System::Windows::Forms::Button^  redoButton;
 	private: System::Windows::Forms::PictureBox^  navigationPic;
+	private: System::Windows::Forms::PictureBox^  pictureBox3;
+	private: System::Windows::Forms::PictureBox^  pictureBox4;
+	private: System::Windows::Forms::PictureBox^  nagivationPicCombBar;
+	private: System::Windows::Forms::PictureBox^  nagivationPicfloatingDis;
+	private: System::Windows::Forms::PictureBox^  navigationPicSearchBar;
+	private: System::Windows::Forms::PictureBox^  navigationPicCalendar;
+
+
+
+
 
 
 	private: System::Windows::Forms::Button^  undoButton;
@@ -89,7 +99,7 @@ namespace UI {
 	private: System::Windows::Forms::RichTextBox^  floatingTasksDisplay;
 	private: System::Windows::Forms::TextBox^  mainDisplayLabel;
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
-	private: System::Windows::Forms::PictureBox^  comdIcon;
+
 	private: System::Windows::Forms::PictureBox^  calenderIcon;
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::PictureBox^  floatingIcon;
@@ -127,7 +137,6 @@ namespace UI {
 			this->floatingTasksDisplay = (gcnew System::Windows::Forms::RichTextBox());
 			this->mainDisplayLabel = (gcnew System::Windows::Forms::TextBox());
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
-			this->comdIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->calenderIcon = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->floatingIcon = (gcnew System::Windows::Forms::PictureBox());
@@ -151,8 +160,13 @@ namespace UI {
 			this->commandsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->shortcutsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->navigationPic = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox4 = (gcnew System::Windows::Forms::PictureBox());
+			this->nagivationPicCombBar = (gcnew System::Windows::Forms::PictureBox());
+			this->nagivationPicfloatingDis = (gcnew System::Windows::Forms::PictureBox());
+			this->navigationPicSearchBar = (gcnew System::Windows::Forms::PictureBox());
+			this->navigationPicCalendar = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->BeginInit();
@@ -161,6 +175,12 @@ namespace UI {
 			this->showDropDown->SuspendLayout();
 			this->helpDropDown->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPic))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox4))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicCombBar))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicfloatingDis))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// commandBox
@@ -180,19 +200,22 @@ namespace UI {
 			this->commandBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
 			this->commandBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
 			this->commandBox->BackColor = System::Drawing::Color::White;
+			this->commandBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->commandBox->Cursor = System::Windows::Forms::Cursors::IBeam;
 			resources->ApplyResources(this->commandBox, L"commandBox");
-			this->commandBox->ForeColor = System::Drawing::SystemColors::InfoText;
+			this->commandBox->ForeColor = System::Drawing::SystemColors::Desktop;
 			this->commandBox->Name = L"commandBox";
 			this->commandBox->Tag = L"Enter";
 			this->toolTip1->SetToolTip(this->commandBox, resources->GetString(L"commandBox.ToolTip"));
 			this->commandBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::commandBox_TextChanged);
+			this->commandBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Enter);
 			this->commandBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::commandBox_KeyDown);
+			this->commandBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Leave);
 			// 
 			// feedbackBox
 			// 
-			this->feedbackBox->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
-			this->feedbackBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->feedbackBox->BackColor = System::Drawing::Color::White;
+			this->feedbackBox->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->feedbackBox->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			resources->ApplyResources(this->feedbackBox, L"feedbackBox");
 			this->feedbackBox->Name = L"feedbackBox";
@@ -218,7 +241,8 @@ namespace UI {
 			// display
 			// 
 			this->display->AutoWordSelection = true;
-			this->display->BackColor = System::Drawing::SystemColors::ControlLightLight;
+			this->display->BackColor = System::Drawing::Color::White;
+			this->display->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->display->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			resources->ApplyResources(this->display, L"display");
 			this->display->Name = L"display";
@@ -228,6 +252,7 @@ namespace UI {
 			this->display->Enter += gcnew System::EventHandler(this, &MapleSyrup::display_Enter);
 			this->display->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::display_KeyDown);
 			this->display->Leave += gcnew System::EventHandler(this, &MapleSyrup::display_Leave);
+			this->display->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::display_MouseEnter);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -241,10 +266,11 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->floatingTasksDisplay, resources->GetString(L"floatingTasksDisplay.ToolTip"));
 			this->floatingTasksDisplay->Enter += gcnew System::EventHandler(this, &MapleSyrup::floatingTasksDisplay_Enter);
 			this->floatingTasksDisplay->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::floatingTasksDisplay_KeyDown);
+			this->floatingTasksDisplay->Leave += gcnew System::EventHandler(this, &MapleSyrup::floatingTasksDisplay_Leave);
 			// 
 			// mainDisplayLabel
 			// 
-			this->mainDisplayLabel->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->mainDisplayLabel->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->mainDisplayLabel->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->mainDisplayLabel->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			resources->ApplyResources(this->mainDisplayLabel, L"mainDisplayLabel");
@@ -255,19 +281,14 @@ namespace UI {
 			// 
 			// pictureBox2
 			// 
+			this->pictureBox2->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->pictureBox2, L"pictureBox2");
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->TabStop = false;
 			// 
-			// comdIcon
-			// 
-			resources->ApplyResources(this->comdIcon, L"comdIcon");
-			this->comdIcon->Name = L"comdIcon";
-			this->comdIcon->TabStop = false;
-			this->toolTip1->SetToolTip(this->comdIcon, resources->GetString(L"comdIcon.ToolTip"));
-			// 
 			// calenderIcon
 			// 
+			this->calenderIcon->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->calenderIcon, L"calenderIcon");
 			this->calenderIcon->Name = L"calenderIcon";
 			this->calenderIcon->TabStop = false;
@@ -276,6 +297,7 @@ namespace UI {
 			// 
 			// pictureBox1
 			// 
+			this->pictureBox1->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->pictureBox1, L"pictureBox1");
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->TabStop = false;
@@ -283,6 +305,7 @@ namespace UI {
 			// 
 			// floatingIcon
 			// 
+			this->floatingIcon->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->floatingIcon, L"floatingIcon");
 			this->floatingIcon->Name = L"floatingIcon";
 			this->floatingIcon->TabStop = false;
@@ -290,6 +313,7 @@ namespace UI {
 			// 
 			// pictureBox8
 			// 
+			this->pictureBox8->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->pictureBox8, L"pictureBox8");
 			this->pictureBox8->Name = L"pictureBox8";
 			this->pictureBox8->TabStop = false;
@@ -305,15 +329,15 @@ namespace UI {
 			// 
 			// searchIcon
 			// 
-			this->searchIcon->BackColor = System::Drawing::Color::White;
+			this->searchIcon->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->searchIcon, L"searchIcon");
-			this->searchIcon->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->searchIcon->Name = L"searchIcon";
 			this->searchIcon->TabStop = false;
 			this->toolTip1->SetToolTip(this->searchIcon, resources->GetString(L"searchIcon.ToolTip"));
 			// 
 			// calenderTop
 			// 
+			this->calenderTop->BackColor = System::Drawing::Color::SeaShell;
 			resources->ApplyResources(this->calenderTop, L"calenderTop");
 			this->calenderTop->MaxSelectionCount = 9999;
 			this->calenderTop->Name = L"calenderTop";
@@ -325,20 +349,22 @@ namespace UI {
 			// 
 			// redoButton
 			// 
-			this->redoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->redoButton->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->redoButton, L"redoButton");
-			this->redoButton->ForeColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->redoButton->FlatAppearance->BorderSize = 0;
+			this->redoButton->ForeColor = System::Drawing::Color::Transparent;
 			this->redoButton->Name = L"redoButton";
 			this->redoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->redoButton, resources->GetString(L"redoButton.ToolTip"));
-			this->redoButton->UseVisualStyleBackColor = false;
+			this->redoButton->UseVisualStyleBackColor = true;
 			this->redoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::redoButton_Click);
 			// 
 			// undoButton
 			// 
-			this->undoButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->undoButton->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->undoButton, L"undoButton");
-			this->undoButton->ForeColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->undoButton->FlatAppearance->BorderSize = 0;
+			this->undoButton->ForeColor = System::Drawing::Color::Transparent;
 			this->undoButton->Name = L"undoButton";
 			this->undoButton->TabStop = false;
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
@@ -347,8 +373,9 @@ namespace UI {
 			// 
 			// showButton
 			// 
-			this->showButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->showButton->BackColor = System::Drawing::Color::Transparent;
 			this->showButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->showButton->FlatAppearance->BorderSize = 0;
 			resources->ApplyResources(this->showButton, L"showButton");
 			this->showButton->ForeColor = System::Drawing::Color::Black;
 			this->showButton->Name = L"showButton";
@@ -358,8 +385,9 @@ namespace UI {
 			// 
 			// helpButton
 			// 
-			this->helpButton->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->helpButton->BackColor = System::Drawing::Color::Transparent;
 			this->helpButton->FlatAppearance->BorderColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->helpButton->FlatAppearance->BorderSize = 0;
 			resources->ApplyResources(this->helpButton, L"helpButton");
 			this->helpButton->ForeColor = System::Drawing::Color::Black;
 			this->helpButton->Name = L"helpButton";
@@ -386,6 +414,7 @@ namespace UI {
 			// dayToolStripMenuItem
 			// 
 			this->dayToolStripMenuItem->AutoToolTip = true;
+			this->dayToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->dayToolStripMenuItem->Name = L"dayToolStripMenuItem";
 			resources->ApplyResources(this->dayToolStripMenuItem, L"dayToolStripMenuItem");
 			this->dayToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::dayToolStripMenuItem_Click);
@@ -393,6 +422,7 @@ namespace UI {
 			// weekToolStripMenuItem
 			// 
 			this->weekToolStripMenuItem->AutoToolTip = true;
+			this->weekToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->weekToolStripMenuItem->Name = L"weekToolStripMenuItem";
 			resources->ApplyResources(this->weekToolStripMenuItem, L"weekToolStripMenuItem");
 			this->weekToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::weekToolStripMenuItem_Click);
@@ -400,18 +430,21 @@ namespace UI {
 			// monthToolStripMenuItem
 			// 
 			this->monthToolStripMenuItem->AutoToolTip = true;
+			this->monthToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->monthToolStripMenuItem->Name = L"monthToolStripMenuItem";
 			resources->ApplyResources(this->monthToolStripMenuItem, L"monthToolStripMenuItem");
 			this->monthToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::monthToolStripMenuItem_Click);
 			// 
 			// allToolStripMenuItem
 			// 
+			this->allToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->allToolStripMenuItem->Name = L"allToolStripMenuItem";
 			resources->ApplyResources(this->allToolStripMenuItem, L"allToolStripMenuItem");
 			this->allToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::allToolStripMenuItem_Click);
 			// 
 			// archiveToolStripMenuItem
 			// 
+			this->archiveToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->archiveToolStripMenuItem->Name = L"archiveToolStripMenuItem";
 			resources->ApplyResources(this->archiveToolStripMenuItem, L"archiveToolStripMenuItem");
 			this->archiveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::archiveToolStripMenuItem_Click);
@@ -426,27 +459,74 @@ namespace UI {
 			// 
 			// introductionToolStripMenuItem
 			// 
-			this->introductionToolStripMenuItem->Name = L"introductionToolStripMenuItem";
+			this->introductionToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			resources->ApplyResources(this->introductionToolStripMenuItem, L"introductionToolStripMenuItem");
+			this->introductionToolStripMenuItem->Name = L"introductionToolStripMenuItem";
 			this->introductionToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::introductionToolStripMenuItem_Click);
 			// 
 			// commandsToolStripMenuItem
 			// 
+			this->commandsToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->commandsToolStripMenuItem->Name = L"commandsToolStripMenuItem";
 			resources->ApplyResources(this->commandsToolStripMenuItem, L"commandsToolStripMenuItem");
 			this->commandsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::commandsToolStripMenuItem_Click);
 			// 
 			// shortcutsToolStripMenuItem
 			// 
+			this->shortcutsToolStripMenuItem->BackColor = System::Drawing::Color::White;
 			this->shortcutsToolStripMenuItem->Name = L"shortcutsToolStripMenuItem";
 			resources->ApplyResources(this->shortcutsToolStripMenuItem, L"shortcutsToolStripMenuItem");
 			this->shortcutsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MapleSyrup::shortcutsToolStripMenuItem_Click);
 			// 
 			// navigationPic
 			// 
+			this->navigationPic->BackColor = System::Drawing::Color::Transparent;
 			resources->ApplyResources(this->navigationPic, L"navigationPic");
 			this->navigationPic->Name = L"navigationPic";
 			this->navigationPic->TabStop = false;
+			// 
+			// pictureBox3
+			// 
+			this->pictureBox3->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->pictureBox3, L"pictureBox3");
+			this->pictureBox3->Name = L"pictureBox3";
+			this->pictureBox3->TabStop = false;
+			// 
+			// pictureBox4
+			// 
+			this->pictureBox4->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->pictureBox4, L"pictureBox4");
+			this->pictureBox4->Name = L"pictureBox4";
+			this->pictureBox4->TabStop = false;
+			// 
+			// nagivationPicCombBar
+			// 
+			this->nagivationPicCombBar->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->nagivationPicCombBar, L"nagivationPicCombBar");
+			this->nagivationPicCombBar->Name = L"nagivationPicCombBar";
+			this->nagivationPicCombBar->TabStop = false;
+			// 
+			// nagivationPicfloatingDis
+			// 
+			this->nagivationPicfloatingDis->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->nagivationPicfloatingDis, L"nagivationPicfloatingDis");
+			this->nagivationPicfloatingDis->Name = L"nagivationPicfloatingDis";
+			this->nagivationPicfloatingDis->TabStop = false;
+			// 
+			// navigationPicSearchBar
+			// 
+			this->navigationPicSearchBar->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->navigationPicSearchBar, L"navigationPicSearchBar");
+			this->navigationPicSearchBar->Name = L"navigationPicSearchBar";
+			this->navigationPicSearchBar->TabStop = false;
+			// 
+			// navigationPicCalendar
+			// 
+			this->navigationPicCalendar->BackColor = System::Drawing::Color::White;
+			resources->ApplyResources(this->navigationPicCalendar, L"navigationPicCalendar");
+			this->navigationPicCalendar->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->navigationPicCalendar->Name = L"navigationPicCalendar";
+			this->navigationPicCalendar->TabStop = false;
 			// 
 			// MapleSyrup
 			// 
@@ -454,13 +534,17 @@ namespace UI {
 			resources->ApplyResources(this, L"$this");
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
-			this->BackColor = System::Drawing::SystemColors::GradientInactiveCaption;
+			this->BackColor = System::Drawing::Color::BurlyWood;
+			this->Controls->Add(this->navigationPicSearchBar);
+			this->Controls->Add(this->nagivationPicfloatingDis);
+			this->Controls->Add(this->nagivationPicCombBar);
 			this->Controls->Add(this->navigationPic);
+			this->Controls->Add(this->commandBox);
+			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
 			this->Controls->Add(this->helpButton);
 			this->Controls->Add(this->showButton);
-			this->Controls->Add(this->floatingTasksDisplay);
 			this->Controls->Add(this->pictureBox8);
 			this->Controls->Add(this->floatingIcon);
 			this->Controls->Add(this->pictureBox1);
@@ -468,13 +552,14 @@ namespace UI {
 			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->searchIcon);
 			this->Controls->Add(this->calenderIcon);
-			this->Controls->Add(this->comdIcon);
 			this->Controls->Add(this->mainDisplayLabel);
 			this->Controls->Add(this->searchBox);
 			this->Controls->Add(this->feedbackBox);
-			this->Controls->Add(this->commandBox);
 			this->Controls->Add(this->display);
+			this->Controls->Add(this->floatingTasksDisplay);
+			this->Controls->Add(this->pictureBox4);
 			this->Controls->Add(this->calenderTop);
+			this->Controls->Add(this->navigationPicCalendar);
 			this->ForeColor = System::Drawing::Color::Black;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->HelpButton = true;
@@ -489,7 +574,6 @@ namespace UI {
 			this->Leave += gcnew System::EventHandler(this, &MapleSyrup::MapleSyrup_Leave);
 			this->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MapleSyrup::MapleSyrup_MouseClick);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->comdIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->floatingIcon))->EndInit();
@@ -498,6 +582,12 @@ namespace UI {
 			this->showDropDown->ResumeLayout(false);
 			this->helpDropDown->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPic))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox3))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox4))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicCombBar))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nagivationPicfloatingDis))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -683,8 +773,14 @@ private:void displayToAllDisplays(){
 private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 			feedbackBox->Text = "";
 			for (unsigned int i = 0; i< displayToFeedback.size(); i++){
-					String^ temp = convertToSys(displayToFeedback[i]);
-					feedbackBox->Text += temp + "\n" ;
+				String^ temp = convertToSys(displayToFeedback[i]);
+				if(i==displayToFeedback.size()-1){
+					feedbackBox->SelectionFont = gcnew Drawing::Font(feedbackBox->SelectionFont->FontFamily,feedbackBox->SelectionFont->Size, FontStyle::Bold);
+					feedbackBox->SelectedText = " " + temp ;
+					}else{
+					feedbackBox->SelectedText = " " + temp + "\n" ;
+					}
+				
 				}
 
 			if (!displayToFeedback.empty()){
@@ -761,7 +857,6 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 					display->SelectionColor = Color::Red;
 					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 					display->SelectedText = date + importanceSymbolString + eventName + "\n";
-
 					display->ScrollToCaret();
 				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
 					String^ date = convertToSys(displayToMain[i].dateString);
@@ -785,7 +880,7 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
 						display->SelectedText = date + importanceSymbolString + eventName + "\n";
 
-						int indexToBeScrolledTo = display->GetFirstCharIndexOfCurrentLine();
+						display->ScrollToCaret();
 				} else {
 						displayNormalEventToMain(displayToMain[i]);
 					}
@@ -1211,9 +1306,14 @@ private: System::Void calenderIcon_Click(System::Object^  sender, System::EventA
 
 private: System::Void calenderTop_Leave(System::Object^  sender, System::EventArgs^  e) {
 			executeCalendarShortcut();
+			navigationPicCalendar->Visible = false;
+			navigationPicCalendar->SendToBack();
 		 }
 
 private: System::Void calenderTop_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPicCalendar->Visible = true;
+			 navigationPicCalendar->BringToFront();
+			 calenderTop->BringToFront();
 		 }
 
 private: void executeCalendarShortcut(){
@@ -1295,6 +1395,10 @@ private: System::Void searchBox_TextChanged(System::Object^  sender, System::Eve
 		 }
 
 private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPicSearchBar->Visible = true;
+			 navigationPicSearchBar->BringToFront();
+			 searchBox->Text = "";
+
 			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
 			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
 			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
@@ -1304,6 +1408,8 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 		 }
 
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPicSearchBar->Visible = false;
+			 navigationPicSearchBar->SendToBack();
 			 searchBox->Text = "";
 			 std::string currentShowCommand = showPtr->getCurrentCommand();
 
@@ -1374,15 +1480,19 @@ private: void executeNextKey(){
 private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 display->SelectionStart = 0;
 			 navigationPic->Visible = true;
+			 navigationPic->BringToFront();
 		 }
 
 private: System::Void display_Leave(System::Object^  sender, System::EventArgs^  e) {
 			 navigationPic->Visible = false;
+			 navigationPic->SendToBack();
 		 }
 
 
 private: System::Void floatingTasksDisplay_Enter(System::Object^  sender, System::EventArgs^  e) {
 			floatingTasksDisplay->SelectionStart = 0;
+			nagivationPicfloatingDis->Visible = true;
+			nagivationPicfloatingDis->BringToFront();
 		 }
 
 private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
@@ -1433,5 +1543,21 @@ private: Void log(std::string label, std::string commands){
 
 
 
+private: System::Void display_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void commandBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = " Type command here";
+			 nagivationPicCombBar->Visible = false;
+			 nagivationPicCombBar->SendToBack();
+		 }
+private: System::Void commandBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = "";
+			 nagivationPicCombBar->Visible = true;
+			 nagivationPicCombBar->BringToFront();
+		 }
+private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System::EventArgs^  e) {
+			nagivationPicfloatingDis->Visible = false;
+			nagivationPicfloatingDis->SendToBack();
+		 }
 };
 }
