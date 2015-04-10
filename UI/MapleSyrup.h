@@ -1098,23 +1098,44 @@ std::string toLowerCase(std::string word){
 * commandBar
 * ===================================================================================================================================================================
 */
+
+
 private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
-			 if (e->KeyCode != Keys::Enter){
+			 if (e->KeyCode == Keys::Enter){
+				String^ temp = commandBox->Text;
+				resetCommandBar();
+				unDisplaySuggestion();
+			 
+				std::string input = convertToStd(temp);
+				log("User Command:", input);
+
+				if (temp == ""){
+					return;
+				}
+
+				cSPtr->setUserActions(input);
+
+				executeUserInput(input);
+
 				return;
 			 }
 
-			 String^ temp = commandBox->Text;
-			 resetCommandBar();
-			 unDisplaySuggestion();
-			 
-			 std::string input = convertToStd(temp);
-			 log("User Command:", input);
-
-			 if (temp == ""){
+			 if (e->KeyCode == Keys::Up){
+				 
+				 std::vector<std::string> userActions = cSPtr->getUserActions();
+				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
+				 cSPtr->setUserActionsIndex(-1);
 				 return;
 			 }
 
-			 executeUserInput(input);
+			 if (e->KeyCode == Keys::Down){
+				 std::vector<std::string> userActions = cSPtr->getUserActions();
+				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
+				 cSPtr->setUserActionsIndex(1);
+				 return;
+			 }
+
+
 		 }
 
 public: void resetCommandBar(){

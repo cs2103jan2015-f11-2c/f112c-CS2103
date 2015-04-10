@@ -8,12 +8,16 @@ UICommandSuggestion::UICommandSuggestion(void)
 	setUpsuggestionEdit();
 	setUpsuggestionSearch();
 	setUpsuggestionShow();
+
+	initializeUserActionsIndex();
 }
 
 
 UICommandSuggestion::~UICommandSuggestion(void)
 {
 }
+
+
 
 // static strings that cannot initialise in "UICommandSuggestion.h"
 const std::string UICommandSuggestion::COMMAND_ADD = "add";
@@ -124,9 +128,60 @@ std::vector<std::string>  UICommandSuggestion::getSuggestionShow(){
 	return _suggestionShow;
 }
 
+void UICommandSuggestion::setUserActions(std::string latestUserAction){
+	_userActions.push_back(latestUserAction);
 
+	if (_userActions.size()>3){
+		_userActions.erase(_userActions.begin());
+	}
 
+	assert(_userActions.size() <= 3);
 
+	_userActionsIndex = _userActions.size() -1 ;
+}
+
+std::vector<std::string> UICommandSuggestion::getUserActions(){
+	return _userActions;
+}
+
+void UICommandSuggestion::initializeUserActionsIndex(){
+	_userActionsIndex = MIN_ACTION_INDEX - 1;
+}
+
+//numToShift 1 or -1
+void UICommandSuggestion::setUserActionsIndex(int numToShift){
+	assert(numToShift == 1 || numToShift == -1);
+
+	if (numToShift == 1 && _userActionsIndex < MAX_ACTION_INDEX){
+		_userActionsIndex += numToShift;
+	}
+
+	if (numToShift == -1 && _userActionsIndex > MIN_ACTION_INDEX){
+		_userActionsIndex += numToShift;
+	}
+
+	if (_userActionsIndex >= _userActions.size()){
+		_userActionsIndex -= 1;
+	}
+
+	if (_userActionsIndex < -1){
+		_userActionsIndex += 1;
+	}
+
+	assert(_userActionsIndex>=-1 && _userActionsIndex<=2);
+}
+
+int UICommandSuggestion::getUserActionsIndex(){
+	return _userActionsIndex;
+}
+
+std::string UICommandSuggestion::getSpecificUserAction(){
+	if(!_userActions.empty()){
+		return _userActions[_userActionsIndex];
+	}else {
+		return "";
+	}
+}
 
 
 

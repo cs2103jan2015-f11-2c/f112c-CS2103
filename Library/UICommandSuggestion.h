@@ -18,6 +18,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <assert.h>
 
 class UICommandSuggestion
 {
@@ -37,6 +38,11 @@ public:
 		UNDISPLAY_,
 		INVALID_
 	};
+
+	static const int MIN_ACTION_INDEX = 0;
+	static const int MAX_ACTION_INDEX = 2;
+
+
 
 /*
 * =================================================================================================================================================================== 
@@ -96,6 +102,9 @@ private:
 	std::vector<std::string> _suggestionSearch;
 	std::vector<std::string> _suggestionShow;
 
+	std::vector<std::string> _userActions;
+	int _userActionsIndex;
+
 	void setUpsuggestionAdd();
 	void setUpsuggestionDelete();
 	void setUpsuggestionEdit();
@@ -134,6 +143,20 @@ public:
 	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
 	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command show
 	std::vector<std::string> getSuggestionShow();
+
+	void setUserActions(std::string);
+
+	std::vector<std::string> getUserActions();
+
+	void initializeUserActionsIndex();
+
+	void setUserActionsIndex(int);
+
+	//Pre-condition: call function setUserActionsIndex() to update _userActionsIndex
+	int getUserActionsIndex();
+
+	std::string getSpecificUserAction();
+
 //===================================================================================================================================================================
 
 };
