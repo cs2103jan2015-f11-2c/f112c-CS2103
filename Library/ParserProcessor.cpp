@@ -599,8 +599,12 @@ int ParserProcessor::extractFirstTimeInteger(int tempIndex, int* indexShift) {
 
 	tempIndex--;
 	if (tempIndex >= 0) {
+		std::string tempTimeString = fragmentedWords[tempIndex];
+		if(tempTimeString.find(".") != std::string::npos){
+			tempTimeString = tempTimeString.substr(0,tempTimeString.find(".")) + tempTimeString.substr(tempTimeString.find(".")+1);
+		}
 		try {
-			auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+			auto tempStoi = std::stoi(tempTimeString);
 			fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 			firstTimeInteger = tempStoi;
 		} catch (...) {
@@ -680,8 +684,12 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 		if (fragmentedWords[tempIndex] == "to") {
 			tempIndex--;
 			if (tempIndex >= 0) {
+				std::string tempTimeString = fragmentedWords[tempIndex];
+				if(tempTimeString.find(".") != std::string::npos){
+					tempTimeString = tempTimeString.substr(0,tempTimeString.find(".")) + tempTimeString.substr(tempTimeString.find(".")+1);
+				}
 				try {
-					auto tempStoi = std::stoi(fragmentedWords[tempIndex]);
+					auto tempStoi = std::stoi(tempTimeString);
 					fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 					tempInt = tempStoi;
 					toFound = true;

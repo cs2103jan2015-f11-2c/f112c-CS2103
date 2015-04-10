@@ -170,19 +170,19 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 					fragmentedWords.push_back(input.substr(0,strCutIndex+1));
 				}
 				strCutIndex = input.find_first_not_of(" ",strCutIndex);
-			} else if(input.at(strCutIndex) == '.'){
-				dotFound = true;
-				if(strCutIndex != 0){
-					fragmentedWords.push_back(input.substr(0,strCutIndex));
-				}
-				strCutIndex = input.find_first_not_of(".",strCutIndex);
+			//} else if(input.at(strCutIndex) == '.'){
+			//	dotFound = true;
+			//	if(strCutIndex != 0){
+			//		fragmentedWords.push_back(input.substr(0,strCutIndex));
+			//	}
+			//	strCutIndex = input.find_first_not_of(".",strCutIndex);
 			} else {
 				if(strCutIndex != 0){
 					fragmentedWords.push_back(input.substr(0,strCutIndex));
 					input = input.substr(strCutIndex);
 					strCutIndex = 0;
 				}
-				strCutIndex = input.find_first_not_of("0123456789",strCutIndex);
+				strCutIndex = input.find_first_not_of("0123456789.",strCutIndex);
 				if(strCutIndex != std::string::npos){
 					if(input[strCutIndex] == ' '){
 						fragmentedWords.push_back(input.substr(0,strCutIndex+1));
