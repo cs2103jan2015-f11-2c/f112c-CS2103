@@ -344,8 +344,8 @@ int ParserProcessor::identifyDay(int index) {
 				if (tempIndex >= 0) {
 					if (fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt") {
 						numWdaysApart = numWdaysApart + NUMBER_OF_DAYSINAWEEK;
+						tempIndex--;
 					}
-					tempIndex--;
 				}
 				if (!startDayFound) {
 					startDayFound = true;
