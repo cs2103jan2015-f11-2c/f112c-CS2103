@@ -65,6 +65,7 @@ public:
 	static const string PARTIAL_EVENT_FOUND_MESSAGE;
 	static const string CHOOSE_EVENT_MESSAGE;
 	static const string DONE_EVENT_ERROR_MESSAGE;
+	static const string DEADLINE_EVENT_ERROR_MESSAGE;
 	static const string NEW_DAY_MESSAGE;
 	static const string UNDO_MESSAGE;
 	static const string REDO_MESSAGE;

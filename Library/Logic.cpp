@@ -149,7 +149,11 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 			Event eventToEdit = createTempEvent(nameOfEvent, id);
 
 			if (eventToEdit.getIsCompleted()) {
-				return new NullCommand;
+				throw false;
+			}
+			
+			if (eventToEdit.getIsDeadline() && !isSameDate(userEvent.getStartDate(), userEvent.getEndDate())) {
+				throw false;
 			}
 
 			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent, updater.getTempMainDisplayLabel());
@@ -397,8 +401,12 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 			}
 
 			//successful edit 
-			if (commandPtr->getIsUndoable() == false) { //user tried to change completed event
-				updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+			if (commandPtr->getIsUndoable() == false) { 
+				if (userEvent.getIsCompleted()) { //user tried to change completed event
+					updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+				} else { //user tried to edit deadline event to have more than one time
+					updater.setFeedbackStrings(LogicUpdater::DEADLINE_EVENT_ERROR_MESSAGE);
+				}
 				throw !isDone;
 			}
 

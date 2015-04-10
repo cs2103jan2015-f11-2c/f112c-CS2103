@@ -60,11 +60,11 @@ Event Command::getEventFromID(vector<Event> eventVec, int id) {
 //if userEvent dates fall within the dates currently being shown, maintain the current date range being shown, otherwise use the date range of userEvent
 vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
 	assert(currentShowingTM.size() == SIZE_TWO);
-	
+
 	vector<tm> userTM, tmRangeToShow;
 	userTM.push_back(userEvent.getStartDate());
 	userTM.push_back(userEvent.getEndDate());
-	
+
 	if (userTM[SIZE_ZERO].tm_year >= currentShowingTM[SIZE_ZERO].tm_year &&
 		userTM[SIZE_ZERO].tm_mon >= currentShowingTM[SIZE_ZERO].tm_mon &&
 		userTM[SIZE_ZERO].tm_mday >= currentShowingTM[SIZE_ZERO].tm_mday &&
@@ -230,7 +230,7 @@ void CompleteCommand::completeExact(vector<Event> tempEvents) {
 	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
 		isFloating = true;
 		userEvent = tempEvents[SIZE_ZERO];
-	
+
 	} else { //1 normal match => event will be at index 1
 		isFloating = false;
 		id = tempEvents[SIZE_ONE].getID();
@@ -258,7 +258,7 @@ void UncompleteCommand::execute() {
 
 	switch (numResults) {
 
-	//no exact match
+		//no exact match
 	case SIZE_ZERO: {
 		logger.log(LogicLog::CASE_0 + LogicLog::UNCOMPLETE);
 		userEvent = createInvalidEvent();
@@ -266,10 +266,10 @@ void UncompleteCommand::execute() {
 		return;
 					}
 
-	//1 exact match
+					//1 exact match
 	case SIZE_ONE: {
 		logger.log(LogicLog::CASE_1 + LogicLog::UNCOMPLETE);
-		
+
 		userEvent = eventsToShow[SIZE_ZERO];
 		if (userEvent.getID() <= INVALID_NUMBER) {
 			userEvent = eventsToShow[SIZE_ONE];
@@ -279,8 +279,8 @@ void UncompleteCommand::execute() {
 		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
 		return;
 				   }
-	
-	//more than 1 exact match
+
+				   //more than 1 exact match
 	default: {
 		logger.log(LogicLog::DEFAULT + LogicLog::UNCOMPLETE);
 		userEvent = createInvalidEvent();
@@ -294,7 +294,9 @@ Event UncompleteCommand::getEvent() {
 }
 
 void UncompleteCommand::undo() {
-	
+	if (userEvent.getID() != INVALID_NUMBER) {
+		eventsToShow = eventFacade->completeEvent(userEvent);
+	}	
 }
 
 void UncompleteCommand::uncompleteImmediately() {
@@ -335,7 +337,7 @@ void DeleteCommand::execute() {
 
 	switch (numResults) {
 
-	//no exact match
+		//no exact match
 	case SIZE_ZERO: { 
 		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
 		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
@@ -346,7 +348,7 @@ void DeleteCommand::execute() {
 		return;
 					}
 
-	//1 exact match
+					//1 exact match
 	case SIZE_ONE: { 
 		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
 		deleteExact(tempEvents);
@@ -354,7 +356,7 @@ void DeleteCommand::execute() {
 		return;
 				   }
 
-	//more than 1 exact match
+				   //more than 1 exact match
 	default: { 
 		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
 		chooseExactMatches(userEvent);
