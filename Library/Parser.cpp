@@ -17,7 +17,6 @@ Parser::Parser(std::string input)
 	keywordCommands[10] = "complete";
 	keywordCommands[11] = "uncomplete";
 	keywordCommands[12] = "undone";
-	errorCounter = 0;
 
 	logger.logParserStart(input);
 	original = input;
