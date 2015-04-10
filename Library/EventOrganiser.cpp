@@ -99,7 +99,7 @@ vector<Event> EventOrganiser::allNormalCompleted(){
 			results.push_back(tempContent[i]);
 		}
 	}
-
+	
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, results.size());
 	return results;
 }
