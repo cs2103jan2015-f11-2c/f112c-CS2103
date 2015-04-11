@@ -1,5 +1,5 @@
 //==================================================================================================
-//EventSearch class handles all searching methods. It ultilises EventOrganiser to obtain the
+//EventSearch class handles all searching methods. It utilises EventOrganiser to obtain the
 //necessary filtered data and to format the data by date.
 //
 //

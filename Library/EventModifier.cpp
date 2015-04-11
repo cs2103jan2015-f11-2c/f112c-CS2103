@@ -19,7 +19,7 @@ vector<Event> EventModifier::add(Event newEvent){
 	logger.log(EventLog::MODIFIER + EventLog::ADD);
 	vector<Event> toLogic;
 	if(newEvent.getIsFloating()){
-		addfloat(newEvent);
+		addFloat(newEvent);
 		toLogic = organiser.showAllFloatingCurrent();	
 	} else{
 		addNormal(newEvent);
@@ -28,7 +28,7 @@ vector<Event> EventModifier::add(Event newEvent){
 	return toLogic; 
 }
 
-void EventModifier::addfloat(Event newEvent){
+void EventModifier::addFloat(Event newEvent){
 	logger.log(EventLog::MODIFIER + EventLog::ADD + EventLog::FLOATING);
 	vector<Event> tempContents;
 	tempContents = organiser.allFloatingCurrent();
@@ -54,7 +54,7 @@ vector<Event> EventModifier::del(Event deletedEvent){
 	if(deletedEvent.getIsFloating()){
 		index = findFloatingIndex(deletedEvent.getID());	//delete floating
 		assert(index > NOT_FOUND);
-		toLogic = deletefloat(index);
+		toLogic = deleteFloat(index);
 	} else{
 		index = findNormalIndex(deletedEvent.getID());	//delete normal
 		assert(index > NOT_FOUND);
@@ -75,7 +75,7 @@ vector<Event> EventModifier::deleteNormal(int index){
 	return toLogic;
 }
 
-vector<Event> EventModifier::deletefloat(int index){
+vector<Event> EventModifier::deleteFloat(int index){
 	
 	vector<Event> tempContents = organiser.allFloatingCurrent();
 	Event deletedEvent = tempContents[index];

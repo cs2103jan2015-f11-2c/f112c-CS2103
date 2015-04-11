@@ -55,10 +55,10 @@ private:
 
 	/*Add Method*/
 	void addNormal(Event newEvent);
-	void addfloat(Event newEvent);
+	void addFloat(Event newEvent);
 
 	/*Delete Method*/
-	vector<Event> deletefloat(int index);
+	vector<Event> deleteFloat(int index);
 	vector<Event> deleteNormal(int index);
 
 	/*Edit Method*/
