@@ -1,3 +1,4 @@
+//@author A0111089L
 #pragma once
 
 #ifndef LOGIC_H
@@ -49,7 +50,13 @@ public:
 	//main api
 	bool executeUserInput(string input);
 	
-	
+
+	//supporting methods
+	bool isProperCommand(Parser::CommandType commandType);
+	bool isSameDate(tm date1, tm date2);
+	void removeLabel(string& feedback);
+	bool isNumber(string s);
+
 private:
 	//main api
 	bool isDataRead();
@@ -62,12 +69,8 @@ private:
 
 
 	//supporting methods
-	bool isProperCommand(Parser::CommandType commandType);
-	bool isNumber(string s);
-	bool isSameDate(tm date1, tm date2);
 	int convertNameToID(string input);
 	string showTypeToString(Parser::CommandType cmd, int importance);	
-	void removeLabel(string& feedback);
 	void setNewID(Event& userEvent);
 	void clearRedo();
 	Event createTempEvent(string name, int id);

@@ -1,3 +1,4 @@
+//@author A0111089L
 #include "LogicLog.h"
 
 const string LogicLog::LOG_FILE_NAME = "LogicLog.txt";
