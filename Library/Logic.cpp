@@ -66,10 +66,10 @@ bool Logic::executeUserInput(string input) {
 	}
 
 	parserPtr = new Parser(input);
-
 	Parser::CommandType commandType = parserPtr->getCommandType();
 	Event userEvent = parserPtr->getEvent();
 	string nameOfEvent = parserPtr->getNameOfEvent();
+	deleteParserPtr();
 
 	Command* commandPtr = queueCommand(commandType, userEvent, nameOfEvent);
 	try {
@@ -80,7 +80,7 @@ bool Logic::executeUserInput(string input) {
 		}
 	}
 
-	deleteParserPtr();
+	
 
 	return isDone;
 }
