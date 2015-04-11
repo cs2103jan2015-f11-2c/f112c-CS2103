@@ -92,7 +92,7 @@ bool Logic::isDataRead() {
 	return true;
 }
 
-//creates pointer to command object, call executor to execute it
+//dynamically creates command object, call executor to execute it
 Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 	
