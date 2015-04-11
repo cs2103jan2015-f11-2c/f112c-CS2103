@@ -38,7 +38,10 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 		tempStr[i] = std::tolower(tempStr[i]);
 	}
 	
-	assert(!tempStr.empty());
+	if(tempStr.empty()){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
 	return tempStr;
 }
 
@@ -72,24 +75,13 @@ std::string InputStringSplit::extractDetails(std::string input){
 	}
 
 	std::string tempStr = input.substr(strCutIndex);
-	assert(!tempStr.empty());
-	return tempStr;
-}
-/*
-//Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
-//Throws exception if no event name/ event index is found or if too many information is provided. Returns the extracted event name/index in string format.
-std::string InputStringSplit::extractDelDoneEventName(std::string input){
-	logger.logParserEnterFunc(EXTRACT_DEL_DONE_EVENT_NAME);
-	assert(!input.empty());
-
-	if(input.empty()){
+	if(tempStr.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
-	
 	return tempStr;
 }
-*/
+
 //Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
 //Throws exception if no event name/ event index is found. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractEditEventName(std::string input){
@@ -109,7 +101,18 @@ std::string InputStringSplit::extractEditEventName(std::string input){
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INDEX);
 	}
 	tempStr = input.substr(0,strCutIndex);
-	assert(!tempStr.empty());
+	strCutIndex = tempStr.find_last_not_of(" ");
+	if (strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INDEX);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INDEX);
+	} else {
+		tempStr = tempStr.substr(0,strCutIndex+1);
+	}
+
+	if(tempStr.empty()){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
 	return tempStr;
 }
 
@@ -132,7 +135,11 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 	} else {
 		tempStr = CONVERT_NORMAL_TO_FLOAT;
 	}
-	assert(!tempStr.empty());
+
+	if(tempStr.empty()){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
 	return tempStr;
 }
 
@@ -154,7 +161,7 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	int dotCounter = 0;
 
 	while(!endOfString){
-		strCutIndex = input.find_first_of("- .0123456789");
+		strCutIndex = input.find_first_of("- 0123456789");
 		if(strCutIndex == std::string::npos){
 			fragmentedWords.push_back(input.substr(0,strCutIndex));
 			endOfString = true;
@@ -170,12 +177,6 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 					fragmentedWords.push_back(input.substr(0,strCutIndex+1));
 				}
 				strCutIndex = input.find_first_not_of(" ",strCutIndex);
-			//} else if(input.at(strCutIndex) == '.'){
-			//	dotFound = true;
-			//	if(strCutIndex != 0){
-			//		fragmentedWords.push_back(input.substr(0,strCutIndex));
-			//	}
-			//	strCutIndex = input.find_first_not_of(".",strCutIndex);
 			} else {
 				if(strCutIndex != 0){
 					fragmentedWords.push_back(input.substr(0,strCutIndex));
@@ -209,7 +210,6 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 			}
 		}
 	}
-	//assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }
 
@@ -231,7 +231,7 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 	int dotCounter = 0;
 
 	while(!endOfString){
-		strCutIndex = input.find_first_of("- .0123456789");
+		strCutIndex = input.find_first_of("- 0123456789");
 		if(strCutIndex == std::string::npos){
 			fragmentedWords.push_back(input.substr(0,strCutIndex));
 			endOfString = true;
@@ -247,19 +247,13 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 					fragmentedWords.push_back(input.substr(0,strCutIndex+1));
 				}
 				strCutIndex = input.find_first_not_of(" ",strCutIndex);
-			} else if(input.at(strCutIndex) == '.'){
-				dotFound = true;
-				if(strCutIndex != 0){
-					fragmentedWords.push_back(input.substr(0,strCutIndex));
-				}
-				strCutIndex = input.find_first_not_of(".",strCutIndex);
 			} else {
 				if(strCutIndex != 0){
 					fragmentedWords.push_back(input.substr(0,strCutIndex));
 					input = input.substr(strCutIndex);
 					strCutIndex = 0;
 				}
-				strCutIndex = input.find_first_not_of("0123456789",strCutIndex);
+				strCutIndex = input.find_first_not_of("0123456789.",strCutIndex);
 				fragmentedWords.push_back(input.substr(0,strCutIndex));
 			}
 			if(dotFound){
@@ -278,48 +272,6 @@ std::vector<std::string> InputStringSplit::fragmentEditString(std::string input)
 			}
 		}
 	}
-
-	/*
-	if(input.find_first_not_of(" -.") == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-	}
-
-	strCutIndex = input.find_first_of(";");
-	if(strCutIndex != std::string::npos){
-		fragmentedWords.push_back(input.substr(0,strCutIndex)+";");
-		strCutIndex = input.find_first_not_of(" -.;",strCutIndex);
-		if(strCutIndex == std::string::npos){
-			endOfString = true;
-		} else {
-			input = input.substr(strCutIndex);
-			for(unsigned int i = 0; i < input.size(); i++){
-				input[i] = std::tolower(input[i]);
-			}
-		}
-	}
-
-	if(input.find_first_not_of(" -.") == std::string::npos){
-		endOfString = true;
-	}
-
-	while(!endOfString){
-		strCutIndex = input.find_first_of(" -.");
-		fragmentedWords.push_back(input.substr(0,strCutIndex));
-		if(strCutIndex != std::string::npos){
-			if(input.at(strCutIndex) == '-'){
-				fragmentedWords.push_back("to");
-			}
-		}
-		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
-		if(strCutIndex == std::string::npos){
-			endOfString = true;
-		} else {
-			input = input.substr(strCutIndex);
-		}
-	}
-	*/
-	//assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }	
 
@@ -361,6 +313,5 @@ std::vector<std::string> InputStringSplit::fragmentShowString(std::string input)
 			input = input.substr(strCutIndex);
 		}
 	}
-	//assert(!fragmentedWords.empty());
 	return fragmentedWords;
 }
