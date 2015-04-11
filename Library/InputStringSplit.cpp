@@ -1,3 +1,5 @@
+//@author A0111379H
+
 #include "InputStringSplit.h"
 
 const std::string InputStringSplit::EXTRACT_FIRST_WORD = "extractFirstWord";

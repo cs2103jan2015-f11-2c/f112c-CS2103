@@ -1,3 +1,5 @@
+//@author A0111379H
+
 #include "Parser.h"
 
 const std::string Parser::TOKENISE_ORIGINAL_STRING = "tokeniseOriginalString";
@@ -113,6 +115,8 @@ void Parser::determineCommandType() {
 	return;
 }
 
+//@author A0111230J
+
 void Parser::determineAddCommand() {
 	std::vector<std::string> fragmentedWords;
 
@@ -225,15 +229,14 @@ bool Parser::checkCommandUndoRedo() {
 	return isUndoRedo;
 }
 
+//@author A0111379H
+
 //Sets the feedback based on what exception code was thrown to be returned to Logic and displayed to the user.
 std::string Parser::createFeedback(std::string errorCode) {
 	std::string tempFeedback;
 	if (errorCode == ParserExceptions::ERROR_MISSING_INPUT) {
 		tempFeedback = "Error: Missing input.";
 	}
-	//if (errorCode == ParserExceptions::ERROR_NO_NAME) {
-	//	tempFeedback = "Error: No event name found.";
-	//}
 	if (errorCode == ParserExceptions::ERROR_TOO_MANY_DATES) {
 		tempFeedback = "Error: Exceeded maximum of 2 date inputs.";
 	}
@@ -249,9 +252,6 @@ std::string Parser::createFeedback(std::string errorCode) {
 	if (errorCode == ParserExceptions::ERROR_MISSING_HOUR_MIN) {
 		tempFeedback = "Error: No hour/minute input before am/pm.";
 	}
-	//if (errorCode == ParserExceptions::ERROR_TOO_MANY_DEL) {
-	//	tempFeedback = "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
-	//}
 	if (errorCode == ParserExceptions::ERROR_MISSING_INDEX) {
 		tempFeedback = "Error: No event index or event name found.";
 	}

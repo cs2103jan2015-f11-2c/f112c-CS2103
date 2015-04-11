@@ -1,4 +1,4 @@
-#pragma warning(disable:4996)
+//@author A0111379H 
 
 #include "ParserProcessor.h"
 
@@ -353,7 +353,11 @@ int ParserProcessor::identifyDay(int index) {
 				}
 				//checking for next which will add one extra week
 				if (tempIndex >= 0) {
-					if (fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt") {
+					lowerCaseString = fragmentedWords[tempIndex];
+					for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+						lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+					}
+					if ((findExactWord(lowerCaseString,"next")) || (findExactWord(lowerCaseString,"nxt"))) {
 						numWdaysApart = numWdaysApart + NUMBER_OF_DAYSINAWEEK;
 						tempIndex--;
 					}
@@ -1231,7 +1235,6 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex) {
 	
 	//Check all system show commands and assign Start and End date accordingly if required
 	if (firstWord == "next" || firstWord == "nxt") {
-		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 		tempIndex++;
 		nextFound = true;
 		firstWord = fragmentedWords[tempIndex];
@@ -1297,10 +1300,15 @@ bool ParserProcessor::identifyShowDay(int index) {
 	int month = now->tm_mon;
 	int year = now->tm_year;
 	std::string strDay;
+	std::string lowerCaseString;
 
 	//Find the presence of keywords based on weekdays (tdy,tmr,mon,tues....)
 	for (int j = 0; j < NUMBER_OF_KEYWORDS_DAYS && !matchFound; j++) {
-		if (fragmentedWords[index].find(keywordDay[j]) != std::string::npos) {
+		lowerCaseString = fragmentedWords[index];
+		for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+			lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+		}
+		if(findExactWord(lowerCaseString,keywordDay[j])){
 			tempIndex = index;
 			strDay = keywordDay[j];
 			matchFound = true;
@@ -1347,8 +1355,13 @@ bool ParserProcessor::identifyShowDay(int index) {
 				tempIndex--;
 				//checking for next which will add one extra week
 				if (tempIndex >= 0) {
-					if (fragmentedWords[tempIndex] == "next" || fragmentedWords[tempIndex] == "nxt") {
+					lowerCaseString = fragmentedWords[tempIndex];
+					for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+						lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+					}
+					if ((findExactWord(lowerCaseString,"next")) || (findExactWord(lowerCaseString,"nxt"))) {
 						numWdaysApart = numWdaysApart + NUMBER_OF_DAYSINAWEEK;
+						tempIndex--;
 					}
 				}
 				if (!oneMatchFound) {
@@ -1377,6 +1390,7 @@ bool ParserProcessor::identifyShowDay(int index) {
 bool ParserProcessor::identifyShowDate(int index) {
 	Conversion convertor;
 	std::string strMonth;
+	std::string lowerCaseString;
 	int tempIndex = 0, indexShift = 0, weekday = 0, dayTo = 0;
 	int day = now->tm_mday;
 	int month = now->tm_mon;
@@ -1384,7 +1398,11 @@ bool ParserProcessor::identifyShowDate(int index) {
 	
 	//Checks current string for any keywords of months
 	for (unsigned int j = 0; j < NUMBER_OF_KEYWORDS_MONTHS && !matchFound; j++) {
-		if (fragmentedWords[index].find(keywordMonths[j]) != std::string::npos) {
+		lowerCaseString = fragmentedWords[index];
+		for(unsigned int i = 0; i < lowerCaseString.size(); i++){
+			lowerCaseString[i] = std::tolower(lowerCaseString[i]);
+		}
+		if(findExactWord(lowerCaseString,keywordMonths[j])){
 			matchFound = true;
 			logger.logParserIdentified(IDENTIFY_DATE);
 			if (!oneMatchFound) {
