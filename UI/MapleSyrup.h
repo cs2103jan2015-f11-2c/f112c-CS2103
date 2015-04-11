@@ -57,6 +57,10 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  navigationPicCalendar;
 	private: System::Windows::Forms::RichTextBox^  suggestBar;
 	private: System::Windows::Forms::PictureBox^  pictureBox5;
+	private: System::Windows::Forms::RichTextBox^  commandBox;
+	private: System::Windows::Forms::PictureBox^  suggPic;
+
+
 
 
 
@@ -109,7 +113,7 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  pictureBox8;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
 	private: System::Windows::Forms::PictureBox^  searchIcon;
-	private: System::Windows::Forms::TextBox^  commandBox;
+
 
 	private: System::ComponentModel::IContainer^  components;
 
@@ -133,7 +137,6 @@ namespace UI {
 		{
 			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MapleSyrup::typeid));
-			this->commandBox = (gcnew System::Windows::Forms::TextBox());
 			this->feedbackBox = (gcnew System::Windows::Forms::RichTextBox());
 			this->searchBox = (gcnew System::Windows::Forms::TextBox());
 			this->display = (gcnew System::Windows::Forms::RichTextBox());
@@ -149,6 +152,7 @@ namespace UI {
 			this->calenderTop = (gcnew System::Windows::Forms::MonthCalendar());
 			this->redoButton = (gcnew System::Windows::Forms::Button());
 			this->undoButton = (gcnew System::Windows::Forms::Button());
+			this->commandBox = (gcnew System::Windows::Forms::RichTextBox());
 			this->showButton = (gcnew System::Windows::Forms::Button());
 			this->helpButton = (gcnew System::Windows::Forms::Button());
 			this->showDropDown = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
@@ -170,6 +174,7 @@ namespace UI {
 			this->navigationPicCalendar = (gcnew System::Windows::Forms::PictureBox());
 			this->suggestBar = (gcnew System::Windows::Forms::RichTextBox());
 			this->pictureBox5 = (gcnew System::Windows::Forms::PictureBox());
+			this->suggPic = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->calenderIcon))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
@@ -186,36 +191,8 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->suggPic))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// commandBox
-			// 
-			this->commandBox->AcceptsReturn = true;
-			this->commandBox->AcceptsTab = true;
-			this->commandBox->AllowDrop = true;
-			this->commandBox->AutoCompleteCustomSource->AddRange(gcnew cli::array< System::String^  >(16) {resources->GetString(L"commandBox.AutoCompleteCustomSource"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource1"), resources->GetString(L"commandBox.AutoCompleteCustomSource2"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource3"), resources->GetString(L"commandBox.AutoCompleteCustomSource4"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource5"), resources->GetString(L"commandBox.AutoCompleteCustomSource6"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource7"), resources->GetString(L"commandBox.AutoCompleteCustomSource8"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource9"), resources->GetString(L"commandBox.AutoCompleteCustomSource10"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource11"), resources->GetString(L"commandBox.AutoCompleteCustomSource12"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource13"), resources->GetString(L"commandBox.AutoCompleteCustomSource14"), 
-				resources->GetString(L"commandBox.AutoCompleteCustomSource15")});
-			this->commandBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::Suggest;
-			this->commandBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::CustomSource;
-			this->commandBox->BackColor = System::Drawing::Color::White;
-			this->commandBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->commandBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-			resources->ApplyResources(this->commandBox, L"commandBox");
-			this->commandBox->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->commandBox->Name = L"commandBox";
-			this->commandBox->Tag = L"Enter";
-			this->toolTip1->SetToolTip(this->commandBox, resources->GetString(L"commandBox.ToolTip"));
-			this->commandBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::commandBox_TextChanged);
-			this->commandBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Enter);
-			this->commandBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::commandBox_KeyDown);
-			this->commandBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Leave);
 			// 
 			// feedbackBox
 			// 
@@ -258,7 +235,6 @@ namespace UI {
 			this->display->Enter += gcnew System::EventHandler(this, &MapleSyrup::display_Enter);
 			this->display->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::display_KeyDown);
 			this->display->Leave += gcnew System::EventHandler(this, &MapleSyrup::display_Leave);
-			this->display->MouseEnter += gcnew System::EventHandler(this, &MapleSyrup::display_MouseEnter);
 			// 
 			// floatingTasksDisplay
 			// 
@@ -376,6 +352,19 @@ namespace UI {
 			this->toolTip1->SetToolTip(this->undoButton, resources->GetString(L"undoButton.ToolTip"));
 			this->undoButton->UseVisualStyleBackColor = false;
 			this->undoButton->Click += gcnew System::EventHandler(this, &MapleSyrup::undoButton_Click);
+			// 
+			// commandBox
+			// 
+			this->commandBox->AutoWordSelection = true;
+			this->commandBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			resources->ApplyResources(this->commandBox, L"commandBox");
+			this->commandBox->Name = L"commandBox";
+			this->commandBox->ShowSelectionMargin = true;
+			this->toolTip1->SetToolTip(this->commandBox, resources->GetString(L"commandBox.ToolTip"));
+			this->commandBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::commandBox_TextChanged_1);
+			this->commandBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Enter_1);
+			this->commandBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::commandBox_KeyDown_1);
+			this->commandBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Leave_1);
 			// 
 			// showButton
 			// 
@@ -542,6 +531,13 @@ namespace UI {
 			this->pictureBox5->Name = L"pictureBox5";
 			this->pictureBox5->TabStop = false;
 			// 
+			// suggPic
+			// 
+			this->suggPic->BackColor = System::Drawing::Color::Transparent;
+			resources->ApplyResources(this->suggPic, L"suggPic");
+			this->suggPic->Name = L"suggPic";
+			this->suggPic->TabStop = false;
+			// 
 			// MapleSyrup
 			// 
 			this->AllowDrop = true;
@@ -549,13 +545,14 @@ namespace UI {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->AutoValidate = System::Windows::Forms::AutoValidate::EnableAllowFocusChange;
 			this->BackColor = System::Drawing::Color::BurlyWood;
+			this->Controls->Add(this->suggPic);
+			this->Controls->Add(this->commandBox);
 			this->Controls->Add(this->suggestBar);
 			this->Controls->Add(this->pictureBox5);
 			this->Controls->Add(this->navigationPicSearchBar);
 			this->Controls->Add(this->nagivationPicfloatingDis);
 			this->Controls->Add(this->nagivationPicCombBar);
 			this->Controls->Add(this->navigationPic);
-			this->Controls->Add(this->commandBox);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->redoButton);
 			this->Controls->Add(this->undoButton);
@@ -604,6 +601,7 @@ namespace UI {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicSearchBar))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->navigationPicCalendar))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox5))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->suggPic))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -1114,9 +1112,7 @@ std::string toLowerCase(std::string word){
 * commandBar
 * ===================================================================================================================================================================
 */
-
-
-private: System::Void commandBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Enter){
 				String^ temp = commandBox->Text;
 				resetCommandBar();
@@ -1136,7 +1132,7 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				return;
 			 }
 
-			 if (e->KeyCode == Keys::Up){
+			 if (e->KeyCode == Keys::Up && commandBox->Text ==""){
 				 
 				 std::vector<std::string> userActions = cSPtr->getUserActions();
 				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
@@ -1144,14 +1140,12 @@ private: System::Void commandBox_KeyDown(System::Object^  sender, System::Window
 				 return;
 			 }
 
-			 if (e->KeyCode == Keys::Down){
+			 if (e->KeyCode == Keys::Down && commandBox->Text ==""){
 				 std::vector<std::string> userActions = cSPtr->getUserActions();
 				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
 				 cSPtr->setUserActionsIndex(1);
 				 return;
 			 }
-
-
 		 }
 
 public: void resetCommandBar(){
@@ -1211,13 +1205,92 @@ private: void unDisplaySuggestion(){
 			suggestBar->Text = "";
 		}
 
+
+
+private: void colourCommands(std::string token){
+			 std::vector<std::string> timeVect = cSPtr->getKeyWordTimeVect();
+			 for (int i=0; i<timeVect.size(); i++){
+				 if(token == timeVect[i]){
+					commandBox->SelectionColor = Color::SandyBrown;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			 std::vector<std::string> othersVect = cSPtr->getkeywordOthersVect();
+			 for (int i=0; i<othersVect.size(); i++){
+				 if(token == othersVect[i]){
+					commandBox->SelectionColor = Color::RoyalBlue;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			 std::vector<std::string> commandsVect = cSPtr->getKeyWordCommandsVect();
+			 for (int i=0; i<commandsVect.size(); i++){
+				 if(token == commandsVect[i]){
+					commandBox->SelectionColor = Color::SlateBlue;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			 std::vector<std::string> dayVect = cSPtr->getKeyWordDayVect();
+			 for (int i=0; i<dayVect.size(); i++){
+				 if(token == dayVect[i]){
+					commandBox->SelectionColor = Color::DimGray;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			 std::vector<std::string> monthsVect = cSPtr->getKeyWordMonthsVect();
+			 for (int i=0; i<monthsVect.size(); i++){
+				 if(token == monthsVect[i]){
+					commandBox->SelectionColor = Color::Gray;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			 
+			 
+			commandBox->SelectionColor = Color::Black;
+			commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Regular);
+			commandBox->SelectedText = convertToSys(token);
+
+		 }
+
+
 //This function is triggered whenever there is a textchange in the commandBox
 //Use to trigger suggestBox to display the respective suggestions to user
-private: System::Void commandBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
-			 
+private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
+			 if(commandBox->Text != ""){
+				 suggPic->Visible = true;
+			 } else {
+				 suggPic->Visible = false;
+			 }
+
+
 			 std::string temp = convertToStd(commandBox->Text);
 			 
 			 std::string tempCommand = toLowerCase(temp);
+				
+			 std::vector<std::string> vectOfTokens = cSPtr->tokenizeString(temp);
+			 commandBox->Text =""; 
+			 for (int i=0; i<vectOfTokens.size(); i++){
+				 colourCommands(vectOfTokens[i]);
+			 }
 
 			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
 
@@ -1257,6 +1330,9 @@ private: System::Void commandBox_TextChanged(System::Object^  sender, System::Ev
 			 }
 			
 		 }
+
+
+
 //===================================================================================================================================================================
 
 /*
@@ -1613,28 +1689,22 @@ private: Void log(std::string label, std::string commands){
 		 }
 //===================================================================================================================================================================
 
-
-
-
-
-
-private: System::Void display_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
-		 }
-private: System::Void commandBox_Leave(System::Object^  sender, System::EventArgs^  e) {
-			 commandBox->Text = " Type command here";
-			 nagivationPicCombBar->Visible = false;
-			 nagivationPicCombBar->SendToBack();
-		 }
-private: System::Void commandBox_Enter(System::Object^  sender, System::EventArgs^  e) {
-			 commandBox->Text = "";
-			 nagivationPicCombBar->Visible = true;
-			 nagivationPicCombBar->BringToFront();
-		 }
 private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System::EventArgs^  e) {
 			nagivationPicfloatingDis->Visible = false;
 			nagivationPicfloatingDis->SendToBack();
 		 }
 
+private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = "";
+			 nagivationPicCombBar->Visible = true;
+			 nagivationPicCombBar->BringToFront();
+		 }
+
+private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = " Type command here";
+			 nagivationPicCombBar->Visible = false;
+			 nagivationPicCombBar->SendToBack();
+		 }
 
 };
 }

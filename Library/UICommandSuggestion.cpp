@@ -13,6 +13,7 @@ UICommandSuggestion::UICommandSuggestion(void)
 	setKeywordDay();
 	setKeywordMonths();
 	setKeywordTime();
+	setKeywordOthers();
 
 	initializeUserActionsIndex();
 }
@@ -233,11 +234,6 @@ void UICommandSuggestion::setKeywordCommands(){
 	_keywordCommands.push_back ("complete");
 	_keywordCommands.push_back ("uncomplete");
 	_keywordCommands.push_back ("undone");
-	_keywordCommands.push_back ("to");
-	_keywordCommands.push_back ("due");
-	_keywordCommands.push_back ("by");
-	_keywordCommands.push_back ("next");
-	_keywordCommands.push_back ("nxt");
 	_keywordCommands.push_back ("back");
 	_keywordCommands.push_back ("bk");
 }
@@ -300,4 +296,56 @@ void UICommandSuggestion::setKeywordDay(){
 	_keywordDay.push_back ("sunday");
 }
 
+void UICommandSuggestion::setKeywordOthers(){
+	_keywordOthers.push_back ("to");
+	_keywordOthers.push_back ("due");
+	_keywordOthers.push_back ("by");	
+	_keywordCommands.push_back ("next");
+	_keywordOthers.push_back ("nxt");
+}
 
+std::vector<std::string> UICommandSuggestion::tokenizeString(std::string input){
+	std::vector<std::string> tokenVect;
+
+	int start = 0;
+	int end = 0;
+
+	std::string token = "";
+
+	for (int i=0; i<input.size();i++){
+		if(input[i] != ' '){
+			token += input[i];
+		} else if(token != ""){
+			tokenVect.push_back(token);
+			token = "";
+			tokenVect.push_back(" ");
+		} else {
+			tokenVect.push_back(" ");
+		}
+
+	}
+
+	tokenVect.push_back(token);
+
+	return tokenVect;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordCommandsVect(){
+	return _keywordCommands;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordMonthsVect(){
+	return _keywordMonths;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordTimeVect(){
+	return _keywordTime;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordDayVect(){
+	return _keywordDay;
+}
+
+std::vector<std::string> UICommandSuggestion::getkeywordOthersVect(){
+	return _keywordOthers;
+}

@@ -48,6 +48,7 @@ public:
 	std::vector<std::string> _keywordMonths;
 	std::vector<std::string> _keywordTime;
 	std::vector<std::string> _keywordDay;
+	std::vector<std::string> _keywordOthers;
 
 /*
 * =================================================================================================================================================================== 
@@ -169,6 +170,16 @@ public:
 	void setKeywordMonths();
 	void setKeywordTime();
 	void setKeywordDay();
+	void setKeywordOthers();
+
+	std::vector<std::string> tokenizeString(std::string);
+
+	std::vector<std::string> getKeyWordCommandsVect();
+	std::vector<std::string> getKeyWordMonthsVect();
+	std::vector<std::string> getKeyWordTimeVect();
+	std::vector<std::string> getKeyWordDayVect();
+	std::vector<std::string> getkeywordOthersVect();
+
 
 };
 #endif
