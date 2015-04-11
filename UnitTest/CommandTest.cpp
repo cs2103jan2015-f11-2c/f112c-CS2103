@@ -111,8 +111,4 @@ namespace UnitTest
 			Assert::AreEqual(invalidEvent.getID(), -1);
 		}
 	};
-
-/**
-* @author A0111089L
-*/
 }

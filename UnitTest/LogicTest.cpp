@@ -135,7 +135,5 @@ namespace UnitTest
 		}
 	};
 
-/**
-* @author A0111089L
-*/
+
 }
