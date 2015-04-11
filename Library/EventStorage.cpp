@@ -1,3 +1,5 @@
+//@author A0113860M
+
 #include "EventStorage.h"
 	
 const string EventStorage::currentFile = "myCurrent.txt";

@@ -1,3 +1,5 @@
+//@author A0113860M
+
 #include "EventLog.h"
 
 const string EventLog::LOG_FILE_NAME = "EventLog.txt";
@@ -46,6 +48,7 @@ const string EventLog::DATA_ID = "dataID ";
 const string EventLog::NORMAL = "Normal "; 
 const string EventLog::FLOATING = "Floating ";
 const string EventLog::EXIT = "Exit ";
+const string EventLog::ERROR = "ERROR: ";
 
 EventLog::EventLog(){
 }

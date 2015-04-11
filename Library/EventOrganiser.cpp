@@ -1,3 +1,5 @@
+//@author A0113860M
+
 #include "EventOrganiser.h"
 
 const int EventOrganiser::TOTAL_MONTHS_IN_A_YEAR = 12;

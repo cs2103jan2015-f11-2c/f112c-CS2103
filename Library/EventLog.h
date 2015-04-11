@@ -1,3 +1,4 @@
+//@author A0113860M
 //==================================================================================================
 //EventLog is responsible for writing logs onto a text file(EventLog.txt) for reference and debugging.
 //Combinations of log messages are used liberally throughout the storage component
@@ -69,7 +70,8 @@ public:
 	static const string NORMAL;
 	static const string FLOATING;
 	static const string EXIT;
-	
+	static const string ERROR;
+
 	//Methods
 	void log(string functionName);
 	void log(string location, int data);

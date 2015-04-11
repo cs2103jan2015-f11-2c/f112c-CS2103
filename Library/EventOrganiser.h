@@ -1,3 +1,4 @@
+//@author A0113860M
 //==================================================================================================
 //EventOrganiser handles organisation and formatting of data from EventStorage. 
 //

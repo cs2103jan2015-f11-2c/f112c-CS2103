@@ -1,9 +1,11 @@
+//@author A0113860M
+
 #include "EventSearch.h"
 
 const int EventSearch::NOT_FOUND = -1;
 const int EventSearch::MAX_LEVEL = 3;
 const int EventSearch::MIN_LEVEL = 1;
-
+const string EventSearch::ERROR_1 =  "Level greater than 3";
 
 EventSearch::EventSearch()
 {
@@ -61,7 +63,7 @@ vector<Event> EventSearch::searchLevelImportance(int level){
 	
 	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
 	vector<Event> normalEvents = organiser.allNormalCurrent();
-//che help if level > 3 set to 3 and thow exception to log
+	
 	floatingEvents = searchEventWithImportance(level, floatingEvents);
 	normalEvents = searchEventWithImportance(level, normalEvents);
 
@@ -182,15 +184,19 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> vectorToSearch){
 
 	vector<Event> returnVector;
-	/*if(level > 3){
-		string exception = "ERROR: Level greater than 3";
-		throw exception;
-	}*/
-	if(level > MAX_LEVEL){
-		level = MAX_LEVEL;
-	} 
-	if( level < MIN_LEVEL){
-		level = MIN_LEVEL;
+	try{
+		if(level > 3){
+			if(level > MAX_LEVEL){
+				level = MAX_LEVEL;
+			} 
+			if( level < MIN_LEVEL){
+				level = MIN_LEVEL;
+			}
+			string exception = ERROR_1;
+			throw exception;
+		}
+	} catch(string e){
+		logger.log(EventLog::ERROR + e);
 	}
 
 	for(auto i=0;i<vectorToSearch.size();i++){

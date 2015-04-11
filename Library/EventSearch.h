@@ -1,3 +1,4 @@
+//@author A0113860M
 //==================================================================================================
 //EventSearch class handles all searching methods. It utilises EventOrganiser to obtain the
 //necessary filtered data and to format the data by date.
@@ -43,6 +44,7 @@ private:
 	static const int EventSearch::NOT_FOUND;
 	static const int EventSearch::MAX_LEVEL;
 	static const int EventSearch::MIN_LEVEL;
+	static const string EventSearch::ERROR_1;
 	
 	EventOrganiser organiser;
 	EventLog logger;

@@ -1,3 +1,4 @@
+//@author A0113860M
 //==================================================================================================
 //EventModifier is a class that deals with the modification of an event or its attributes that will
 //affect storage. The internal and external storages are then updated according to the action executed.

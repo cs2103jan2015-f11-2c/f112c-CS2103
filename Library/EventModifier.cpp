@@ -1,3 +1,5 @@
+//@author A0113860M
+
 #include "EventModifier.h"
 
 const int EventModifier::NOT_FOUND = -1 ;

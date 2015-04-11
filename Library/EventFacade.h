@@ -1,3 +1,4 @@
+//@author A0113860M
 //==================================================================================================
 //EventFacade is a thin class which provides a simple interface to the client, hiding the internal
 //complexity of the storage. It purely redirects desired function calls to the appropriate destination.
