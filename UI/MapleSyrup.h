@@ -1158,6 +1158,9 @@ public: void resetCommandBar(){
 * Functions that link commandBar to CommandSuggestion.h to display the various suggestions 
 * ===================================================================================================================================================================
 */
+
+
+
 //Pre-condition : None 
 //Display the information in vector suggestion onto suggestBar
 private: void displaySuggestion(std::vector<std::string> suggestion){
@@ -1332,6 +1335,18 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 		 }
 
 
+private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = "";
+			 nagivationPicCombBar->Visible = true;
+			 nagivationPicCombBar->BringToFront();
+		 }
+
+private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventArgs^  e) {
+			 commandBox->Text = " Type command here";
+			 nagivationPicCombBar->Visible = false;
+			 nagivationPicCombBar->SendToBack();
+			 suggPic->Visible = false;
+		 }
 
 //===================================================================================================================================================================
 
@@ -1694,17 +1709,6 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->SendToBack();
 		 }
 
-private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
-			 commandBox->Text = "";
-			 nagivationPicCombBar->Visible = true;
-			 nagivationPicCombBar->BringToFront();
-		 }
-
-private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventArgs^  e) {
-			 commandBox->Text = " Type command here";
-			 nagivationPicCombBar->Visible = false;
-			 nagivationPicCombBar->SendToBack();
-		 }
 
 };
 }

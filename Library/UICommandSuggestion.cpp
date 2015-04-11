@@ -302,6 +302,7 @@ void UICommandSuggestion::setKeywordOthers(){
 	_keywordOthers.push_back ("by");	
 	_keywordCommands.push_back ("next");
 	_keywordOthers.push_back ("nxt");
+	_keywordOthers.push_back ("all");
 }
 
 std::vector<std::string> UICommandSuggestion::tokenizeString(std::string input){
