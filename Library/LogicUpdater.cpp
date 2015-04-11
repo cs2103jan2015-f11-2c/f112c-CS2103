@@ -89,7 +89,13 @@ vector<Event> LogicUpdater::getFeedbackEvents() {
 }
 
 int LogicUpdater::getTotalNumEvents() {
+	
 	int normalCount = 0;
+
+	if (_floatingEvents.size() == normalCount && _normalEvents.size() == normalCount) {
+		return normalCount;
+	}
+
 	for (int i = 0; i < _normalEvents.size(); i++) {
 		if (_normalEvents[i].getName() != NEW_DAY_MESSAGE) {
 			normalCount++;
@@ -200,15 +206,20 @@ Event LogicUpdater::getEventFromID(int id) {
 	}
 }
 
-vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {
+vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {	
 	vector<Event> resultEvents;
+
 	if (index != INVALID_NUMBER) {
+		if (index > getTotalNumEvents()) {
+			return resultEvents;
+		}
+
 		if (index <= getTotalFloatingEvents()) {
 			resultEvents.push_back(_floatingEvents[index-1]); 
 		} else {
 			int normalIndex = index - getTotalFloatingEvents();
 			int count = 0;
-
+			
 			while (count != normalIndex) {
 				if (_normalEvents[count].getName() == NEW_DAY_MESSAGE) {
 					normalIndex++;
@@ -222,18 +233,24 @@ vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {
 		return resultEvents;
 	}
 
+	
 	for (unsigned int i = 0; i < getTotalFloatingEvents(); i++) {
 		if (_floatingEvents[i].getName() == name) {
 			resultEvents.push_back(_floatingEvents[i]);
 		}
 	}
 
+	
 	for (unsigned int i = 0; i < getTotalNormalEvents(); i++) {
 		if (_normalEvents[i].getName() == name | _normalEvents[i].getName() == NEW_DAY_MESSAGE) {
 			resultEvents.push_back(_normalEvents[i]);
 		}
 	}
 
+	if (resultEvents.empty()) {
+		return resultEvents;
+	}
+	
 	for (unsigned int i = 0; i < resultEvents.size() - 1; i++) {
 		if (resultEvents[i].getName() == NEW_DAY_MESSAGE && resultEvents[i + 1].getName() == NEW_DAY_MESSAGE) {
 			resultEvents.erase(resultEvents.begin() + i);
