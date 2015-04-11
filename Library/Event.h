@@ -37,12 +37,6 @@ private:
 public:
 	//constructors
 	Event();
-	/*
-	Event(string name);
-	Event(string eventName, int day, int month, int year);
-	Event(string eventName, int day, int month, int year, int startTime);
-	Event(string eventName, int day, int month, int year, int startTime, int endTime);
-	*/
 
 
 	//getters
@@ -84,3 +78,13 @@ public:
 };
 
 #endif
+
+
+//@author A0111089L-unused
+//These were the original ways events would be constructed but we decided to use setters instead
+/*
+	Event(string name);
+	Event(string eventName, int day, int month, int year);
+	Event(string eventName, int day, int month, int year, int startTime);
+	Event(string eventName, int day, int month, int year, int startTime, int endTime);
+	*/

@@ -158,7 +158,8 @@ void Event::setID(int number) {
 }
 
 
-//unused constructors
+//@author A0111089L-unused
+//These were the original ways events would be constructed but we decided to use setters instead
 /*
 Event::Event(string eventName) : name(eventName) {
 }
