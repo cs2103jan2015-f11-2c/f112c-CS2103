@@ -117,7 +117,7 @@ void Parser::determineAddCommand() {
 	std::vector<std::string> fragmentedWords;
 
 	try {
-		fragmentedWords = splitter.fragmentAddString(details);
+		fragmentedWords = splitter.fragmentString(details);
 		tempEventStore = processor.processAddEvent(fragmentedWords);
 		if (tempEventStore.getIsFloating() == true) {
 			typeOfCommand = Parser::ADDFLOAT;
@@ -144,7 +144,7 @@ void Parser::determineEditCommand() {
 	try {
 		nameOfEvent = splitter.extractEditEventName(details);
 		details = splitter.removeEditEventName(details,nameOfEvent);
-		fragmentedWords = splitter.fragmentEditString(details);
+		fragmentedWords = splitter.fragmentString(details);
 		tempEventStore = processor.processEditEvent(fragmentedWords);
 		typeOfCommand = Parser::EDIT;
 	} catch (ParserExceptions& e) {

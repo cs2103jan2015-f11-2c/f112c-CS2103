@@ -21,8 +21,7 @@ public:
 	static const std::string EXTRACT_DEL_DONE_EVENT_NAME;
 	static const std::string EXTRACT_EDIT_EVENT_NAME;
 	static const std::string REMOVE_EDIT_EVENT_NAME;
-	static const std::string FRAGMENT_ADD_STRING;
-	static const std::string FRAGMENT_EDIT_STRING;
+	static const std::string FRAGMENT_STRING;
 	static const std::string FRAGMENT_SHOW_STRING;
 
 	static const std::string CONVERT_NORMAL_TO_FLOAT;
@@ -33,8 +32,7 @@ public:
 	std::string extractDetails(std::string);
 	std::string extractEditEventName(std::string);
 	std::string removeEditEventName(std::string, std::string);
-	std::vector<std::string> fragmentAddString(std::string);
-	std::vector<std::string> fragmentEditString(std::string);
+	std::vector<std::string> fragmentString(std::string);
 	std::vector<std::string> fragmentShowString(std::string);
 };
 

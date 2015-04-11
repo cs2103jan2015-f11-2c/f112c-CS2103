@@ -5,8 +5,7 @@ const std::string InputStringSplit::EXTRACT_DETAILS = "extractDetails";
 const std::string InputStringSplit::EXTRACT_DEL_DONE_EVENT_NAME = "extractDelDoneEventName";
 const std::string InputStringSplit::EXTRACT_EDIT_EVENT_NAME = "extractEditEventName";
 const std::string InputStringSplit::REMOVE_EDIT_EVENT_NAME = "removeEditEventName";
-const std::string InputStringSplit::FRAGMENT_ADD_STRING = "fragmentAddString";
-const std::string InputStringSplit::FRAGMENT_EDIT_STRING = "fragmentEditString";
+const std::string InputStringSplit::FRAGMENT_STRING = "fragmentString";
 const std::string InputStringSplit::FRAGMENT_SHOW_STRING = "fragmentShowString";
 
 const std::string InputStringSplit::CONVERT_NORMAL_TO_FLOAT = "to>>>float";
@@ -145,8 +144,8 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 
 //Splits the input string into a vector of strings for add events, first by taking out the event name, and then separating the remaining string by finding delimiters 
 //( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or no event name. Returns a vector of strings.
-std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
-	logger.logParserEnterFunc(FRAGMENT_ADD_STRING);
+std::vector<std::string> InputStringSplit::fragmentString(std::string input){
+	logger.logParserEnterFunc(FRAGMENT_STRING);
 	assert(!input.empty());
 
 	if(input.empty()){
@@ -212,68 +211,6 @@ std::vector<std::string> InputStringSplit::fragmentAddString(std::string input){
 	}
 	return fragmentedWords;
 }
-
-//Splits the input string into a vector of strings for edit events, first by checking if there is an event name, and then separating the remaining string by 
-//finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
-std::vector<std::string> InputStringSplit::fragmentEditString(std::string input){
-	logger.logParserEnterFunc(FRAGMENT_EDIT_STRING);
-	assert(!input.empty());
-
-	if(input.empty()){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-	}
-	std::string::size_type strCutIndex;
-	std::vector<std::string> fragmentedWords;
-	std::string tempString;
-	bool endOfString = false;
-	bool dotFound = false;
-	int dotCounter = 0;
-
-	while(!endOfString){
-		strCutIndex = input.find_first_of("- 0123456789");
-		if(strCutIndex == std::string::npos){
-			fragmentedWords.push_back(input.substr(0,strCutIndex));
-			endOfString = true;
-		} else {
-			if(input.at(strCutIndex) == '-'){
-				if(strCutIndex != 0){
-					fragmentedWords.push_back(input.substr(0,strCutIndex));
-				}
-				fragmentedWords.push_back("to");
-				strCutIndex = input.find_first_not_of(" -.",strCutIndex);
-			} else if(input.at(strCutIndex) == ' '){
-				if(strCutIndex != 0){
-					fragmentedWords.push_back(input.substr(0,strCutIndex+1));
-				}
-				strCutIndex = input.find_first_not_of(" ",strCutIndex);
-			} else {
-				if(strCutIndex != 0){
-					fragmentedWords.push_back(input.substr(0,strCutIndex));
-					input = input.substr(strCutIndex);
-					strCutIndex = 0;
-				}
-				strCutIndex = input.find_first_not_of("0123456789.",strCutIndex);
-				fragmentedWords.push_back(input.substr(0,strCutIndex));
-			}
-			if(dotFound){
-				dotCounter++;
-			}
-			if(dotCounter == 2 && fragmentedWords.size() >= 2){
-				fragmentedWords[fragmentedWords.size()-2] = fragmentedWords[fragmentedWords.size()-2] + fragmentedWords[fragmentedWords.size()-1];
-				fragmentedWords.pop_back();
-				dotFound = false;
-				dotCounter = 0;
-			}
-			if(strCutIndex == std::string::npos){
-				endOfString = true;
-			} else {
-				input = input.substr(strCutIndex);
-			}
-		}
-	}
-	return fragmentedWords;
-}	
 
 //Splits the input string into a vector of strings for show events, first by checking if there is an event name, and then separating the remaining string by 
 //finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
