@@ -162,4 +162,7 @@
       <UniqueIdentifier>{a8aeaa31-b6be-4539-8428-16cd6af51dfb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

@@ -1159,8 +1159,6 @@ public: void resetCommandBar(){
 * ===================================================================================================================================================================
 */
 
-
-
 //Pre-condition : None 
 //Display the information in vector suggestion onto suggestBar
 private: void displaySuggestion(std::vector<std::string> suggestion){
@@ -1266,8 +1264,6 @@ private: void colourCommands(std::string token){
 
 			 }
 
-			 
-			 
 			commandBox->SelectionColor = Color::Black;
 			commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Regular);
 			commandBox->SelectedText = convertToSys(token);
@@ -1284,19 +1280,16 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 				 suggPic->Visible = false;
 			 }
 
-
-			 std::string temp = convertToStd(commandBox->Text);
-			 
+			 std::string temp = convertToStd(commandBox->Text);	
 			 std::string tempCommand = toLowerCase(temp);
-				
-			 std::vector<std::string> vectOfTokens = cSPtr->tokenizeString(temp);
-			 commandBox->Text =""; 
-			 for (int i=0; i<vectOfTokens.size(); i++){
-				 colourCommands(vectOfTokens[i]);
-			 }
+
+			 commandBox->SelectionStart =  commandBox->Text->LastIndexOf(" ") + 1;
+			 commandBox->SelectionLength = commandBox->Text->Length - commandBox->Text->LastIndexOf(" ");
+			 std::string tempString = convertToStd(commandBox->SelectedText);
+				 	
+			 colourCommands(tempString);
 
 			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
-
 			 switch(tempCommandType){
 			 case UICommandSuggestion::ADD_:{
 				 std::vector<std::string> suggestionAdd = cSPtr->getSuggestionAdd();
@@ -1525,9 +1518,8 @@ private: System::Void calenderTop_DateSelected(System::Object^  sender, System::
 * Search function and related functions that will be used in Search Mode
 * ===================================================================================================================================================================
 */
-
 private: bool isSearchEnterPressed;
-
+private: bool isSearchBoxLeft;
 
 private: void noSearchInput(){
 			 String^ NO_SEARCH_INPUT = "No Search Input\n";
@@ -1538,7 +1530,9 @@ private: void noSearchInput(){
 private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
 			 String^ tempToBeSearched = searchBox->Text;
 
-			 if (tempToBeSearched == ""){
+			 if(isSearchBoxLeft){
+				 return;
+			 } else if (tempToBeSearched == "" && !isSearchBoxLeft){
 				 noSearchInput();
 			 }
 			 
@@ -1553,6 +1547,7 @@ private: System::Void searchBox_TextChanged(System::Object^  sender, System::Eve
 
 private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
 			 isSearchEnterPressed = false;
+			 isSearchBoxLeft = false;
 
 			 navigationPicSearchBar->Visible = true;
 			 navigationPicSearchBar->BringToFront();
@@ -1567,6 +1562,8 @@ private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs
 		 }
 
 private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 isSearchBoxLeft = true;
+
 			 navigationPicSearchBar->Visible = false;
 			 navigationPicSearchBar->SendToBack();
 			 searchBox->Text = "";
