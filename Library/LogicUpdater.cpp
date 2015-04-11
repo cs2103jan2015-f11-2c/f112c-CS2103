@@ -1,3 +1,5 @@
+//@author A0111230J
+
 #include "LogicUpdater.h"
 
 //Variables that cannot be initialized in LogicUpdater.h
@@ -284,9 +286,8 @@ vector<tm> LogicUpdater::getTempMainDisplayLabel() {
 	return _tempMainDisplayLabel;
 }
 //===================================================================================================================================================================
-void LogicUpdater::setAllEvents(vector<Event> normalEvents,vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
-	//put in assertion to check validity of normalEvents, floatingEvents & label
-
+void LogicUpdater::setAllEvents(vector<Event> normalEvents,
+vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
 	_newID = id;
 	setWeekMonthOrNothing (weekMonthOrNothing);
 	setFeedbackStrings(feedback);

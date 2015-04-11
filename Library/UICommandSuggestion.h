@@ -1,3 +1,4 @@
+//@author A0111230J
 /**
  * This class is used to store and retrieve information to suggest to the user.
  * It supports a total of 5 commands (add,delete,edit,search,show).
@@ -6,8 +7,6 @@
  * Caller can make use of the returned ComdType to call the respective getters ( getSuggestionAdd(),getSuggestionDelete(),getSuggestionEdit(),
  * getSuggestionSearch() or getSuggestionShow() ) to receive object of std::vector<std::string> which contains the respective suggestion information.
  * In the case where ComdType is UNDISPLAY_ or INVALID, caller can choose to execute otherwise.
-
- * @author A0111230J
  */
 
 #pragma once

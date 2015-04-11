@@ -1,9 +1,8 @@
+//@author A0111230J
 /**
  * This class is used to generate commands related to "show" by calling the respective public methods and passing in the required data (if required)
  * The commands generated should be passed to Logic for further execution
  * [WARNING - This class does not execute any command, it purely generate command that are passed on for execution]
- 
- * @author A0111230J
  */
 
 #pragma once

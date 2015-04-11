@@ -1,10 +1,10 @@
+//@author A0111230J
 /**
  * This class is used store information that are to be displayed to the user. 
  * Key information are first stored in it's primitive vector<event> and vector<tm> form. These information are subsequently being converted and stored as vector<EVENT_STRING> and vector<string> form.
  * The former form is being used by the setter for checking and updating purposes while the latter is being used for direct and easier display to user. 
  *
- * @author A0111230J
- * @author A0111089L
+
  */
 
 
@@ -20,7 +20,6 @@
 #include "LogicLog.h"
 
 using std::ostringstream;
-
 
 class LogicUpdater {
 

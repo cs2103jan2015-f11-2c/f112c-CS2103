@@ -1,10 +1,9 @@
+//@author A0111230J
 /**
  * This class is used to store and retrieve information related to help and commands to suggest to the user.
  * It has a total of 3 public methods ( getHelpIntroduction(), getHelpCommands(), getHelpShortcuts() ) for caller to get the respective 
  * information in std::vector<LogicUpdater::EVENT_STRING> form.
  * No pre-condition is needed to use this class and no imformation is needed to be passed into any of the public methods.
-
- * @author A0111230J
  */
 
 #pragma once
