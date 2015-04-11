@@ -122,7 +122,7 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 
 		case Parser::UNCOMPLETE: {
 			vector<Event> resultEvents = getExactMatches(nameOfEvent);
-
+			
 			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, resultEvents, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::UNCOMPLETE);
 			return executor.execute(uncompleteCommand);
@@ -750,6 +750,6 @@ vector<Event> Logic::getExactMatches(string name) {
 			index = Command::INVALID_NUMBER;
 		}
 	}
-
+	
 	return updater.getExactNameMatches(index, name);
 }
