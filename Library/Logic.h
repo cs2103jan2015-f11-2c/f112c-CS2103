@@ -22,6 +22,7 @@ private:
 
 	LogicLog logger;
 
+
 public:
 	static const string EMPTY_STRING;
 	static const string COMMA_SPACE;
@@ -47,6 +48,10 @@ public:
 
 	//main api
 	bool executeUserInput(string input);
+	
+	
+private:
+	//main api
 	bool isDataRead();
 	Command* queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent);
 	void setUpdater(Command* commandPtr, Parser::CommandType, Event userEvent, string nameOfEvent);

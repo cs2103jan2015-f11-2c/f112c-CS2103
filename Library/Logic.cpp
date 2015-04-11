@@ -80,8 +80,6 @@ bool Logic::executeUserInput(string input) {
 		}
 	}
 
-	
-
 	return isDone;
 }
 
@@ -98,7 +96,6 @@ bool Logic::isDataRead() {
 Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent) {
 	assert(isProperCommand(command));
 	
-	Command* resultCommand;
 	try {
 		switch (command) {
 		case Parser::ADD:
