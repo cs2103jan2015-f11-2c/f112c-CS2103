@@ -126,15 +126,15 @@ void UICommandSuggestion::setUpsuggestionShow(){
 UICommandSuggestion::ComdType UICommandSuggestion::getComdType (std::string comdInString){
 	UICommandSuggestion::ComdType typeOfComd;
 
-	if(comdInString == COMMAND_ADD){
+	if(comdInString.size()>=COMMAND_ADD.size() &&  comdInString.substr(0,COMMAND_ADD.size())== COMMAND_ADD){
 		typeOfComd = ADD_;
-	} else if (comdInString == COMMAND_DELETE){
+	} else if (comdInString.size()>=COMMAND_DELETE.size() &&  comdInString.substr(0,COMMAND_DELETE.size()) == COMMAND_DELETE){
 		typeOfComd = DELETE_;
-	} else if (comdInString == COMMAND_EDIT){
+	} else if (comdInString.size()>=COMMAND_EDIT.size() &&  comdInString.substr(0,COMMAND_EDIT.size()) == COMMAND_EDIT){
 		typeOfComd = EDIT_;
-	} else if (comdInString == COMMAND_SEARCH){
+	} else if (comdInString.size()>=COMMAND_SEARCH.size() &&  comdInString.substr(0,COMMAND_SEARCH.size()) == COMMAND_SEARCH){
 		typeOfComd = SEARCH_;
-	} else if (comdInString == COMMAND_SHOW){
+	} else if (comdInString.size()>=COMMAND_SHOW.size() &&  comdInString.substr(0,COMMAND_SHOW.size()) == COMMAND_SHOW){
 		typeOfComd = SHOW_;
 	} else if (comdInString == COMMAND_AD || comdInString == COMMAND_DELET || comdInString == COMMAND_EDI || comdInString == COMMAND_SEARC || comdInString == COMMAND_SHO || comdInString.empty()){
 		typeOfComd = UNDISPLAY_;
@@ -175,12 +175,9 @@ void UICommandSuggestion::setUserActions(std::string latestUserAction){
 
 	assert(_userActions.size() <= 3);
 
-	_userActionsIndex = _userActions.size() -1 ;
+	_userActionsIndex = _userActions.size() - 1 ;
 }
 
-std::vector<std::string> UICommandSuggestion::getUserActions(){
-	return _userActions;
-}
 
 void UICommandSuggestion::initializeUserActionsIndex(){
 	_userActionsIndex = MIN_ACTION_INDEX - 1;
@@ -190,7 +187,7 @@ void UICommandSuggestion::initializeUserActionsIndex(){
 void UICommandSuggestion::setUserActionsIndex(int numToShift){
 	assert(numToShift == 1 || numToShift == -1);
 
-	if (numToShift == 1 && _userActionsIndex < MAX_ACTION_INDEX){
+	if (numToShift == 1 && _userActionsIndex < _userActions.size() - 1){
 		_userActionsIndex += numToShift;
 	}
 
@@ -198,20 +195,9 @@ void UICommandSuggestion::setUserActionsIndex(int numToShift){
 		_userActionsIndex += numToShift;
 	}
 
-	if (_userActionsIndex >= _userActions.size()){
-		_userActionsIndex -= 1;
-	}
-
-	if (_userActionsIndex < -1){
-		_userActionsIndex += 1;
-	}
-
 	assert(_userActionsIndex>=-1 && _userActionsIndex<=2);
 }
 
-int UICommandSuggestion::getUserActionsIndex(){
-	return _userActionsIndex;
-}
 
 std::string UICommandSuggestion::getSpecificUserAction(){
 	if(!_userActions.empty()){
@@ -219,6 +205,14 @@ std::string UICommandSuggestion::getSpecificUserAction(){
 	}else {
 		return "";
 	}
+}
+
+void UICommandSuggestion::upKeyPressed(){
+	setUserActionsIndex(-1);
+}
+
+void UICommandSuggestion::downKeyPressed(){
+	setUserActionsIndex(1);
 }
 
 

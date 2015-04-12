@@ -152,16 +152,15 @@ public:
 
 	void setUserActions(std::string);
 
-	std::vector<std::string> getUserActions();
-
 	void initializeUserActionsIndex();
 
 	void setUserActionsIndex(int);
 
-	//Pre-condition: call function setUserActionsIndex() to update _userActionsIndex
-	int getUserActionsIndex();
-
 	std::string getSpecificUserAction();
+
+	void upKeyPressed();
+
+	void downKeyPressed();
 
 //===================================================================================================================================================================
 
