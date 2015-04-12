@@ -1295,13 +1295,17 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 				 previousTextLength = 0;
 			 }
 
+			 try{
+
 			 int cursorPosition = commandBox->SelectionStart;
-			 
-			 log(convertToStd(cursorPosition.ToString()),"cursor");
+
+			 if(cursorPosition <0){
+				 throw "Error: Please retype";
+			 }
 
 			 if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
-				 int indexToSearchFrom;
-				 int selectionStartPoint;
+				 int indexToSearchFrom = 0;
+				 int selectionStartPoint = 0;
 				 
 				 if (cursorPosition == 0){
 					 selectionStartPoint = 0;  
@@ -1309,14 +1313,14 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 					 indexToSearchFrom = cursorPosition - 1;
 					 selectionStartPoint = commandBox->Text->LastIndexOf(" ",indexToSearchFrom) + 1;
 				 }
-				 	
-				 commandBox->SelectionStart = selectionStartPoint;
-				 log(convertToStd(selectionStartPoint.ToString()),"start");
+				 
+				 if(selectionStartPoint < 0 || cursorPosition < selectionStartPoint){
+					 throw "Error: Please retype";
+				 }
 
+				 commandBox->SelectionStart = selectionStartPoint;
 				 commandBox->SelectionLength = cursorPosition - selectionStartPoint;
 				 
-				 log(convertToStd(commandBox->SelectionLength.ToString()),"length");
-
 				 std::string tempString = convertToStd(commandBox->SelectedText);
 				 colourCommands(tempString);
 			 } else {
@@ -1331,6 +1335,14 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 			 commandBox->Select(cursorPosition,0);
 
 			 previousTextLength = commandBox->Text->Length;
+			 
+			 }
+			 catch(const std::string& errorMsg){
+				 log("Error from CommandBar:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+				 commandBox->Text = "";
+			 }
 
 			 std::string temp = convertToStd(commandBox->Text);	
 			 std::string tempCommand = toLowerCase(temp);
