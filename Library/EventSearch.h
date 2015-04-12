@@ -1,10 +1,12 @@
 //@author A0113860M
 //==================================================================================================
-//EventSearch class handles all searching methods. It utilises EventOrganiser to obtain the
-//necessary filtered data and to format the data by date.
+//EventSearch class is responsible for locating an event in storage. Searches can be based on name,
+//importance, or ID.
 //
+//Search by name and importance are the basic APIs for an external client to call through eventFacade.
+//Search by ID on the other hand is mostly used within Storage.
 //
-//
+//It also utilises EventOrganiser to obtain the necessary filtered data and to format the data by date.
 //==================================================================================================
 #pragma once
 
@@ -18,8 +20,8 @@ public:
 	EventSearch(void);
 	~EventSearch(void);
 	
-	//Main APIs
-	//2 main checks for multiple uncompleted event names
+	//Main methods
+	//2 main checks for multiple current event names
 	vector<Event> searchCurrentNameOccurrence(string eventName);
 	vector<Event> searchCurrentNameExact(string eventName);
 

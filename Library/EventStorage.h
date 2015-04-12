@@ -2,7 +2,7 @@
 //==================================================================================================
 //EventStorage class is responsible for the internal and external storages. 
 //It adopts the singleton pattern to ensure that only one storage object is created to prevent 
-//data corruption and duplicates.
+//read/write errors and duplicates.
 //
 //Hence, only an instance of storage will be distributed when needed.
 //		sample usages to request for instance:
@@ -14,18 +14,13 @@
 //	2)myBackUp
 //
 //myBackup:
-//The backup file is written upon starting up of the program after successfully reading the main text file(myCurrent)
-//In the event that the user accidentally deleted or corrupted the main text file that deem it unreadable.
-//the program will automatically load the backup file.
-//The user would however, be refrained from editting the backup copy.
+//In the event that the user accidentally deleted or corrupted the main text file(myCurrent) that it is deemed
+//unreadable, the program will automatically load the backup file. myCurrent will also be updated.
+//The myBackup file is written upon program start up if the main text file is successfully read.
 //
 //Internal storages are held in 2 vectors:
 //	1) normalContent
 //	2) floatingContent
-//
-//
-//
-//
 //
 //==================================================================================================
 #pragma once
@@ -55,8 +50,8 @@ public:
 	//Returns a new storage instance if one does not exist. 
 	//else, it simply returns a reference to created storage. 
 	static EventStorage& storage(){
-        static EventStorage store;   // Guaranteed to be destroyed.		
-        return store;				 // Instantiated on first use.
+        static EventStorage store;   		
+        return store;			
 	}
 
 	//getters
@@ -87,13 +82,12 @@ private:
 	Conversion conversion;
 	EventLog logger;
 
-	//Constructor, Destructor
-	EventStorage(void); 
+	EventStorage(void);						//constructor is private
 	~EventStorage(void);
-	EventStorage(EventStorage const&);              // copy constructor is private
-    void operator=(EventStorage const&);			 // assignment operator is private
+	EventStorage(EventStorage const&);      //copy constructor is private
+    void operator=(EventStorage const&);	//assignment operator is private
 
-	//Import / Export Methods only called by itself. Singleton Pattern
+	//Import / Export Methods only called by EventStorage. 
 	void startUpFiles();
 	void checkFileExist(); 
 	void writeToFile(string fileName);

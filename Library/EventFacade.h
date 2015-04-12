@@ -1,18 +1,24 @@
 //@author A0113860M
 //==================================================================================================
-//EventFacade is a thin class which provides a simple interface to the client, hiding the internal
-//complexity of the storage. It purely redirects desired function calls to the appropriate destination.
+//EventFacade is a thin class which provides a simple interface with all the important APIs to the 
+//client, hiding the internal complexity of the storage. It purely redirects desired function calls 
+//to the appropriate destination.
 //
-//The 4 main destinations are:
+//The 4 main destinations for redirections are:
 // 1) EventModifier
 // 2) EventSearch
 // 3) EventOrgansier
 // 4) EventStorage
 //
 //When an EventFacade object is first created, it will construct the first storage instance. Establising
-//the internal and external(text file) storages.
+//the internal and external(text file) storages. Subsequent access to storage will be through an instance.
 //
 //All redirections are logged.
+//
+//sample usage:
+//	EventFacade facade;
+//		facade.add(event);
+//		//returns vector<Event>
 //==================================================================================================
 
 #pragma once

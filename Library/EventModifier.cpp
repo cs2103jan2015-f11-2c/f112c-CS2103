@@ -156,13 +156,13 @@ vector<Event> EventModifier::editFloatingToNormal(int index, Event afterEdit){
 
 	correctDate(&tempContents[index]);
 
-	del(beforeEdit);  //delete from floatingContent
-	tempContents = add(tempContents[index]);  //add to normalContent		
+	del(beforeEdit);  
+	tempContents = add(tempContents[index]);		
 	
 	return tempContents;
 }
 
-vector<Event> EventModifier::editFloating(int index, Event afterEdit){ //check if float to float or float to normal
+vector<Event> EventModifier::editFloating(int index, Event afterEdit){ 
 	logger.log(EventLog::MODIFIER + EventLog::EDIT + EventLog::FLOATING);
 
 	vector<Event> tempContents = organiser.allFloatingCurrent();
@@ -229,8 +229,8 @@ vector<Event> EventModifier::editNormalToFloating(int index, Event afterEdit){
 		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
 	}
 
-	del(beforeEdit);  //delete from normalContent
-	tempContents = add(tempContents[index]);  //add to floatingContent		
+	del(beforeEdit);  
+	tempContents = add(tempContents[index]);  
 
 	return tempContents;
 }
@@ -261,11 +261,11 @@ vector<Event> EventModifier::complete(Event completedEvent){
 	vector<Event> toLogic;
 
 	if(completedEvent.getIsFloating()){
-		index = findFloatingIndex(completedEvent.getID());
+		index = findFloatingIndex(completedEvent.getID()); //complete floating
 		assert(index > NOT_FOUND);
 		toLogic = completeFloat(index);
 	} else{
-		index = findNormalIndex(completedEvent.getID());
+		index = findNormalIndex(completedEvent.getID()); //complete normal
 		assert(index > NOT_FOUND);
 		toLogic = completeNormal(index, completedEvent);
 	}
@@ -281,7 +281,6 @@ vector<Event> EventModifier::completeNormal(int index, Event completedEvent){
 	vector<Event> completedEventDate = organiser.showDatesFromNormalContent(tempContents[index]);
 	completedEventDate = markCompleted(completedEvent, completedEventDate);
 	
-	//mark complete in normalContent
 	tempContents[index].setIsCompleted(true);
 	organiser.saveNormal(tempContents);
 
@@ -316,11 +315,11 @@ vector<Event> EventModifier::uncomplete(Event uncompletedEvent){
 	vector<Event> toLogic;
 
 	if(uncompletedEvent.getIsFloating()){
-		index = findFloatingCompletedIndex(uncompletedEvent.getID());
+		index = findFloatingCompletedIndex(uncompletedEvent.getID()); //uncomplete floating
 		assert(index > NOT_FOUND);
 		toLogic = uncompleteFloat(index);
 	} else{
-		index = findNormalCompletedIndex(uncompletedEvent.getID());
+		index = findNormalCompletedIndex(uncompletedEvent.getID()); //uncomplete normal
 		assert(index > NOT_FOUND);
 		toLogic = uncompleteNormal(index);
 	}

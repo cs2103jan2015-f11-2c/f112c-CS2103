@@ -1,7 +1,7 @@
 //@author A0113860M
 //==================================================================================================
-//EventModifier is a class that deals with the modification of an event or its attributes that will
-//affect storage. The internal and external storages are then updated according to the action executed.
+//EventModifier is a class that deals with the modification of an event or its attributes.
+//The internal and external storages are then updated based on the action executed.
 //
 //EventModifier comprises of 5 main methods:
 // 1)Adding an event
@@ -10,18 +10,13 @@
 // 4)completing an event
 // 5)uncompleting an event
 //
-//The returning vectors solely varies according to the type of event modified:
+//The returning vectors varies according to the type of event modified:
 //		Event Modified			::			Output
 //	Current Normal Event		:: returns uncompleted events within the start and end date of the modified event.
 //	Current Floating Event		:: returns all uncompleted floating events.
 //	Completed Normal Event		:: returns completed events within the start and end date of the modified event.
 //	Completed Floating Event	:: returns all completed floating events.
 //
-//
-//sample usage:
-//	EventModifier modifier;
-//		modifier.add(event);
-//		//returns vector<Event>
 //==================================================================================================
 #pragma once
 

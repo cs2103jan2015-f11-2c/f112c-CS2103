@@ -16,7 +16,7 @@ EventOrganiser::~EventOrganiser(void)
 {
 }
 
-//show all APIs
+//show all Methods
 vector<Event> EventOrganiser::showAllNormalCurrent(){
 	vector<Event> tempContent =	allNormalCurrent();
 	tempContent = showEvents(tempContent);
@@ -41,6 +41,7 @@ vector<Event> EventOrganiser::showAllFloatingCompleted(){
 	return allFloatingCompleted();
 }
 
+//==================================================================================================
 //shows the range of given eventVector, sorted and marked
 vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_EVENTS, eventsToShow.size());
@@ -61,6 +62,7 @@ vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEnd
 	return tempContent;
 }
 
+//==================================================================================================
 //Filters  uncompleted / completed Events
 //get from internal storage vectors and returns filtered events
 vector<Event> EventOrganiser::allNormalCurrent(){
@@ -146,6 +148,7 @@ void EventOrganiser::saveFloatingCompleted(vector<Event> floatingCompleted){
 	EventStorage::storage().setFloatingContent(tempFloatingCurrent);
 }
 
+//==================================================================================================
 //Show dates support methods
 //shows date range for vector items, sorted and marked
 vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter){

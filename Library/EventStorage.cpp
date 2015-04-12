@@ -17,8 +17,8 @@ EventStorage::~EventStorage(void)
 {
 }
 
-//METHODS
-//Reads from txt file upon start up.
+//Methods
+//Reads from text file upon start up.
 //If read successful, copy to backupFile (set: isRead = true)
 //If read fails, load backupFile and copy backup to currentFile (set: isRead = false)
 void EventStorage::startUpFiles(){
@@ -26,9 +26,9 @@ void EventStorage::startUpFiles(){
 	checkFileExist();
 	readToContent(currentFile);
 	if(isRead){
-		writeToFile(backupFile); //if successful, copy to backupFile
+		writeToFile(backupFile); 
 	} else{
-		normalContent.clear();	//if fail, load backupFile and copy to currentFile
+		normalContent.clear();	
 		floatingContent.clear();
 		readToContent(backupFile);
 		writeToFile(currentFile);
@@ -83,7 +83,7 @@ void EventStorage::readToContent(string fileName){
 	in.close();
 }
 
-
+//==================================================================================================
 //Support Methods
 void EventStorage::importNormal(std::istream& in, Event* tempEvent){
 	importName(in, tempEvent);

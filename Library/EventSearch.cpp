@@ -15,8 +15,8 @@ EventSearch::~EventSearch()
 {
 }
 
-//Main APIs
-//checking API 1 --- search event with matching string name and returns sorted with marker
+//Main methods
+//checking method 1 --- search event with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCurrentNameOccurrence(string eventName){
 	//get events from internal storages
 	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
@@ -36,7 +36,8 @@ vector<Event> EventSearch::searchCurrentNameExact(string eventName){
 	return toLogic;
 }
 
-//checking API 2 --- search completed with matching string name and returns sorted with marker
+//==================================================================================================
+//checking method 2 --- search completed with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	
 	//get events from internal storages
@@ -57,7 +58,8 @@ vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 	return toLogic;
 }
 
-//API 3 --- search level of importance
+//==================================================================================================
+//method 3 --- search level of importance
 vector<Event> EventSearch::searchLevelImportance(int level){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
 	
@@ -70,7 +72,7 @@ vector<Event> EventSearch::searchLevelImportance(int level){
 	return combineResults(floatingEvents, normalEvents);
 }
 
-//API 4 --- search method finds all important events
+//search method finds all important events
 vector<Event> EventSearch::searchAllImportance(){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_ALL_IMPORTANCE);
 	vector<Event> returnVector;
@@ -84,18 +86,8 @@ vector<Event> EventSearch::searchAllImportance(){
 	return combineResults(floatingEvents, normalEvents);
 }
 
-//find index in internal storages with ID (DEL / EDIT SUPPORT)
-int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
-	logger.log(EventLog::SEARCH + EventLog::SEARCH_INDEX_WITH_ID, eventID);
-	for(auto i=0;i<eventVectorToSearch.size();i++){
-		if(eventVectorToSearch[i].getID() == eventID){
-			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
-			return i;
-		}
-	} 
-	return NOT_FOUND;
-}
-
+//==================================================================================================
+//method 4 --- search event with eventID
 Event EventSearch::searchEventWithID(int eventID){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_EVENT_WITH_ID, eventID);
 
@@ -128,8 +120,22 @@ Event EventSearch::searchCompletedEventWithID(int eventID){
 	return noResults;
 }
 
-//SUPPORT METHODS
-//Support method for API 1 --- finds string name match
+//==================================================================================================
+//find index in internal storages with ID (DEL / EDIT SUPPORT)
+int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_INDEX_WITH_ID, eventID);
+	for(auto i=0;i<eventVectorToSearch.size();i++){
+		if(eventVectorToSearch[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
+			return i;
+		}
+	} 
+	return NOT_FOUND;
+}
+
+//==================================================================================================
+//support methods
+//Support for method 1 --- finds string name match
 vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + eventName);
 	
@@ -156,7 +162,7 @@ vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> e
 	return returnVector;
 }
 
-//Support method for API 2 --- find exact string name match
+//Support for method 2 --- find exact string name match
 vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> normal, vector<Event> floating){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + eventName);	
 
@@ -180,7 +186,7 @@ vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eve
 	return returnVector;
 }
 
-//Support method for API 3--- finds importance match
+//Support for method 3--- finds importance match
 vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> vectorToSearch){
 
 	vector<Event> returnVector;
@@ -207,7 +213,7 @@ vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> ve
 	return returnVector;
 }
 
-//Support method for API 4 --- finds all events with importance level > 0
+//finds all events with importance level > 0
 vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSearch){
 
 	vector<Event> returnVector;

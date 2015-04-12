@@ -3,15 +3,18 @@
 //EventOrganiser handles organisation and formatting of data from EventStorage. 
 //
 //There are 4 main types of functions in this class:
-//	Firstly, it filters events from the internal storage vectors into 4 categories 
-//	i.e Current Normal, Current Floating, Completed Normal, Completed Floating.
+//	1) filtering events from the internal storage vectors into 4 categories 
+//		1. Current Normal
+//		2. Current Floating
+//		3. Completed Normal
+//		4. Completed Floating
 //
-//	Secondly, it sorts the events according to date and time and separates them with a marker.
+//	2) sorting the events by date and time and separating them with a marker.
 //
-//	Thirdly, it shows(sorted and marked) the events or dates of concern. 
+//	3) shows the events or dates of concern. (sorted and marked)
 //
-//	Lastly, it merges the completed and uncompleted events and saves them in the internal and external 
-//	storages through EventStorage.
+//	4) merge completed and uncompleted events and saves them in the internal and external 
+//	storage.
 //
 //==================================================================================================
 
@@ -27,15 +30,15 @@ public:
 	EventOrganiser(void);
 	~EventOrganiser(void);
 	
-	//Show normal API
+	//Show normal method
 	vector<Event> showAllNormalCurrent();
 	vector<Event> showAllNormalCompleted();
 
-	//Show floating API
+	//Show floating method
 	vector<Event> showAllFloatingCurrent();
 	vector<Event> showAllFloatingCompleted();
 	
-	//Show dates API
+	//Show dates method
 	vector<Event> showEvents(vector<Event> eventsToShow);
 	vector<Event> showDatesFromNormalContent(Event eventWithStartEndTimes);
 
