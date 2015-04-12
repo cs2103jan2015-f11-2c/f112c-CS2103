@@ -3341,7 +3341,7 @@
     <value>240, 550</value>
   </data>
   <data name="commandBox.MaxLength" type="System.Int32, mscorlib">
-    <value>500</value>
+    <value>300</value>
   </data>
   <data name="commandBox.Multiline" type="System.Boolean, mscorlib">
     <value>False</value>

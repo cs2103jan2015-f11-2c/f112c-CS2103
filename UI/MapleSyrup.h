@@ -357,6 +357,7 @@ namespace UI {
 			// 
 			this->commandBox->AutoWordSelection = true;
 			this->commandBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->commandBox->EnableAutoDragDrop = true;
 			resources->ApplyResources(this->commandBox, L"commandBox");
 			this->commandBox->Name = L"commandBox";
 			this->commandBox->ShowSelectionMargin = true;
@@ -364,6 +365,7 @@ namespace UI {
 			this->commandBox->TextChanged += gcnew System::EventHandler(this, &MapleSyrup::commandBox_TextChanged_1);
 			this->commandBox->Enter += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Enter_1);
 			this->commandBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::commandBox_KeyDown_1);
+			this->commandBox->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MapleSyrup::commandBox_KeyUp);
 			this->commandBox->Leave += gcnew System::EventHandler(this, &MapleSyrup::commandBox_Leave_1);
 			// 
 			// showButton
@@ -623,7 +625,7 @@ namespace UI {
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
 			clearAllLogFiles();
 			initializeAndUndisplayAll();
-			initializeShortcut();
+			initializeSysCtrlPressed();
 			loadData();	
 }
 
@@ -702,7 +704,7 @@ public: String^ convertToSys(std::string stdStr){
 */
 private: bool isCtrlPressed;
 
-private: void initializeShortcut(){
+private: void initializeSysCtrlPressed(){
 			 isCtrlPressed = false;
 		 }
 
@@ -1111,46 +1113,37 @@ std::string toLowerCase(std::string word){
 * commandBar
 * ===================================================================================================================================================================
 */
+
 private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Enter){
+				if (commandBox->Text == ""){
+					previousTextLength = 0;
+					return;
+				}
+
 				String^ temp = commandBox->Text;
 				resetCommandBar();
 				unDisplaySuggestion();
 			 
 				std::string input = convertToStd(temp);
 				log("User Command:", input);
-
-				if (temp == ""){
-					return;
-				}
-
 				cSPtr->setUserActions(input);
-
+				
 				executeUserInput(input);
-
 				return;
 			 }
 
 			 if (e->KeyCode == Keys::Up){
-				 commandBox->Text = "";
 				 std::string userAction = cSPtr->getSpecificUserAction();
-				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(userAction);
-				 for (int i=0;i<userActionToken.size();i++){
-					 colourCommands(userActionToken[i]);
-				 }
-
+				 commandBox->Text = convertToSys(userAction);
+				 
 				 cSPtr->upKeyPressed();
 				 return;
 			 }
 
 			 if (e->KeyCode == Keys::Down){
-				 commandBox->Text = "";
 				 std::string userAction = cSPtr->getSpecificUserAction();
-				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(userAction);
-				 for (int i=0;i<userActionToken.size();i++){
-					 colourCommands(userActionToken[i]);
-				 }
-
+				 commandBox->Text = convertToSys(userAction);
 				 cSPtr->downKeyPressed();
 				 return;
 			 }
@@ -1158,7 +1151,12 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 
 public: void resetCommandBar(){
 			commandBox->Text = "";
+			initializePreviousTextLength();
 		}
+
+private: System::Void commandBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+
+		 }
 //===================================================================================================================================================================
 
 /*
@@ -1279,6 +1277,12 @@ private: void colourCommands(std::string token){
 		 }
 
 
+private: int previousTextLength;
+
+private: void initializePreviousTextLength(){
+			 previousTextLength = 0;
+		 }
+
 //This function is triggered whenever there is a textchange in the commandBox
 //Use to trigger suggestBox to display the respective suggestions to user
 private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
@@ -1286,17 +1290,25 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 				 suggPic->Visible = true;
 			 } else {
 				 suggPic->Visible = false;
+				 previousTextLength = 0;
+			 }
+
+			 if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
+				commandBox->SelectionStart =  commandBox->Text->LastIndexOf(" ") + 1;
+				commandBox->SelectionLength = commandBox->Text->Length - commandBox->Text->LastIndexOf(" ");
+				std::string tempString = convertToStd(commandBox->SelectedText);
+				colourCommands(tempString);
+			 } else {
+				 std::string longCommands = convertToStd(commandBox->Text);
+				 resetCommandBar();
+				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(longCommands);
+				 for (int i=0;i<userActionToken.size();i++){
+					 colourCommands(userActionToken[i]);
+				 }
 			 }
 
 			 std::string temp = convertToStd(commandBox->Text);	
 			 std::string tempCommand = toLowerCase(temp);
-
-			 commandBox->SelectionStart =  commandBox->Text->LastIndexOf(" ") + 1;
-			 commandBox->SelectionLength = commandBox->Text->Length - commandBox->Text->LastIndexOf(" ");
-			 std::string tempString = convertToStd(commandBox->SelectedText);
-				 	
-			 colourCommands(tempString);
-
 			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
 			 switch(tempCommandType){
 			 case UICommandSuggestion::ADD_:{
@@ -1337,12 +1349,13 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 
 
 private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
-			 commandBox->Text = "";
+			 resetCommandBar();
 			 nagivationPicCombBar->Visible = true;
 			 nagivationPicCombBar->BringToFront();
 		 }
 
 private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventArgs^  e) {
+			 resetCommandBar();
 			 commandBox->Text = " Type command here";
 			 nagivationPicCombBar->Visible = false;
 			 nagivationPicCombBar->SendToBack();
@@ -1713,6 +1726,7 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->Visible = false;
 			nagivationPicfloatingDis->SendToBack();
 		 }
+
 
 
 };
