@@ -1296,11 +1296,27 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 			 }
 
 			 int cursorPosition = commandBox->SelectionStart;
+			 
+			 log(convertToStd(cursorPosition.ToString()),"cursor");
 
 			 if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
-				 int selectionStartPoint =  commandBox->Text->LastIndexOf(" ",cursorPosition - 1) + 1;	
+				 int indexToSearchFrom;
+				 int selectionStartPoint;
+				 
+				 if (cursorPosition == 0){
+					 selectionStartPoint = 0;  
+				 } else{
+					 indexToSearchFrom = cursorPosition - 1;
+					 selectionStartPoint = commandBox->Text->LastIndexOf(" ",indexToSearchFrom) + 1;
+				 }
+				 	
 				 commandBox->SelectionStart = selectionStartPoint;
+				 log(convertToStd(selectionStartPoint.ToString()),"start");
+
 				 commandBox->SelectionLength = cursorPosition - selectionStartPoint;
+				 
+				 log(convertToStd(commandBox->SelectionLength.ToString()),"length");
+
 				 std::string tempString = convertToStd(commandBox->SelectedText);
 				 colourCommands(tempString);
 			 } else {
