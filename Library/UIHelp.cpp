@@ -14,67 +14,34 @@ UIHelp::~UIHelp(void)
 
 
 // static variables that cannot initialise in "UIHelp.h"
-const std::string UIHelp::HELP_GUIDE_WELCOME_MESSAGE = "Welcome to MapleSyrup. Following are the commands: \n";
+const std::string UIHelp::HELP_GUIDE_WELCOME_MESSAGE = "Welcome to MapleSyrup! This introductory guide will provide you \nwith examples to Add, Delete, Edit & Show !\n";
 
-const std::string UIHelp::HELP_GUIDE_ADD[UIHelp::NUM_ADD] = { "There are a total of 9 ways to add an event:\n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n"
-																	};
+const std::string UIHelp::HELP_GUIDE_ADD[UIHelp::NUM_ADD] = {"ADD : ", 
+																"1.add drink maplesyrup (Ongoing Event)",															 
+															    "2.add drink maplesyrup 1 jan 3pm - 4pm (Single Day Event)",															  
+																"3.add drink maplesyrup 1 jan 1am - 31 dec 11pm (Multiple Day Event)",																		
+																"4.add drink maplesyrup by 31 dec 11pm (Deadline Events)\n",																	
+															};
 
-const std::string UIHelp::HELP_GUIDE_DELETE[UIHelp::NUM_DELETE] = { "Through index: Use either the 'show' or 'search' command to display the event you would like to delete.\n",
-																 "Delete by entering the number beside it.\n",
-																 "e.g. 'delete 2'  to delete 2.CS2103 \n",
-																 "Through event name: \n",
-																 "e.g. 'delete 2'  to delete 2.CS2103 \n",
-																 "TBC \n"
+const std::string UIHelp::HELP_GUIDE_DELETE[UIHelp::NUM_DELETE] = { "DELETE : ", 
+																 "1.del drink maplesyrup (by name)",
+																 "2.del 1 (by index)\n",
 															   };
 																 
-const std::string UIHelp::HELP_GUIDE_EDIT[UIHelp::NUM_EDIT] = {"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n"
+const std::string UIHelp::HELP_GUIDE_EDIT[UIHelp::NUM_EDIT] = {"EDIT : ",
+																		"1.edit drink maplesyrup; buy maplesyrup (Normal)",
+																		"2.edit drink maplesyrup; (Normal to Ongoing Event)",
+																		"3.edit drink maplesyrup; 5may 7-8pm (Ongoing to Normal Event)\n",
 																	};
 
-const std::string UIHelp::HELP_GUIDE_DONE[UIHelp::NUM_DONE]= {"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
+const std::string UIHelp::HELP_GUIDE_END = "For more details, please refer to the MapleSyrup guide provided!\nHappy Mapling!";
+
+const std::string UIHelp::HELP_GUIDE_SHOW[UIHelp::NUM_SHOW] = {"SHOW : ",
+																		"1.show 24apr (Single Day)",
+																		"2.show 22-23apr (Multiple Days)",
+																		"3.show apr-may (Month)",
+																		"4.show all (All)\n",
 																	};
-
-
-
-const std::string UIHelp::HELP_GUIDE_SEARCH[UIHelp::NUM_SEARCH]= {"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n"
-																	};
-
-const std::string UIHelp::HELP_GUIDE_SHOW[UIHelp::NUM_SHOW] = {"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n",
-																		"TBC \n"
-																	};
-const std::string UIHelp::HELP_GUIDE_UNDO = "TBC \n";
-
-const std::string UIHelp::HELP_GUIDE_REDO = "TBC \n";
-
-const std::string UIHelp::HELP_GUIDE_EXIT = "TBC \n";
 
 const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tadd",
 																		"2.\tdelete/del",
@@ -107,81 +74,6 @@ const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tC
 																	};
 
 //Functions	
-std::string UIHelp::getHelpWelcomeMessage(){
-	return HELP_GUIDE_WELCOME_MESSAGE;
-}
-
-std::string UIHelp::getHelpAdd(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_ADD;i++){
-		out += HELP_GUIDE_ADD[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpDelete(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_DELETE;i++){
-		out += HELP_GUIDE_DELETE[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpEdit(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_EDIT;i++){
-		out += HELP_GUIDE_EDIT[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpDone(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_DONE;i++){
-		out += HELP_GUIDE_DONE[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpSearch(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_SEARCH;i++){
-		out += HELP_GUIDE_SEARCH[i];
-	}
-
-	return out;
-}
-
-std::string UIHelp::getHelpShow(){
-	std::string out = "";
-
-	for (int i=0; i<NUM_SHOW;i++){
-		out += HELP_GUIDE_SHOW[i];
-	}
-
-	return out;
-}
-	
-std::string UIHelp::getHelpUndo(){
-	return HELP_GUIDE_UNDO;
-}
-	
-std::string UIHelp::getHelpRedo(){
-	return HELP_GUIDE_REDO ;
-}
-	
-std::string UIHelp::getHelpExit(){
-	return HELP_GUIDE_EXIT;
-}
 
 LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
 	LogicUpdater::EVENT_STRING temp;
@@ -204,56 +96,52 @@ std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpIntroduction(){
 	LogicUpdater::EVENT_STRING helpString;
 
 	//Welcome Message
-	tempHelpString = getHelpWelcomeMessage();
-	helpString = convertToEventString(tempHelpString);
+	helpString = convertToEventString(HELP_GUIDE_WELCOME_MESSAGE);
 	vectOfHelp.push_back(helpString);
 
 	//Add
-	tempHelpString = getHelpAdd();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
+	for (int i=0; i<UIHelp::NUM_ADD; i++){
+		tempHelpString = HELP_GUIDE_ADD[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
 
-	//Welcome Delete
-	tempHelpString = getHelpDelete();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
+	//Delete
+	for (int i=0; i<UIHelp::NUM_DELETE; i++){
+		tempHelpString = HELP_GUIDE_DELETE[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
 
 	//Edit
-	tempHelpString = getHelpEdit();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
-
-	//Done
-	tempHelpString = getHelpDone();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
-
-	//Search
-	tempHelpString = getHelpSearch();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
+	for (int i=0; i<UIHelp::NUM_EDIT; i++){
+		tempHelpString = HELP_GUIDE_EDIT[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
 
 	//Show
-	tempHelpString = getHelpShow();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
+	for (int i=0; i<UIHelp::NUM_SHOW; i++){
+		tempHelpString = HELP_GUIDE_SHOW[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
 
-	//Undo
-	tempHelpString = getHelpUndo();
-	helpString = convertToEventString(tempHelpString);
+	//End Message
+	helpString = convertToEventString(HELP_GUIDE_END);
 	vectOfHelp.push_back(helpString);
-
-	//Redo
-	tempHelpString = getHelpRedo();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
-
-	//Exit
-	tempHelpString = getHelpExit();
-	helpString = convertToEventString(tempHelpString);
-	vectOfHelp.push_back(helpString);
-
-	assert(vectOfHelp.size() == 10);
 
 	return vectOfHelp;
 }

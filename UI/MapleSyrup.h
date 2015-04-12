@@ -68,6 +68,7 @@ namespace UI {
 
 
 
+
 	private: System::Windows::Forms::Button^  undoButton;
 
 	public:
@@ -1463,6 +1464,7 @@ private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, S
 private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 			 displayHelpShortCuts();
 		 }
+
 //===================================================================================================================================================================
 
 /*
@@ -1734,6 +1736,7 @@ private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System
 			nagivationPicfloatingDis->Visible = false;
 			nagivationPicfloatingDis->SendToBack();
 		 }
+
 
 
 

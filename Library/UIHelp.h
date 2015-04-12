@@ -30,12 +30,10 @@ public:
 * Static variables (std::string arrays) which contain the help information
 * ===================================================================================================================================================================
 */
-	static const int NUM_ADD = 10;
-	static const int NUM_DELETE = 6;
-	static const int NUM_EDIT = 6;
-	static const int NUM_DONE = 4;
-	static const int NUM_SEARCH = 8;
-	static const int NUM_SHOW = 7;
+	static const int NUM_ADD = 5;
+	static const int NUM_DELETE = 3;
+	static const int NUM_EDIT = 4;
+	static const int NUM_SHOW = 5;
 	static const int NUM_COMMANDS = 16;
 	static const int NUM_SHORTCUTS = 10;
 	
@@ -43,12 +41,10 @@ public:
 	static const std::string HELP_GUIDE_ADD [NUM_ADD];
 	static const std::string HELP_GUIDE_DELETE [NUM_DELETE];
 	static const std::string HELP_GUIDE_EDIT [NUM_EDIT];
-	static const std::string HELP_GUIDE_DONE [NUM_DONE];
-	static const std::string HELP_GUIDE_SEARCH [NUM_SEARCH];
+	static const std::string HELP_GUIDE_END;
+
 	static const std::string HELP_GUIDE_SHOW [NUM_SHOW];
-	static const std::string HELP_GUIDE_UNDO;
-	static const std::string HELP_GUIDE_REDO;
-	static const std::string HELP_GUIDE_EXIT;
+
 	static const std::string HELP_GUIDE_COMMANDS [NUM_COMMANDS];
 	static const std::string HELP_GUIDE_SHORTCUTS [NUM_SHORTCUTS];
 //===================================================================================================================================================================
@@ -61,16 +57,6 @@ public:
 * ===================================================================================================================================================================
 */
 private:
-	std::string getHelpWelcomeMessage();
-	std::string getHelpAdd();
-	std::string getHelpDelete();
-	std::string getHelpEdit();
-	std::string getHelpDone();
-	std::string getHelpSearch();
-	std::string getHelpShow();
-	std::string getHelpUndo();
-	std::string getHelpRedo();
-	std::string getHelpExit();
 
 	LogicUpdater::EVENT_STRING convertToEventString(std::string);
 //===================================================================================================================================================================
