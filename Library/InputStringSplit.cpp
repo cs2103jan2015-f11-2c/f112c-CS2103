@@ -213,7 +213,7 @@ std::vector<std::string> InputStringSplit::fragmentString(std::string input){
 	}
 	return fragmentedWords;
 }
-
+/*
 //Splits the input string into a vector of strings for show events, first by checking if there is an event name, and then separating the remaining string by 
 //finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
 std::vector<std::string> InputStringSplit::fragmentShowString(std::string input){
@@ -254,3 +254,4 @@ std::vector<std::string> InputStringSplit::fragmentShowString(std::string input)
 	}
 	return fragmentedWords;
 }
+*/

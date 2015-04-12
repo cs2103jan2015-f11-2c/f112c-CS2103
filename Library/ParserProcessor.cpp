@@ -491,7 +491,7 @@ int ParserProcessor::checkDayTo(int tempIndex, int* indexShift) {
 
 	tempIndex--;
 	if (tempIndex >= 0) {
-		if (fragmentedWords[tempIndex] == "to") {
+		if (fragmentedWords[tempIndex] == "to" || fragmentedWords[tempIndex] == "to " ) {
 			tempIndex--;
 			if (tempIndex >= 0) {
 				try {
@@ -685,7 +685,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 	*indexShift = tempIndex;
 
 	if (tempIndex >= 0) {
-		if (fragmentedWords[tempIndex] == "to") {
+		if (fragmentedWords[tempIndex] == "to" || fragmentedWords[tempIndex] == "to " ) {
 			tempIndex--;
 			if (tempIndex >= 0) {
 				std::string tempTimeString = fragmentedWords[tempIndex];
@@ -1179,7 +1179,7 @@ bool ParserProcessor::checkShowByYear(int tempIndex) {
 				fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 				tempIndex++;
 				if (fragmentedWords.size() > tempIndex) {      
-					if (fragmentedWords[tempIndex] == "to") {    //Check if it is a range between 2 year inputs. E.g. 2015-2016  2015 to 2016
+					if (fragmentedWords[tempIndex] == "to" || fragmentedWords[tempIndex] == "to " ) {    //Check if it is a range between 2 year inputs. E.g. 2015-2016  2015 to 2016
 						try {
 							tempIndex++;
 							if (fragmentedWords.size() > tempIndex) {
@@ -1263,8 +1263,8 @@ bool ParserProcessor::checkSystemBasedShow(int tempIndex) {
 			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
 		}
 		systemShowMonth = true;
-	} else if (firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "due" || 
-				firstWord == "important" || firstWord == "impt" || firstWord == "done" || firstWord == "completed" || firstWord == "complete") {
+	} else if (firstWord == "floating" || firstWord == "float" || firstWord == "all" || firstWord == "important" || firstWord == "impt" 
+				|| firstWord == "done" || firstWord == "completed" || firstWord == "complete") {
 		tempEventStore.setName(firstWord);
 		fragmentedWords[tempIndex] = LOCKUP_USED_INFORMATION;
 		systemShowOthers = true;

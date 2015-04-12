@@ -161,14 +161,12 @@ void Parser::determineShowCommand() {
 	
 	try {
 		nameOfEvent = details;
-		fragmentedWords = splitter.fragmentShowString(details);
+		fragmentedWords = splitter.fragmentString(details);
 		tempEventStore = processor.processShowEvent(fragmentedWords);
 		if (tempEventStore.getName() == "floating" || tempEventStore.getName() == "float") {
 			typeOfCommand = Parser::SHOWFLOAT;
 		} else if (tempEventStore.getName() == "all") {
 			typeOfCommand = Parser::SHOWALL;
-		} else if (tempEventStore.getName() == "due") {
-			typeOfCommand = Parser::SHOWDUE;
 		} else if (tempEventStore.getName() == "specificimportance") {
 			typeOfCommand = Parser::SHOWIMPORTANT;
 		} else if (tempEventStore.getName() == "important" || tempEventStore.getName() == "impt") {

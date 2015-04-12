@@ -35,7 +35,7 @@ public:
 	std::string extractEditEventName(std::string);
 	std::string removeEditEventName(std::string, std::string);
 	std::vector<std::string> fragmentString(std::string);
-	std::vector<std::string> fragmentShowString(std::string);
+	//std::vector<std::string> fragmentShowString(std::string);
 };
 
 #endif
