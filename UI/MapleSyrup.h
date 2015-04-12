@@ -1294,16 +1294,15 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 				 previousTextLength = 0;
 			 }
 
-
 			 int cursorPosition = commandBox->SelectionStart;
 
-			  if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
-				int selectionStartPoint =  commandBox->Text->LastIndexOf(" ",cursorPosition - 1) + 1;	
-				commandBox->SelectionStart = selectionStartPoint;
-				commandBox->SelectionLength = cursorPosition - selectionStartPoint;
-				std::string tempString = convertToStd(commandBox->SelectedText);
-				colourCommands(tempString);		  
-			  } else {
+			 if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
+				 int selectionStartPoint =  commandBox->Text->LastIndexOf(" ",cursorPosition - 1) + 1;	
+				 commandBox->SelectionStart = selectionStartPoint;
+				 commandBox->SelectionLength = cursorPosition - selectionStartPoint;
+				 std::string tempString = convertToStd(commandBox->SelectedText);
+				 colourCommands(tempString);
+			 } else {
 				 std::string longCommands = convertToStd(commandBox->Text);
 				 resetCommandBar();
 				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(longCommands);
