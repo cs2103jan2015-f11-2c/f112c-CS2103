@@ -1132,13 +1132,25 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 			 }
 
 			 if (e->KeyCode == Keys::Up){
-				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
+				 commandBox->Text = "";
+				 std::string userAction = cSPtr->getSpecificUserAction();
+				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(userAction);
+				 for (int i=0;i<userActionToken.size();i++){
+					 colourCommands(userActionToken[i]);
+				 }
+
 				 cSPtr->upKeyPressed();
 				 return;
 			 }
 
 			 if (e->KeyCode == Keys::Down){
-				 commandBox->Text = convertToSys(cSPtr->getSpecificUserAction());
+				 commandBox->Text = "";
+				 std::string userAction = cSPtr->getSpecificUserAction();
+				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(userAction);
+				 for (int i=0;i<userActionToken.size();i++){
+					 colourCommands(userActionToken[i]);
+				 }
+
 				 cSPtr->downKeyPressed();
 				 return;
 			 }
