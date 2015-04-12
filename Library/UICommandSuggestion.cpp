@@ -232,6 +232,11 @@ void UICommandSuggestion::setKeywordCommands(){
 	_keywordCommands.push_back ("undone");
 	_keywordCommands.push_back ("back");
 	_keywordCommands.push_back ("bk");
+	_keywordCommands.push_back ("commands");
+	_keywordCommands.push_back ("shortcuts");
+	_keywordCommands.push_back ("calendar");
+	_keywordCommands.push_back ("exit");
+	_keywordCommands.push_back ("help");
 }
 
 void UICommandSuggestion::setKeywordMonths(){	

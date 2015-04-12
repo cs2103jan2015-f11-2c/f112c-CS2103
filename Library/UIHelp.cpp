@@ -76,21 +76,22 @@ const std::string UIHelp::HELP_GUIDE_REDO = "TBC \n";
 
 const std::string UIHelp::HELP_GUIDE_EXIT = "TBC \n";
 
-const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tAdd",
-																		"2.\tDelete",
-																		"3.\tEdit",
-																		"4.\tDone",
-																		"5.\tSearch",
-																		"6.\tShow",
-																		"7.\tUndo",
-																		"8.\tRedo",
-																		"9.\tExit",
-																		"10.\tHelp",
-																		"11.\tCommands",
-																		"12.\tShortcuts",
-																		"13.\tCalendar",
-																		"14.\tBack",
-																		"15.\tNext",
+const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tadd",
+																		"2.\tdelete/del",
+																		"3.\tedit",
+																		"4.\tdone/completed",
+																		"5.\tundone/uncompleted",
+																		"6.\tsearch",
+																		"7.\tshow",
+																		"8.\tundo",
+																		"9.\tredo",
+																		"10.\texit",
+																		"11.\thelp",
+																		"12.\tcommands",
+																		"13.\tshortcuts",
+																		"14.\tcalendar",
+																		"15.\tback",
+																		"16.\tnext",
 																	};
 
 const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tCtrl + D ------ display calendar",
@@ -99,10 +100,10 @@ const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tC
 																	      "4.\tCtrl + X ------ redo",
 																		  "5.\tCtrl + C ------ copy",
 																		  "6.\tCtrl + V ------ paste",
-																		  "7.\tEscape Key ---- Zoom to main display",
-																		  "8.\tLeft arrow ---- display back (only after pressing Escape Key)",
-																		  "9.\tRight arrow ----- display next (only after pressing Escape Key)",
-																		  "10.\tCtrl + Shift ----- Focus to command Box",
+																		  "7.\tEscape Key ---- zoom to main/on-going events displays",
+																		  "8.\tLeft arrow ---- display back",
+																		  "9.\tRight arrow ----- display next",
+																		  "10.\tCtrl + Shift ----- focus to command Box",
 																	};
 
 //Functions	

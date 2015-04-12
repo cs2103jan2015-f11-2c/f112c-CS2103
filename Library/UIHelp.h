@@ -36,7 +36,7 @@ public:
 	static const int NUM_DONE = 4;
 	static const int NUM_SEARCH = 8;
 	static const int NUM_SHOW = 7;
-	static const int NUM_COMMANDS = 15;
+	static const int NUM_COMMANDS = 16;
 	static const int NUM_SHORTCUTS = 10;
 	
 	static const std::string HELP_GUIDE_WELCOME_MESSAGE;
