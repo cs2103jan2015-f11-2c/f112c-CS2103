@@ -626,6 +626,7 @@ private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs
 			clearAllLogFiles();
 			initializeAndUndisplayAll();
 			initializeSysCtrlPressed();
+			initializePreviousTextLength();
 			loadData();	
 }
 
@@ -1306,6 +1307,9 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 					 colourCommands(userActionToken[i]);
 				 }
 			 }
+
+
+			 previousTextLength = commandBox->Text->Length;
 
 			 std::string temp = convertToStd(commandBox->Text);	
 			 std::string tempCommand = toLowerCase(temp);
