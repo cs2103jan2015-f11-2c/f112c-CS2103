@@ -1049,7 +1049,7 @@ private: bool checkAndExecuteUIHandledCommands(std::string input){
 
 			std::string inputInLowerCase = toLowerCase(input);
 
-			if (inputInLowerCase.size() ==4 &&  inputInLowerCase.substr(0,4) == "exit"){
+			if (inputInLowerCase.size() >=4 &&  inputInLowerCase.substr(0,4) == "exit"){
 				Application::Exit();
 				isUIHandledCommand = true;
 
