@@ -1567,9 +1567,14 @@ void ParserProcessor::assignShowDate(int day, int month, int year, int dayTo) {
 	//For handling system show month. E.g. month   mar   apr
 	if (userShowMonth) {
 		tempEventStore.setName("month");
-		if (month == now->tm_mon) {
-			tempEventStore.setStartDate(now->tm_mday,month,year);
-			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+		if (year == now->tm_year){
+			if (month == now->tm_mon) {
+				tempEventStore.setStartDate(now->tm_mday,month,year);
+				tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+			} else {
+				tempEventStore.setStartDate(1,month,year);
+				tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
+			}
 		} else {
 			tempEventStore.setStartDate(1,month,year);
 			tempEventStore.setEndDate(convertor.determineLastDayOfMth(month,year),month,year);
