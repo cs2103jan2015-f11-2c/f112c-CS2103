@@ -16,7 +16,7 @@ namespace UnitTest
 		std::vector<std::string> testInput;
 		
 		//extractFirstWord always find the first instance of a spacing and take what comes before the space
-		TEST_METHOD(processAddEvent_Test)
+		TEST_METHOD(ParserProcessor_processAddEvent_Test)
 		{
 			//Case 1: One word, event name only
 			Event testOutput1;
@@ -84,7 +84,7 @@ namespace UnitTest
 			testInput.clear();
 		}
 	
-		TEST_METHOD(processEditEvent_Test)
+		TEST_METHOD(ParserProcessor_processEditEvent_Test)
 		{
 			//Case 1: One word, event name only
 			Event testOutput1;
@@ -152,7 +152,7 @@ namespace UnitTest
 			testInput.clear();
 		}
 
-		TEST_METHOD(processShowEvent_Test)
+		TEST_METHOD(ParserProcessor_processShowEvent_Test)
 		{
 			//Case 1: Single day
 			Event testOutput1;

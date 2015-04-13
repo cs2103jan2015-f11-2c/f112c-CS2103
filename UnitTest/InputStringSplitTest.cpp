@@ -18,7 +18,7 @@ namespace UnitTest
 		std::string expectedOutput;
 		
 		//extractFirstWord always find the first instance of a spacing and take what comes before the space
-		TEST_METHOD(extractFirstWord_Test)
+		TEST_METHOD(InputStringSplitTest_extractFirstWord_Test)
 		{
 			//Case 1: One Word
 			testInput = "add";
@@ -46,7 +46,7 @@ namespace UnitTest
 		}
 
 		//Finds the first non spacing after the first spacing and takes the whole string after that
-		TEST_METHOD(extractDetails_Test)
+		TEST_METHOD(InputStringSplitTest_extractDetails_Test)
 		{
 			//Case 1: One word
 			testInput = "add";
@@ -88,7 +88,7 @@ namespace UnitTest
 		}
 		
 		//Extracts the index of the event, or the event name if index is not found
-		TEST_METHOD(extractEditEventName_Test)
+		TEST_METHOD(InputStringSplitTest_extractEditEventName_Test)
 		{
 			//Case 1: Editting by index
 			testInput = "13; 24-25apr 9pm";
@@ -130,7 +130,7 @@ namespace UnitTest
 		}
 
 		//Removes the index of the event, or the event name from the string
-		TEST_METHOD(removeEditEventName_Test)
+		TEST_METHOD(InputStringSplitTest_removeEditEventName_Test)
 		{
 			std::string eventName;
 
@@ -170,7 +170,7 @@ namespace UnitTest
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentString_Test)
+		TEST_METHOD(InputStringSplitTest_fragmentString_Test)
 		{
 			std::vector<std::string> fragmentedWords;
 			std::string expectedOutput0;
