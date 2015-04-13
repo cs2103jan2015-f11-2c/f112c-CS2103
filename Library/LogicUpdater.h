@@ -96,6 +96,11 @@ public:
 	static const string DASH_WITH_SPACES;
 	static const string DASH_WITHOUT_SPACES;
 	static const string EQUAL_LINE;
+	static const string COLON;
+	static const string TIME_AM;
+	static const string TIME_PM;
+	static const string STRING_ZERO;
+
 
 	static const string TIME_ZERO_4;
 	static const string TIME_TWO_THREE_FIVE_NINE;

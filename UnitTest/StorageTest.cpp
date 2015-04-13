@@ -41,8 +41,8 @@ namespace UnitTest
 
 			expected.push_back(marker);
 			expected.push_back(testEvent1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*test case: add single event with exisiting event in storage*/
 			result.clear();
@@ -64,9 +64,9 @@ namespace UnitTest
 			expected.push_back(testEvent2);
 			expected.push_back(testEvent1);	
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			Assert::AreEqual(expected[2].getName(),result[2].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
 
 
 			/*test case: add single floating event with empty storage*/
@@ -84,7 +84,7 @@ namespace UnitTest
 
 			expected.push_back(testFloat1);
 			result = modifier.add(testFloat1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 
 			/*test case: add single floating event with exisitng normal in storage*/
 			result.clear();
@@ -97,7 +97,7 @@ namespace UnitTest
 
 			expected.push_back(testFloat1);
 			result = modifier.add(testFloat1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 		
 			/*test case: add single normal event with exisitng float in storage*/
 			result.clear();
@@ -112,8 +112,8 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 
 			result = modifier.add(testEvent1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 		}
 
 		TEST_METHOD(EventModifier_del_test)
@@ -174,8 +174,8 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 
 			result = modifier.del(testEvent2);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*test case: delete single floating event with multiple events in storage*/
 			expected.clear();
@@ -193,7 +193,7 @@ namespace UnitTest
 			expected.push_back(testFloat1);
 
 			result = modifier.del(testFloat2);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 
 		}
 	};
@@ -245,13 +245,13 @@ namespace UnitTest
 			int result, expected;
 			/*successful case: 1 search result*/
 			expected = 1;
-			result = searcher.searchIndexWithID(222,testCurrentContent);
-			Assert::AreEqual(expected,result);
+			result = searcher.searchIndexWithID(222, testCurrentContent);
+			Assert::AreEqual(expected, result);
 
 			/*boundary case: unsuccessful search */
 			expected = -1;
-			result = searcher.searchIndexWithID(000,testCurrentContent);
-			Assert::AreEqual(expected,result);
+			result = searcher.searchIndexWithID(000, testCurrentContent);
+			Assert::AreEqual(expected, result);
 		
 			//creating test event 4
 			testEvent4.setName("event4");
@@ -322,10 +322,10 @@ namespace UnitTest
 			expected.push_back(testEvent2);
 			result = searcher.searchCurrentNameOccurrence("event");
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			Assert::AreEqual(expected[2].getName(),result[2].getName());
-			Assert::AreEqual(expected[3].getName(),result[3].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+			Assert::AreEqual(expected[3].getName(), result[3].getName());
 
 			/*test boundary case: Unsuccessful search returns empty vector */
 			result = searcher.searchCurrentNameOccurrence("inexistentEvent");
@@ -381,8 +381,8 @@ namespace UnitTest
 			expected.push_back(testEvent2);
 			result = searcher.searchCurrentNameExact("event111");
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*test boundary case: Unsuccessful search returns empty vector */
 			result = searcher.searchCurrentNameExact("inexistentEvent");
@@ -441,8 +441,8 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 			result = searcher.searchLevelImportance(3);
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*test boundary case: Unsuccessful search returns empty vector */
 			result = searcher.searchLevelImportance(2);
@@ -501,9 +501,9 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 			result = searcher.searchAllImportance();
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			Assert::AreEqual(expected[2].getName(),result[2].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
 
 			/*test boundary case: 0 important events*/
 			testNormalContent.clear();
@@ -568,7 +568,7 @@ namespace UnitTest
 			expected.push_back(testEvent2);
 			result = organiser.allNormalCurrent();
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 
 			/*boundary case: 0 uncompleted events*/
 			testNormalContent.clear();
@@ -614,7 +614,7 @@ namespace UnitTest
 			expected.push_back(testEvent2);
 			result = organiser.allFloatingCurrent();
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 
 			/*boundary case: 0 uncompleted events*/
 			testFloatContent.clear();
@@ -674,8 +674,8 @@ namespace UnitTest
 			expected.push_back(testEvent3);
 			result = organiser.allNormalCompleted();
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 0 completed events*/
 			testNormalContent.clear();
@@ -722,8 +722,8 @@ namespace UnitTest
 			expected.push_back(testEvent3);
 			result = organiser.allFloatingCompleted();
 			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 0 completed events*/
 			testFloatContent.clear();
@@ -786,8 +786,8 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 			result = EventStorage::storage().getNormalContent();
 
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 0 completed events, 1 uncompleted*/
 			//setting curretnContent stub
@@ -804,7 +804,7 @@ namespace UnitTest
 			result.clear();
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getNormalContent();
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 		}
 
 		//set floatingContent by appending current task onto completed task 
@@ -848,8 +848,8 @@ namespace UnitTest
 			expected.push_back(testEvent1);
 			result = EventStorage::storage().getFloatingContent();
 
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 0 completed events, 1 uncompleted*/
 			//setting curretnContent stub
@@ -866,7 +866,7 @@ namespace UnitTest
 			result.clear();
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getFloatingContent();
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 		}
 
 		//set normalContents by appending completed task onto current task 
@@ -922,8 +922,8 @@ namespace UnitTest
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getNormalContent();
 
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 1 completed event, 0 uncompleted*/
 			//setting curretnContent stub
@@ -940,7 +940,7 @@ namespace UnitTest
 			result.clear();
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getNormalContent();
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 		}
 			
 		//set floatingContent by appending completed task onto current task 
@@ -985,8 +985,8 @@ namespace UnitTest
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getFloatingContent();
 
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
 
 			/*boundary case: 1 completed event, 0 uncompleted*/
 			//setting curretnContent stub
@@ -1003,7 +1003,7 @@ namespace UnitTest
 			result.clear();
 			expected.push_back(testEvent3);
 			result = EventStorage::storage().getFloatingContent();
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
 		}
 		
 		TEST_METHOD(EventOrganiser_showEvents_Test)
@@ -1047,10 +1047,10 @@ namespace UnitTest
 			
 			/*successful case*/
 			result = organiser.showEvents(testNormalContent);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-			Assert::AreEqual(expected[2].getName(),result[2].getName());
-			Assert::AreEqual(expected[3].getName(),result[3].getName());
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+			Assert::AreEqual(expected[3].getName(), result[3].getName());
 
 			/*empty case:*/
 			expected.clear();

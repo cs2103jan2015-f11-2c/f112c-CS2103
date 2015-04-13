@@ -18,7 +18,7 @@ EventSearch::~EventSearch()
 //Main methods
 //checking method 1 --- search event with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCurrentNameOccurrence(string eventName){
-	//get events from internal storages
+
 	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
 	vector<Event> normalCurrent = organiser.allNormalCurrent();
 
@@ -28,7 +28,6 @@ vector<Event> EventSearch::searchCurrentNameOccurrence(string eventName){
 
 vector<Event> EventSearch::searchCurrentNameExact(string eventName){
 	
-	//get events from internal storages
 	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
 	vector<Event> normalCurrent = organiser.allNormalCurrent();
 
@@ -40,7 +39,6 @@ vector<Event> EventSearch::searchCurrentNameExact(string eventName){
 //checking method 2 --- search completed with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	
-	//get events from internal storages
 	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
 	vector<Event> normalCompleted = organiser.allNormalCompleted();
 
@@ -50,7 +48,6 @@ vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 
 vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 
-	//get events from internal storages
 	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
 	vector<Event> normalCompleted = organiser.allNormalCompleted();
 
@@ -229,6 +226,6 @@ vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSe
 //Support method
 vector<Event> EventSearch::combineResults(vector<Event> floatingEvents, vector<Event> normalEvents){
 	normalEvents = organiser.showEvents(normalEvents);
-	floatingEvents.insert( floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
+	floatingEvents.insert(floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
 	return floatingEvents;
 }

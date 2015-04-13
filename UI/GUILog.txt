@@ -1,1 +1,795 @@
 Clear All Log Files: All log files cleared
+Program starts at: 13 Apr,Monday, 20:52:57
+executeUserInput: show floating
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+executeUserInput: show today
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+User Command: search 10feb
+executeUserInput: search 10feb
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+User Command: search 10 feb
+executeUserInput: search 10 feb
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Main label displayed: Help Introduction
+Main displayed: Successful
+Program starts at: 13 Apr,Monday, 20:55:18
+executeUserInput: show floating
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+executeUserInput: show today
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 14apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Tomorrow] 14 April 2015, Tuesday
+Called UIShow.displayBack 
+executeUserInput: show 13apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayBack 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 11apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 13apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayBack 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 11apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 April 2015, Saturday
+Called UIShow.displayBack 
+executeUserInput: show 10apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 10 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 10 April 2015, Friday
+Called UIShow.displayBack 
+executeUserInput: show 9apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 9 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 9 April 2015, Thursday
+Called UIShow.displayBack 
+executeUserInput: show 8apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 8 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 8 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 9apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 9 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 9 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 10apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 10 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 10 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 11apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 13apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 14apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Tomorrow] 14 April 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 15apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 15 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 15 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 16apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 16 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 16 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 17apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 17 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 17 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 18apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 18 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 18 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 19apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 19 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 19 April 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 18apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 18 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 18 April 2015, Saturday
+Called UIShow.displayBack 
+executeUserInput: show 17apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 17 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 17 April 2015, Friday
+Called UIShow.displayBack 
+executeUserInput: show 16apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 16 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 16 April 2015, Thursday
+Called UIShow.displayBack 
+executeUserInput: show 15apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 15 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 15 April 2015, Wednesday
+Called UIShow.displayBack 
+executeUserInput: show 14apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Tomorrow] 14 April 2015, Tuesday
+Called UIShow.displayBack 
+executeUserInput: show 13apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayBack 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 11apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 April 2015, Saturday
+Called UIShow.displayBack 
+executeUserInput: show 10apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 10 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 10 April 2015, Friday
+Called UIShow.displayBack 
+executeUserInput: show 9apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 9 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 9 April 2015, Thursday
+Called UIShow.displayBack 
+executeUserInput: show 8apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 8 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 8 April 2015, Wednesday
+Called UIShow.displayBack 
+executeUserInput: show 7apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 7 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 7 April 2015, Tuesday
+Called UIShow.displayBack 
+executeUserInput: show 6apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 6 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 6 April 2015, Monday
+Called UIShow.displayBack 
+executeUserInput: show 5apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 5 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 5 April 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 4apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 April 2015, Saturday
+Called UIShow.displayBack 
+executeUserInput: show 3apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 3 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 3 April 2015, Friday
+Called UIShow.displayBack 
+executeUserInput: show 2apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 2 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 2 April 2015, Thursday
+Called UIShow.displayBack 
+executeUserInput: show 1apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 1 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 1 April 2015, Wednesday
+Called UIShow.displayBack 
+executeUserInput: show 31mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 31 March 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 31 March 2015, Tuesday
+Called UIShow.displayBack 
+executeUserInput: show 30mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 30 March 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 30 March 2015, Monday
+Called UIShow.displayBack 
+executeUserInput: show 29mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 29 March 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 29 March 2015, Sunday
+Called UIShow.displayBack 
+executeUserInput: show 28mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 28 March 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 28 March 2015, Saturday
+Called UIShow.displayBack 
+executeUserInput: show 27mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 27 March 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 27 March 2015, Friday
+Called UIShow.displayBack 
+executeUserInput: show 26mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 26 March 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 26 March 2015, Thursday
+Called UIShow.displayBack 
+executeUserInput: show 25mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 25 March 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 25 March 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 26mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 26 March 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 26 March 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 27mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 27 March 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 27 March 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 28mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 28 March 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 28 March 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 29mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 29 March 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 29 March 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 30mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 30 March 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 30 March 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 31mar 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 31 March 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 31 March 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 1apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 1 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 1 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 2apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 2 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 2 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 3apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 3 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 3 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 4apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 5apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 5 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 5 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 6apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 6 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 6 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 7apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 7 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 7 April 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 8apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 8 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 8 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 9apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 9 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 9 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 10apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 10 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 10 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 11apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 12apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 13apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 14apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Tomorrow] 14 April 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 15apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 15 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 15 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 16apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 16 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 16 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 17apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 17 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 17 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 18apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 18 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 18 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 19apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 19 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 19 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 20apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 20 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 20 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 21apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 21 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 21 April 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 22apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 22 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 22 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 23apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 23 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 23 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 24apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 24 April 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 24 April 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 25apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 25 April 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 25 April 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 26apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 26 April 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 26 April 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 27apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 27 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 27 April 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 28apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 28 April 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 28 April 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 29apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 29 April 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 29 April 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 30apr 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 30 April 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 30 April 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 1may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 1 May 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 1 May 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 2may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 2 May 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 2 May 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 3may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 3 May 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 3 May 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 4may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 4 May 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 4 May 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 5may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 5 May 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 5 May 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 6may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 6 May 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 6 May 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 7may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 7 May 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 7 May 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 8may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 8 May 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 8 May 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 9may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 9 May 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 9 May 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 10may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 10 May 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 10 May 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 11may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 11 May 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 11 May 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 12may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 12 May 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 12 May 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 13may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 13 May 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 13 May 2015, Wednesday
+Called UIShow.displayNext 
+executeUserInput: show 14may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 14 May 2015, Thursday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 14 May 2015, Thursday
+Called UIShow.displayNext 
+executeUserInput: show 15may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 15 May 2015, Friday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 15 May 2015, Friday
+Called UIShow.displayNext 
+executeUserInput: show 16may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 16 May 2015, Saturday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 16 May 2015, Saturday
+Called UIShow.displayNext 
+executeUserInput: show 17may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 17 May 2015, Sunday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 17 May 2015, Sunday
+Called UIShow.displayNext 
+executeUserInput: show 18may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 18 May 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 18 May 2015, Monday
+Called UIShow.displayNext 
+executeUserInput: show 19may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 19 May 2015, Tuesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 19 May 2015, Tuesday
+Called UIShow.displayNext 
+executeUserInput: show 20may 2015
+Logic command executed & returns: True
+Feedback displayed: showing: 20 May 2015, Wednesday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: 20 May 2015, Wednesday
+User Command: exit
+executeUserInput: exit
+UI-handled command executed: exit
+Program starts at: 13 Apr,Monday, 21:02:15
+executeUserInput: show floating
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+executeUserInput: show today
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+User Command: mapleclearall123
+executeUserInput: mapleclearall123
+Developer command executed: mapleclearall
+Program starts at: 13 Apr,Monday, 21:05:12
+executeUserInput: show floating
+Logic command executed & returns: True
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+executeUserInput: show today
+Logic command executed & returns: True
+Feedback displayed: showing: 13 April 2015, Monday
+Floating displayed: Successful
+Main displayed: Successful
+Main label displayed: [Today] 13 April 2015, Monday
+User Command: mapleclearall
+executeUserInput: mapleclearall
+Developer command executed: mapleclearall

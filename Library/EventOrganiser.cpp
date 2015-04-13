@@ -155,14 +155,11 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATE_RANGE);
 
 	vector<Event> returnVector, sortResults;
-	vector<struct tm> wantedEventDates;
-	vector<struct tm> exisitngEventDates;
+	vector<struct tm> wantedEventDates, exisitngEventDates;
 	bool isPushed = false;
 	time_t t = time(0);
 	struct tm* temp = localtime(&t);
-	Event tempEvent;
-
-	Event marker;
+	Event tempEvent, marker;
 	marker.setName(MARKER_CODE);
 	marker.setID(UNIQUE_ID);
 	marker.setIsFloating(false);
@@ -183,12 +180,12 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
 						tempEvent = eventsToFilter[j];
 						if(wantedEventDates[i].tm_mday == tempEvent.getStartDate().tm_mday){ //start of multiday
-							tempEvent.setEndTime(23,59);
+							tempEvent.setEndTime(23, 59);
 						} else if(wantedEventDates[i].tm_mday == tempEvent.getEndDate().tm_mday){ //end of multiday
-							tempEvent.setStartTime(0,0);
+							tempEvent.setStartTime(0, 0);
 						} else{ //days between multiday
-							tempEvent.setStartTime(0,0);
-							tempEvent.setEndTime(23,59);
+							tempEvent.setStartTime(0, 0);
+							tempEvent.setEndTime(23, 59);
 						}
 						returnVector.push_back(tempEvent);
 						isPushed = true;
@@ -215,6 +212,7 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 	return returnVector;
 }
 
+//@author A0111379H
 //returns a vector of days for the wanted range of dates.
 vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	
@@ -269,6 +267,7 @@ vector<struct tm> EventOrganiser::eventDateToVector(Event showEventDates){
 	return datesToShow;
 }
 
+//@author A0113860M
 //shift marker up to before events
 vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 	vector<Event> returnVector;
@@ -301,8 +300,8 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 		int lastIndex = eventsToFilter.size()-1;
 		latestDate = eventsToFilter[lastIndex].getEndDate();
 	
-		returnEvent.setStartDate(earliestDate.tm_mday,earliestDate.tm_mon,earliestDate.tm_year);	
-		returnEvent.setEndDate(latestDate.tm_mday,latestDate.tm_mon,latestDate.tm_year);
+		returnEvent.setStartDate(earliestDate.tm_mday, earliestDate.tm_mon, earliestDate.tm_year);	
+		returnEvent.setEndDate(latestDate.tm_mday, latestDate.tm_mon, latestDate.tm_year);
 	}
 
 	return returnEvent;
@@ -313,12 +312,12 @@ Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
 vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){ 
 	Event temp;
 	
-	if(eventsToSort.size()<=1){
+	if(eventsToSort.size() <= 1){
 		return eventsToSort;
 	} else{
 		for(auto i = 0; i < (eventsToSort.size()-1); i++){
 			for(int j = i+1; j < eventsToSort.size(); j++){
-				int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
+				int difference = findTimeDiff(eventsToSort[j].getStartDate(), eventsToSort[i].getStartDate());
 				if(difference >= 0 ){ 
 					temp = eventsToSort[i];
 					eventsToSort[i] = eventsToSort[j];
@@ -334,12 +333,12 @@ vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
 vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){
 	Event temp;
 	
-	if(eventsToSort.size()<=1){
+	if(eventsToSort.size() <= 1){
 		return eventsToSort;
 	} else{
 		for(auto i = 0; i < (eventsToSort.size()-1); i++){
 			for(int j = i+1; j < eventsToSort.size(); j++){
-				int difference = findTimeDiff(eventsToSort[j].getEndDate(),eventsToSort[i].getEndDate());
+				int difference = findTimeDiff(eventsToSort[j].getEndDate(), eventsToSort[i].getEndDate());
 				if(difference >= 0 ){ 
 					temp = eventsToSort[i];
 					eventsToSort[i] = eventsToSort[j];
@@ -356,7 +355,7 @@ int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 	time_t start = mktime(&startDay);
 	time_t end = mktime(&endDay);
 
-	int difference = difftime(end,start);
+	int difference = difftime(end, start);
 	return difference;
 }
 
@@ -364,11 +363,11 @@ int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
 vector<Event> EventOrganiser::sortFloatingByID(vector<Event> floating){
 	Event temp;
 
-	if(floating.size()<=1){
+	if(floating.size() <= 1){
 		return floating;
 	} else{
 		for(auto i = 0; i < (floating.size()-1); i++){
-			for(int j=i+1;j<floating.size();j++){
+			for(int j = i+1; j < floating.size(); j++){
 				if(floating[i].getID() > floating[j].getID()){ 
 					temp = floating[i];
 					floating[i] = floating[j];

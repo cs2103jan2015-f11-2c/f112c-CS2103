@@ -25,8 +25,6 @@ UICommandSuggestion::~UICommandSuggestion(void)
 {
 }
 
-
-
 // static strings that cannot initialise in "UICommandSuggestion.h"
 const std::string UICommandSuggestion::COMMAND_ADD = "add";
 const std::string UICommandSuggestion::COMMAND_DELETE = "del";
@@ -108,8 +106,6 @@ void UICommandSuggestion::setUpsuggestionSearch(){
 	_suggestionSearch.push_back(COMMAND_SEARCH);
 	_suggestionSearch.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
 
-	_suggestionSearch.push_back(COMMAND_SEARCH);
-	_suggestionSearch.push_back(BLANK_SPACE + SYMBOL_DATE);
 }
 
 void UICommandSuggestion::setUpsuggestionShow(){
