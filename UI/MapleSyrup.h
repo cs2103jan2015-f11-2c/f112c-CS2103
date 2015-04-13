@@ -59,16 +59,6 @@ namespace UI {
 	private: System::Windows::Forms::PictureBox^  pictureBox5;
 	private: System::Windows::Forms::RichTextBox^  commandBox;
 	private: System::Windows::Forms::PictureBox^  suggPic;
-
-
-
-
-
-
-
-
-
-
 	private: System::Windows::Forms::Button^  undoButton;
 
 	public:
@@ -617,14 +607,12 @@ namespace UI {
 /*
 * =================================================================================================================================================================== 
 * Functions to load GUI & data
-* GUI exited
 * ===================================================================================================================================================================
 */
 //Pre-condition : None
 //To display the UI
 //Invoked by MapleSyrup.cpp
 private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
-			clearAllLogFiles();
 			initializeAndUndisplayAll();
 			initializeSysCtrlPressed();
 			initializePreviousTextLength();
@@ -663,7 +651,6 @@ private: void clearAllLogFiles(){
 		 }
 
 private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-			//close everything
 			closeCalendar();
 		 }
 
@@ -771,7 +758,8 @@ private: void displayErrorString(){
 
 //Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
 //Get the display vectors from Logic.h when invoked by function executeUserInput(). 
-//It proceed on to display these vectors to the respective displays, namely main display, floating tasks display and feedback box. 
+//It proceed on to display these vectors to the respective displays, namely main display, 
+//floating tasks display and feedback box. 
 private:void displayToAllDisplays(){
 			vector<LogicUpdater::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
 			vector<LogicUpdater::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
@@ -791,13 +779,13 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 			for (unsigned int i = 0; i< displayToFeedback.size(); i++){
 				String^ temp = convertToSys(displayToFeedback[i]);
 				if(i==displayToFeedback.size()-1){
-					feedbackBox->SelectionFont = gcnew Drawing::Font(feedbackBox->SelectionFont->FontFamily,feedbackBox->SelectionFont->Size, FontStyle::Bold);
+					feedbackBox->SelectionFont = gcnew Drawing::Font(feedbackBox->SelectionFont->FontFamily,
+						feedbackBox->SelectionFont->Size, FontStyle::Bold);
 					feedbackBox->SelectedText = " " + temp ;
 					feedbackBox->ScrollToCaret();
 					}else{
 					feedbackBox->SelectedText = " " + temp + "\n" ;
-					}
-				
+					}	
 				}
 
 			if (!displayToFeedback.empty()){
@@ -820,7 +808,8 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 
 						String^  eventName= convertToSys (displayToFloating[i].eventString);
 
-						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
+						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+							floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
 						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
 
 						floatingTasksDisplay->ScrollToCaret();				
@@ -828,7 +817,8 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 					
 					else {
 						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
 						if(displayToFloating[i].dateString != ""){
 						String^ date = convertToSys (displayToFloating[i].dateString);
@@ -840,7 +830,8 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 						floatingTasksDisplay->SelectionColor = Color::Red;
 						
 						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
 						
 						if(importanceSymbolString != ""){
@@ -851,14 +842,12 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
 						
 						if (displayToFloating[i].isCompleted){
-							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
-						floatingTasksDisplay->SelectedText = eventName + "\n";
-						
+						floatingTasksDisplay->SelectedText = eventName + "\n";			
 					}
-					
 				}
-
 				log ("Floating displayed:", "Successful");
 		}
 
@@ -882,7 +871,8 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 					String^  eventName= convertToSys (displayToMain[i].eventString);
 
 					display->SelectionColor = Color::Red;
-					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+						display->SelectionFont->Size, FontStyle::Bold);
 					display->SelectedText = date + importanceSymbolString + eventName + "\n";
 					display->ScrollToCaret();
 				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
@@ -904,7 +894,8 @@ private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToM
 						String^  eventName= convertToSys (displayToMain[i].eventString);
 
 						display->SelectionColor = Color::Green;
-						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Bold);
+						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+							display->SelectionFont->Size, FontStyle::Bold);
 						display->SelectedText = date + importanceSymbolString + eventName + "\n";
 
 						display->ScrollToCaret();
@@ -921,20 +912,23 @@ private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
 			 if( normalEvent.isCompleted ){
 				 String^ date = convertToSys (normalEvent.dateString);
 				 display->SelectionColor = Color::MidnightBlue;
-				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
 				 display->SelectedText = date ;
 			 
 				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
 				 String^ importanceSymbolString = convertToSys (importanceSymbol);
 				 display->SelectionColor = Color::Red;
-				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
 				 
 				 if(importanceSymbolString != ""){
 					display->SelectedText = importanceSymbolString;
 				 }
 				 String^  eventName= convertToSys (normalEvent.eventString);
 				 display->SelectionColor = Color::MidnightBlue;
-				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
 				 display->SelectedText = eventName + "\n";
 			 } else {
 				 if(normalEvent.dateString != ""){
@@ -952,10 +946,8 @@ private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
 				 
 				 String^  eventName= convertToSys (normalEvent.eventString);
 				 display->SelectionColor = Color::MidnightBlue;	
-				 display->SelectedText = eventName + "\n";
-				 
+				 display->SelectedText = eventName + "\n";		 
 			 }
-
 		 }
 
 //Pre-condition : vector displayToMain to be correctly updated
@@ -987,7 +979,8 @@ private: std::string setImportancesymbol(int importanceLevel){
 */
 //Pre-condition : None
 //This function centralises all the calls from the various parts/event handlers from the UI 
-//It first checks and matches commands that are related to developer or UI-handled. If yes, it proceeds with executing these commands
+//It first checks and matches commands that are related to developer or UI-handled. 
+//If yes, it proceeds with executing these commands
 //If no, it proceed to pass command in string form to function to passCommandToLogic()
 public: void executeUserInput(std::string input){
 			log("executeUserInput:", input);
@@ -1130,10 +1123,9 @@ std::string toLowerCase(std::string word){
 
 /*
 * =================================================================================================================================================================== 
-* commandBar
+* Functions that link commandBar to CommandSuggestion.h to display the various suggestions  & colour the keywords
 * ===================================================================================================================================================================
 */
-
 private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 			 if (e->KeyCode == Keys::Enter){
 				if (commandBox->Text == ""){
@@ -1181,13 +1173,6 @@ public: void resetCommandBar(){
 private: System::Void commandBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
 
 		 }
-//===================================================================================================================================================================
-
-/*
-* =================================================================================================================================================================== 
-* Functions that link commandBar to CommandSuggestion.h to display the various suggestions 
-* ===================================================================================================================================================================
-*/
 
 //Pre-condition : None 
 //Display the information in vector suggestion onto suggestBar
@@ -1198,20 +1183,25 @@ private: void displaySuggestion(std::vector<std::string> suggestion){
 			for (unsigned int i = 0; i < suggestion.size();i++){
 					std::string temp = suggestion[i];
 
-					if(temp == UICommandSuggestion::DASH || temp == UICommandSuggestion::SEMI_COLON ||temp == UICommandSuggestion::WORD_DUE){	
+					if(temp == UICommandSuggestion::DASH || temp == UICommandSuggestion::SEMI_COLON ||
+						temp == UICommandSuggestion::WORD_DUE){	
 						String^ toAdd = convertToSys(" " + temp);
-						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Bold);
 						suggestBar->SelectionColor = Color::RoyalBlue;
 						suggestBar->SelectedText = toAdd;
-					} else if (temp == UICommandSuggestion::COMMAND_ADD || temp == UICommandSuggestion::COMMAND_DELETE || temp == UICommandSuggestion::COMMAND_EDIT ||
+					} else if (temp == UICommandSuggestion::COMMAND_ADD || temp == UICommandSuggestion::COMMAND_DELETE || 
+						temp == UICommandSuggestion::COMMAND_EDIT ||
 					temp == UICommandSuggestion::COMMAND_SEARCH || temp == UICommandSuggestion::COMMAND_SHOW){
 						String^ toAdd = convertToSys(" " + temp);
-						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Bold);
 						suggestBar->SelectionColor = Color::SlateBlue;
 						suggestBar->SelectedText = toAdd;
 					} else {
 						String^ toAdd = convertToSys(" " + temp);
-						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,suggestBar->SelectionFont->Size, FontStyle::Regular);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Regular);
 						suggestBar->SelectionColor = Color::DimGray;
 						suggestBar->SelectedText = toAdd;
 					}
@@ -1236,58 +1226,61 @@ private: void unDisplaySuggestion(){
 			suggestBar->Text = "";
 		}
 
-
-
+//Pre-condition : None 
+//This function takes in a string, check whether it is a keyword, and colour it in the respective colour 
+// if it is, else it will colour the word black.
+// All these words will be read onto the commandBar
 private: void colourCommands(std::string token){
 			 std::vector<std::string> timeVect = cSPtr->getKeyWordTimeVect();
 			 for (int i=0; i<timeVect.size(); i++){
 				 if(token == timeVect[i]){
 					commandBox->SelectionColor = Color::SandyBrown;
-					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
 					commandBox->SelectedText = convertToSys(token);
 					return;
 				 }
-
 			 }
 
 			 std::vector<std::string> othersVect = cSPtr->getkeywordOthersVect();
 			 for (int i=0; i<othersVect.size(); i++){
 				 if(token == othersVect[i]){
 					commandBox->SelectionColor = Color::RoyalBlue;
-					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
 					commandBox->SelectedText = convertToSys(token);
 					return;
 				 }
-
 			 }
 
 			 std::vector<std::string> commandsVect = cSPtr->getKeyWordCommandsVect();
 			 for (int i=0; i<commandsVect.size(); i++){
 				 if(token == commandsVect[i]){
 					commandBox->SelectionColor = Color::SlateBlue;
-					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
 					commandBox->SelectedText = convertToSys(token);
 					return;
 				 }
-
 			 }
 
 			 std::vector<std::string> dayVect = cSPtr->getKeyWordDayVect();
 			 for (int i=0; i<dayVect.size(); i++){
 				 if(token == dayVect[i]){
 					commandBox->SelectionColor = Color::DimGray;
-					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
 					commandBox->SelectedText = convertToSys(token);
 					return;
 				 }
-
 			 }
 
 			 std::vector<std::string> monthsVect = cSPtr->getKeyWordMonthsVect();
 			 for (int i=0; i<monthsVect.size(); i++){
 				 if(token == monthsVect[i]){
 					commandBox->SelectionColor = Color::Gray;
-					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
 					commandBox->SelectedText = convertToSys(token);
 					return;
 				 }
@@ -1295,7 +1288,8 @@ private: void colourCommands(std::string token){
 			 }
 
 			commandBox->SelectionColor = Color::Black;
-			commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,commandBox->SelectionFont->Size, FontStyle::Regular);
+			commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+				commandBox->SelectionFont->Size, FontStyle::Regular);
 			commandBox->SelectedText = convertToSys(token);
 
 		 }
@@ -1318,10 +1312,8 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 			 }
 
 			 try{
-
 			 int cursorPosition = commandBox->SelectionStart;
-
-			 if(cursorPosition <0){
+			 if(cursorPosition < 0){
 				 throw "Error: Please retype";
 			 }
 
@@ -1345,6 +1337,7 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 				 
 				 std::string tempString = convertToStd(commandBox->SelectedText);
 				 colourCommands(tempString);
+
 			 } else {
 				 std::string longCommands = convertToStd(commandBox->Text);
 				 resetCommandBar();
@@ -1355,9 +1348,7 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 			 }
 
 			 commandBox->Select(cursorPosition,0);
-
-			 previousTextLength = commandBox->Text->Length;
-			 
+			 previousTextLength = commandBox->Text->Length;		 
 			 }
 			 catch(const std::string& errorMsg){
 				 log("Error from CommandBar:",errorMsg);
@@ -1368,7 +1359,12 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 
 			 std::string temp = convertToStd(commandBox->Text);	
 			 std::string tempCommand = toLowerCase(temp);
-			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(tempCommand);
+			 displaySuggestionBox(tempCommand);
+		 }
+
+//Use to trigger suggestBox to display the respective suggestions to user
+private: void displaySuggestionBox(std::string comdInString){
+			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(comdInString);
 			 switch(tempCommandType){
 			 case UICommandSuggestion::ADD_:{
 				 std::vector<std::string> suggestionAdd = cSPtr->getSuggestionAdd();
@@ -1402,10 +1398,11 @@ private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::
 			 case UICommandSuggestion::INVALID_:{
 				 break;
 										  }
-			 }
-			
-		 }
+			 }		
 
+
+
+		 }
 
 private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
 			 resetCommandBar();
@@ -1426,6 +1423,7 @@ private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventA
 /*
 * =================================================================================================================================================================== 
 * Functions that link UI to UIHelp.h to display help information
+* They also update the mainDisplayLabel accordingly
 * ===================================================================================================================================================================
 */
 private: void displayHelpIntroduction(){
@@ -1456,7 +1454,8 @@ public: void displayHelpShortCuts(){
 /*
 * =================================================================================================================================================================== 
 * Functions and attributes that control show and help column
-* Functions that are under the show column call UIShow.h directly to obtain the respective commands and pass them to function executeUserInput for execution
+* Functions that are under the show column call UIShow.h directly to obtain the respective commands and 
+* pass them to function executeUserInput for execution
 * Functions that are under the help column call the respective help functions within this class
 * ===================================================================================================================================================================
 */
@@ -1520,6 +1519,8 @@ private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, 
 /*
 * =================================================================================================================================================================== 
 * Calendar display functions
+* Functions that link to UIShow by passing the selected date(s) to the respective functions
+* and receive the respective commands to send to function executeUserInput() for execution.
 * ===================================================================================================================================================================
 */
 private: bool topCalenderDisplayed;
@@ -1566,7 +1567,8 @@ private: void closeCalendar(){
 		 }
 
 //Pre-condition : Only works when dates are chosen from the calendar
-//It receives the start and end date to be displayed from calendar and pass them to UIShow.h to generate a proper command
+//It receives the start and end date to be displayed from calendar and pass them 
+//to UIShow.h to generate a proper command
 //It moves on to pass this command to function executeUserInput for executition
 private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
 			 
@@ -1744,11 +1746,17 @@ private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, Syst
 			    commandBox->Select();
 			 }
 		 }
+
+private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System::EventArgs^  e) {
+			nagivationPicfloatingDis->Visible = false;
+			nagivationPicfloatingDis->SendToBack();
+		 }
+
 //===================================================================================================================================================================	
 
 /*
 * =================================================================================================================================================================== 
-* Undo and Redo Buttons and functions
+* Undo and Redo Buttons and their functions
 * ===================================================================================================================================================================
 */
 private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -1781,14 +1789,5 @@ private: Void log(std::string label, std::string commands){
 			 outFile.close();
 		 }
 //===================================================================================================================================================================
-
-private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System::EventArgs^  e) {
-			nagivationPicfloatingDis->Visible = false;
-			nagivationPicfloatingDis->SendToBack();
-		 }
-
-
-
-
 };
 }

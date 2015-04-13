@@ -64,6 +64,11 @@ const string LogicUpdater::EQUAL_LINE = "=======================================
 const string LogicUpdater::TIME_ZERO_4 = "00:00am";
 const string LogicUpdater::TIME_TWO_THREE_FIVE_NINE = "11:59pm";
 
+const string LogicUpdater::COLON = ":";
+const string LogicUpdater::TIME_AM = "am";
+const string LogicUpdater::TIME_PM = "pm";
+const string LogicUpdater::STRING_ZERO ="0";
+
 //constructor
 LogicUpdater::LogicUpdater() {
 	_normalEvents.clear();
@@ -727,7 +732,8 @@ bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate) {
 
 	bool isMonth = false;
 
-	if (isFirstDayOfMonth(frontDate) && isLastDayOfMonth(backDate) && isSameMonth(frontDate,backDate) && isSameYear(frontDate,backDate)) {
+	if (isFirstDayOfMonth(frontDate) && isLastDayOfMonth(backDate) && isSameMonth(frontDate,backDate) 
+		&& isSameYear(frontDate,backDate)) {
 		isMonth = true;
 	} else if (_weekMonthOrNothing == WORD_MONTH) {
 		isMonth = true;
@@ -871,23 +877,23 @@ std::string LogicUpdater::intToTime (int timeInInt) {
 	if (hours >= 10){
 		oss << hours;
 	} else{
-		oss << "0";
+		oss << STRING_ZERO;
 		oss << hours;
 	}
 
-	oss << ":";
+	oss << COLON;
 
 	if (minutes >= 10) {
 		oss << minutes;
 	} else {
-		oss << "0";
+		oss << STRING_ZERO;
 		oss << minutes;
 	}
 
 	if (afterTwelve) {		
-		oss << "pm";
+		oss << TIME_PM;
 	} else {
-		oss << "am";
+		oss << TIME_AM;
 	}
 	
 	return oss.str();

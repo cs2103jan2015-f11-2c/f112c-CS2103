@@ -1,0 +1,1106 @@
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created search command
+executed search command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created search command
+executed search command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
+created show command
+executed show command
+undoStack size 0
+redoStack size 0
+created showfloat command
+executed showfloat command
+undoStack size 0
+redoStack size 0
+set floating events succeeded
+set normal events succeeded
