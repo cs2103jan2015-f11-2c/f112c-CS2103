@@ -121,28 +121,28 @@ void EventStorage::importFloatDate(std::istream& in){
 	getline(in, endHour);
 	getline(in, endMin);
 
-	if(startYear.substr(0,LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
+	if(startYear.substr(0, LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
 		throw LABEL_STARTYEAR;
-	} else if(startMonth.substr(0,LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
+	} else if(startMonth.substr(0, LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
 		throw LABEL_STARTMONTH;
-	} else if(startDay.substr(0,LABEL_STARTDAY.size()) != LABEL_STARTDAY){
+	} else if(startDay.substr(0, LABEL_STARTDAY.size()) != LABEL_STARTDAY){
 		throw LABEL_STARTDAY;
 	} 
-	if(startHour.substr(0,LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
+	if(startHour.substr(0, LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
 		throw LABEL_STARTHOUR;
-	} else if(startMin.substr(0,LABEL_STARTMIN.size()) != LABEL_STARTMIN){
+	} else if(startMin.substr(0, LABEL_STARTMIN.size()) != LABEL_STARTMIN){
 		throw LABEL_STARTMIN;
 	}
-	if(endYear.substr(0,LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
+	if(endYear.substr(0, LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
 		throw LABEL_ENDYEAR;
-	} else if(endMonth.substr(0,LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
+	} else if(endMonth.substr(0, LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
 		throw LABEL_ENDMONTH;
-	} else if(endDay.substr(0,LABEL_ENDDAY.size()) != LABEL_ENDDAY){
+	} else if(endDay.substr(0, LABEL_ENDDAY.size()) != LABEL_ENDDAY){
 		throw LABEL_ENDDAY;
 	}	
-	if(endHour.substr(0,LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
+	if(endHour.substr(0, LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
 		throw LABEL_ENDHOUR;
-	} else if(endMin.substr(0,LABEL_ENDMIN.size()) != LABEL_ENDMIN){
+	} else if(endMin.substr(0, LABEL_ENDMIN.size()) != LABEL_ENDMIN){
 		throw LABEL_ENDMIN;
 	}
 }
@@ -150,7 +150,7 @@ void EventStorage::importFloatDate(std::istream& in){
 void EventStorage::importName(std::istream& in, Event* tempEvent){
 	string name;
 	getline(in, name);
-	if(name.substr(0,LABEL_EVENTNAME.size()) == LABEL_EVENTNAME){
+	if(name.substr(0, LABEL_EVENTNAME.size()) == LABEL_EVENTNAME){
 		tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
 	} else{
 		throw LABEL_EVENTNAME;
@@ -171,46 +171,48 @@ void EventStorage::importDate(std::istream& in, Event* tempEvent){
 	getline(in, endHour);
 	getline(in, endMin);
 
-	if(startYear.substr(0,LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
+	if(startYear.substr(0, LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
 		throw LABEL_STARTYEAR;
-	} else if(startMonth.substr(0,LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
+	} else if(startMonth.substr(0, LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
 		throw LABEL_STARTMONTH;
-	} else if(startDay.substr(0,LABEL_STARTDAY.size()) != LABEL_STARTDAY){
+	} else if(startDay.substr(0, LABEL_STARTDAY.size()) != LABEL_STARTDAY){
 		throw LABEL_STARTDAY;
 	} else{
-		tempEvent->setStartDate(atoi((startDay.substr(LABEL_STARTDAY.size())).c_str()),atoi((startMonth.substr(LABEL_STARTMONTH.size())).c_str()),atoi((startYear.substr(LABEL_STARTYEAR.size())).c_str()));
+		tempEvent->setStartDate(atoi((startDay.substr(LABEL_STARTDAY.size())).c_str()),
+			atoi((startMonth.substr(LABEL_STARTMONTH.size())).c_str()), atoi((startYear.substr(LABEL_STARTYEAR.size())).c_str()));
 	}
 	
-	if(startHour.substr(0,LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
+	if(startHour.substr(0, LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
 		throw LABEL_STARTHOUR;
-	} else if(startMin.substr(0,LABEL_STARTMIN.size()) != LABEL_STARTMIN){
+	} else if(startMin.substr(0, LABEL_STARTMIN.size()) != LABEL_STARTMIN){
 		throw LABEL_STARTMIN;
 	} else{
-		tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()),atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
+		tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()), atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
 	} 
 
-	if(endYear.substr(0,LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
+	if(endYear.substr(0, LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
 		throw LABEL_ENDYEAR;
-	} else if(endMonth.substr(0,LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
+	} else if(endMonth.substr(0, LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
 		throw LABEL_ENDMONTH;
-	} else if(endDay.substr(0,LABEL_ENDDAY.size()) != LABEL_ENDDAY){
+	} else if(endDay.substr(0, LABEL_ENDDAY.size()) != LABEL_ENDDAY){
 		throw LABEL_ENDDAY;
 	} else{
-		tempEvent->setEndDate(atoi((endDay.substr(LABEL_ENDDAY.size())).c_str()),atoi((endMonth.substr(LABEL_ENDMONTH.size())).c_str()),atoi((endYear.substr(LABEL_ENDYEAR.size())).c_str()));
+		tempEvent->setEndDate(atoi((endDay.substr(LABEL_ENDDAY.size())).c_str()),
+			atoi((endMonth.substr(LABEL_ENDMONTH.size())).c_str()), atoi((endYear.substr(LABEL_ENDYEAR.size())).c_str()));
 	}
-	if(endHour.substr(0,LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
+	if(endHour.substr(0, LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
 		throw LABEL_ENDHOUR;
-	} else if(endMin.substr(0,LABEL_ENDMIN.size()) != LABEL_ENDMIN){
+	} else if(endMin.substr(0, LABEL_ENDMIN.size()) != LABEL_ENDMIN){
 		throw LABEL_ENDMIN;
 	} else{
-		tempEvent->setEndTime(atoi((endHour.substr(LABEL_ENDHOUR.size())).c_str()),atoi((endMin.substr(LABEL_ENDMIN.size())).c_str()));
+		tempEvent->setEndTime(atoi((endHour.substr(LABEL_ENDHOUR.size())).c_str()), atoi((endMin.substr(LABEL_ENDMIN.size())).c_str()));
 	}
 }
 
 void EventStorage::importDeadLine(std::istream& in, Event* tempEvent){
 	string deadline;
 	getline(in, deadline);
-	if(deadline.substr(0,LABEL_ISDEADLINE.size()) == LABEL_ISDEADLINE){
+	if(deadline.substr(0, LABEL_ISDEADLINE.size()) == LABEL_ISDEADLINE){
 		tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
 	} else{
 		throw LABEL_ISDEADLINE;
@@ -220,7 +222,7 @@ void EventStorage::importDeadLine(std::istream& in, Event* tempEvent){
 void EventStorage::importCompleted(std::istream& in, Event* tempEvent){
 	string completed;
 	getline(in, completed);
-	if(completed.substr(0,LABEL_ISCOMPLETED.size()) == LABEL_ISCOMPLETED){
+	if(completed.substr(0, LABEL_ISCOMPLETED.size()) == LABEL_ISCOMPLETED){
 		tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
 	} else{
 		throw LABEL_ISCOMPLETED;
@@ -230,7 +232,7 @@ void EventStorage::importCompleted(std::istream& in, Event* tempEvent){
 void EventStorage::importImportance(std::istream& in, Event* tempEvent){
 	string importance;
 	getline(in, importance);
-	if(importance.substr(0,LABEL_IMPORTANCE.size()) == LABEL_IMPORTANCE){
+	if(importance.substr(0, LABEL_IMPORTANCE.size()) == LABEL_IMPORTANCE){
 		tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
 	} else{
 		throw LABEL_IMPORTANCE;
@@ -240,7 +242,7 @@ void EventStorage::importImportance(std::istream& in, Event* tempEvent){
 void EventStorage::importID(std::istream& in, Event* tempEvent){
 	string id;
 	getline(in, id);
-	if(id.substr(0,LABEL_ID.size()) == LABEL_ID){
+	if(id.substr(0, LABEL_ID.size()) == LABEL_ID){
 		int ID = (atoi((id.substr(LABEL_ID.size())).c_str()));
 		setLastID(ID);
 		tempEvent->setID(ID);
@@ -268,7 +270,7 @@ int EventStorage::getLastID(){
 }
 
 void EventStorage::exportNormal(std::ostream& out){
-	for(auto i=0;i<normalContent.size();i++){
+	for(auto i = 0; i < normalContent.size(); i++){
 		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(normalContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << normalContent[i].getName() << std::endl 
@@ -281,7 +283,7 @@ void EventStorage::exportNormal(std::ostream& out){
 }
 
 void EventStorage::exportFloating(std::ostream& out){
-	for(auto i=0;i<floatingContent.size();i++){
+	for(auto i = 0; i < floatingContent.size(); i++){
 		out 
 			<< LABEL_ISFLOATING << conversion.boolToString(floatingContent[i].getIsFloating()) << std::endl 
 			<< LABEL_EVENTNAME << floatingContent[i].getName() << std::endl 

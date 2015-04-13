@@ -1,8 +1,8 @@
 //@author A0113860M
 //========================================================================================
 //EventStorage class is responsible for the internal and external storages. 
-//It adopts the singleton pattern to ensure that only one storage object is created to prevent 
-//read/write errors and duplicates.
+//It adopts the singleton pattern to ensure that only one storage object is created to
+//prevent read/write errors and duplicates.
 //
 //Hence, only an instance of storage will be distributed when needed.
 //		sample usages to request for instance:
