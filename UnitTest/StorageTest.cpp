@@ -206,12 +206,10 @@ namespace UnitTest
 			testFloatingContent.push_back(testFloat2);
 			EventStorage::storage().setFloatingContent(testFloatingContent);
 
-			expected.push_back(marker);
 			expected.push_back(testFloat1);
 
 			result = modifier.del(testFloat2);
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
 
 		}
 	};
