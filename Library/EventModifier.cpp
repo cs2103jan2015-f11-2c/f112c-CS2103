@@ -6,7 +6,6 @@ const int EventModifier::NOT_FOUND = -1 ;
 const int EventModifier::DEFAULT = 100;
 
 
-//CONSTRUCTOR, DESTRUCTOR
 EventModifier::EventModifier(void)
 {
 }

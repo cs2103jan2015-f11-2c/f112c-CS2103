@@ -176,8 +176,9 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 		for(int j = 0; j < eventsToFilter.size(); j++){
 			exisitngEventDates = eventDateToVector(eventsToFilter[j]);
 			for(int k = 0; k<exisitngEventDates.size(); k++){
-				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon)
-					&& (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
+				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) &&
+					(wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) &&
+					(wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
 					//check ALLDAY.. set starttime and endtime
 					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
 						tempEvent = eventsToFilter[j];

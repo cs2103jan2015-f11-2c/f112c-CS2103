@@ -1,8 +1,9 @@
 //@author A0113860M
-//==================================================================================================
-//EventLog is responsible for writing logs onto a text file(EventLog.txt) for reference and debugging.
-//Combinations of log messages are used liberally throughout the storage component
-//==================================================================================================
+//========================================================================================
+//EventLog is responsible for writing logs onto a text file(EventLog.txt) for reference 
+//and debugging. Combinations of log messages are used liberally throughout the storage 
+//component.
+//========================================================================================
 #pragma once
 
 #ifndef EVENTLOG_H

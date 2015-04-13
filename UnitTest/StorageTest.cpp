@@ -79,7 +79,7 @@ namespace UnitTest
 			//creating test event 1
 			testFloat1.setName("event1");
 			testFloat1.setIsFloating(true);
-			testFloat1.setID(1426225500);
+			testFloat1.setID(1);
 			testFloat1.setIsCompleted(false);	
 
 			expected.push_back(testFloat1);
@@ -93,7 +93,7 @@ namespace UnitTest
 			//creating test event 2
 			testFloat2.setName("event2");
 			testFloat2.setIsFloating(true);
-			testFloat2.setID(1426225501);
+			testFloat2.setID(2);
 			testFloat2.setIsCompleted(false);
 
 			expected.push_back(testFloat1);
