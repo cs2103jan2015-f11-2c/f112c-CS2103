@@ -20,55 +20,35 @@ namespace UnitTest
 		//extractFirstWord always find the first instance of a spacing and take what comes before the space
 		TEST_METHOD(extractFirstWord_Test)
 		{
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.extractFirstWord(testInput);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 2: One Word
+			//Case 1: One Word
 			testInput = "add";
 			testOutput = splitter.extractFirstWord(testInput);
 			expectedOutput = "add";
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 3: Multiple Words
+			//Case 2: Multiple Words
 			testInput = "add event; 17-18mar";
 			testOutput = splitter.extractFirstWord(testInput);
 			expectedOutput = "add";
 			Assert::AreEqual(expectedOutput,testOutput);
 			
-			//Case 4: Multiple Words random input
+			//Case 3: Multiple Words random input
 			testInput = "ave;l233 o4,;s lkkk";
 			testOutput = splitter.extractFirstWord(testInput);
 			expectedOutput = "ave;l233";
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 5: Input with starting spaces
+			//Case 4: Input with starting spaces
 			testInput = "     add";
 			testOutput = splitter.extractFirstWord(testInput);
-			expectedOutput = "";
+			expectedOutput = "add";
 			Assert::AreEqual(expectedOutput,testOutput);
 		}
 
 		//Finds the first non spacing after the first spacing and takes the whole string after that
 		TEST_METHOD(extractDetails_Test)
 		{
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.extractDetails(testInput);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 2: One word
+			//Case 1: One word
 			testInput = "add";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
 			try {
@@ -78,7 +58,7 @@ namespace UnitTest
 			}
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 3: One word plus spaces and symbols
+			//Case 2: One word plus spaces and symbols
 			testInput = "del     ;;;";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
 			try {
@@ -88,19 +68,19 @@ namespace UnitTest
 			}
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 4: Multiple Words
+			//Case 3: Multiple Words
 			testInput = "add event; 17-18mar";
 			testOutput = splitter.extractDetails(testInput);
 			expectedOutput = "event; 17-18mar";
 			Assert::AreEqual(expectedOutput,testOutput);
 			
-			//Case 5: Multiple Words random input
+			//Case 4: Multiple Words random input
 			testInput = "ave;l233 o4,;s lkkk";
 			testOutput = splitter.extractDetails(testInput);
 			expectedOutput = "o4,;s lkkk";
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 6: Input with starting spaces
+			//Case 5: Input with starting spaces
 			testInput = "     add";
 			testOutput = splitter.extractDetails(testInput);
 			expectedOutput = "add";
@@ -110,35 +90,25 @@ namespace UnitTest
 		//Extracts the index of the event, or the event name if index is not found
 		TEST_METHOD(extractEditEventName_Test)
 		{
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.extractEditEventName(testInput);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 2: Editting by index
-			testInput = "13 24-25apr 9pm";
+			//Case 1: Editting by index
+			testInput = "13; 24-25apr 9pm";
 			testOutput = splitter.extractEditEventName(testInput);
 			expectedOutput = "13";
 			Assert::AreEqual(expectedOutput,testOutput);
 			
-			//Case 3: Editting by event name
+			//Case 2: Editting by event name
 			testInput = "event name12345; 24-25apr 9pm";
 			testOutput = splitter.extractEditEventName(testInput);
 			expectedOutput = "event name12345";
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 4: Editting by event name with number in front
+			//Case 3: Editting by event name with number in front
 			testInput = "21 jump street; 24-25apr 9pm";
 			testOutput = splitter.extractEditEventName(testInput);
-			expectedOutput = "21";
+			expectedOutput = "21 jump street";
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 5: Many inputs but no name
+			//Case 4: Many inputs but no ; to indicate name
 			testInput = "jump street";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INDEX;
 			try {
@@ -148,7 +118,7 @@ namespace UnitTest
 			}
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 6: One input, no name, no index
+			//Case 5: One input, no name, no index
 			testInput = "jumpstreet";
 			expectedOutput = ParserExceptions::ERROR_MISSING_INDEX;
 			try {
@@ -164,26 +134,10 @@ namespace UnitTest
 		{
 			std::string eventName;
 
-			//Case 1: Empty string
-			testInput = "";
-			eventName = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.removeEditEventName(testInput,eventName);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
 			//Case 1: Remove name with no additional input after that
 			testInput = "jumpstreet;";
 			eventName = splitter.extractEditEventName(testInput);
-			expectedOutput = ParserExceptions::ERROR_INSUFFICIENT_INFO;
-			try {
-				testOutput = splitter.removeEditEventName(testInput,eventName);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
+			expectedOutput = "";
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 2: Remove index with no additional input after that
@@ -198,7 +152,7 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 3: Remove by index
-			testInput = "13 24-25apr 9pm";
+			testInput = "13; 24-25apr 9pm";
 			eventName = splitter.extractEditEventName(testInput);
 			testOutput = splitter.removeEditEventName(testInput,eventName);
 			expectedOutput = "24-25apr 9pm";
@@ -215,12 +169,12 @@ namespace UnitTest
 			testInput = "21 jump street; 24-25apr 9pm";
 			eventName = splitter.extractEditEventName(testInput);
 			testOutput = splitter.removeEditEventName(testInput,eventName);
-			expectedOutput = "jump street; 24-25apr 9pm";
+			expectedOutput = "24-25apr 9pm";
 			Assert::AreEqual(expectedOutput,testOutput);
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentAddString_Test)
+		TEST_METHOD(fragmentString_Test)
 		{
 			std::vector<std::string> fragmentedWords;
 			std::string expectedOutput0;
@@ -230,45 +184,48 @@ namespace UnitTest
 			std::string expectedOutput4;
 			std::string expectedOutput5;
 			std::string expectedOutput6;
+			std::string expectedOutput7;
+			std::string expectedOutput8;
+			std::string expectedOutput9;
+			std::string expectedOutput10;
+			std::string expectedOutput11;
+			std::string expectedOutput12;
 
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				fragmentedWords = splitter.fragmentAddString(testInput);
-				testOutput = fragmentedWords[0];
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
+			//Case 1: One word
+			testInput = "event";
+			expectedOutput0 = "event";
+			fragmentedWords = splitter.fragmentString(testInput);
+			testOutput = fragmentedWords[0];
+			Assert::AreEqual(expectedOutput0,testOutput);
 
-			//Case 2: No event name in add input
-			testInput = "event name12345 24-25apr 9am-10pm";
-			expectedOutput = ParserExceptions::ERROR_NO_NAME;
-			try {
-				fragmentedWords = splitter.fragmentAddString(testInput);
-				testOutput = fragmentedWords[0];
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 3: Event name only (floating events)
+			//Case 2: Event name only (floating events)
 			testInput = "event name12345;";
-			fragmentedWords = splitter.fragmentAddString(testInput);
-			expectedOutput0 = "event name12345;";
+			fragmentedWords = splitter.fragmentString(testInput);
+			expectedOutput0 = "event ";
+			expectedOutput1 = "name";
+			expectedOutput2 = "12345";
+			expectedOutput3 = ";";
 			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
+			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
+			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
+			Assert::AreEqual(expectedOutput3,fragmentedWords[3]);
 			
-			//Case 4: Add normal event
+			//Case 3: Add normal event
 			testInput = "event name12345; 24-25apr 9am-10pm";
-			fragmentedWords = splitter.fragmentAddString(testInput);
-			expectedOutput0 = "event name12345;";
-			expectedOutput1 = "24";
-			expectedOutput2 = "to";
-			expectedOutput3 = "25apr";
-			expectedOutput4 = "9am";
+			fragmentedWords = splitter.fragmentString(testInput);
+			expectedOutput0 = "event ";
+			expectedOutput1 = "name";
+			expectedOutput2 = "12345";
+			expectedOutput3 = "; ";
+			expectedOutput4 = "24";
 			expectedOutput5 = "to";
-			expectedOutput6 = "10pm";
+			expectedOutput6 = "25";
+			expectedOutput7 = "apr ";
+			expectedOutput8 = "9";
+			expectedOutput9 = "am";
+			expectedOutput10 = "to";
+			expectedOutput11 = "10";
+			expectedOutput12 = "pm";
 			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
 			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
 			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
@@ -276,74 +233,23 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput4,fragmentedWords[4]);
 			Assert::AreEqual(expectedOutput5,fragmentedWords[5]);
 			Assert::AreEqual(expectedOutput6,fragmentedWords[6]);
+			Assert::AreEqual(expectedOutput7,fragmentedWords[7]);
+			Assert::AreEqual(expectedOutput8,fragmentedWords[8]);
+			Assert::AreEqual(expectedOutput9,fragmentedWords[9]);
+			Assert::AreEqual(expectedOutput10,fragmentedWords[10]);
+			Assert::AreEqual(expectedOutput11,fragmentedWords[11]);
+			Assert::AreEqual(expectedOutput12,fragmentedWords[12]);
 
-			//Case 5: Add with random input
+			//Case 4: Add with random input
 			testInput = "gvtr d'kfnd;;; ndfv-nlksn' lkfdnv. dkl";
-			fragmentedWords = splitter.fragmentAddString(testInput);
-			expectedOutput0 = "gvtr d'kfnd;;;";
-			expectedOutput1 = "ndfv";
-			expectedOutput2 = "to";
-			expectedOutput3 = "nlksn'";
-			expectedOutput4 = "lkfdnv";
-			expectedOutput5 = "dkl";
-			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
-			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
-			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
-			Assert::AreEqual(expectedOutput3,fragmentedWords[3]);
-			Assert::AreEqual(expectedOutput4,fragmentedWords[4]);
-			Assert::AreEqual(expectedOutput5,fragmentedWords[5]);
-		}
-
-		//Fragment the input string by taking out delimiters such as " .-"
-		TEST_METHOD(fragmentEditString_Test)
-		{
-			std::vector<std::string> fragmentedWords;
-			std::string expectedOutput0;
-			std::string expectedOutput1;
-			std::string expectedOutput2;
-			std::string expectedOutput3;
-			std::string expectedOutput4;
-			std::string expectedOutput5;
-			std::string expectedOutput6;
-
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				fragmentedWords = splitter.fragmentEditString(testInput);
-				testOutput = fragmentedWords[0];
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 2: Input with all " .-"
-			testInput = " .-.-. -.- .- ... .";
-			expectedOutput = ParserExceptions::ERROR_INSUFFICIENT_INFO;
-			try {
-				fragmentedWords = splitter.fragmentEditString(testInput);
-				testOutput = fragmentedWords[0];
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 3: Edit floating event
-			testInput = "event name12345;";
-			fragmentedWords = splitter.fragmentEditString(testInput);
-			expectedOutput0 = "event name12345;";
-			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
-			
-			//Case 4: Edit normal event
-			testInput = "event name12345; 24-25apr 9am-10pm";
-			fragmentedWords = splitter.fragmentEditString(testInput);
-			expectedOutput0 = "event name12345;";
-			expectedOutput1 = "24";
-			expectedOutput2 = "to";
-			expectedOutput3 = "25apr";
-			expectedOutput4 = "9am";
-			expectedOutput5 = "to";
-			expectedOutput6 = "10pm";
+			fragmentedWords = splitter.fragmentString(testInput);
+			expectedOutput0 = "gvtr ";
+			expectedOutput1 = "d'kfnd;;; ";
+			expectedOutput2 = "ndfv";
+			expectedOutput3 = "to";
+			expectedOutput4 = "nlksn' ";
+			expectedOutput5 = "lkfdnv. ";
+			expectedOutput6 = "dkl";
 			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
 			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
 			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
@@ -351,22 +257,6 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput4,fragmentedWords[4]);
 			Assert::AreEqual(expectedOutput5,fragmentedWords[5]);
 			Assert::AreEqual(expectedOutput6,fragmentedWords[6]);
-
-			//Case 5: Edit with random input
-			testInput = "gvtr d'kfnd;;; ndfv-nlksn' lkfdnv. dkl";
-			fragmentedWords = splitter.fragmentEditString(testInput);
-			expectedOutput0 = "gvtr d'kfnd;";
-			expectedOutput1 = "ndfv";
-			expectedOutput2 = "to";
-			expectedOutput3 = "nlksn'";
-			expectedOutput4 = "lkfdnv";
-			expectedOutput5 = "dkl";
-			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
-			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
-			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
-			Assert::AreEqual(expectedOutput3,fragmentedWords[3]);
-			Assert::AreEqual(expectedOutput4,fragmentedWords[4]);
-			Assert::AreEqual(expectedOutput5,fragmentedWords[5]);
 		}
 
 		//Fragment the input string by taking out delimiters such as " .-"
@@ -381,18 +271,7 @@ namespace UnitTest
 			std::string expectedOutput5;
 			std::string expectedOutput6;
 
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				fragmentedWords = splitter.fragmentShowString(testInput);
-				testOutput = fragmentedWords[0];
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
-
-			//Case 2: Input with all " .-"
+			//Case 1: Input with all " .-"
 			testInput = " .-.-. -.- .- ... .";
 			expectedOutput = ParserExceptions::ERROR_INSUFFICIENT_INFO;
 			try {
@@ -403,7 +282,7 @@ namespace UnitTest
 			}
 			Assert::AreEqual(expectedOutput,testOutput);
 
-			//Case 3: Show system input
+			//Case 2: Show system input
 			testInput = "week 14apr";
 			fragmentedWords = splitter.fragmentShowString(testInput);
 			expectedOutput0 = "week";
@@ -411,7 +290,7 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput0,fragmentedWords[0]);
 			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
 			
-			//Case 4: Show user dates
+			//Case 3: Show user dates
 			testInput = "21-25apr";
 			fragmentedWords = splitter.fragmentShowString(testInput);
 			expectedOutput0 = "21";
@@ -421,7 +300,7 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput1,fragmentedWords[1]);
 			Assert::AreEqual(expectedOutput2,fragmentedWords[2]);
 
-			//Case 5: Show random input
+			//Case 4: Show random input
 			testInput = "ndfv-nlksn' lkfdnv. dkl";
 			fragmentedWords = splitter.fragmentShowString(testInput);
 			expectedOutput0 = "ndfv";

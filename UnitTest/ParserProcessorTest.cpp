@@ -9,25 +9,37 @@ namespace UnitTest
 	TEST_CLASS(ParserProcessorTest)
 	{
 	public:
-		/*
 		ParserProcessor processor;
-		std::string testInput;
-		std::string testOutput;
-		std::string expectedOutput;
+		Event expectedOutput;
+		Event testOutput;
+		std::vector<std::string> testInput;
 		
 		//extractFirstWord always find the first instance of a spacing and take what comes before the space
-		TEST_METHOD(extractFirstWord_Test)
+		TEST_METHOD(processAddEvent_Test)
 		{
-			//Case 1: Empty string
-			testInput = "";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.extractFirstWord(testInput);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
-			Assert::AreEqual(expectedOutput,testOutput);
+			//Case 1: One word, event name
+			testInput.push_back("hello");
+			expectedOutput.setName("hello");
+			expectedOutput.setStartDate(0,0,0);
+			expectedOutput.setEndDate(0,0,0);
+			expectedOutput.setStartTime(0,0);
+			expectedOutput.setIsDeadline(false);
+			expectedOutput.setIsFloating(true);
+			expectedOutput.setIsCompleted(false);
+			expectedOutput.setImportanceLevel(0);
+			testOutput = processor.processAddEvent(testInput);
+			Assert::AreEqual(expectedOutput.getName(),testOutput.getName());
+			Assert::AreEqual(expectedOutput.getStartDate().tm_mday,testOutput.getStartDate().tm_mday);
+			Assert::AreEqual(expectedOutput.getStartDate().tm_mon,testOutput.getStartDate().tm_mon);
+			Assert::AreEqual(expectedOutput.getStartDate().tm_year,testOutput.getStartDate().tm_year);
+			Assert::AreEqual(expectedOutput.getStartDate().tm_hour,testOutput.getStartDate().tm_hour);
+			Assert::AreEqual(expectedOutput.getStartDate().tm_min,testOutput.getStartDate().tm_min);
+			Assert::AreEqual(expectedOutput.getIsDeadline(),testOutput.getIsDeadline());
+			Assert::AreEqual(expectedOutput.getIsFloating(),testOutput.getIsFloating());
+			Assert::AreEqual(expectedOutput.getIsCompleted(),testOutput.getIsCompleted());
+			Assert::AreEqual(expectedOutput.getImportanceLevel(),testOutput.getImportanceLevel());
 
+			/*
 			//Case 2: One Word
 			testInput = "add";
 			testOutput = splitter.extractFirstWord(testInput);
@@ -51,7 +63,8 @@ namespace UnitTest
 			testOutput = splitter.extractFirstWord(testInput);
 			expectedOutput = "";
 			Assert::AreEqual(expectedOutput,testOutput);
+			*/
 		}
-		*/
+		
 	};
 }
