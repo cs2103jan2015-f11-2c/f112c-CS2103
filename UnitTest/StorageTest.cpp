@@ -96,8 +96,8 @@ namespace UnitTest
 			testFloat2.setID(2);
 			testFloat2.setIsCompleted(false);
 
-			expected.push_back(testFloat1);
 			expected.push_back(testFloat2);
+			expected.push_back(testFloat1);
 
 			result = modifier.add(testFloat2);
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
@@ -196,6 +196,8 @@ namespace UnitTest
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
 
 			/*test case: delete single floating event with multiple events in storage*/
+			expected.clear();
+			result.clear();
 			//creating test event 1
 			testFloat2.setName("event2");
 			testFloat2.setIsFloating(true);
