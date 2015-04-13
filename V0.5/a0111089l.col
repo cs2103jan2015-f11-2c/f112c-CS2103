@@ -1,0 +1,2920 @@
+//@author: a0111089l
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Command.cpp
+	 */
+
+#include "Command.h"
+
+
+const int Command::INVALID_NUMBER = -1;
+const int Command::SIZE_ZERO = 0;
+const int Command::SIZE_ONE = 1;
+const int Command::SIZE_TWO = 2;
+
+
+//COMMON API
+vector<Event> Command::getEventVector() {
+	return eventsToShow;
+}
+
+bool Command::getIsFloating() {
+	return isFloating;
+}
+
+bool Command::getIsExecuted() {
+	return isExecuted;
+}
+
+bool Command::getIsUndoable() {
+	return isUndoable;
+}
+
+int Command::getNumEvents(vector<Event> eventVec) {
+	//remove marker events
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getID() < SIZE_ZERO) {
+			eventVec.erase(eventVec.begin() + i);
+		}
+	}
+
+	int count = SIZE_ZERO;
+	vector<int> idVec;
+
+	//only count events with different ID
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
+		if ( find(idVec.begin(), idVec.end(), eventVec[i].getID()) == idVec.end() ) {
+			idVec.push_back(eventVec[i].getID());
+			count++;
+		}
+	}
+	return count;
+}
+
+Event Command::getEventFromID(vector<Event> eventVec, int id) {
+	for (unsigned int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getID() == id) {
+			if (eventVec[i].getIsFloating()) {
+				return eventVec[i];
+			} else {
+				return eventFacade->findEventWithID(id);
+			}
+		}
+	}
+	return createInvalidEvent();
+}
+
+//if userEvent dates fall within the dates currently being shown, maintain the current date range being shown, otherwise use the date range of userEvent
+vector<Event> Command::getShowEventVector(Event userEvent, vector<tm> currentShowingTM) {
+	assert(currentShowingTM.size() == SIZE_TWO);
+
+	vector<tm> userTM, tmRangeToShow;
+	userTM.push_back(userEvent.getStartDate());
+	userTM.push_back(userEvent.getEndDate());
+
+	if (userTM[SIZE_ZERO].tm_year >= currentShowingTM[SIZE_ZERO].tm_year &&
+		userTM[SIZE_ZERO].tm_mon >= currentShowingTM[SIZE_ZERO].tm_mon &&
+		userTM[SIZE_ZERO].tm_mday >= currentShowingTM[SIZE_ZERO].tm_mday &&
+		userTM[SIZE_ONE].tm_year <= currentShowingTM[SIZE_ONE].tm_year &&
+		userTM[SIZE_ONE].tm_mon <= currentShowingTM[SIZE_ONE].tm_mon &&
+		userTM[SIZE_ONE].tm_mday <= currentShowingTM[SIZE_ONE].tm_mday) {
+			tmRangeToShow = currentShowingTM;
+
+	} else {
+		tmRangeToShow = userTM;
+	}
+
+	Event eventWithShowRange;
+	eventWithShowRange.setStartEndDate(tmRangeToShow);
+
+	return eventFacade->showDates(eventWithShowRange);
+}
+
+void Command::checkPartialMatches(int numResults, vector<Event> tempEvents) {
+	switch (numResults) {
+	case SIZE_ZERO: { //no partial match
+		eventsToShow.push_back(createInvalidEvent());
+		isExecuted = true;
+		return;
+					}
+
+	default: { //at least 1 partial match
+		eventsToShow = tempEvents;
+		isExecuted = false;
+		return;
+			 }
+	}
+}
+
+//used when user wants to change an event by typing its name, but there are several events with the same name
+void Command::chooseExactMatches(Event& userEvent) {
+	eventsToShow = eventFacade->findNameOccurrence(userEvent.getName());
+
+	//setting userEvent to have invalid id indicates this command cannot be added to the undoStack
+	userEvent = createInvalidEvent();
+	assert(userEvent.getID() == INVALID_NUMBER);
+	isExecuted = false;
+}
+
+Event Command::createInvalidEvent() {
+	Event invalidEvent;
+	invalidEvent.setID(INVALID_NUMBER);
+	return invalidEvent;
+}
+
+
+
+
+//Add Command
+AddCommand::AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	userEvent = e;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void AddCommand::execute() {
+	isFloating = userEvent.getIsFloating();
+	eventsToShow = eventFacade->addEvent(userEvent);
+
+	if (isFloating) {
+		return;
+	} else {
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
+
+	isExecuted = true;
+	logger.log(LogicLog::EXECUTED + LogicLog::ADD);
+}
+
+Event AddCommand::getEvent() {
+	return userEvent;
+}
+
+void AddCommand::undo() {
+	eventsToShow = eventFacade->deleteEvent(userEvent);
+	if (!userEvent.getIsFloating()) {
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
+}
+
+
+
+
+//Complete Command
+CompleteCommand::CompleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	id = eventID;
+	userEvent = e;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void CompleteCommand::execute() {
+	//if id found in current display, complete immediately
+	if (id > SIZE_ZERO) {
+		completeImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
+		return;
+	}
+
+	vector<Event> tempEvents = eventFacade->findNameExact(userEvent.getName());
+	int numResults = getNumEvents(tempEvents);
+
+	switch (numResults) {
+
+		//no exact match
+	case SIZE_ZERO: { 
+		logger.log(LogicLog::CASE_0 + LogicLog::COMPLETE);
+		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
+		numResults = getNumEvents(tempEvents);
+
+		checkPartialMatches(numResults, tempEvents);
+		return;
+					}
+
+					//1 exact match
+	case SIZE_ONE: { 
+		logger.log(LogicLog::CASE_1 + LogicLog::COMPLETE);
+		completeExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::COMPLETE);
+		return;
+				   }
+
+				   //more than 1 exact match
+	default: { 
+		logger.log(LogicLog::DEFAULT + LogicLog::COMPLETE);
+		chooseExactMatches(userEvent);
+		return;
+			 }
+	}
+}
+
+Event CompleteCommand::getEvent() {
+	return userEvent;
+}
+
+void CompleteCommand::undo() {
+	if (userEvent.getID() != INVALID_NUMBER) {
+		eventsToShow = eventFacade->uncompleteEvent(userEvent);
+		if (!isFloating) {
+			eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		}
+	}
+}
+
+void CompleteCommand::completeImmediately() {
+	isFloating = userEvent.getIsFloating();
+	eventsToShow = eventFacade->completeEvent(userEvent);
+
+	isExecuted = true;
+}
+
+void CompleteCommand::completeExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		userEvent = tempEvents[SIZE_ZERO];
+
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		id = tempEvents[SIZE_ONE].getID();
+		userEvent = eventFacade->findEventWithID(id);
+	}
+
+	id = userEvent.getID();
+	completeImmediately();
+}
+
+
+
+
+//Uncomplete Command
+UncompleteCommand::UncompleteCommand(EventFacade* eventStorage, vector<Event> events, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	eventsToShow = events;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void UncompleteCommand::execute() {
+	int numResults = getNumEvents(eventsToShow);
+
+	switch (numResults) {
+
+	//no exact match
+	case SIZE_ZERO: {
+		logger.log(LogicLog::CASE_0 + LogicLog::UNCOMPLETE);
+		userEvent = createInvalidEvent();
+		isExecuted = true;
+		return;
+					}
+
+	//1 exact match
+	case SIZE_ONE: {
+		logger.log(LogicLog::CASE_1 + LogicLog::UNCOMPLETE);
+
+		userEvent = eventsToShow[SIZE_ZERO];
+		if (userEvent.getID() <= INVALID_NUMBER) { //index [0] was a marker
+			userEvent = eventsToShow[SIZE_ONE];
+		}
+		uncompleteImmediately();
+
+		logger.log(LogicLog::EXECUTED + LogicLog::UNCOMPLETE);
+		return;
+				   }
+
+	//more than 1 exact match
+	default: {
+		logger.log(LogicLog::DEFAULT + LogicLog::UNCOMPLETE);
+		userEvent = createInvalidEvent();
+		return;
+			 }
+	}
+}
+
+Event UncompleteCommand::getEvent() {
+	return userEvent;	
+}
+
+void UncompleteCommand::undo() {
+	if (userEvent.getID() != INVALID_NUMBER) {
+		eventsToShow = eventFacade->completeEvent(userEvent);
+	}	
+}
+
+void UncompleteCommand::uncompleteImmediately() {
+	isFloating = userEvent.getIsFloating();
+	if (isFloating) {
+		eventsToShow = eventFacade->uncompleteEvent(userEvent);
+	} else {
+		eventFacade->uncompleteEvent(userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
+
+	isExecuted = true;
+}
+
+
+
+
+//Delete Command
+DeleteCommand::DeleteCommand(EventFacade* eventStorage, int eventID, Event e, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	id = eventID;
+	userEvent = e;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+}
+
+void DeleteCommand::execute() {
+	//if id found in current display, delete immediately
+	if (id > SIZE_ZERO) {
+		deleteImmediately();
+		logger.log(LogicLog::EXECUTED + LogicLog::DELETE);
+		return;
+	}
+
+	vector<Event> tempEvents = eventFacade->findNameExact(userEvent.getName());
+	int numResults = getNumEvents(tempEvents);
+
+	switch (numResults) {
+
+		//no exact match
+	case SIZE_ZERO: { 
+		logger.log(LogicLog::CASE_0 + LogicLog::DELETE);
+		tempEvents = eventFacade->findNameOccurrence(userEvent.getName());
+		userEvent = createInvalidEvent();
+		numResults = getNumEvents(tempEvents);
+
+		checkPartialMatches(numResults, tempEvents);
+		return;
+					}
+
+					//1 exact match
+	case SIZE_ONE: { 
+		logger.log(LogicLog::CASE_1 + LogicLog::DELETE);
+		deleteExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::DELETE);
+		return;
+				   }
+
+				   //more than 1 exact match
+	default: { 
+		logger.log(LogicLog::DEFAULT + LogicLog::DELETE);
+		chooseExactMatches(userEvent);
+		return;
+			 };
+	};
+}
+
+Event DeleteCommand::getEvent() {
+	return userEvent;
+}
+
+void DeleteCommand::undo() {
+	if (userEvent.getID() != INVALID_NUMBER) {
+		eventsToShow = eventFacade->addEvent(userEvent);
+		if (!isFloating) {
+			eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+		}
+	}
+}
+
+void DeleteCommand::deleteImmediately() {
+	isFloating = userEvent.getIsFloating();
+	if (isFloating) {
+		eventsToShow = eventFacade->deleteEvent(userEvent);
+	} else {
+		eventFacade->deleteEvent(userEvent);
+		eventsToShow = getShowEventVector(userEvent, currentShowingTM);
+	}
+
+	isExecuted = true;
+}
+
+void DeleteCommand::deleteExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		userEvent = tempEvents[SIZE_ZERO];
+
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		id = tempEvents[SIZE_ONE].getID();
+		userEvent = eventFacade->findEventWithID(id);
+	}
+
+	id = userEvent.getID();
+	deleteImmediately();
+}
+
+
+
+
+//Edit Command
+EditCommand::EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited, vector<tm> currentShowing) {
+	eventFacade = eventStorage;
+	id = eventID;
+	eventToEdit = toEdit;
+	editedEvent = edited;
+	currentShowingTM = currentShowing;
+	isExecuted = false;
+	isUndoable = true;
+	isEdited = false;
+
+}
+
+void EditCommand::execute() {
+	//if id found in current display, edit immediately
+	if (id > SIZE_ZERO) {
+		if (isEdited == false) {
+			//for first time edit
+			editImmediately();
+		} else {
+			//for redoing edit command that has previously been executed and undone
+			redoEdit();
+		}
+		return;
+	}
+
+	vector<Event> tempEvents = eventFacade->findNameExact(eventToEdit.getName());
+	int numResults = getNumEvents(tempEvents);
+
+	switch (numResults) {
+
+		//no exact match
+	case SIZE_ZERO: { 
+		logger.log(LogicLog::CASE_0 + LogicLog::EDIT);
+		tempEvents = eventFacade->findNameOccurrence(eventToEdit.getName());
+		eventToEdit = createInvalidEvent();
+		numResults = tempEvents.size();
+
+		checkPartialMatches(numResults, tempEvents);
+		return;
+					}
+
+					//1 exact match
+	case SIZE_ONE: { 
+		logger.log(LogicLog::CASE_1 + LogicLog::EDIT);
+		editExact(tempEvents);
+		logger.log(LogicLog::EXECUTED + LogicLog::EDIT);
+		return;
+				   }
+
+				   //more than 1 exact match
+	default:{ 
+		logger.log(LogicLog::DEFAULT + LogicLog::EDIT);
+		chooseExactMatches(eventToEdit);
+		return;
+			}
+	}
+
+}
+
+Event EditCommand::getEvent() {
+	return eventToEdit;
+}
+
+void EditCommand::undo() {
+	if (eventToEdit.getID() == INVALID_NUMBER) {
+		return;
+	}
+
+	eventFacade->deleteEvent(editedEvent);
+	if (eventToEdit.getIsFloating()) {
+		eventsToShow = eventFacade->addEvent(eventToEdit);
+	} else {
+		eventFacade->addEvent(eventToEdit);
+		eventsToShow = getShowEventVector(eventToEdit, currentShowingTM);
+	}
+	isFloating = eventToEdit.getIsFloating();
+}
+
+void EditCommand::editImmediately() {
+	eventsToShow = eventFacade->editEvent(eventToEdit, editedEvent);
+	editedEvent = getEventFromID(eventsToShow, id);
+	isFloating = editedEvent.getIsFloating();
+	if (!isFloating) {
+		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
+	}
+
+	isExecuted = true;
+	isEdited = true;
+}
+
+void EditCommand::editExact(vector<Event> tempEvents) {
+	if (tempEvents.size() == SIZE_ONE) { //1 floating match => event will be at index 0
+		isFloating = true;
+		eventToEdit = tempEvents[SIZE_ZERO];
+
+	} else { //1 normal match => event will be at index 1
+		isFloating = false;
+		id = tempEvents[SIZE_ONE].getID();
+		eventToEdit = eventFacade->findEventWithID(id);
+	}
+
+	id = eventToEdit.getID();
+	editImmediately();
+}
+
+void EditCommand::redoEdit() {
+	eventsToShow = eventFacade->deleteEvent(eventToEdit);
+	eventsToShow = eventFacade->addEvent(editedEvent);
+	isFloating = editedEvent.getIsFloating();
+
+	if (!isFloating) {
+		eventsToShow = getShowEventVector(editedEvent, currentShowingTM);
+	}
+}
+
+
+
+//Search Command
+SearchCommand::SearchCommand(EventFacade* eventStorage, string s) {
+	eventFacade = eventStorage;
+	searchString = s;
+	isUndoable = false;
+}
+
+void SearchCommand::execute() {
+	eventsToShow = eventFacade->findNameOccurrence(searchString);
+	logger.log(LogicLog::EXECUTED + LogicLog::SEARCH);
+}
+
+Event SearchCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void SearchCommand::undo() {
+}
+
+
+
+
+//Show Command
+ShowCommand::ShowCommand(EventFacade* eventStorage, Event e) {
+	eventFacade = eventStorage;
+	eventRangeToShow = e;
+	isUndoable = false;
+}
+
+void ShowCommand::execute() {
+	eventsToShow = eventFacade->showDates(eventRangeToShow);
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOW);
+}
+
+Event ShowCommand::getEvent() {
+	return eventRangeToShow;
+}
+
+void ShowCommand::undo() {
+}
+
+
+
+
+//Show All Command
+ShowAllCommand::ShowAllCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowAllCommand::execute() {
+	vector<Event> floating = eventFacade->showAllFloatingEvents();
+	vector<Event> normal = eventFacade->showAllNormalEvents();
+	floating.insert(floating.end(), normal.begin(), normal.end());
+
+	eventsToShow = floating;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWALL);
+}
+
+Event ShowAllCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowAllCommand::undo() {
+}
+
+
+
+
+//Show All Important Command
+ShowAllImportantCommand::ShowAllImportantCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowAllImportantCommand::execute() {
+	eventsToShow = eventFacade->findAllImportance();
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWALLIMPORTANT);
+}
+
+Event ShowAllImportantCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowAllImportantCommand::undo() {
+}
+
+
+
+
+//Show Completed Command
+ShowCompletedCommand::ShowCompletedCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowCompletedCommand::execute() {
+	vector<Event> floating = eventFacade->showAllFloatingCompleted();
+	vector<Event> normal = eventFacade->showAllNormalCompleted();
+	floating.insert(floating.end(), normal.begin(), normal.end());
+
+	eventsToShow = floating;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWCOMPLETED);
+}
+
+Event ShowCompletedCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowCompletedCommand::undo() {
+}
+
+
+
+
+//Show Float Command
+ShowFloatCommand::ShowFloatCommand(EventFacade* eventStorage) {
+	eventFacade = eventStorage;
+	isUndoable = false;
+}
+
+void ShowFloatCommand::execute() {
+	eventsToShow = eventFacade->showAllFloatingEvents();
+	isFloating = true;
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWFLOAT);
+}
+
+Event ShowFloatCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowFloatCommand::undo() {
+}
+
+
+
+
+//Show Importance Command
+ShowImportanceCommand::ShowImportanceCommand(EventFacade* eventStorage, int importance) {
+	eventFacade = eventStorage;
+	importanceLevel = importance;
+	isUndoable = false;
+}
+
+void ShowImportanceCommand::execute() {
+	eventsToShow = eventFacade->findLevelImportance(importanceLevel);
+	logger.log(LogicLog::EXECUTED + LogicLog::SHOWIMPORTANCE);
+}
+
+Event ShowImportanceCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void ShowImportanceCommand::undo() {
+}
+
+
+
+
+//Null Command
+NullCommand::NullCommand() {
+	isExecuted = false;
+	isUndoable = false;
+	eventsToShow.clear();
+}
+
+void NullCommand::execute() {
+}
+
+Event NullCommand::getEvent() {
+	return createInvalidEvent();
+}
+
+void NullCommand::undo() {
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Command.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Command.h
+	 */
+
+#pragma once
+
+#ifndef COMMAND_H
+#define COMMAND_H
+
+#include <algorithm>
+#include "EventFacade.h"
+#include "LogicLog.h"
+
+using std::find;
+
+
+class Command {
+public:
+	static const int INVALID_NUMBER;
+	static const int SIZE_ZERO;
+	static const int SIZE_ONE;
+	static const int SIZE_TWO;
+
+
+	//virtual methods
+	virtual void execute() = 0;
+	virtual Event getEvent() = 0;
+	virtual void undo() = 0;
+
+
+	//common api
+	vector<Event> getEventVector();
+	bool getIsFloating();
+	bool getIsExecuted();
+	bool getIsUndoable();
+	int getNumEvents(vector<Event> eventVec);
+	Event getEventFromID(vector<Event> eventVec, int id);
+	vector<Event> getShowEventVector(Event userEvent, vector<tm> currentShowingTM);
+	void checkPartialMatches(int numResults, vector<Event> tempEvents);
+	void chooseExactMatches(Event& userEvent);
+	Event createInvalidEvent();
+
+
+protected:
+	EventFacade* eventFacade;
+	vector<Event> eventsToShow;
+	vector<tm> currentShowingTM;
+	bool isFloating;
+	bool isExecuted;
+	bool isUndoable;
+	LogicLog logger;
+};
+
+
+
+
+//Add Command
+class AddCommand : public Command {
+private:
+	Event userEvent;
+
+public:
+	AddCommand(EventFacade* eventStorage, Event e, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Complete Command
+class CompleteCommand : public Command {
+private:
+	int id;
+	Event userEvent;
+
+public:
+	CompleteCommand(EventFacade* eventStorage, int eventID, Event userEvent, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void completeImmediately();
+	void completeExact(vector<Event> tempEvents);
+};
+
+
+
+
+
+//Uncomplete Command
+class UncompleteCommand : public Command {
+private:
+	int id;
+	Event userEvent;
+
+public:
+	UncompleteCommand(EventFacade* eventStorage, vector<Event> events, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void uncompleteImmediately();
+};
+
+
+
+
+
+//Delete Command
+class DeleteCommand : public Command {
+private:
+	int id;
+	Event userEvent;
+
+public:
+	DeleteCommand(EventFacade* eventStorage, int eventID, Event userEvent, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void deleteImmediately();
+	void deleteExact(vector<Event> tempEvents);
+};
+
+
+
+
+//Edit Command
+class EditCommand : public Command {
+private:
+	int id;
+	Event eventToEdit, editedEvent;
+	bool isEdited;
+
+public:
+	EditCommand(EventFacade* eventStorage, int eventID, Event toEdit, Event edited, vector<tm> currentShowing);
+	void execute();
+	Event getEvent();
+	void undo();
+
+	void editImmediately();
+	void editExact(vector<Event> tempEvents);
+	void redoEdit();
+};
+
+
+
+
+//Search Command
+class SearchCommand : public Command {
+private:
+	string searchString;
+
+public:
+	SearchCommand(EventFacade* eventStorage, string s);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show Command
+class ShowCommand : public Command {
+private:
+	Event eventRangeToShow;
+
+public:
+	ShowCommand(EventFacade* eventStorage, Event e);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show All Command
+class ShowAllCommand : public Command {
+private:
+
+public:
+	ShowAllCommand(EventFacade* eventStorage);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show All Important Command
+class ShowAllImportantCommand : public Command {
+private:
+
+public:
+	ShowAllImportantCommand(EventFacade* eventStorage);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show Completed Command
+class ShowCompletedCommand : public Command {
+private:
+
+public:
+	ShowCompletedCommand(EventFacade* eventStorage);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show Float Command
+class ShowFloatCommand : public Command {
+private:
+
+public:
+	ShowFloatCommand(EventFacade* eventStorage);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Show Importance Command
+class ShowImportanceCommand : public Command {
+private:
+	int importanceLevel;
+
+public:
+	ShowImportanceCommand(EventFacade* eventStorage, int importance);
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+
+
+//Null Command
+class NullCommand : public Command {
+private:
+
+public:
+	NullCommand();
+	void execute();
+	Event getEvent();
+	void undo();
+};
+
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Command.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Event.cpp
+	 */
+
+#include "Event.h"
+
+
+//constructors
+Event::Event() {
+	name = "";
+	startDateTime.tm_mday = 0;
+	startDateTime.tm_mon = 0;
+	startDateTime.tm_year = 0;
+	startDateTime.tm_hour = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_sec = 0;
+	endDateTime.tm_mday = 0;
+	endDateTime.tm_mon = 0;
+	endDateTime.tm_year = 0;
+	endDateTime.tm_hour = 0;
+	endDateTime.tm_min = 0;
+	endDateTime.tm_sec = 0;
+	isFloating = false;
+	isDeadline = false;
+	isCompleted = false;
+	importanceLevel = 0;
+	feedback = "";
+	ID = time(0);
+}
+
+Event::Event(string eventName) : name(eventName) {
+}
+
+Event::Event(string eventName, int day, int month, int year) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = 0;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_mday++;
+	mktime(&endDateTime);
+}
+
+Event::Event(string eventName, int day, int month, int year, int startTime) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = startTime;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_hour++;
+	mktime(&endDateTime);
+}
+
+Event::Event(string eventName, int day, int month, int year, int startTime, int endTime) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = startTime;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_hour = endTime;
+	mktime(&endDateTime);
+}
+
+
+//getters
+string Event::getName() {
+	return name;
+}
+
+struct tm Event::getStartDate() {
+	return startDateTime;
+}
+
+struct tm Event::getEndDate() {
+	return endDateTime;
+}
+
+vector<tm> Event::getAllTM() {
+	vector<tm> tmVec;
+	tmVec.push_back(startDateTime);
+	tmVec.push_back(endDateTime);
+	return tmVec;
+}
+
+bool Event::getIsFloating() {
+	return isFloating;
+}
+
+bool Event::getIsDeadline() {
+	return isDeadline;
+}
+
+bool Event::getIsCompleted() {
+	return isCompleted;
+}
+
+int Event::getImportanceLevel() {
+	return importanceLevel;
+}
+
+vector<string> Event::getTags() {
+	return tags;
+}
+
+string Event::getDescription() {
+	return description;
+}
+
+string Event::getFeedback() {
+	return feedback;
+}
+
+int Event::getID() {
+	return ID;
+}
+
+
+//setters
+void Event::setName(string nameToSet) {
+	name = nameToSet;
+}
+
+void Event::setStartEndDate(vector<tm> tmVec) {
+	startDateTime = tmVec[0];
+	endDateTime = tmVec[1];
+}
+
+void Event::setStartDate(int day, int month, int year) {
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+}
+
+void Event::setEndDate(int day, int month, int year) {
+	endDateTime.tm_mday = day;
+	endDateTime.tm_mon = month;
+	endDateTime.tm_year = year;
+}
+
+void Event::setStartTime(int hour, int minute) {
+	startDateTime.tm_hour = hour;
+	startDateTime.tm_min = minute;
+}
+
+void Event::setEndTime(int hour, int minute) {
+	endDateTime.tm_hour = hour;
+	endDateTime.tm_min = minute;
+}
+
+void Event::setStartWeekday(int weekday){
+	startDateTime.tm_wday = weekday;
+}
+
+void Event::setEndWeekday(int weekday){
+	endDateTime.tm_wday = weekday;
+}
+
+void Event::setIsFloating(bool floating) {
+	isFloating = floating;
+}
+
+void Event::setIsDeadline(bool deadline) {
+	isDeadline = deadline;
+}
+
+void Event::setIsCompleted(bool completed) {
+	isCompleted = completed;
+}
+
+void Event::setImportanceLevel(int importance) {
+	if(importance > 3) {
+		importance = 3;
+	}
+	if (importance < 0) {
+		importance = 0;
+	}
+	importanceLevel = importance;
+}
+
+void Event::setTags(vector<string> userTags){
+	tags = userTags;
+}
+
+void Event::setDescription(string desc) {
+	description = desc;
+}
+
+void Event::setFeedback(string feedbackToUser) {
+	feedback = feedbackToUser;
+}
+
+void Event::setID(int number) {
+	ID = number;
+}
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Event.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Event.h
+	 */
+
+#pragma once
+
+#ifndef EVENT_H
+#define EVENT_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <ctime>
+#include <cassert>
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::vector;
+
+
+class Event {
+private:
+	string name;
+	tm startDateTime;
+	tm endDateTime;
+	bool isFloating;
+	bool isDeadline;
+	bool isCompleted;
+	int importanceLevel;
+	string feedback;
+	int ID; //based on system time
+
+
+	//unused
+	vector<string> tags;
+	string description;
+
+public:
+	//constructors
+	Event();
+	Event(string name);
+	Event(string eventName, int day, int month, int year);
+	Event(string eventName, int day, int month, int year, int startTime);
+	Event(string eventName, int day, int month, int year, int startTime, int endTime);
+
+
+	//getters
+	string getName();
+	struct tm getStartDate();
+	struct tm getEndDate();
+	vector<tm> getAllTM();
+	bool getIsFloating();
+	bool getIsDeadline();
+	bool getIsCompleted();
+	int getImportanceLevel();
+	vector<string> getTags();
+	string getDescription();
+	string getFeedback();
+	int getID();
+	
+
+	//setters
+	void setName(string nameToSet);
+	void setStartEndDate(vector<tm> tmVec);
+	void setStartDate(int day, int month, int year);
+	void setEndDate(int day, int month, int year);
+	void setStartTime(int hour, int minute);
+	void setEndTime(int hour, int minute);
+	void setStartWeekday(int weekday);
+	void setEndWeekday(int weekday);
+	void setIsFloating(bool floating);
+	void setIsDeadline(bool deadline);
+	void setIsCompleted(bool completed);
+	void setImportanceLevel(int importance);
+	void setFeedback(string feedbackToUser);
+	void setID(int number);
+
+	//unused
+	void setTags(vector<string> userTags);
+	void setDescription(string desc);
+	
+
+};
+
+#endif
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Event.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Executor.cpp
+	 */
+
+#include "Executor.h"
+
+
+//CONSTRUCTOR, DESTRUCTOR
+Executor::Executor() {
+	while (!undoStack.empty()) {
+		undoStack.pop();
+	}
+
+	while (!redoStack.empty()) {
+		redoStack.pop();
+	}
+}
+
+Executor::~Executor() {
+	while (!undoStack.empty()) {
+		delete undoStack.top();
+		undoStack.top() = NULL;
+		undoStack.pop();
+	}
+
+	while (!redoStack.empty()) {
+		delete redoStack.top();
+		redoStack.top() = NULL;
+		redoStack.pop();
+	}
+}
+
+
+//API
+Command* Executor::execute(Command* command) {
+	command->execute();
+
+	if (command->getIsUndoable() && command->getEvent().getID() != Command::INVALID_NUMBER) {
+		undoStack.push(command);
+	}
+
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
+	return command;
+}
+
+Command* Executor::undo() {
+	if(undoStack.empty()) {
+		logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+		return new NullCommand;
+	}
+	
+	//push most recently executed command from undo stack to redo stack, undo that command
+	Command* commandPtr = undoStack.top();
+	assert(commandPtr->getIsUndoable());
+	redoStack.push(commandPtr);
+	commandPtr->undo();
+	undoStack.pop();
+
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
+	return commandPtr;
+}
+
+Command* Executor::redo() {
+	if(redoStack.empty()) {
+		logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
+		return new NullCommand;
+	}
+
+	//push most recently undone command from redo stack to undo stack, execute that command
+	Command* commandPtr = redoStack.top();
+	undoStack.push(commandPtr);
+	commandPtr->execute();
+	redoStack.pop();
+
+	logger.log(LogicLog::UNDOSTACK_SIZE, undoStack.size());
+	logger.log(LogicLog::REDOSTACK_SIZE, redoStack.size());
+	return commandPtr;
+}
+
+void Executor::clearRedo() {
+	while (!redoStack.empty()) {
+		redoStack.pop();
+	}
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Executor.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Executor.h
+	 */
+
+#pragma once
+
+#ifndef EXECUTOR_H
+#define EXECUTOR_H
+
+#include <stack>
+#include "Command.h"
+
+using std::stack;
+
+
+class Executor {
+private:
+	stack<Command*> undoStack, redoStack;
+	LogicLog logger;
+
+public:
+	//constructor, destructor
+	Executor();
+	~Executor();
+
+	//api
+	Command* execute(Command* command);
+	Command* undo();
+	Command* redo();
+
+	void clearRedo();
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Executor.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Logic.cpp
+	 */
+
+#include "Logic.h"
+
+
+const string Logic::EMPTY_STRING = "";
+const string Logic::COMMA_SPACE = ", ";
+const string Logic::EXCLAMATION_MARK = "!";
+const char Logic::CHAR_OPEN_SQUARE_BRACKET = '[';
+const char Logic::CHAR_CLOSE_SQUARE_BRACKET = ']';
+
+
+
+//CONSTRUCTOR, DESTRUCTOR
+Logic::Logic() {
+	parserPtr = NULL;
+	lastID = eventFacade.getDataID() + Command::SIZE_ONE;
+}
+
+Logic::~Logic() {
+	deleteParserPtr();
+}
+
+
+
+//GETTERS
+EventFacade Logic::getEventFacade() {
+	return eventFacade;
+}
+
+vector<LogicUpdater::EVENT_STRING> Logic::getFloatingStrings() {
+	return updater.getFloatingDisplayStrings();
+}
+
+vector<LogicUpdater::EVENT_STRING> Logic::getMainStrings() {
+	return updater.getMainDisplayStrings();
+}
+
+vector<string> Logic::getFeedbackStrings() {
+	return updater.getFeedbackDisplayStrings();
+}
+
+vector<string> Logic::getErrorString() {
+	return updater.getErrorStrings();
+}
+
+string Logic::getMainDisplayLabel() {
+	return updater.getMainDisplayLabel();
+}
+
+vector<tm> Logic::getTempMainDisplayLabel() {
+	return updater.getTempMainDisplayLabel();
+}
+
+
+
+//MAIN API
+//returns true if command executed thoroughly, false otherwise
+bool Logic::executeUserInput(string input) {
+	bool isDone = true;
+
+	try {
+		throw isDataRead();
+	} catch (bool isRead) {
+		if (isRead == false) {
+			return !isDone;
+		}
+	}
+
+	parserPtr = new Parser(input);
+	Parser::CommandType commandType = parserPtr->getCommandType();
+	Event userEvent = parserPtr->getEvent();
+	string nameOfEvent = parserPtr->getNameOfEvent();
+	deleteParserPtr();
+
+	Command* commandPtr = queueCommand(commandType, userEvent, nameOfEvent);
+	try {
+		setUpdater(commandPtr, commandType, userEvent, nameOfEvent);
+	} catch (bool isProperCommand) {
+		if (!isProperCommand) {
+			isDone = false;
+		}
+	}
+
+	return isDone;
+}
+
+
+
+//SUPPORTING API
+bool Logic::isProperCommand(Parser::CommandType commandType) {
+	return ( (commandType == Parser::ADD) |
+		(commandType == Parser::ADDFLOAT) |
+		(commandType == Parser::COMPLETE) |
+		(commandType == Parser::UNCOMPLETE) |
+		(commandType == Parser::DELETE_) |
+		(commandType == Parser::EDIT) |
+		(commandType == Parser::SEARCH) |
+		(commandType == Parser::SHOW) |
+		(commandType == Parser::SHOWWEEK) |
+		(commandType == Parser::SHOWMONTH) |
+		(commandType == Parser::SHOWALL) |
+		(commandType == Parser::SHOWALLIMPORTANT) |
+		(commandType == Parser::SHOWCOMPLETE) |
+		(commandType == Parser::SHOWFLOAT) |
+		(commandType == Parser::SHOWIMPORTANT) |
+		(commandType == Parser::UNDO) |
+		(commandType == Parser::REDO) |
+		(commandType == Parser::ERROR_) );
+}
+
+//returns true if 2 input dates have same mday and mon and year, false otherwise
+bool Logic::isSameDate(tm date1, tm date2) {
+	return(date1.tm_mday == date2.tm_mday &&
+		date1.tm_mon == date2.tm_mon &&
+		date1.tm_year == date2.tm_year);
+}
+
+//returns true if input string consists of only numeric digits, false otherwise
+bool Logic::isNumber(string s) {
+	//log if input string is empty
+	try {
+		if (s.size() == Command::SIZE_ZERO) {
+			throw false;
+		} else {
+			throw true;
+		}
+	} catch (bool isEmpty) {
+		if (isEmpty == false) {
+			logger.log(LogicLog::ISNUMBER_INPUT_EMPTY);
+			return false;
+		}
+	}
+
+
+	for (unsigned int i = 0; i < s.size(); i++) {
+		if (!isdigit(s[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+//removes label enclosed by "[]" from input string
+void Logic::removeLabel(string& feedback) {
+	for (int i = 0; i < feedback.size(); i++) {
+		if (feedback[i] == CHAR_OPEN_SQUARE_BRACKET) {
+			feedback.erase(feedback.begin() + i);
+			while (feedback[i] != CHAR_CLOSE_SQUARE_BRACKET) {
+				feedback.erase(feedback.begin() + i);
+			}
+			feedback.erase(feedback.begin() + i);
+			feedback.erase(feedback.begin() + i);
+		}
+	}
+}
+
+
+
+//MAIN PRIVATE METHODS
+//returns true if data successfully read from file, false otherwise
+bool Logic::isDataRead() {
+	if (!eventFacade.dataRead()) {
+		updater.setFeedbackStrings(LogicUpdater::FILE_NOT_READ_MESSAGE);
+		return false;
+	}
+	return true;
+}
+
+//dynamically creates command object, call executor to execute it
+Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent) {
+	assert(isProperCommand(command));
+	
+	try {
+		switch (command) {
+		case Parser::ADD:
+		case Parser::ADDFLOAT: {
+			setNewID(userEvent);
+
+			Command* addCommand = new AddCommand(&eventFacade, userEvent, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::ADD);
+			return executor.execute(addCommand);
+							   }
+
+		case Parser::COMPLETE: {
+			int id = convertNameToID(nameOfEvent);
+			Event eventToComplete = createTempEvent(nameOfEvent, id);
+
+			if (eventToComplete.getIsCompleted()) {
+				return new NullCommand;
+			}
+
+			Command* completeCommand = new CompleteCommand(&eventFacade, id, eventToComplete, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::COMPLETE);
+			return executor.execute(completeCommand);
+							   }
+
+		case Parser::UNCOMPLETE: {
+			vector<Event> resultEvents = getExactMatches(nameOfEvent);
+			
+			if (resultEvents.size() > Command::SIZE_ZERO) {
+				if (!isEventsCompleted(resultEvents)) {
+					return new NullCommand;
+				}
+			}
+
+			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, resultEvents, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::UNCOMPLETE);
+			return executor.execute(uncompleteCommand);
+								 }
+
+		case Parser::DELETE_: {
+			int id = convertNameToID(nameOfEvent);
+			Event eventToDelete = createTempEvent(nameOfEvent, id);
+			
+			if (eventToDelete.getIsCompleted()) {
+				return new NullCommand;
+			}
+
+			Command* deleteCommand = new DeleteCommand(&eventFacade, id, eventToDelete, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::DELETE);
+			return executor.execute(deleteCommand);
+							  }
+
+		case Parser::EDIT: {
+			int id = convertNameToID(nameOfEvent);
+			Event eventToEdit = createTempEvent(nameOfEvent, id);
+
+			if (eventToEdit.getIsCompleted()) {
+				throw false;
+			}
+			
+			if (eventToEdit.getIsDeadline() && !isSameDate(userEvent.getStartDate(), userEvent.getEndDate())) {
+				throw false;
+			}
+
+			Command* editCommand = new EditCommand(&eventFacade, id, eventToEdit, userEvent, updater.getTempMainDisplayLabel());
+			logger.log(LogicLog::CREATED + LogicLog::EDIT);
+			return executor.execute(editCommand);
+						   }
+
+		case Parser::SEARCH: {
+			Command* searchCommand = new SearchCommand(&eventFacade, nameOfEvent);
+			logger.log(LogicLog::CREATED + LogicLog::SEARCH);
+			return executor.execute(searchCommand);
+							 }
+
+		case Parser::SHOW: 
+		case Parser::SHOWWEEK:
+		case Parser::SHOWMONTH: {
+			Command* showCommand = new ShowCommand(&eventFacade, userEvent);
+			logger.log(LogicLog::CREATED + LogicLog::SHOW);
+			return executor.execute(showCommand);
+								}
+
+		case Parser::SHOWALL: {
+			Command* showAllCommand = new ShowAllCommand(&eventFacade);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWALL);
+			return executor.execute(showAllCommand);
+							  }
+
+		case Parser::SHOWALLIMPORTANT: {
+			Command* showAllImportantCommand = new ShowAllImportantCommand(&eventFacade);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWALLIMPORTANT);
+			return executor.execute(showAllImportantCommand);
+									   }
+
+		case Parser::SHOWCOMPLETE: {
+			Command* showCompletedCommand = new ShowCompletedCommand(&eventFacade);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWCOMPLETED);
+			return executor.execute(showCompletedCommand);
+								   }
+
+		case Parser::SHOWFLOAT: {
+			Command* showFloatCommand = new ShowFloatCommand(&eventFacade);
+			logger.log(LogicLog::CREATED + LogicLog::SHOWFLOAT);
+			return executor.execute(showFloatCommand);
+								}
+
+		case Parser::SHOWIMPORTANT: {
+			Command* showImportanceCommand = new ShowImportanceCommand(&eventFacade, userEvent.getImportanceLevel());
+			logger.log(LogicLog::CREATED + LogicLog::SHOWIMPORTANCE);
+			return executor.execute(showImportanceCommand);
+									}
+
+		case Parser::UNDO: {
+			logger.log(LogicLog::QUEUEING_UNDO);
+			return executor.undo();
+						   }
+
+		case Parser::REDO: {
+			logger.log(LogicLog::QUEUEING_REDO);
+			return executor.redo();
+						   }
+
+		default: {
+			throw false;
+				 }
+		}
+	} catch (bool) {
+		return new NullCommand;
+	}
+}
+
+//update new information for UI to display
+void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event userEvent, string nameOfEvent) {
+	assert(isProperCommand(command));
+
+	try {
+		bool isDone = true;
+		vector<Event> normalEvents, floatingEvents;
+
+		switch (command) {
+		case Parser::ADD: {
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);	
+
+			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName() + COMMA_SPACE;
+			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+				feedback += updater.setSingleDayString(userEvent.getStartDate());
+			} else {
+				feedback += updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+			}
+
+			int id = userEvent.getID();
+
+			clearRedo();
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
+			break;
+						  }
+
+		case Parser::ADDFLOAT: {		
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+			string feedback = LogicUpdater::ADDED_MESSAGE + userEvent.getName();
+			int id = userEvent.getID();
+
+			clearRedo();
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
+			break;
+							   }
+
+		case Parser::COMPLETE:
+		case Parser::DELETE_: {
+			vector<Event> tempEvents = commandPtr->getEventVector();
+
+			//2 cases
+			if (!commandPtr->getIsExecuted()) { 
+				setEventVectors(normalEvents, floatingEvents, tempEvents);
+
+				//case 1: more than 1 exact match
+				if ( (!floatingEvents.empty() && floatingEvents[Command::SIZE_ZERO].getName() == nameOfEvent) |
+					(!normalEvents.empty() && normalEvents[Command::SIZE_ONE].getName() == nameOfEvent) ) {
+						vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+						return;
+				}
+
+				//case 2: at least 1 partial match
+				if (!tempEvents.empty() && tempEvents[Command::SIZE_ZERO].getID() != Command::INVALID_NUMBER) {
+					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+					return;
+				}
+			}
+
+			//no event found
+			if (!tempEvents.empty() && tempEvents[Command::SIZE_ZERO].getID() == Command::INVALID_NUMBER) {
+				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+
+				updater.setFeedbackStrings(feedback);
+				throw !isDone;
+			}
+
+			//successful complete/delete
+			if (commandPtr->getIsUndoable() == false) { //user tried to change completed event
+				updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+				throw !isDone;
+			}
+
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+
+			Event doneEvent = commandPtr->getEvent();
+
+			string feedback;
+			if (command == Parser::DELETE_) { //for delete
+				feedback = LogicUpdater::DELETED_MESSAGE + doneEvent.getName();
+			} else { //for complete
+				feedback = LogicUpdater::COMPLETED_MESSAGE + doneEvent.getName();
+			}
+			if (!doneEvent.getIsFloating()) {
+				if (isSameDate(doneEvent.getStartDate(), doneEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(doneEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(doneEvent.getStartDate(), doneEvent.getEndDate());
+				}
+			}
+
+			if (command != Parser::UNCOMPLETE) {
+				clearRedo();
+			}
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+							  }
+
+		case Parser::UNCOMPLETE: {
+			vector<Event> tempEvents = commandPtr->getEventVector();
+
+			if (!commandPtr->getIsExecuted()) {
+				if (commandPtr->getEventVector().size() > Command::SIZE_ZERO) { //more than 1 exact match
+					setEventVectors(normalEvents, floatingEvents, tempEvents);
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+					updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+				} else { //user tried to uncomplete event that is not completed
+					updater.setFeedbackStrings(LogicUpdater::EVENT_NOT_COMPLETED_MESSAGE);
+				}
+				return;
+			}
+
+
+			Event uncompletedEvent = commandPtr->getEvent();
+			int id = uncompletedEvent.getID();
+			//no event found 
+			if (id == Command::INVALID_NUMBER) {
+				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+				updater.setFeedbackStrings(feedback);
+				throw !isDone;
+			}
+
+			//successful uncomplete
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+
+			string feedback = LogicUpdater::UNCOMPLETED_MESSAGE + uncompletedEvent.getName();
+			if (!uncompletedEvent.getIsFloating()) {
+				if (isSameDate(uncompletedEvent.getStartDate(), uncompletedEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(uncompletedEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(uncompletedEvent.getStartDate(), uncompletedEvent.getEndDate());
+				}
+			}
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
+			break;
+								 }
+
+		case Parser::EDIT: {
+			vector<Event> tempEvents = commandPtr->getEventVector();
+
+			//2 cases
+			if (!commandPtr->getIsExecuted()) { 
+				setEventVectors(normalEvents, floatingEvents, tempEvents);
+
+				//case 1: more than 1 exact match
+				if ( (!floatingEvents.empty() && floatingEvents[Command::SIZE_ZERO].getName() == nameOfEvent) |
+					(!normalEvents.empty() && normalEvents[Command::SIZE_ONE].getName() == nameOfEvent) ) {
+						vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+						updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+						return;
+				}
+
+				//case 2: at least 1 partial match
+				if (!tempEvents.empty() && tempEvents[Command::SIZE_ZERO].getID() != Command::INVALID_NUMBER) {
+					string feedback = nameOfEvent + LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE;
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+					updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+					return;
+				}
+			}
+
+			//no event found 
+			if (!tempEvents.empty() && tempEvents[Command::SIZE_ZERO].getID() == Command::INVALID_NUMBER) {
+				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
+				updater.setFeedbackStrings(feedback);
+				throw !isDone;
+			}
+
+			//successful edit 
+			if (commandPtr->getIsUndoable() == false) { 
+				if (userEvent.getIsCompleted()) { //user tried to change completed event
+					updater.setFeedbackStrings(LogicUpdater::DONE_EVENT_ERROR_MESSAGE);
+				} else { //user tried to edit deadline event to have more than one time
+					updater.setFeedbackStrings(LogicUpdater::DEADLINE_EVENT_ERROR_MESSAGE);
+				}
+				throw !isDone;
+			}
+
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+
+			Event oldEvent = commandPtr->getEvent();
+			int id = oldEvent.getID();
+
+			string feedback = LogicUpdater::EDITED_MESSAGE + oldEvent.getName();
+			if (!oldEvent.getIsFloating()) {
+				if (isSameDate(oldEvent.getStartDate(), oldEvent.getEndDate())) {
+					feedback += COMMA_SPACE + updater.setSingleDayString(oldEvent.getStartDate());
+				} else {
+					feedback += COMMA_SPACE + updater.setMultipleDaysString(oldEvent.getStartDate(), oldEvent.getEndDate());
+				}
+			}
+
+			clearRedo();
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, id, lastShowType);
+			break;
+						   }
+
+		case Parser::SEARCH: {
+			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+							 }
+
+		case Parser::SHOW: 
+		case Parser:: SHOWWEEK:
+		case Parser:: SHOWMONTH: {
+			normalEvents = commandPtr->getEventVector();
+			Command* tempCmd = queueCommand(Parser::SHOWFLOAT, userEvent, nameOfEvent);
+			floatingEvents = tempCmd->getEventVector();
+
+			vector<tm> tmVec;
+			tmVec.push_back(userEvent.getStartDate());
+			tmVec.push_back(userEvent.getEndDate());
+
+			lastShowType = LogicUpdater::EMPTY_STRING;
+			if (command == Parser::SHOWWEEK) {
+				lastShowType = LogicUpdater::WORD_WEEK;
+			}
+			if (command == Parser::SHOWMONTH) {
+				lastShowType = LogicUpdater::WORD_MONTH;
+			}
+
+			string feedback = LogicUpdater::SHOW_MESSAGE;
+			if (isSameDate(userEvent.getStartDate(),userEvent.getEndDate())) {
+				feedback += updater.setSingleDayString(userEvent.getStartDate());
+			} else {
+				feedback += updater.setMultipleDaysString(userEvent.getStartDate(),userEvent.getEndDate());
+			}
+			removeLabel(feedback);
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+								 }
+
+		case Parser::SHOWALL:
+		case Parser::SHOWALLIMPORTANT:
+		case Parser::SHOWCOMPLETE:
+		case Parser::SHOWIMPORTANT: {
+			setEventVectors(normalEvents, floatingEvents, commandPtr->getEventVector());
+			string feedback = showTypeToString(command, userEvent.getImportanceLevel());
+			vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+									}
+
+		case Parser::SHOWFLOAT: {
+			normalEvents = updater.getNormalEvents();
+			floatingEvents = commandPtr->getEventVector();
+			vector<tm> tmVec = updater.getTempMainDisplayLabel();
+
+			updater.setAllEvents(normalEvents, floatingEvents, EMPTY_STRING, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+								}
+
+		case Parser::UNDO: {
+			if (commandPtr->getEvent().getID() == Command::INVALID_NUMBER) {
+				updater.setFeedbackStrings(LogicUpdater::NO_MORE_UNDO_MESSAGE);
+				throw !isDone;
+			}
+
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+			string feedback = LogicUpdater::UNDO_MESSAGE;
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+						   }
+
+		case Parser::REDO: {
+			if (commandPtr->getEvent().getID() == Command::INVALID_NUMBER) {
+				updater.setFeedbackStrings(LogicUpdater::NO_MORE_REDO_MESSAGE);
+				throw !isDone;
+			}
+
+			vector<tm> tmVec;
+			setOneEventVector(normalEvents, floatingEvents, commandPtr, tmVec);
+			string feedback = LogicUpdater::REDO_MESSAGE;
+
+			updater.setAllEvents(normalEvents, floatingEvents, feedback, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			break;
+						   }
+
+
+		case Parser::ERROR_: {
+			updater.setFeedbackStrings(userEvent.getFeedback());
+			throw !isDone;
+			break;
+							 }
+		}
+
+	} catch (bool isProperCommand) {
+		if (!isProperCommand) {
+			delete commandPtr;
+			commandPtr = NULL;
+			throw isProperCommand;
+		}
+	}
+}
+
+void Logic::setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original) {
+	if (original.empty()) {
+		return;
+	}
+	
+	unsigned int i = Command::SIZE_ZERO;
+	//push all floating events from original into floating vector
+	while (original[i].getIsFloating()) {
+		floating.push_back(original[i]);
+		i++;
+		if (i == original.size()) {
+			return;
+		}
+	}
+
+	//remaining events are normal, push them into normal vector
+	for (; i < original.size(); i++) {
+		normal.push_back(original[i]);
+	}
+}
+
+void Logic::setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec) {
+	if (commandPtr->getIsFloating()) {
+		floating = commandPtr->getEventVector();
+
+		tmVec = updater.getTempMainDisplayLabel();
+		Event dummyEvent;
+		dummyEvent.setStartEndDate(tmVec);
+		Command* tempCmd = queueCommand(Parser::SHOW, dummyEvent, EMPTY_STRING);
+		normal = tempCmd->getEventVector();
+
+	} else {
+		normal = commandPtr->getEventVector();
+
+		tmVec = getTmVecFromEvents(normal);
+		Event dummyEvent;
+		Command* tempCmd = queueCommand(Parser::SHOWFLOAT, dummyEvent, EMPTY_STRING);
+		floating = tempCmd->getEventVector();
+	}
+}
+
+vector<tm> Logic::getTmVecFromEvents(vector<Event> normalEvents) {
+	vector<tm> tmVec, currentShowingTM = updater.getTempMainDisplayLabel();
+
+	if (normalEvents.empty()) { //no normal events to show
+		tmVec = updater.getTempMainDisplayLabel();
+
+	} else { //at least 1 normal event to show, if it falls within current show range then return current range, if not then return new range
+		tmVec.push_back(normalEvents[Command::SIZE_ONE].getStartDate());
+		tmVec.push_back(normalEvents[normalEvents.size() - 1].getEndDate());
+
+		if (tmVec[Command::SIZE_ZERO].tm_year >= currentShowingTM[Command::SIZE_ZERO].tm_year &&
+			tmVec[Command::SIZE_ZERO].tm_mon >= currentShowingTM[Command::SIZE_ZERO].tm_mon &&
+			tmVec[Command::SIZE_ZERO].tm_mday >= currentShowingTM[Command::SIZE_ZERO].tm_mday &&
+			tmVec[Command::SIZE_ONE].tm_year <= currentShowingTM[Command::SIZE_ONE].tm_year &&
+			tmVec[Command::SIZE_ONE].tm_mon <= currentShowingTM[Command::SIZE_ONE].tm_mon &&
+			tmVec[Command::SIZE_ONE].tm_mday <= currentShowingTM[Command::SIZE_ONE].tm_mday) {
+				tmVec = currentShowingTM;
+		} 
+	}
+
+	return tmVec;
+}
+
+void Logic::deleteParserPtr() {
+	delete parserPtr;
+	parserPtr = NULL;
+}
+
+
+
+//OTHER PRIVATE METHODS
+//returns id of event if found in updater, -1 otherwise
+int Logic::convertNameToID(string name) {
+	if (isNumber(name)) {
+		int index = std::stoi(name);
+
+		if (index <= Command::SIZE_ZERO) {
+			return Command::INVALID_NUMBER;
+		}
+
+		if (index > updater.getTotalNumEvents()) {
+			return Command::INVALID_NUMBER;
+		} else {
+			return updater.getIDFromIndex(index);
+		}
+	} else {
+		return Command::INVALID_NUMBER;
+	}
+}
+
+bool Logic::isEventsCompleted(vector<Event> eventVec) {
+	for (int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getName() != LogicUpdater::NEW_DAY_MESSAGE && !eventVec[i].getIsCompleted()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+string Logic::showTypeToString(Parser::CommandType cmd, int importance) {
+	switch (cmd) {
+	case Parser::SHOWALL: {
+		return LogicUpdater::SHOWALL_MESSAGE;
+						  }
+
+	case Parser::SHOWALLIMPORTANT: {
+		return LogicUpdater::SHOWALLIMPORTANT_MESSAGE;
+								   }
+
+	case Parser::SHOWCOMPLETE: {
+		return LogicUpdater::SHOWCOMPLETE_MESSAGE;
+							   }
+
+	case Parser::SHOWIMPORTANT: {
+		string cmdString = LogicUpdater::SHOWIMPORTANT_MESSAGE;
+		int countImportance = Command::SIZE_ZERO;
+		while (countImportance != importance) {
+			cmdString += EXCLAMATION_MARK;
+			countImportance++;
+		}
+		return cmdString;
+								}
+
+	default: {
+		return LogicLog::ERROR;
+			 }
+	}
+}
+
+//set id for newly added event
+void Logic::setNewID(Event& userEvent) {
+	userEvent.setID(lastID);
+	lastID++;
+}
+
+void Logic::clearRedo() {
+	executor.clearRedo();
+}
+
+//returns temporary event with name taken from user input, if id is found in updater it returns the exact event
+Event Logic::createTempEvent(string name, int id) {
+	Event tempEvent;
+	tempEvent.setName(name);
+	if (id != Command::INVALID_NUMBER) {
+		tempEvent = updater.getEventFromID(id);
+	}
+	return tempEvent;
+}
+
+vector<Event> Logic::getExactMatches(string name) {
+	int index = Command::INVALID_NUMBER;
+	if (isNumber(name)) {
+		index = std::stoi(name);
+
+		if (index <= Command::SIZE_ZERO | index > updater.getTotalNumEvents()) {
+			index = Command::INVALID_NUMBER;
+		}
+	}
+	
+	return updater.getExactNameMatches(index, name);
+}
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Logic.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Logic.h
+	 */
+
+#pragma once
+
+#ifndef LOGIC_H
+#define LOGIC_H
+
+
+#include <cassert>
+#include "Parser.h"
+#include "LogicUpdater.h"
+#include "Executor.h"
+
+
+class Logic {
+private:
+	Parser* parserPtr;
+	EventFacade eventFacade;
+	LogicUpdater updater;
+	Executor executor;
+
+	int lastID;
+	string lastShowType;
+
+	LogicLog logger;
+
+
+public:
+	static const string EMPTY_STRING;
+	static const string COMMA_SPACE;
+	static const string EXCLAMATION_MARK;
+	static const char CHAR_OPEN_SQUARE_BRACKET;
+	static const char CHAR_CLOSE_SQUARE_BRACKET;
+
+
+	//constructor, destructor
+	Logic(void);
+	~Logic();
+
+
+	//getters
+	EventFacade getEventFacade();
+	vector<LogicUpdater::EVENT_STRING> getFloatingStrings();
+	vector<LogicUpdater::EVENT_STRING> getMainStrings();
+	vector<string> getFeedbackStrings();
+	vector<string> getErrorString();
+	string getMainDisplayLabel();
+	vector<tm> getTempMainDisplayLabel();
+
+
+	//main api
+	bool executeUserInput(string input);
+	
+
+	//supporting api
+	bool isProperCommand(Parser::CommandType commandType);
+	bool isSameDate(tm date1, tm date2);
+	bool isNumber(string s);
+	void removeLabel(string& feedback);
+
+
+private:
+	//main private methods
+	bool isDataRead();
+	Command* queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent);
+	void setUpdater(Command* commandPtr, Parser::CommandType, Event userEvent, string nameOfEvent);
+	void setEventVectors(vector<Event>& normal, vector<Event>& floating, vector<Event> original);
+	void setOneEventVector(vector<Event>& normal, vector<Event>& floating, Command* commandPtr, vector<tm>& tmVec);
+	vector<tm> getTmVecFromEvents(vector<Event> normalEvents);
+	void deleteParserPtr();
+
+
+	//other private methods
+	int convertNameToID(string input);
+	bool isEventsCompleted(vector<Event>);
+	string showTypeToString(Parser::CommandType cmd, int importance);	
+	void setNewID(Event& userEvent);
+	void clearRedo();
+	Event createTempEvent(string name, int id);
+	vector<Event> getExactMatches(string name);
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Logic.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicLog.cpp
+	 */
+
+#include "LogicLog.h"
+
+const string LogicLog::LOG_FILE_NAME = "LogicLog.txt";
+
+const string LogicLog::CREATED = "created ";
+const string LogicLog::EXECUTED = "executed ";
+const string LogicLog::ADD = "add command";
+const string LogicLog::COMPLETE = "complete command";
+const string LogicLog::UNCOMPLETE = "uncomplete command";
+const string LogicLog::DELETE = "delete command";
+const string LogicLog::EDIT = "edit command";
+const string LogicLog::SHOW = "show command";
+const string LogicLog::SHOWALL = "show all command";
+const string LogicLog::SHOWALLIMPORTANT = "show all important command";
+const string LogicLog::SHOWCOMPLETED = "show completed command";
+const string LogicLog::SHOWFLOAT = "showfloat command";
+const string LogicLog::SHOWIMPORTANCE = "show importance command";
+const string LogicLog::SEARCH = "search command";
+const string LogicLog::QUEUEING_UNDO = "queueing undo";
+const string LogicLog::QUEUEING_REDO = "queueing redo";
+const string LogicLog::ISNUMBER_INPUT_EMPTY = "isNumber input string empty";
+const string LogicLog::CASE_0 = "entered case 0 for ";
+const string LogicLog::CASE_1 = "entered case 1 for ";
+const string LogicLog::DEFAULT = "entered default for ";
+const string LogicLog::UNDOSTACK_SIZE = "undoStack size ";
+const string LogicLog::REDOSTACK_SIZE = "redoStack size ";
+const string LogicLog::SUCCEEDED = " succeeded";
+const string LogicLog::ERROR = "error";
+
+
+void LogicLog::log(string logString) {
+	ofstream outFile;
+	outFile.open(LOG_FILE_NAME, ios::app);
+	outFile << logString << endl;
+	outFile.close();
+}
+
+void LogicLog::log(int logInt) {
+	ostringstream outString;
+	outString << logInt;
+
+	ofstream outFile;
+	outFile.open(LOG_FILE_NAME, ios::app);
+	outFile << outString.str() << endl;
+	outFile.close();
+}
+
+void LogicLog::log(string logString, int logInt) {
+	ostringstream outString;
+	outString << logInt;
+
+	ofstream outFile;
+	outFile.open(LOG_FILE_NAME, ios::app);
+	outFile << logString + outString.str() << endl;
+	outFile.close();
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicLog.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicLog.h
+	 */
+
+#pragma once
+
+#ifndef LOGICLOG_H
+#define LOGICLOG_H
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+using std::string;
+using std::ofstream;
+using std::ostringstream;
+using std::ios;
+using std::endl;
+
+class LogicLog {
+private:
+	static const string LOG_FILE_NAME;
+
+public:
+	static const string CREATED;
+	static const string EXECUTED;
+	static const string ADD;
+	static const string COMPLETE;
+	static const string UNCOMPLETE;
+	static const string DELETE;
+	static const string EDIT;
+	static const string SHOW;
+	static const string SHOWALL;
+	static const string SHOWALLIMPORTANT;
+	static const string SHOWCOMPLETED;
+	static const string SHOWFLOAT;
+	static const string SHOWIMPORTANCE;
+	static const string SEARCH;
+	static const string QUEUEING_UNDO;
+	static const string QUEUEING_REDO;
+	static const string ISNUMBER_INPUT_EMPTY;
+	static const string CASE_0;
+	static const string CASE_1;
+	static const string DEFAULT;
+	static const string UNDOSTACK_SIZE;
+	static const string REDOSTACK_SIZE;
+	static const string SUCCEEDED;
+	static const string ERROR;
+
+	void log(string logString);
+	void log(int logInt);
+	void log(string logString, int logInt);
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicLog.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\CommandTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "Command.cpp"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(CommandTest)
+	{
+	public:
+		Event emptyEvent;
+		vector<Event> eventVec;
+		EventFacade eventFacade;
+
+		TEST_METHOD(Command_getEventVector_Test)
+		{
+			//dummy command
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
+
+
+			//test partition of unexecuted command
+			int size = commandPtr->getEventVector().size();
+			Assert::AreEqual(size, 0);
+			delete commandPtr;
+			commandPtr = NULL;
+		}
+
+
+		TEST_METHOD(Command_getIsExecuted_Test)
+		{
+			//dummy command
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
+
+
+			//test partition of unexecuted command
+			Assert::AreEqual(commandPtr->getIsExecuted(), false);
+			delete commandPtr;
+			commandPtr = NULL;
+		}
+
+
+		TEST_METHOD(Command_getIsUndoable_Test)
+		{
+			//dummy command
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
+
+
+			//test partition of undoable command
+			Assert::AreEqual(commandPtr->getIsUndoable(), true);
+			delete commandPtr;
+			commandPtr = NULL;
+
+
+			//test partition of non undoable command
+			commandPtr = new ShowCommand(&eventFacade, emptyEvent);
+			Assert::AreEqual(commandPtr->getIsUndoable(), false);
+			delete commandPtr;
+			commandPtr = NULL;
+		}
+
+
+		TEST_METHOD(Command_getEventFromID_Test)
+		{
+			//dummy command
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
+
+			Event floating, normalName, normal;
+			floating.setIsFloating(true);
+			floating.setName("float");
+			floating.setID(1);
+			normalName.setIsFloating(false);
+			normalName.setName("-MSmsgjyw-");
+			normalName.setID(-1);
+			normal.setIsFloating(false);
+			normal.setName("normal");
+			normal.setID(2);
+
+
+			//test partition of only floating events in event vector
+			eventVec.push_back(floating);
+			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 1).getID(), floating.getID());
+			eventVec.clear();
+
+
+			//test partition of both floating and normal events in event vector
+			eventVec.push_back(floating);
+			eventVec.push_back(normalName);
+			eventVec.push_back(normal);
+			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 1).getID(), floating.getID());
+			eventVec.clear();
+
+
+			//test partition of id not found in event vector
+			eventVec.push_back(floating);
+			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 3).getID(), -1);
+			eventVec.clear();
+
+			delete commandPtr;
+			commandPtr = NULL;
+		}
+
+
+		TEST_METHOD(Command_createInvalidEvent_Test)
+		{
+			//dummy command
+			vector<tm> dummyTM;
+			Command* commandPtr = new AddCommand(&eventFacade, emptyEvent, dummyTM);
+
+			Event invalidEvent = commandPtr->createInvalidEvent();
+			Assert::AreEqual(invalidEvent.getID(), -1);
+
+			delete commandPtr;
+			commandPtr = NULL;
+		}
+	};
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\CommandTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\EventTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "Event.cpp"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(EventTest)
+	{
+	public:
+		
+		TEST_METHOD(Event_setName_getName_Test)
+		{
+			Event e;
+			
+			//test partition of string consisting of only letters
+			e.setName("name");
+			string name = "name";
+			Assert::AreEqual(e.getName(), name);
+
+			//test partition of string consisting of only numbers
+			e.setName("123");
+			name = "123";
+			Assert::AreEqual(e.getName(), name);
+
+			//test partition of string consisting of both numbers and letters
+			e.setName("123abc");
+			name = "123abc";
+			Assert::AreEqual(e.getName(), name);
+		}
+
+
+		TEST_METHOD(Event_setDate_getDate_Test)
+		{
+			//test partition of valid date
+			Event e1;
+			e1.setStartDate(1, 1, 115);
+			tm time;
+			time.tm_mday = 1;
+			time.tm_mon = 1;
+			time.tm_year = 115;
+			Assert::AreEqual(e1.getStartDate().tm_mday, time.tm_mday);
+			Assert::AreEqual(e1.getStartDate().tm_mon, time.tm_mon);
+			Assert::AreEqual(e1.getStartDate().tm_year, time.tm_year);
+
+			//test partition of invalid date
+			Event e2;
+			e2.setStartDate(-1, -1, -1);
+			tm time1;
+			time1.tm_mday = -1;
+			time1.tm_mon = -1;
+			time1.tm_year = -1;
+			Assert::AreEqual(e2.getStartDate().tm_mday, time1.tm_mday);
+			Assert::AreEqual(e2.getStartDate().tm_mon, time1.tm_mon);
+			Assert::AreEqual(e2.getStartDate().tm_year, time1.tm_year);
+		}
+
+
+		TEST_METHOD(Event_setTime_getTime_Test)
+		{
+			//test partition of valid time
+			Event e1;
+			e1.setStartTime(1, 1);
+			tm time;
+			time.tm_hour = 1;
+			time.tm_min = 1;
+			Assert::AreEqual(e1.getStartDate().tm_hour, time.tm_hour);
+			Assert::AreEqual(e1.getStartDate().tm_min, time.tm_min);
+
+			//test partition of invalid time
+			Event e2;
+			e2.setStartTime(-1, -1);
+			tm time1;
+			time1.tm_hour = -1;
+			time1.tm_min = -1;
+			Assert::AreEqual(e2.getStartDate().tm_hour, time1.tm_hour);
+			Assert::AreEqual(e2.getStartDate().tm_min, time1.tm_min);
+		}
+		
+		TEST_METHOD(Event_setIsFloating_getIsFloating_Test)
+		{
+			Event e;
+			
+			//test partition of isFloating == true
+			e.setIsFloating(true);
+			bool floating = true;
+			Assert::AreEqual(e.getIsFloating(), floating);
+
+			//test partition of isFloating == false
+			e.setIsFloating(false);
+			floating = false;
+			Assert::AreEqual(e.getIsFloating(), floating);
+		}
+
+
+		TEST_METHOD(Event_setIsDeadline_getIsDeadline_Test)
+		{
+			Event e;
+			
+			//test partition of isDeadline == true
+			e.setIsDeadline(true);
+			bool deadline = true;
+			Assert::AreEqual(e.getIsDeadline(), deadline);
+
+			//test partition of isDeadline == false
+			e.setIsDeadline(false);
+			deadline = false;
+			Assert::AreEqual(e.getIsDeadline(), deadline);
+		}
+
+
+		TEST_METHOD(Event_setIsCompleted_getIsCompleted_Test)
+		{
+			Event e;
+			
+			//test partition of isDeadline == true
+			e.setIsCompleted(true);
+			bool completed = true;
+			Assert::AreEqual(e.getIsCompleted(), completed);
+
+			//test partition of isDeadline == false
+			e.setIsCompleted(false);
+			completed = false;
+			Assert::AreEqual(e.getIsCompleted(), completed);
+		}
+
+
+		TEST_METHOD(Event_setImportanceLevel_getImportanceLevel_Test)
+		{
+			Event e;
+			
+			//test partition of negative importance (out of bounds, should be set to 0)
+			e.setImportanceLevel(-1);
+			int importance = 0;
+			Assert::AreEqual(e.getImportanceLevel(), importance);
+
+			//test partition of importance == 0
+			e.setImportanceLevel(0);
+			importance = 0;
+			Assert::AreEqual(e.getImportanceLevel(), importance);
+
+			//test partition of importance == 3 (maximum)
+			e.setImportanceLevel(3);
+			importance = 3;
+			Assert::AreEqual(e.getImportanceLevel(), importance);
+
+			//test partition of importance == 4 (out of bounds, should be set to 3)
+			e.setImportanceLevel(4);
+			importance = 3;
+			Assert::AreEqual(e.getImportanceLevel(), importance);
+		}
+
+
+		TEST_METHOD(Event_setFeedback_getFeedback_Test)
+		{
+			Event e;
+			
+			//test partition of string consisting of only letters
+			e.setFeedback("feedback");
+			string feedback = "feedback";
+			Assert::AreEqual(e.getFeedback(), feedback);
+
+			//test partition of string consisting of only numbers
+			e.setFeedback("123");
+			feedback = "123";
+			Assert::AreEqual(e.getFeedback(), feedback);
+
+			//test partition of string consisting of both numbers and letters
+			e.setFeedback("123abc");
+			feedback = "123abc";
+			Assert::AreEqual(e.getFeedback(), feedback);
+		}
+
+
+		TEST_METHOD(Event_setID_getID_Test)
+		{
+			Event e;
+			
+			//test partition of negative id
+			e.setID(-1);
+			int id = -1;
+			Assert::AreEqual(e.getID(), id);
+
+			//test partition of id == 0
+			e.setID(0);
+			id = 0;
+			Assert::AreEqual(e.getID(), id);
+
+			//test partition of positive id
+			e.setID(12345678);
+			id = 12345678;
+			Assert::AreEqual(e.getID(), id);
+		}
+	};
+
+
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\EventTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\LogicTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include "Logic.cpp"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(LogicTest)
+	{
+	public:
+		Logic logic;
+
+		TEST_METHOD(Logic_isProperCommand_Test)
+		{
+			//test partition of valid parser command
+			Assert::AreEqual(logic.isProperCommand(Parser::ADD), true);
+		}
+
+
+		TEST_METHOD(Logic_isSameDate_Test)
+		{
+			//test partition of both dates same
+			tm first, second;
+			first.tm_mday = 1;
+			first.tm_mon = 1;
+			first.tm_year = 115;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), true);
+
+
+			//test partition of only day different
+			first.tm_mday = 2;
+			first.tm_mon = 1;
+			first.tm_year = 115;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of only month different
+			first.tm_mday = 1;
+			first.tm_mon = 2;
+			first.tm_year = 115;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of only year different
+			first.tm_mday = 1;
+			first.tm_mon = 1;
+			first.tm_year = 116;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of day and month different
+			first.tm_mday = 2;
+			first.tm_mon = 2;
+			first.tm_year = 115;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of day and year different
+			first.tm_mday = 2;
+			first.tm_mon = 1;
+			first.tm_year = 116;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of month and year different
+			first.tm_mday = 1;
+			first.tm_mon = 2;
+			first.tm_year = 116;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+
+
+			//test partition of day and month and year different
+			first.tm_mday = 2;
+			first.tm_mon = 2;
+			first.tm_year = 116;
+			second.tm_mday = 1;
+			second.tm_mon = 1;
+			second.tm_year = 115;
+			Assert::AreEqual(logic.isSameDate(first, second), false);
+		}
+
+
+		TEST_METHOD(Logic_isNumber_Test)
+		{
+			//test partition of string with only nondigits
+			string s = "ab!@";
+			Assert::AreEqual(logic.isNumber(s), false);
+
+
+			//test partition of string with only digits
+			s = "1234";
+			Assert::AreEqual(logic.isNumber(s), true);
+
+
+			//test partition of string with both digits and nondigits
+			s = "1234ab!@";
+			Assert::AreEqual(logic.isNumber(s), false);
+		}
+
+
+		TEST_METHOD(Logic_removeLabel_Test)
+		{
+			//test partition of label in front of desired string
+			string input = "[DAY] 8 April", expected = "8 April";
+			logic.removeLabel(input);
+			Assert::AreEqual(input, expected);
+
+			//test partition of no label in front of desired string
+			input = "8 April", expected = "8 April";
+			logic.removeLabel(input);
+			Assert::AreEqual(input, expected);
+		}
+	};
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\LogicTest.cpp
+
+
+
+
+

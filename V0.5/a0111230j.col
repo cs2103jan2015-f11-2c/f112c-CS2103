@@ -1,0 +1,5996 @@
+//@author: a0111230j
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicUpdater.cpp
+	 */
+
+
+#include "LogicUpdater.h"
+
+//Variables that cannot be initialized in LogicUpdater.h
+const int LogicUpdater::GARBAGE_INT = -12345;
+const int LogicUpdater::INVALID_NUMBER = -1;
+const int LogicUpdater::ZERO = 0;
+const string LogicUpdater::EMPTY_STRING = "";
+const int LogicUpdater::SHIFT_BY_ONE = 1;
+const int LogicUpdater::MAX_LENGTH_EVENT_NAME = 42;
+
+const string LogicUpdater::SET_FLOATING = "set floating events";
+const string LogicUpdater::SET_NORMAL = "set normal events";
+
+const string LogicUpdater::NO_EVENTS_MESSAGE = "Currently no task";
+const string LogicUpdater::ADDED_MESSAGE = "added: ";
+const string LogicUpdater::EDITED_MESSAGE = "edited: ";
+const string LogicUpdater::DELETED_MESSAGE = "deleted: ";
+const string LogicUpdater::COMPLETED_MESSAGE = "completed: ";
+const string LogicUpdater::UNCOMPLETED_MESSAGE = "uncompleted: ";
+const string LogicUpdater::SHOW_MESSAGE = "showing: ";
+const string LogicUpdater::SHOWALL_MESSAGE = "showing: all items";
+const string LogicUpdater::SHOWALLIMPORTANT_MESSAGE = "showing: all important items";
+const string LogicUpdater::SHOWCOMPLETE_MESSAGE = "showing: all completed items";
+const string LogicUpdater::SHOWIMPORTANT_MESSAGE = "showing: importance level ";
+const string LogicUpdater::EVENT_NOT_FOUND_MESSAGE = " not found";
+const string LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE = " not found, showing partial matches..";
+const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "multiple results! please select an index.";
+const string LogicUpdater::EVENT_NOT_COMPLETED_MESSAGE = "that event is not yet completed!";
+const string LogicUpdater::DONE_EVENT_ERROR_MESSAGE = "sorry, you can't change a completed event :(";
+const string LogicUpdater::DEADLINE_EVENT_ERROR_MESSAGE = "deadline events can only happen within 1 day!";
+const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";
+const string LogicUpdater::UNDO_MESSAGE = "undo";
+const string LogicUpdater::REDO_MESSAGE = "redo";
+const string LogicUpdater::NO_MORE_UNDO_MESSAGE = "no commands to undo";
+const string LogicUpdater::NO_MORE_REDO_MESSAGE = "no commands to redo";
+const string LogicUpdater::FILE_NOT_READ_MESSAGE = "memory corrupted, automatically reverted to last usable state";
+
+const string LogicUpdater::WORD_TODAY = "Today";
+const string LogicUpdater::WORD_TOMORROW = "Tomorrow";
+const string LogicUpdater::WORD_MONTH = "Month";
+const string LogicUpdater::WORD_WEEK = "Week";
+const string LogicUpdater::WORD_ALLDAY = "All Day";
+
+const string LogicUpdater::LABEL_TODAY = "[Today]";
+const string LogicUpdater::LABEL_TOMORROW = "[Tomorrow]";
+const string LogicUpdater::LABEL_MONTH = "[Month]";
+const string LogicUpdater::LABEL_WEEK = "[Week]";
+const string LogicUpdater::LABEL_ALLDAY = "    All Day    ";
+const string LogicUpdater::LABEL_DUE = "*DUE*   ";
+
+const string LogicUpdater::BLANK_SPACE = " " ;
+const string LogicUpdater::TAB = "\t";
+const string LogicUpdater::LEAVE_A_LINE = "\n";
+const string LogicUpdater::OPEN_SQUARE_BRACKET = "[";
+const string LogicUpdater::CLOSE_SQUARE_BRACKET = "]";
+const string LogicUpdater::FULL_STOP = ".";
+const string LogicUpdater::COMMA = ",";
+const string LogicUpdater::DASH_WITH_SPACES = " - ";
+const string LogicUpdater::DASH_WITHOUT_SPACES = "-";
+const string LogicUpdater::EQUAL_LINE = "==============================================================";
+
+const string LogicUpdater::TIME_ZERO_4 = "00:00am";
+const string LogicUpdater::TIME_TWO_THREE_FIVE_NINE = "11:59pm";
+
+const string LogicUpdater::COLON = ":";
+const string LogicUpdater::TIME_AM = "am";
+const string LogicUpdater::TIME_PM = "pm";
+const string LogicUpdater::STRING_ZERO ="0";
+
+//constructor
+LogicUpdater::LogicUpdater() {
+	_normalEvents.clear();
+	_floatingEvents.clear();
+	_feedbackEvents.clear();
+
+	time_t timeNow;
+	tm* tmNow;
+	time(&timeNow);
+	tmNow = localtime(&timeNow);
+	_tempMainDisplayLabel.push_back(*tmNow);
+	_tempMainDisplayLabel.push_back(*tmNow);
+
+	_mainDisplayStrings.clear();
+	_mainDisplayLabel.clear();
+	_floatingDisplayStrings.clear();
+	_feedbackDisplayStrings.clear();
+}
+
+vector<Event> LogicUpdater::getNormalEvents() {
+	return _normalEvents;
+}
+
+vector<Event> LogicUpdater::getFloatingEvents() {
+	return _floatingEvents;
+}
+
+vector<Event> LogicUpdater::getFeedbackEvents() {
+	return _feedbackEvents;
+}
+
+int LogicUpdater::getTotalNumEvents() {
+	
+	int normalCount = 0;
+
+	if (_floatingEvents.size() == normalCount && _normalEvents.size() == normalCount) {
+		return normalCount;
+	}
+
+	for (int i = 0; i < _normalEvents.size(); i++) {
+		if (_normalEvents[i].getName() != NEW_DAY_MESSAGE) {
+			normalCount++;
+		}
+	}
+	return _floatingEvents.size() + normalCount;
+}
+
+int LogicUpdater::getTotalFloatingEvents() {
+	return _floatingEvents.size();
+}
+
+int LogicUpdater::getTotalNormalEvents() {
+	return _normalEvents.size();
+}
+
+int LogicUpdater::getIDFromIndex(int index) {
+	if (index > getTotalNumEvents()) {
+		return INVALID_NUMBER;
+	} else {
+		if (index <= getTotalFloatingEvents()) {
+			return _floatingEvents[index-1].getID();
+		} else {
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+
+			while (count != normalIndex) {
+				if (_normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			return _normalEvents[count].getID();
+		}
+	}
+}
+
+string LogicUpdater::getNameFromIndex (int index) {
+	if (index > getTotalNumEvents()) {
+		return EMPTY_STRING;
+	} else {
+		if (index <= getTotalFloatingEvents()) {
+			return _floatingEvents[index-1].getName();
+		} else {
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+
+			while (count != normalIndex) {
+				if (_normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			return _normalEvents[count].getName();
+		}
+	}
+}
+
+int LogicUpdater::getIDFromName(string name) {
+	for (int i = 0; i < getTotalFloatingEvents(); i++) {
+		if (_floatingEvents[i].getName() == name) {
+			return _floatingEvents[i].getID();
+		}
+	}
+
+	for (int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getName() == name) {
+			return _normalEvents[i].getID();
+		}
+	}
+	return INVALID_NUMBER;
+}
+
+int LogicUpdater::getNewID() {
+	return _newID;
+}
+
+
+bool LogicUpdater::getIsFloatingFromID(int id) {
+	for (int i = 0; i < getTotalFloatingEvents(); i++) {
+		if (_floatingEvents[i].getID() == id) {
+			return _floatingEvents[i].getIsFloating();
+		}
+	}
+
+	for (int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getID() == id) {
+			return _normalEvents[i].getIsFloating();
+		}
+	}
+}
+
+Event LogicUpdater::getEventFromID(int id) {
+	for (int i = 0; i < getTotalFloatingEvents(); i++) {
+		if (_floatingEvents[i].getID() == id) {
+			return _floatingEvents[i];
+		}
+	}
+
+	for (int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getID() == id) {
+			return _normalEvents[i];
+		}
+	}
+}
+
+vector<Event> LogicUpdater::getExactNameMatches(int index, string name) {	
+	vector<Event> resultEvents;
+
+	if (index != INVALID_NUMBER) {
+		if (index > getTotalNumEvents()) {
+			return resultEvents;
+		}
+
+		if (index <= getTotalFloatingEvents()) {
+			resultEvents.push_back(_floatingEvents[index-1]); 
+		} else {
+			int normalIndex = index - getTotalFloatingEvents();
+			int count = 0;
+			
+			while (count != normalIndex) {
+				if (_normalEvents[count].getName() == NEW_DAY_MESSAGE) {
+					normalIndex++;
+				}
+				count++;
+			}
+			count--;
+
+			resultEvents.push_back(_normalEvents[count]);
+		}
+		return resultEvents;
+	}
+
+	
+	for (unsigned int i = 0; i < getTotalFloatingEvents(); i++) {
+		if (_floatingEvents[i].getName() == name) {
+			resultEvents.push_back(_floatingEvents[i]);
+		}
+	}
+
+	
+	for (unsigned int i = 0; i < getTotalNormalEvents(); i++) {
+		if (_normalEvents[i].getName() == name | _normalEvents[i].getName() == NEW_DAY_MESSAGE) {
+			resultEvents.push_back(_normalEvents[i]);
+		}
+	}
+
+	if (resultEvents.empty()) {
+		return resultEvents;
+	}
+	
+	for (unsigned int i = 0; i < resultEvents.size() - 1; i++) {
+		if (resultEvents[i].getName() == NEW_DAY_MESSAGE && resultEvents[i + 1].getName() == NEW_DAY_MESSAGE) {
+			resultEvents.erase(resultEvents.begin() + i);
+		}
+	}
+	
+	return resultEvents;
+}
+
+vector<LogicUpdater::EVENT_STRING> LogicUpdater::getMainDisplayStrings() {
+	return _mainDisplayStrings;
+}
+
+vector<LogicUpdater::EVENT_STRING> LogicUpdater::getFloatingDisplayStrings() {
+	return _floatingDisplayStrings;
+}
+
+vector<string> LogicUpdater::getFeedbackDisplayStrings() {
+	return _feedbackDisplayStrings;
+}
+
+vector<string> LogicUpdater::getErrorStrings() {
+	return _errorStrings;
+}
+
+string LogicUpdater::getMainDisplayLabel() {
+	return _mainDisplayLabel;
+}
+
+vector<tm> LogicUpdater::getTempMainDisplayLabel() {
+	return _tempMainDisplayLabel;
+}
+//===================================================================================================================================================================
+void LogicUpdater::setAllEvents(vector<Event> normalEvents,
+vector<Event> floatingEvents, string feedback, vector<tm> label, int id, string weekMonthOrNothing) {
+	_newID = id;
+	setWeekMonthOrNothing (weekMonthOrNothing);
+	setFeedbackStrings(feedback);
+	setFloatingEvents(floatingEvents);
+	_logger.log(SET_FLOATING + LogicLog::SUCCEEDED);
+	setNormalEvents(normalEvents, label);
+	_logger.log(SET_NORMAL + LogicLog::SUCCEEDED);
+}
+
+void LogicUpdater::setFeedbackStrings(string newFeedback) {
+	if (!newFeedback.empty()) {
+		_feedbackDisplayStrings.push_back(newFeedback);
+	}
+
+	while (_feedbackDisplayStrings.size()>3) {
+		_feedbackDisplayStrings.erase(_feedbackDisplayStrings.begin());
+	}
+
+	assert (_feedbackDisplayStrings.size()<=3);
+}
+
+void LogicUpdater::setFloatingEvents(vector<Event> events) {
+	_floatingEvents = events;
+	floatingEventsToString();
+}
+
+void LogicUpdater::floatingEventsToString() {
+	_floatingDisplayStrings.clear();
+	
+
+	if (_floatingEvents.empty()) {
+		setNoEventsMessage(_floatingDisplayStrings);
+	} else {
+		for (int i = 0; i < _floatingEvents.size(); i++) {
+			EVENT_STRING temp;
+			initializeEventString(temp);
+
+			ostringstream outDate;
+			outDate << (i + SHIFT_BY_ONE) << FULL_STOP;
+			temp.dateString = outDate.str();
+
+			ostringstream outEvent;
+			outEvent << _floatingEvents[i].getName();
+			temp.eventString = outEvent.str();
+
+			temp.isCompleted = _floatingEvents[i].getIsCompleted();
+			temp.importanceLevel = _floatingEvents[i].getImportanceLevel();
+			temp.isNew = setIsNew(_floatingEvents[i]);
+
+			_floatingDisplayStrings.push_back(temp);
+		}
+	}
+	assert(_floatingDisplayStrings.size()>=1);
+}
+
+std::string LogicUpdater::setMultipleDaysString(tm start,tm end) {
+	std::mktime(&start);
+	std::mktime(&end);
+	
+	if(start.tm_year == end.tm_year && start.tm_mon == end.tm_mon){
+		assert(start.tm_mday < end.tm_mday);
+	} else if(start.tm_year == end.tm_year){
+		assert(start.tm_mon <= end.tm_mon);
+	} else {
+		assert(start.tm_year <= end.tm_year);
+	}
+	
+	std::string multipleDaysString = "";
+
+	if (isDisplayMonth(start,end)) {
+		string commandMonth = LABEL_MONTH + BLANK_SPACE;
+		multipleDaysString += commandMonth;
+	} else if (isDisplayWeek(start,end)) {
+		string commandWeek = LABEL_WEEK + BLANK_SPACE;
+		multipleDaysString += commandWeek;
+	}
+
+	multipleDaysString += tmToString(start);
+
+	if (start.tm_year != end.tm_year) {
+		string startYear = intToString(start.tm_year + 1900);
+		multipleDaysString += BLANK_SPACE + startYear;
+	}
+
+	multipleDaysString += DASH_WITH_SPACES;
+
+	multipleDaysString += tmToString(end);
+
+	string endYear = intToString(end.tm_year + 1900);
+	multipleDaysString += BLANK_SPACE +endYear;
+
+	return multipleDaysString;
+}
+
+void LogicUpdater::setMainDisplayLabel (vector<tm> label) {
+	assert(label.size()==2);
+	std::mktime(&label[0]);
+	std::mktime(&label[1]);
+
+	_mainDisplayLabel.clear();
+
+	if (isSingleDay(label) && isToday (label[0])) {
+		string commandToday = LABEL_TODAY + BLANK_SPACE;
+		std::string dateInString = setSingleDayString(label[0]);
+		_mainDisplayLabel += commandToday + dateInString;
+	} else if (isSingleDay(label) && isTomorrow (label[0])) {
+		string commandTomorrow = LABEL_TOMORROW + BLANK_SPACE;
+		std::string dateInString = setSingleDayString(label[0]);
+		_mainDisplayLabel += commandTomorrow + dateInString;
+	} else if (isSingleDay(label)){
+		std::string dateInString = setSingleDayString(label[0]);
+		_mainDisplayLabel += dateInString;
+	} else {
+		_mainDisplayLabel = setMultipleDaysString(label[0],label[1]);
+	}
+}
+
+void LogicUpdater::setWeekMonthOrNothing(string identity) {
+	assert( identity == WORD_WEEK || identity == WORD_MONTH || identity == "");
+
+	_weekMonthOrNothing = identity;
+}
+
+std::string LogicUpdater::setSingleDayString(tm label) {
+	std::mktime(&label);
+
+	string dayOfMonth = intToString(label.tm_mday);
+	string month = intToMonth(label.tm_mon);
+	string dayOfWeek = intToDayOfWeek(label.tm_wday);
+	string year = intToString(label.tm_year + 1900);
+	string dateInString = dayOfMonth + BLANK_SPACE + month + BLANK_SPACE + year + COMMA + BLANK_SPACE + dayOfWeek;
+	return dateInString;
+}
+
+void LogicUpdater::setNormalEvents(vector<Event> events,vector<tm> label) {
+	_normalEvents = events;
+	_tempMainDisplayLabel = label;
+	setMainDisplayLabel(label);
+	normalEventsToString();
+}
+
+void LogicUpdater::normalEventsToString() {
+	_mainDisplayStrings.clear();
+
+	if (_normalEvents.empty()) {
+		setNoEventsMessage(_mainDisplayStrings);
+		return;
+	}
+
+	std::vector<int> indexOfMarkers;
+	int newEventStartTime = ZERO;
+	int newEventEndTime = ZERO;
+	int newEventIndex = INVALID_NUMBER;
+	int indexForNormalEvents = getTotalFloatingEvents();
+
+	for (int i = 0; i < _normalEvents.size(); i++) {
+		EVENT_STRING toBePushed;
+		initializeEventString(toBePushed);
+
+		//Set New Day Marker
+		if (_normalEvents[i].getName() == NEW_DAY_MESSAGE) {	
+			indexOfMarkers.push_back(i);
+
+			toBePushed.isMarker = true;
+			toBePushed.eventString = setMarkerEventString(_normalEvents[i],i);
+
+			//isClash is set between 2 markers & when there is a new event
+			if ( indexOfMarkers.size() >= 2 && newEventIndex != INVALID_NUMBER ) {
+				setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+				newEventIndex = INVALID_NUMBER;
+			}
+		} else {
+			//Set normal event
+			toBePushed.isNew = setIsNew(_normalEvents[i]);
+			toBePushed.isCompleted = _normalEvents[i].getIsCompleted();
+			toBePushed.importanceLevel = _normalEvents[i].getImportanceLevel();
+			toBePushed.dateString = setNormalEventDateString(_normalEvents[i],++indexForNormalEvents);
+			toBePushed.eventString = setNormalEventEventString(_normalEvents[i]);			
+		}
+
+		if (toBePushed.isNew == true) {
+			newEventStartTime = getStartTime(_normalEvents[i]);
+			newEventEndTime = getEndTime(_normalEvents[i]);
+			newEventIndex = i;
+		}
+
+		_mainDisplayStrings.push_back(toBePushed);
+	}
+
+	//isClash is set after the last event too
+	indexOfMarkers.push_back(_normalEvents.size());
+	
+	if ( indexOfMarkers.size() >= 2 && newEventIndex != INVALID_NUMBER ) {
+		setIsClash(newEventStartTime, newEventEndTime, newEventIndex,indexOfMarkers);
+		newEventIndex = INVALID_NUMBER;
+	}
+
+	assert(_mainDisplayStrings.size()>=1);
+}
+
+std::string LogicUpdater::setMarkerEventString(Event marker, int index) {
+	ostringstream out;
+
+	assert(index>=0);
+	if (index != 0) {
+		out << LEAVE_A_LINE;
+	}
+
+	out << OPEN_SQUARE_BRACKET;
+	out << marker.getStartDate().tm_mday;
+	out << BLANK_SPACE;
+
+	int monthInt = marker.getStartDate().tm_mon;
+	out << intToMonth(monthInt);
+
+	out << BLANK_SPACE;
+	out << marker.getStartDate().tm_year + 1900;
+
+	out << COMMA + BLANK_SPACE;
+
+	int dayOfWeekInt = marker.getStartDate().tm_wday;
+	out << intToDayOfWeek(dayOfWeekInt);
+
+	out << CLOSE_SQUARE_BRACKET;
+	out << EQUAL_LINE;
+	out << LEAVE_A_LINE;
+
+	return out.str();
+}
+
+std::string LogicUpdater::setNormalEventDateString(Event eventToBeSet, int eventIndex) {
+	assert(eventIndex >= 1);
+	ostringstream outDate;
+	
+	outDate << eventIndex << ".";
+	outDate << TAB;
+
+	outDate << OPEN_SQUARE_BRACKET;
+	if (eventToBeSet.getIsDeadline()) {
+		outDate << LABEL_DUE;
+		int endTime = getStartTime(eventToBeSet);
+		outDate << intToTime(endTime);
+	} else if (isAllDay(eventToBeSet)) {
+		outDate << LABEL_ALLDAY;
+	} else {
+		int startTime = getStartTime(eventToBeSet);
+		outDate << intToTime(startTime);
+		outDate << DASH_WITHOUT_SPACES;
+		int endTime = getEndTime(eventToBeSet);
+		outDate << intToTime(endTime);
+	}
+			
+	outDate << CLOSE_SQUARE_BRACKET;
+	outDate << TAB;		
+	return outDate.str();
+}
+
+std::string LogicUpdater::setNormalEventEventString(Event eventToBeSet) {
+	
+	ostringstream outEvent;
+
+	std::string nameOfEvent = eventToBeSet.getName();
+
+	while(nameOfEvent.size() > MAX_LENGTH_EVENT_NAME) {
+		outEvent << nameOfEvent.substr(0,MAX_LENGTH_EVENT_NAME);
+		outEvent << LEAVE_A_LINE;
+		outEvent << TAB + TAB + TAB + TAB + TAB;
+		nameOfEvent = nameOfEvent.substr(MAX_LENGTH_EVENT_NAME);
+	}
+
+	outEvent << nameOfEvent;
+	return outEvent.str();	
+}
+
+void LogicUpdater:: setIsClash(int newEventStartTime, int newEventEndTime, int newEventIndex, std::vector<int> indexOfNewMarker) {
+	assert(indexOfNewMarker.size() >=2);
+
+	bool setNewItemClash = false;
+
+	for (int i = indexOfNewMarker[indexOfNewMarker.size() - 2] + 1; i < indexOfNewMarker[indexOfNewMarker.size() - 1]; i++) {
+		int checkEventStartTime = getStartTime (_normalEvents[i]);
+		int checkEventEndTime = getEndTime (_normalEvents[i]);
+
+		if (checkEventStartTime < newEventStartTime && newEventStartTime < checkEventEndTime && _normalEvents[i].getID() != _newID) {
+				_mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+		}
+		
+		if (checkEventStartTime < newEventEndTime && newEventEndTime < checkEventEndTime && _normalEvents[i].getID() != _newID) {
+				_mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+		}
+		
+		if (newEventStartTime < checkEventStartTime  && checkEventStartTime < newEventEndTime && _normalEvents[i].getID() != _newID) {
+				_mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+		}
+
+		if (newEventStartTime < checkEventEndTime && checkEventEndTime < newEventEndTime && _normalEvents[i].getID() != _newID){
+				_mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+		}
+
+		if (checkEventStartTime == newEventStartTime && checkEventEndTime == newEventEndTime && _normalEvents[i].getID() != _newID) {
+				_mainDisplayStrings[i].isClash = true;
+				setNewItemClash = true;
+		}
+	}
+		
+		if (setNewItemClash) {
+			_mainDisplayStrings[newEventIndex].isClash = true;
+		}
+}
+
+
+void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
+	assert(displayVec.empty());
+
+	EVENT_STRING noEvent;
+	noEvent.dateString = "";
+	noEvent.eventString = NO_EVENTS_MESSAGE;
+	noEvent.isNew = false;
+	noEvent.isClash= false;
+	noEvent.isMarker = false;
+	noEvent.isCompleted = false;
+	noEvent.importanceLevel= 0;
+	displayVec.push_back(noEvent);
+}
+//===================================================================================================================================================================
+
+void LogicUpdater::initializeEventString(LogicUpdater::EVENT_STRING &item) {
+	item.dateString.clear();
+	item.eventString.clear();
+	item.isNew = false;
+	item.isClash = false;
+	item.isMarker = false;
+	item.isCompleted = false;
+	item.importanceLevel = 0;
+}
+
+void LogicUpdater::initializeTime(tm date) {
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 0;
+}
+
+
+bool LogicUpdater::setIsNew(Event toBeSet) {
+	bool isNew = false;
+
+	if (toBeSet.getID() == _newID) {
+		isNew = true;
+	}
+	return isNew;
+}
+
+bool LogicUpdater::isSingleDay(vector<tm> label) {
+	assert(label.size()==2);
+	std::mktime(&label[0]);
+	std::mktime(&label[1]);
+
+	bool isSingle = false;
+	if (label[0].tm_mday == label[1].tm_mday && label[0].tm_mon == label[1].tm_mon && label[0].tm_year == label[1].tm_year) {
+		isSingle = true;
+	}
+
+	return isSingle;
+}
+
+bool LogicUpdater::isToday(tm date) {
+	bool isDateToday = false;
+
+	std::mktime(&date);
+
+	//Initialize date to today
+	time_t now = time(0);
+	struct tm today = *localtime(&now);
+
+	if (today.tm_mday == date.tm_mday && today.tm_mon == date.tm_mon && today.tm_year == date.tm_year) {
+		isDateToday = true;
+	}
+
+	return isDateToday;
+}
+
+bool LogicUpdater::isTomorrow(tm date) {
+	bool isDateTomorrow = false;
+
+	std::mktime(&date);
+
+	//Initialize date to tomorrow
+	time_t now = time(0);
+	struct tm tomorrow = *localtime(&now);
+	tomorrow.tm_mday ++;
+	mktime(&tomorrow);
+
+	if (tomorrow.tm_mday == date.tm_mday && tomorrow.tm_mon == date.tm_mon && tomorrow.tm_year == date.tm_year) {
+		isDateTomorrow = true;
+	}
+
+	return isDateTomorrow;
+}
+
+bool LogicUpdater::isAllDay(Event eventToDisplay) {
+	bool isAllDayEvent = false;
+	
+	int startTime = getStartTime(eventToDisplay);
+	string startTimeInString = intToTime(startTime);
+
+	int endTime = getEndTime(eventToDisplay);
+	string endTimeInString = intToTime(endTime);
+
+	if (startTimeInString == TIME_ZERO_4  && endTimeInString == TIME_TWO_THREE_FIVE_NINE) {
+		isAllDayEvent = true;
+	}
+
+	return isAllDayEvent;
+}
+
+bool LogicUpdater::isDisplayMonth(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
+	if(frontDate.tm_year == backDate.tm_year && frontDate.tm_mon == backDate.tm_mon){
+		assert(frontDate.tm_mday < backDate.tm_mday);
+	} else if(frontDate.tm_year == backDate.tm_year){
+		assert(frontDate.tm_mon <= backDate.tm_mon);
+	} else {
+		assert(frontDate.tm_year <= backDate.tm_year);
+	}
+
+
+	bool isMonth = false;
+
+	if (isFirstDayOfMonth(frontDate) && isLastDayOfMonth(backDate) && isSameMonth(frontDate,backDate) 
+		&& isSameYear(frontDate,backDate)) {
+		isMonth = true;
+	} else if (_weekMonthOrNothing == WORD_MONTH) {
+		isMonth = true;
+	}
+
+	return isMonth;
+}
+
+bool LogicUpdater::isFirstDayOfMonth(tm frontDate) {
+	bool isFirstDay = false;
+	
+	std::mktime(&frontDate);
+
+	int monthBefore = frontDate.tm_mon;
+
+	assert(frontDate.tm_mday>=1 && frontDate.tm_mday<=31); 
+	assert(frontDate.tm_mon>=0 && frontDate.tm_mon<=11);
+	assert(frontDate.tm_year<3000 && frontDate.tm_year>70);
+
+	frontDate.tm_mday--;
+	std::mktime(&frontDate);
+	int monthAfter = frontDate.tm_mon;
+
+	if (monthBefore != monthAfter) {
+		isFirstDay = true;
+	}
+
+	return isFirstDay;
+}
+
+bool LogicUpdater::isLastDayOfMonth(tm backDate) {
+	bool isLastDay = false;
+
+	std::mktime(&backDate);
+	
+	int monthBefore = backDate.tm_mon;
+
+	assert(backDate.tm_mday>=1 && backDate.tm_mday<=31); 
+	assert(backDate.tm_mon>=0 && backDate.tm_mon<=11);
+	assert(backDate.tm_year<3000 && backDate.tm_year>70);
+
+
+	backDate.tm_mday++;
+	std::mktime(&backDate);
+	int monthAfter = backDate.tm_mon;
+
+	if (monthBefore != monthAfter) {
+		isLastDay = true;
+	}
+
+	return isLastDay;
+}
+
+bool LogicUpdater::isDisplayWeek(tm frontDate,tm backDate) {
+	bool isWeek  = false;
+
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
+	if (isFirstDayOfWeek(frontDate) && isLastDayOfWeek(backDate) && countNumDays(frontDate,backDate) == 6 ) {
+		isWeek = true;
+	}
+
+	if (_weekMonthOrNothing == WORD_WEEK) {
+		isWeek = true;
+	}
+
+	return isWeek;
+}
+
+bool LogicUpdater::isFirstDayOfWeek(tm frontDate) {
+	std::mktime(&frontDate);
+	assert(frontDate.tm_wday>=0 && frontDate.tm_wday<=6);
+
+	bool isFirstDay = false;
+
+	if (frontDate.tm_wday == 0) {
+		isFirstDay = true;
+	}
+
+	return isFirstDay;
+}
+
+bool LogicUpdater::isLastDayOfWeek(tm backDate) {
+	std::mktime(&backDate);
+	assert(backDate.tm_wday>=0 && backDate.tm_wday<=6);
+
+	bool isLastDay = false;
+
+	if (backDate.tm_wday == 6) {
+		isLastDay = true;
+	}
+
+	return isLastDay;
+}
+
+bool LogicUpdater::isSameMonth(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
+	bool sameMonth = false;
+
+	if (frontDate.tm_mon == backDate.tm_mon) {
+		sameMonth = true;
+	}
+
+	return sameMonth;
+}
+
+bool LogicUpdater::isSameYear(tm frontDate,tm backDate) {
+	std::mktime(&frontDate);
+	std::mktime(&backDate);
+
+	bool sameYear = false;
+
+	if (frontDate.tm_year == backDate.tm_year) {
+		sameYear = true;
+	}
+
+	return sameYear;
+}
+
+std::string LogicUpdater::intToTime (int timeInInt) {
+	int hours;
+	int minutes;
+	bool afterTwelve = false;
+	std::ostringstream oss;
+	hours = timeInInt/100;
+	minutes = timeInInt%100;
+
+	assert(0<=hours && hours<=23);
+	assert(0<=minutes && minutes<=59);
+
+	if (hours > 12) {
+		hours = hours - 12;
+		afterTwelve = true;
+	} else if (hours == 12) {
+		afterTwelve = true;
+	}
+
+	if (hours >= 10){
+		oss << hours;
+	} else{
+		oss << STRING_ZERO;
+		oss << hours;
+	}
+
+	oss << COLON;
+
+	if (minutes >= 10) {
+		oss << minutes;
+	} else {
+		oss << STRING_ZERO;
+		oss << minutes;
+	}
+
+	if (afterTwelve) {		
+		oss << TIME_PM;
+	} else {
+		oss << TIME_AM;
+	}
+	
+	return oss.str();
+}
+
+std::string LogicUpdater::intToDayOfWeek (int dayInNum) {
+	if (dayInNum == 0) {
+		return "Sunday";
+	} else if (dayInNum == 1) {
+		return "Monday";
+	} else if (dayInNum == 2) {
+		return "Tuesday";
+	} else if (dayInNum == 3) {
+		return "Wednesday";
+	} else if (dayInNum == 4) {
+		return "Thursday";
+	} else if (dayInNum == 5) {
+		return "Friday";
+	} else if (dayInNum == 6) {
+		return "Saturday";
+	} else {
+		return "Invalid day";
+	}
+}
+
+std::string LogicUpdater::intToMonth (int monthInNum) {
+	if (monthInNum == 0) {
+		return "January";
+	} else if (monthInNum  == 1) {
+		return "Feburary";
+	} else if (monthInNum  == 2) {
+		return "March";
+	} else if (monthInNum  == 3) {
+		return "April";
+	} else if (monthInNum  == 4) {
+		return "May";
+	} else if (monthInNum  == 5) {
+		return "June";
+	} else if (monthInNum  == 6) {
+		return "July";
+	} else if (monthInNum  == 7) {
+		return "August";
+	} else if (monthInNum  == 8) {
+		return "September";
+	} else if (monthInNum  == 9) {
+		return "October";
+	} else if (monthInNum  == 10) {
+		return "November";
+	} else if (monthInNum  == 11) {
+		return "December";
+	} else {
+		return "Invalid month";
+	}
+}
+
+std::string LogicUpdater::tmToString(tm date){
+	std::mktime(&date);
+
+	assert(date.tm_mday>=1 && date.tm_mday<=31); 
+	assert(date.tm_mon>=0 && date.tm_mon<=11);
+	assert(date.tm_year<3000 && date.tm_year>70);
+
+	string startDayOfMonth = intToString(date.tm_mday);
+	string startMonth = intToMonth(date.tm_mon);
+
+	return startDayOfMonth + BLANK_SPACE + startMonth;
+}
+
+std::string LogicUpdater::intToString(int num) {
+	assert(num>=0);
+
+	std::string outString;
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+int LogicUpdater:: getStartTime(Event toGet) {
+	return toGet.getStartDate().tm_hour*100 + toGet.getStartDate().tm_min;
+}
+
+int LogicUpdater:: getEndTime(Event toGet) {
+	return toGet.getEndDate().tm_hour*100 + toGet.getEndDate().tm_min;
+}
+
+int LogicUpdater::countNumDays(tm startDay, tm endDay) {
+	initializeTime(startDay);
+	initializeTime(endDay);
+	std::time_t start = std::mktime(&startDay);
+	std::time_t end = std::mktime(&endDay);
+
+	int dayDifference = std::difftime(end,start)/(60*60*24);
+
+	return dayDifference;
+}
+
+
+
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicUpdater.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicUpdater.h
+	 */
+
+/**
+ * This class is used store information that are to be displayed to the user. 
+ * Key information are first stored in it's primitive vector<event> and vector<tm> form. These information are subsequently being converted and stored as vector<EVENT_STRING> and vector<string> form.
+ * The former form is being used by the setter for checking and updating purposes while the latter is being used for direct and easier display to user. 
+ *
+
+ */
+
+
+#pragma once
+
+#ifndef LOGIC_UPDATER
+#define LOGIC_UPDATER
+
+#include <assert.h>
+#include <ctime>
+#include <algorithm>
+#include "Event.h"
+#include "LogicLog.h"
+
+using std::ostringstream;
+
+class LogicUpdater {
+
+public:
+	struct EVENT_STRING {
+		string dateString;
+		string eventString;
+		bool isNew;
+		bool isClash;
+		bool isMarker;
+		bool isCompleted;
+		int importanceLevel;
+	};
+
+/*
+* =================================================================================================================================================================== 
+* Static variables 
+* ===================================================================================================================================================================
+*/
+	static const int GARBAGE_INT;
+	static const int INVALID_NUMBER;
+	static const int ZERO;
+	static const string EMPTY_STRING;
+	static const int SHIFT_BY_ONE;
+	static const int MAX_LENGTH_EVENT_NAME;
+
+	static const string SET_FLOATING;
+	static const string SET_NORMAL;
+
+	static const string NO_EVENTS_MESSAGE;
+	static const string ADDED_MESSAGE;
+	static const string EDITED_MESSAGE;
+	static const string DELETED_MESSAGE;
+	static const string COMPLETED_MESSAGE;
+	static const string UNCOMPLETED_MESSAGE;
+	static const string SHOW_MESSAGE;
+	static const string SHOWALL_MESSAGE;
+	static const string SHOWALLIMPORTANT_MESSAGE;
+	static const string SHOWCOMPLETE_MESSAGE;
+	static const string SHOWIMPORTANT_MESSAGE;
+	static const string EVENT_NOT_FOUND_MESSAGE;
+	static const string PARTIAL_EVENT_FOUND_MESSAGE;
+	static const string CHOOSE_EVENT_MESSAGE;
+	static const string EVENT_NOT_COMPLETED_MESSAGE;
+	static const string DONE_EVENT_ERROR_MESSAGE;
+	static const string DEADLINE_EVENT_ERROR_MESSAGE;
+	static const string NEW_DAY_MESSAGE;
+	static const string UNDO_MESSAGE;
+	static const string REDO_MESSAGE;
+	static const string NO_MORE_UNDO_MESSAGE;
+	static const string NO_MORE_REDO_MESSAGE;
+	static const string FILE_NOT_READ_MESSAGE;
+
+	static const string WORD_TODAY;
+	static const string WORD_TOMORROW;
+	static const string WORD_MONTH;
+	static const string WORD_WEEK;
+	static const string WORD_ALLDAY;
+
+	static const string LABEL_TODAY;
+	static const string LABEL_TOMORROW;
+	static const string LABEL_MONTH;
+	static const string LABEL_WEEK;
+	static const string LABEL_ALLDAY;
+	static const string LABEL_DUE;
+
+	static const string BLANK_SPACE;
+	static const string TAB;
+	static const string LEAVE_A_LINE;
+	static const string OPEN_SQUARE_BRACKET;
+	static const string CLOSE_SQUARE_BRACKET;
+	static const string FULL_STOP;
+	static const string COMMA;
+	static const string DASH_WITH_SPACES;
+	static const string DASH_WITHOUT_SPACES;
+	static const string EQUAL_LINE;
+	static const string COLON;
+	static const string TIME_AM;
+	static const string TIME_PM;
+	static const string STRING_ZERO;
+
+
+	static const string TIME_ZERO_4;
+	static const string TIME_TWO_THREE_FIVE_NINE;
+
+
+	
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Private attributes 
+* ===================================================================================================================================================================
+*/
+private:
+	vector<Event> _normalEvents;
+	vector<Event> _floatingEvents;
+	vector<Event> _feedbackEvents;
+	vector<tm> _tempMainDisplayLabel;
+
+	int _newID;
+	string _weekMonthOrNothing;
+
+	vector<EVENT_STRING> _mainDisplayStrings;
+	string _mainDisplayLabel;
+	vector<EVENT_STRING> _floatingDisplayStrings;
+	vector<string> _feedbackDisplayStrings;
+	vector<string> _errorStrings;
+
+	LogicLog _logger;
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public getters & respective APIs
+* ===================================================================================================================================================================
+*/
+public:
+	//constructor
+	LogicUpdater();
+	
+	//WJ
+	//Getters for extracting information when setting/updating
+	vector<Event> getNormalEvents();
+	vector<Event> getFloatingEvents();
+	vector<Event> getFeedbackEvents();
+	
+	int getTotalNumEvents();
+	int getTotalFloatingEvents();
+	int getTotalNormalEvents();
+
+	int getIDFromIndex(int index);
+	string getNameFromIndex (int index);
+	int getIDFromName(string name);
+	int getNewID();
+	bool getIsFloatingFromID(int id);
+	Event getEventFromID(int id);
+	vector<Event> getExactNameMatches(int index, string name);
+
+	//YK
+	//Getters for extracting information to display
+	vector<EVENT_STRING> getMainDisplayStrings();
+	vector<EVENT_STRING> getFloatingDisplayStrings();
+	vector<string> getFeedbackDisplayStrings();
+	vector<string> getErrorStrings();
+	string getMainDisplayLabel();
+	vector<tm> getTempMainDisplayLabel();
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public setters & respective APIs
+* ===================================================================================================================================================================
+*/	
+	//Pre-condition : vector<tm> label to be of size 2
+	//				  Conventionally, id will house the id of a newly-added event, but will take on LogicUpdater::GARBAGE_INT when there is no new event
+	//				  weekMonthOrNothing can only contain one of the 3 words (LogicUpdater::WORD_MONTH, LogicUpdater::WORD_WEEK, or empty)
+	//This function is the single point assessed by the setter to updated the information to be displayed to user
+	//Information passed into this function will be processed and stored in 2 forms in the respective private attribute of this Class
+	void setAllEvents (vector<Event> normalEvents,vector<Event> floatingEvents,string feedback, vector<tm> label, int id, string weekMonthOrNothing);
+
+	//Pre-condition : None
+	//This function is the single point assessed by the setter to updated the feedback to be displayed
+	//[WARNING - This function is purely to update the feedback only. It is being used in the case where only feedback required update which the other information
+	//remain the same]
+	//[WARNING - Empty feedbackstring will be ignored and recorded]
+	void setFeedbackStrings(string newFeedback);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Intermediate supporting functions that are invoked by the Public setters 
+* The main roles of these functions is to update the private attributes of these classes correctly
+* These functions are asssisted by the Universal basic supporting functions
+* ===================================================================================================================================================================
+*/
+	void setFloatingEvents(vector<Event> events);
+
+	//Pre-condition : _floatingEvents to be correctly set
+	//Converts the newly updated _floatingEvents into and stored as EVENT_STRING form
+	void floatingEventsToString();
+
+	//Pre-condition: Dates passed in cannot be the same
+	//[WARNING - start date must be on the left & end date on the right] 
+	std::string setMultipleDaysString(tm,tm);
+
+	//Pre-condition : Size of vector must be 2
+	void setMainDisplayLabel (vector<tm> label);
+
+	void setWeekMonthOrNothing(string);
+
+	std::string setSingleDayString(tm);
+
+	//Pre-condition : Size of vector<tm> must be 2
+	void setNormalEvents(vector<Event> events,vector<tm> label);
+	
+	void normalEventsToString();
+
+	std::string setMarkerEventString(Event, int);
+
+	std::string setNormalEventDateString(Event, int);
+
+	std::string setNormalEventEventString(Event);
+
+	void setIsClash(int,int,int,std::vector<int>);
+
+	//Pre-condition : Vector passed in must be empty
+	//This vector will become size 1 containing the NO_EVENTS_MESSAGE
+	void setNoEventsMessage(vector<EVENT_STRING>& displayVec);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Universal basic supporting functions
+* ===================================================================================================================================================================
+*/
+	void initializeEventString(EVENT_STRING &item);
+
+	void initializeTime(tm);
+
+	bool setIsNew(Event);
+
+	//Pre-condition : Size of vector must be 2
+	bool isSingleDay(vector<tm>);
+
+	bool isToday(tm);
+	
+	bool isTomorrow(tm);
+
+	//Pre-condition: Dates passed in to be in 12-hr formatt - e.g. 12:30pm
+	bool isAllDay(Event);
+
+	//Pre-condition: start date must be on the left & end date on the right
+	bool isDisplayMonth(tm,tm);
+	
+	bool isFirstDayOfMonth(tm);
+	
+	bool isLastDayOfMonth(tm);
+
+	bool isDisplayWeek(tm,tm);
+
+	bool isFirstDayOfWeek(tm);
+
+	bool isLastDayOfWeek(tm);
+
+	bool isSameMonth(tm,tm);
+
+	bool isSameYear(tm,tm);
+
+	//Pre-condition: Time pass in must be in 24-hrs formatt - hhmm 
+	//Returns time in  12-hr formatt - e.g. 12:30pm
+	string intToTime (int);
+	
+	std::string intToDayOfWeek (int);
+	
+	std::string intToMonth (int);
+	
+	std::string intToString(int);
+
+	std::string tmToString(tm);
+	
+	int getStartTime(Event);
+	
+	int getEndTime(Event); 
+
+	int countNumDays(tm, tm);
+//===================================================================================================================================================================
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\LogicUpdater.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Parser.cpp
+	 */
+
+
+void Parser::determineAddCommand() {
+	std::vector<std::string> fragmentedWords;
+
+	try {
+		fragmentedWords = splitter.fragmentString(details);
+		tempEventStore = processor.processAddEvent(fragmentedWords);
+		if (tempEventStore.getIsFloating() == true) {
+			typeOfCommand = Parser::ADDFLOAT;
+		} else {
+			typeOfCommand = Parser::ADD;
+		}
+	} catch (ParserExceptions& e) {
+		throw e;
+	}
+}
+
+void Parser::determineDelCommand() {
+	try {
+		nameOfEvent = details;
+		typeOfCommand = Parser::DELETE_;
+	} catch (ParserExceptions& e) {
+		throw e;
+	}
+}
+
+void Parser::determineEditCommand() {
+	std::vector<std::string> fragmentedWords;
+	
+	try {
+		nameOfEvent = splitter.extractEditEventName(details);
+		details = splitter.removeEditEventName(details,nameOfEvent);
+		fragmentedWords = splitter.fragmentString(details);
+		tempEventStore = processor.processEditEvent(fragmentedWords);
+		typeOfCommand = Parser::EDIT;
+	} catch (ParserExceptions& e) {
+		throw e;
+	}
+}
+
+void Parser::determineShowCommand() {
+	std::vector<std::string> fragmentedWords;
+	
+	try {
+		nameOfEvent = details;
+		fragmentedWords = splitter.fragmentString(details);
+		tempEventStore = processor.processShowEvent(fragmentedWords);
+		if (tempEventStore.getName() == "floating" || tempEventStore.getName() == "float") {
+			typeOfCommand = Parser::SHOWFLOAT;
+		} else if (tempEventStore.getName() == "all") {
+			typeOfCommand = Parser::SHOWALL;
+		} else if (tempEventStore.getName() == "specificimportance") {
+			typeOfCommand = Parser::SHOWIMPORTANT;
+		} else if (tempEventStore.getName() == "important" || tempEventStore.getName() == "impt") {
+			typeOfCommand = Parser::SHOWALLIMPORTANT;
+		} else if (tempEventStore.getName() == "completed" || tempEventStore.getName() == "done" || tempEventStore.getName() == "complete") {
+			typeOfCommand = Parser::SHOWCOMPLETE;
+		} else if (tempEventStore.getName() == "week") {
+			typeOfCommand = Parser::SHOWWEEK;
+		} else if (tempEventStore.getName() == "month") {
+			typeOfCommand = Parser::SHOWMONTH;
+		} else {
+			typeOfCommand = Parser::SHOW;
+		}
+	} catch (ParserExceptions& e) {
+		throw e;
+	}
+}
+
+void Parser::determineCompleteCommand() {
+	nameOfEvent = details;
+	typeOfCommand = Parser::COMPLETE;
+}
+
+void Parser::determineUncompleteCommand() {
+	nameOfEvent = details;
+	typeOfCommand = Parser::UNCOMPLETE;
+}
+
+void Parser::determineOtherCommand() {
+	if (command == "search") {
+		nameOfEvent = details;
+		typeOfCommand = Parser::SEARCH;
+	} else if (command == "undo") {
+		typeOfCommand = Parser::UNDO;
+	} else if (command == "redo") {
+		typeOfCommand = Parser::REDO;
+	}
+}
+
+//Checks with a list of commands that Parser recognises to confirm whether the command is supported.
+bool Parser::checkCommandExist() {
+	bool commandExist = false;
+
+	for (int j = 0; j < NUMBER_OF_KEYWORDS_COMMANDS; j++) {
+		if (command == keywordCommands[j]) {
+			commandExist = true;
+		}
+	}
+	return commandExist;
+}
+
+//Checks whether the command is an undo or redo command
+bool Parser::checkCommandUndoRedo() {
+	bool isUndoRedo = false;
+	if (command == "undo" || command == "redo") {
+		isUndoRedo = true;
+	}
+	return isUndoRedo;
+}
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\Parser.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UICommandSuggestion.cpp
+	 */
+
+
+#include "UICommandSuggestion.h"
+
+
+UICommandSuggestion::UICommandSuggestion(void)
+{
+	setUpsuggestionAdd();
+	setUpsuggestionDelete();
+	setUpsuggestionEdit();
+	setUpsuggestionSearch();
+	setUpsuggestionShow();
+
+	setKeywordCommands();
+	setKeywordDay();
+	setKeywordMonths();
+	setKeywordTime();
+	setKeywordOthers();
+
+	initializeUserActionsIndex();
+}
+
+
+UICommandSuggestion::~UICommandSuggestion(void)
+{
+}
+
+// static strings that cannot initialise in "UICommandSuggestion.h"
+const std::string UICommandSuggestion::COMMAND_ADD = "add";
+const std::string UICommandSuggestion::COMMAND_DELETE = "del";
+const std::string UICommandSuggestion::COMMAND_EDIT = "edit";
+const std::string UICommandSuggestion::COMMAND_SEARCH = "search";
+const std::string UICommandSuggestion::COMMAND_SHOW = "show";
+
+const std::string UICommandSuggestion::COMMAND_AD = "ad";
+const std::string UICommandSuggestion::COMMAND_DELET = "de";
+const std::string UICommandSuggestion::COMMAND_EDI = "edi";
+const std::string UICommandSuggestion::COMMAND_SEARC = "searc";
+const std::string UICommandSuggestion::COMMAND_SHO = "sho";
+
+const std::string UICommandSuggestion::BLANK_SPACE = " ";
+const std::string UICommandSuggestion::LEAVE_A_LINE = "\n";
+const std::string UICommandSuggestion::DASH = "-";
+const std::string UICommandSuggestion::SEMI_COLON = ";";
+const std::string UICommandSuggestion::WORD_DUE = "due";
+
+const std::string UICommandSuggestion::SYMBOL_EVENT = "[Event]";
+const std::string UICommandSuggestion::SYMBOL_INDEX_OF_EVENT = "[Index of Event]";
+const std::string UICommandSuggestion::SYMBOL_DATE = "[Date]";
+const std::string UICommandSuggestion::SYMBOL_NEW_DATE = "[New date]";
+const std::string UICommandSuggestion::SYMBOL_START_DATE = "[Start date]";
+const std::string UICommandSuggestion::SYMBOL_END_DATE = "[End date]";
+const std::string UICommandSuggestion::SYMBOL_START_TIME = "[Start time]";
+const std::string UICommandSuggestion::SYMBOL_END_TIME = "[End time]";
+const std::string UICommandSuggestion::SYMBOL_NEW_EVENT = "[New Event]";
+const std::string UICommandSuggestion::SYMBOL_NEW_START_TIME = "[New start time]";
+const std::string UICommandSuggestion::SYMBOL_NEW_END_TIME = "[New end time]";
+
+
+
+void UICommandSuggestion::setUpsuggestionAdd(){
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE + SYMBOL_START_TIME + BLANK_SPACE);
+	_suggestionAdd.push_back(DASH);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_END_TIME + LEAVE_A_LINE);
+
+	_suggestionAdd.push_back(COMMAND_ADD);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionAdd.push_back(WORD_DUE);
+	_suggestionAdd.push_back(BLANK_SPACE + SYMBOL_DATE + BLANK_SPACE + SYMBOL_END_TIME);
+
+
+}
+
+void UICommandSuggestion::setUpsuggestionDelete(){
+	_suggestionDelete.push_back(COMMAND_DELETE);
+	_suggestionDelete.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+	_suggestionDelete.push_back(COMMAND_DELETE);
+	_suggestionDelete.push_back(BLANK_SPACE + SYMBOL_INDEX_OF_EVENT);
+
+}
+void UICommandSuggestion::setUpsuggestionEdit(){
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_EVENT +LEAVE_A_LINE);
+
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_START_TIME + BLANK_SPACE);
+	_suggestionEdit.push_back(DASH);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_END_TIME + LEAVE_A_LINE);
+
+	_suggestionEdit.push_back(COMMAND_EDIT);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_INDEX_OF_EVENT + BLANK_SPACE);
+	_suggestionEdit.push_back(SEMI_COLON);
+	_suggestionEdit.push_back(BLANK_SPACE + SYMBOL_NEW_DATE);
+}
+
+void UICommandSuggestion::setUpsuggestionSearch(){
+	_suggestionSearch.push_back(COMMAND_SEARCH);
+	_suggestionSearch.push_back(BLANK_SPACE + SYMBOL_EVENT + LEAVE_A_LINE);
+
+}
+
+void UICommandSuggestion::setUpsuggestionShow(){
+	_suggestionShow.push_back(COMMAND_SHOW);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_DATE + LEAVE_A_LINE);
+
+	_suggestionShow.push_back(COMMAND_SHOW);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_START_DATE + BLANK_SPACE);
+	_suggestionShow.push_back(DASH);
+	_suggestionShow.push_back(BLANK_SPACE + SYMBOL_END_DATE);
+}
+
+
+UICommandSuggestion::ComdType UICommandSuggestion::getComdType (std::string comdInString){
+	UICommandSuggestion::ComdType typeOfComd;
+
+	if(comdInString.size()>=COMMAND_ADD.size() &&  comdInString.substr(0,COMMAND_ADD.size())== COMMAND_ADD){
+		typeOfComd = ADD_;
+	} else if (comdInString.size()>=COMMAND_DELETE.size() &&  comdInString.substr(0,COMMAND_DELETE.size()) == COMMAND_DELETE){
+		typeOfComd = DELETE_;
+	} else if (comdInString.size()>=COMMAND_EDIT.size() &&  comdInString.substr(0,COMMAND_EDIT.size()) == COMMAND_EDIT){
+		typeOfComd = EDIT_;
+	} else if (comdInString.size()>=COMMAND_SEARCH.size() &&  comdInString.substr(0,COMMAND_SEARCH.size()) == COMMAND_SEARCH){
+		typeOfComd = SEARCH_;
+	} else if (comdInString.size()>=COMMAND_SHOW.size() &&  comdInString.substr(0,COMMAND_SHOW.size()) == COMMAND_SHOW){
+		typeOfComd = SHOW_;
+	} else if (comdInString == COMMAND_AD || comdInString == COMMAND_DELET || comdInString == COMMAND_EDI || comdInString == COMMAND_SEARC || comdInString == COMMAND_SHO || comdInString.empty()){
+		typeOfComd = UNDISPLAY_;
+	} else {
+		typeOfComd = INVALID_;
+	}
+	
+	return typeOfComd;
+}
+
+
+std::vector<std::string>  UICommandSuggestion::getSuggestionAdd(){
+	return _suggestionAdd;
+}
+
+std::vector<std::string>  UICommandSuggestion::getSuggestionDelete(){
+	return _suggestionDelete;
+}
+
+std::vector<std::string>  UICommandSuggestion::getSuggestionEdit(){
+	return _suggestionEdit;
+}
+
+std::vector<std::string>  UICommandSuggestion::getSuggestionSearch(){
+	return _suggestionSearch;
+}
+
+std::vector<std::string>  UICommandSuggestion::getSuggestionShow(){
+	return _suggestionShow;
+}
+
+void UICommandSuggestion::setUserActions(std::string latestUserAction){
+	_userActions.push_back(latestUserAction);
+
+	if (_userActions.size()>3){
+		_userActions.erase(_userActions.begin());
+	}
+
+	assert(_userActions.size() <= 3);
+
+	_userActionsIndex = _userActions.size() - 1 ;
+}
+
+
+void UICommandSuggestion::initializeUserActionsIndex(){
+	_userActionsIndex = MIN_ACTION_INDEX - 1;
+}
+
+//numToShift 1 or -1
+void UICommandSuggestion::setUserActionsIndex(int numToShift){
+	assert(numToShift == 1 || numToShift == -1);
+
+	if (numToShift == 1 && _userActionsIndex < _userActions.size() - 1){
+		_userActionsIndex += numToShift;
+	}
+
+	if (numToShift == -1 && _userActionsIndex > MIN_ACTION_INDEX){
+		_userActionsIndex += numToShift;
+	}
+
+	assert(_userActionsIndex>=-1 && _userActionsIndex<=2);
+}
+
+
+std::string UICommandSuggestion::getSpecificUserAction(){
+	if(!_userActions.empty()){
+		return _userActions[_userActionsIndex];
+	}else {
+		return "";
+	}
+}
+
+void UICommandSuggestion::upKeyPressed(){
+	setUserActionsIndex(-1);
+}
+
+void UICommandSuggestion::downKeyPressed(){
+	setUserActionsIndex(1);
+}
+
+
+void UICommandSuggestion::setKeywordCommands(){
+	_keywordCommands.push_back ("add");
+	_keywordCommands.push_back ("del");
+	_keywordCommands.push_back ("delete");
+	_keywordCommands.push_back ("edit");
+	_keywordCommands.push_back ("show");
+	_keywordCommands.push_back ("search");
+	_keywordCommands.push_back ("undo");
+	_keywordCommands.push_back ("redo");
+	_keywordCommands.push_back ("done");
+	_keywordCommands.push_back ("completed");
+	_keywordCommands.push_back ("complete");
+	_keywordCommands.push_back ("uncomplete");
+	_keywordCommands.push_back ("undone");
+	_keywordCommands.push_back ("back");
+	_keywordCommands.push_back ("bk");
+	_keywordCommands.push_back ("commands");
+	_keywordCommands.push_back ("shortcuts");
+	_keywordCommands.push_back ("calendar");
+	_keywordCommands.push_back ("exit");
+	_keywordCommands.push_back ("help");
+}
+
+void UICommandSuggestion::setKeywordMonths(){	
+	_keywordMonths.push_back ("jan");
+	_keywordMonths.push_back ("january");
+	_keywordMonths.push_back ("feb");
+	_keywordMonths.push_back ("february");
+	_keywordMonths.push_back ("mar");
+	_keywordMonths.push_back ("march");
+	_keywordMonths.push_back ("apr");
+	_keywordMonths.push_back ("april");
+	_keywordMonths.push_back ("may");
+	_keywordMonths.push_back ("jun");
+	_keywordMonths.push_back ( "june");
+	_keywordMonths.push_back ( "jul");
+	_keywordMonths.push_back ("july");
+	_keywordMonths.push_back ("aug");
+	_keywordMonths.push_back ("august");
+	_keywordMonths.push_back ( "sep");
+	_keywordMonths.push_back ("september");
+	_keywordMonths.push_back ("oct");
+	_keywordMonths.push_back ("october");
+	_keywordMonths.push_back ("nov");
+	_keywordMonths.push_back ("november");
+	_keywordMonths.push_back ("dec");
+	_keywordMonths.push_back ("december");
+	_keywordMonths.push_back ("week");
+	_keywordMonths.push_back ("wk");
+	_keywordMonths.push_back ("month");
+	_keywordMonths.push_back ("mth");
+	_keywordMonths.push_back ("year");
+	_keywordMonths.push_back ("yr");
+}
+
+void UICommandSuggestion::setKeywordTime(){
+	_keywordTime.push_back ( "am");
+	_keywordTime.push_back ("pm");
+}
+
+void UICommandSuggestion::setKeywordDay(){
+	_keywordDay.push_back ("today");
+	_keywordDay.push_back ("tdy");
+	_keywordDay.push_back ("tomorrow");
+	_keywordDay.push_back ("tmr");
+	_keywordDay.push_back ("mon");
+	_keywordDay.push_back ( "monday");
+	_keywordDay.push_back ("tues");
+	_keywordDay.push_back ( "tuesday");
+	_keywordDay.push_back ("wed");
+	_keywordDay.push_back ("wednesday");
+	_keywordDay.push_back ("thurs");
+	_keywordDay.push_back ("thursday");
+	_keywordDay.push_back ("fri");
+	_keywordDay.push_back ("friday");
+	_keywordDay.push_back ("sat");
+	_keywordDay.push_back ("saturday");
+	_keywordDay.push_back ("sun");
+	_keywordDay.push_back ("sunday");
+}
+
+void UICommandSuggestion::setKeywordOthers(){
+	_keywordOthers.push_back ("to");
+	_keywordOthers.push_back ("due");
+	_keywordOthers.push_back ("by");	
+	_keywordCommands.push_back ("next");
+	_keywordOthers.push_back ("nxt");
+	_keywordOthers.push_back ("all");
+}
+
+std::vector<std::string> UICommandSuggestion::tokenizeString(std::string input){
+	std::vector<std::string> tokenVect;
+
+	int start = 0;
+	int end = 0;
+
+	std::string token = "";
+
+	for (int i=0; i<input.size();i++){
+		if(input[i] != ' '){
+			token += input[i];
+		} else if(token != ""){
+			tokenVect.push_back(token);
+			token = "";
+			tokenVect.push_back(" ");
+		} else {
+			tokenVect.push_back(" ");
+		}
+
+	}
+
+	tokenVect.push_back(token);
+
+	return tokenVect;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordCommandsVect(){
+	return _keywordCommands;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordMonthsVect(){
+	return _keywordMonths;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordTimeVect(){
+	return _keywordTime;
+}
+
+std::vector<std::string> UICommandSuggestion::getKeyWordDayVect(){
+	return _keywordDay;
+}
+
+std::vector<std::string> UICommandSuggestion::getkeywordOthersVect(){
+	return _keywordOthers;
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UICommandSuggestion.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UICommandSuggestion.h
+	 */
+
+/**
+ * This class is used to store and retrieve information to suggest to the user.
+ * It supports a total of 5 commands (add,delete,edit,search,show).
+ * A command in std::string form is passed in through function getCommandType() and the corresponding ComdType will be returned to the caller.
+ * [WARNING - command passed in must be in small caps]
+ * Caller can make use of the returned ComdType to call the respective getters ( getSuggestionAdd(),getSuggestionDelete(),getSuggestionEdit(),
+ * getSuggestionSearch() or getSuggestionShow() ) to receive object of std::vector<std::string> which contains the respective suggestion information.
+ * In the case where ComdType is UNDISPLAY_ or INVALID, caller can choose to execute otherwise.
+ */
+
+#pragma once
+
+#ifndef UICOMMANDSUGGESTION_H_
+#define UICOMMANDSUGGESTION_H_
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <assert.h>
+
+class UICommandSuggestion
+{
+public:
+
+	//Constructors & destructors
+	UICommandSuggestion(void);
+	~UICommandSuggestion(void);
+
+	//Enumeration of the various types of commands that will be used
+	enum ComdType {
+		ADD_,
+		DELETE_,
+		EDIT_,
+		SEARCH_,
+		SHOW_,
+		UNDISPLAY_,
+		INVALID_
+	};
+
+//===================================================================================================================================================================
+
+	static const int MIN_ACTION_INDEX = 0;
+	static const int MAX_ACTION_INDEX = 2;
+
+	std::vector<std::string> _keywordCommands;
+	std::vector<std::string> _keywordMonths;
+	std::vector<std::string> _keywordTime;
+	std::vector<std::string> _keywordDay;
+	std::vector<std::string> _keywordOthers;
+
+/*
+* =================================================================================================================================================================== 
+* Static variables which contain the respective commands
+* ===================================================================================================================================================================
+*/
+	static const std::string COMMAND_ADD;
+	static const std::string COMMAND_DELETE;
+	static const std::string COMMAND_EDIT;
+	static const std::string COMMAND_SEARCH;
+	static const std::string COMMAND_SHOW;
+
+	static const std::string COMMAND_AD;
+	static const std::string COMMAND_DELET;
+	static const std::string COMMAND_EDI;
+	static const std::string COMMAND_SEARC;
+	static const std::string COMMAND_SHO;
+
+	static const std::string BLANK_SPACE;
+	static const std::string LEAVE_A_LINE;
+	static const std::string DASH;
+	static const std::string SEMI_COLON;
+	static const std::string WORD_DUE;
+
+	static const std::string SYMBOL_EVENT;
+	static const std::string SYMBOL_INDEX_OF_EVENT;
+	static const std::string SYMBOL_DATE;
+	static const std::string SYMBOL_NEW_DATE;
+	static const std::string SYMBOL_START_DATE;
+	static const std::string SYMBOL_END_DATE;
+	static const std::string SYMBOL_START_TIME;
+	static const std::string SYMBOL_END_TIME;
+	static const std::string SYMBOL_NEW_EVENT;
+	static const std::string SYMBOL_NEW_START_TIME;
+	static const std::string SYMBOL_NEW_END_TIME;
+
+
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Static variables which contain the respective suggestion information for each command
+* ===================================================================================================================================================================
+*/
+
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Private attributes to house the combined information in std::vector form for each command
+* Private methods that are used to construct/set up the respective std::vector of combined information
+* ===================================================================================================================================================================
+*/
+private: 
+	std::vector<std::string> _suggestionAdd;
+	std::vector<std::string> _suggestionDelete;
+	std::vector<std::string> _suggestionEdit;
+	std::vector<std::string> _suggestionSearch;
+	std::vector<std::string> _suggestionShow;
+
+	std::vector<std::string> _userActions;
+	int _userActionsIndex;
+
+	void setUpsuggestionAdd();
+	void setUpsuggestionDelete();
+	void setUpsuggestionEdit();
+	void setUpsuggestionSearch();
+	void setUpsuggestionShow();
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public methods and their respective APIs
+* ===================================================================================================================================================================
+*/	
+public:
+	//Pre-condition : std::string passed in to be in lowercase
+	//This function takes in a std::string and return the respective command type 
+	//E.g. It takes in "add" and return ComdType::ADD_
+	//E.g. For an invalid std::string "hello", it will return ComdType::INVALID_
+	ComdType getComdType (std::string);
+
+	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
+	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command add
+	std::vector<std::string> getSuggestionAdd();
+
+	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
+	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command delete
+	std::vector<std::string> getSuggestionDelete();
+
+	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
+	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command edit
+	std::vector<std::string> getSuggestionEdit();
+
+	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
+	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command search
+	std::vector<std::string> getSuggestionSearch();
+
+	//Pre-condition : Recommend uses function getComdType to determine the ComdType and ensure match with this function 
+	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command show
+	std::vector<std::string> getSuggestionShow();
+
+	//This function store the lastest user's command when it is being entered into the system
+	void setUserActions(std::string);
+
+	//This function returns the specific user's command when summoned, according to the numer of times up/down is pressed
+	std::string getSpecificUserAction();
+
+	void upKeyPressed();
+
+	void downKeyPressed();
+//===================================================================================================================================================================
+
+	void setKeywordCommands();
+	void setKeywordMonths();
+	void setKeywordTime();
+	void setKeywordDay();
+	void setKeywordOthers();
+
+	std::vector<std::string> tokenizeString(std::string);
+
+	std::vector<std::string> getKeyWordCommandsVect();
+	std::vector<std::string> getKeyWordMonthsVect();
+	std::vector<std::string> getKeyWordTimeVect();
+	std::vector<std::string> getKeyWordDayVect();
+	std::vector<std::string> getkeywordOthersVect();
+
+	void initializeUserActionsIndex();
+	
+	void setUserActionsIndex(int);
+};
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UICommandSuggestion.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIHelp.cpp
+	 */
+
+
+#include "UIHelp.h"
+
+
+UIHelp::UIHelp(void)
+{
+}
+
+
+UIHelp::~UIHelp(void)
+{
+}
+
+
+// static variables that cannot initialise in "UIHelp.h"
+const std::string UIHelp::HELP_GUIDE_WELCOME_MESSAGE = "Welcome to MapleSyrup! This introductory guide will provide you \nwith examples to Add, Delete, Edit & Show !\n";
+
+const std::string UIHelp::HELP_GUIDE_ADD[UIHelp::NUM_ADD] = {"ADD : ", 
+																"1.add drink maplesyrup (Ongoing Event)",															 
+															    "2.add drink maplesyrup 1 jan 3pm - 4pm (Single Day Event)",															  
+																"3.add drink maplesyrup 1 jan 1am - 31 dec 11pm (Multiple Day Event)",																		
+																"4.add drink maplesyrup by 31 dec 11pm (Deadline Events)\n",																	
+															};
+
+const std::string UIHelp::HELP_GUIDE_DELETE[UIHelp::NUM_DELETE] = { "DELETE : ", 
+																 "1.del drink maplesyrup (by name)",
+																 "2.del 1 (by index)\n",
+															   };
+																 
+const std::string UIHelp::HELP_GUIDE_EDIT[UIHelp::NUM_EDIT] = {"EDIT : ",
+																		"1.edit drink maplesyrup; buy maplesyrup (Normal)",
+																		"2.edit drink maplesyrup; (Normal to Ongoing Event)",
+																		"3.edit drink maplesyrup; 5may 7-8pm (Ongoing to Normal Event)\n",
+																	};
+
+const std::string UIHelp::HELP_GUIDE_END = "For more details, please refer to the MapleSyrup guide provided!\nHappy Mapling!";
+
+const std::string UIHelp::HELP_GUIDE_SHOW[UIHelp::NUM_SHOW] = {"SHOW : ",
+																		"1.show 24apr (Single Day)",
+																		"2.show 22-23apr (Multiple Days)",
+																		"3.show apr-may (Month)",
+																		"4.show all (All)\n",
+																	};
+
+const std::string UIHelp::HELP_GUIDE_COMMANDS[UIHelp::NUM_COMMANDS] = {"1.\tadd",
+																		"2.\tdelete/del",
+																		"3.\tedit",
+																		"4.\tdone/completed",
+																		"5.\tundone/uncompleted",
+																		"6.\tsearch",
+																		"7.\tshow",
+																		"8.\tundo",
+																		"9.\tredo",
+																		"10.\texit",
+																		"11.\thelp",
+																		"12.\tcommands",
+																		"13.\tshortcuts",
+																		"14.\tcalendar",
+																		"15.\tback",
+																		"16.\tnext",
+																	};
+
+const std::string UIHelp::HELP_GUIDE_SHORTCUTS [UIHelp::NUM_SHORTCUTS] = {"1.\tCtrl + D ------ display calendar",
+																		  "2.\tCtrl + F ------ search mode/bar",
+																		  "3.\tCtrl + Z ------ undo",
+																	      "4.\tCtrl + X ------ redo",
+																		  "5.\tCtrl + C ------ copy",
+																		  "6.\tCtrl + V ------ paste",
+																		  "7.\tEscape Key ---- zoom to main/on-going events displays",
+																		  "8.\tLeft arrow ---- display back",
+																		  "9.\tRight arrow ----- display next",
+																		  "10.\tCtrl + Shift ----- focus to command Box",
+																	};
+
+//Functions	
+
+LogicUpdater::EVENT_STRING UIHelp::convertToEventString(std::string stdString){
+	LogicUpdater::EVENT_STRING temp;
+
+	temp.dateString = "";
+	temp.eventString = stdString;
+	temp.importanceLevel = 0;
+	temp.isCompleted = false;
+	temp.isMarker = false;
+	temp.isClash = false;
+	temp.isNew = false;
+
+	return temp;
+}
+
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpIntroduction(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfHelp;
+
+	std::string tempHelpString; 
+	LogicUpdater::EVENT_STRING helpString;
+
+	//Welcome Message
+	helpString = convertToEventString(HELP_GUIDE_WELCOME_MESSAGE);
+	vectOfHelp.push_back(helpString);
+
+	//Add
+	for (int i=0; i<UIHelp::NUM_ADD; i++){
+		tempHelpString = HELP_GUIDE_ADD[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
+
+	//Delete
+	for (int i=0; i<UIHelp::NUM_DELETE; i++){
+		tempHelpString = HELP_GUIDE_DELETE[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
+
+	//Edit
+	for (int i=0; i<UIHelp::NUM_EDIT; i++){
+		tempHelpString = HELP_GUIDE_EDIT[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
+
+	//Show
+	for (int i=0; i<UIHelp::NUM_SHOW; i++){
+		tempHelpString = HELP_GUIDE_SHOW[i];
+		helpString = convertToEventString(tempHelpString);
+		if(i!=0){
+			helpString.isMarker = true;
+		}
+		vectOfHelp.push_back(helpString);
+	}
+
+	//End Message
+	helpString = convertToEventString(HELP_GUIDE_END);
+	vectOfHelp.push_back(helpString);
+
+	return vectOfHelp;
+}
+
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpCommands(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfComds;
+
+	for (int i=0; i< UIHelp::NUM_COMMANDS; i++){
+		LogicUpdater::EVENT_STRING temp;
+		temp = convertToEventString(HELP_GUIDE_COMMANDS[i]);
+		vectOfComds.push_back(temp);
+	}
+
+	assert(vectOfComds.size() == UIHelp::NUM_COMMANDS);
+
+	return vectOfComds;
+}
+std::vector<LogicUpdater::EVENT_STRING> UIHelp::getHelpShortcuts(){
+	std::vector<LogicUpdater::EVENT_STRING> vectOfComds;
+
+	for (int i=0; i< UIHelp::NUM_SHORTCUTS; i++){
+		LogicUpdater::EVENT_STRING temp;
+		temp = convertToEventString(HELP_GUIDE_SHORTCUTS[i]);
+		vectOfComds.push_back(temp);
+	}
+
+	assert(vectOfComds.size() == NUM_SHORTCUTS);
+
+	return vectOfComds;
+}
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIHelp.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIHelp.h
+	 */
+
+/**
+ * This class is used to store and retrieve information related to help and commands to suggest to the user.
+ * It has a total of 3 public methods ( getHelpIntroduction(), getHelpCommands(), getHelpShortcuts() ) for caller to get the respective 
+ * information in std::vector<LogicUpdater::EVENT_STRING> form.
+ * No pre-condition is needed to use this class and no imformation is needed to be passed into any of the public methods.
+ */
+
+#pragma once
+
+#ifndef UIHELP_H
+#define UIHELP_H
+
+#include <iostream>
+#include <string>
+#include <assert.h>
+#include "LogicUpdater.h"
+
+class UIHelp
+{
+public:
+
+	//Constructors & destructors
+	UIHelp(void);
+	~UIHelp(void);
+
+/*
+* =================================================================================================================================================================== 
+* Static variables (integers) which contain the sizes of the arrays which contain the help information
+* Static variables (std::string arrays) which contain the help information
+* ===================================================================================================================================================================
+*/
+	static const int NUM_ADD = 5;
+	static const int NUM_DELETE = 3;
+	static const int NUM_EDIT = 4;
+	static const int NUM_SHOW = 5;
+	static const int NUM_COMMANDS = 16;
+	static const int NUM_SHORTCUTS = 10;
+	
+	static const std::string HELP_GUIDE_WELCOME_MESSAGE;
+	static const std::string HELP_GUIDE_ADD [NUM_ADD];
+	static const std::string HELP_GUIDE_DELETE [NUM_DELETE];
+	static const std::string HELP_GUIDE_EDIT [NUM_EDIT];
+	static const std::string HELP_GUIDE_END;
+
+	static const std::string HELP_GUIDE_SHOW [NUM_SHOW];
+
+	static const std::string HELP_GUIDE_COMMANDS [NUM_COMMANDS];
+	static const std::string HELP_GUIDE_SHORTCUTS [NUM_SHORTCUTS];
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions that convert the respective help information from its storage form(array) into std::string form
+* Function convertToEventString() further convert the respective std::string into EVENT_STRING form 
+* ===================================================================================================================================================================
+*/
+private:
+
+	LogicUpdater::EVENT_STRING convertToEventString(std::string);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public attributes and their respective APIs
+* ===================================================================================================================================================================
+*/
+public:
+
+	//Pre-condition : None
+	//Return a short introduction/teaching guide about the usage of MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpIntroduction();
+	
+	//Pre-condition : None
+	//Return a list of commands and their description supported in MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpCommands();
+
+	//Pre-condition : None
+	//Return a list of shortcuts and their description supported in MapleSyrup in std::vector<LogicUpdater::EVENT_STRING> to caller
+	std::vector<LogicUpdater::EVENT_STRING> getHelpShortcuts();
+//===================================================================================================================================================================
+
+};
+
+#endif
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIHelp.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIShow.cpp
+	 */
+
+
+#include "UIShow.h"
+
+
+UIShow::UIShow(void)
+{
+}
+
+
+UIShow::~UIShow(void)
+{
+}
+
+//Variables that cannot be initialized in UIShow.h
+const std::string UIShow::COMMAND_SHOW = "show";
+const std::string UIShow::SHOW_DAY = "show today";
+const std::string UIShow::SHOW_WEEK = "show week";
+const std::string UIShow::SHOW_MONTH = "show month";
+const std::string UIShow::SHOW_ALL = "show all";
+const std::string UIShow::SHOW_DONE = "show done";
+const std::string UIShow::SHOW_FLOAT = "show floating";
+
+const std::string UIShow::WORD_COMMANDS = "Commands";
+const std::string UIShow::WORD_HELP_INTRO = "Help Introduction";
+const std::string UIShow::WORD_HELP = "help";
+const std::string UIShow::WORD_SEARCH_MODE = "Search Mode";
+const std::string UIShow::WORD_SEARCH = "search";
+const std::string UIShow::WORD_SHORTCUTS = "Shortcuts";
+
+const std::string UIShow::LABEL_WEEK = "[Week]";
+const std::string UIShow::LABEL_MONTH = "[Month]";
+
+const std::string UIShow::MESSAGE_YEAR_BEFORE_1971 = "Error: Unable to display date before year 1971";
+const std::string UIShow::MESSAGE_YEAR_AFTER_2999 = "Error: Unable to display date after year 2999";
+const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date(s) Selected / Date(s) out of range";
+const std::string UIShow::MESSAGE_START_LATER_THAN_END = "Error: Invalid Date(s) - Start date is later than End date";
+
+const std::string UIShow::KEYWORD_TO = " to ";
+const std::string UIShow::BLANK_SPACE = " ";
+const std::string UIShow::NO_SPACE = "";
+
+const std::string UIShow::KEYWORD_JAN = "jan";
+const std::string UIShow::KEYWORD_FEB = "feb";
+const std::string UIShow::KEYWORD_MAR = "mar";
+const std::string UIShow::KEYWORD_APR = "apr";
+const std::string UIShow::KEYWORD_MAY = "may";
+const std::string UIShow::KEYWORD_JUN = "jun";
+const std::string UIShow::KEYWORD_JUL = "jul";
+const std::string UIShow::KEYWORD_AUG = "aug";
+const std::string UIShow::KEYWORD_SEP = "sep";
+const std::string UIShow::KEYWORD_OCT = "oct";
+const std::string UIShow::KEYWORD_NOV = "nov";
+const std::string UIShow::KEYWORD_DEC = "dec";
+const std::string UIShow::KEYWORD_INVALID = "Invalid month";
+
+std::string UIShow::getShowDay(){
+	return SHOW_DAY;
+}
+
+std::string UIShow::getShowWeek(){
+	return SHOW_WEEK;
+}
+
+std::string UIShow::getShowMonth(){
+	return SHOW_MONTH;
+}
+
+std::string UIShow::getShowAll(){
+	return SHOW_ALL;
+}
+
+std::string UIShow::getShowDone(){
+	return SHOW_DONE;
+}
+
+std::string UIShow::getShowFloat(){
+	return SHOW_FLOAT;
+}
+
+std::string UIShow::getCurrentCommand(){
+	return _currentCommand;
+}
+
+
+std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+	
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
+	
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newCommand = generateShowWeekForNext(mainDisplayDate[1]);
+		return newCommand;
+	} else if (currentMainDisplayLabel.size()>=7 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+		std::string newCommand = generateShowMonthForNext(mainDisplayDate[0]);
+		return newCommand;
+	} else if (checkIsSingleDate(mainDisplayDate) ){
+		tm newDateToShow = shiftDate(mainDisplayDate[0],1);
+		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
+		return newCommand;
+	} else {
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
+		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
+		std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(newStartDate) + KEYWORD_TO + convertFromTmToStr(newEndDate);
+		return newCommand;
+	}
+}
+
+
+std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
+
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newCommand = generateShowWeekForBack(mainDisplayDate[1]);
+		return newCommand;
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+		assert(mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon);
+		std::string newCommand = generateShowMonthForBack(mainDisplayDate[0]);
+		return newCommand;
+	} else if (checkIsSingleDate(mainDisplayDate) ){
+		tm newDateToShow = shiftDate(mainDisplayDate[0],-1);
+		 std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newDateToShow);
+		 return newCommand;
+	} else {
+		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
+		tm newStartDate = shiftDate(mainDisplayDate[0], -numDaysToShift);
+		tm newEndDate = shiftDate(mainDisplayDate[1], -numDaysToShift);
+		std:: string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(newStartDate) + KEYWORD_TO + convertFromTmToStr(newEndDate);
+		return newCommand;
+	}
+}
+
+std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::string endDate){
+	std::string startDateString = generateDateString(startDate);
+	std::string endDateString = generateDateString(endDate);
+
+	std::string command = COMMAND_SHOW + BLANK_SPACE + startDateString  + KEYWORD_TO + endDateString;
+	return command;
+}
+
+void UIShow:: setCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	_currentCommand = generateCurrentCommand(currentMainDisplayLabel, mainDisplayDate);
+}
+
+std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, std::vector<tm> mainDisplayDate){
+	assert(!currentMainDisplayLabel.empty());
+	assert(mainDisplayDate.size() == 2);
+
+	//exception
+	checkValidityOftm(mainDisplayDate[0]);
+	checkValidityOftm(mainDisplayDate[1]);
+	
+	if (currentMainDisplayLabel == WORD_COMMANDS){
+		return WORD_COMMANDS;
+	} else if (currentMainDisplayLabel == WORD_HELP_INTRO){
+		return WORD_HELP;
+	} else if (currentMainDisplayLabel == WORD_SEARCH_MODE){
+		return WORD_SEARCH;
+	} else if (currentMainDisplayLabel == WORD_SHORTCUTS){
+		return WORD_SHORTCUTS;
+	} else if (currentMainDisplayLabel.size()>=6 && currentMainDisplayLabel.substr(0,6) == LABEL_WEEK){
+		std::string newShowCommand = SHOW_WEEK + currentMainDisplayLabel.substr(6);
+		return newShowCommand;
+	} else if (currentMainDisplayLabel.size()>=7 && currentMainDisplayLabel.substr(0,7) == LABEL_MONTH){
+		std::string newShowCommand = SHOW_MONTH + currentMainDisplayLabel.substr(7);
+		return newShowCommand;
+	} else {
+		std::string newShowCommand = NO_SPACE;
+
+		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
+
+		if ( isSingleDate ){
+			newShowCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(mainDisplayDate[0]);
+		} else {
+			newShowCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(mainDisplayDate[0]) + KEYWORD_TO + convertFromTmToStr(mainDisplayDate[1]);
+		}
+
+		return newShowCommand;
+	}
+}
+
+tm UIShow::shiftDate(tm date, int numDaysToShift){
+	time_t t = time(0);
+	struct tm* newDatePtr = localtime(&t);
+
+	newDatePtr->tm_mday = date.tm_mday + numDaysToShift;
+	newDatePtr->tm_mon = date.tm_mon;
+	newDatePtr->tm_year = date.tm_year;
+
+	std::mktime(newDatePtr);
+
+	struct tm newDate;
+	newDate.tm_mday = newDatePtr->tm_mday;
+	newDate.tm_mon = newDatePtr->tm_mon;
+	newDate.tm_year = newDatePtr->tm_year;
+
+	//exception
+	checkValidityOftm(newDate);
+	
+	return newDate;
+}
+
+std::string UIShow::generateShowWeekForNext(tm endDate){
+	time_t now;
+	struct tm front;
+	struct tm back;
+
+	time(&now);
+	front = *localtime(&now);
+	back = *localtime(&now);
+
+	front = endDate;
+	front.tm_mday += 1;
+	std::mktime(&front);
+
+	//exception
+	checkValidityOftm(front);
+
+	back = front;
+	back.tm_mday += 6;
+	std::mktime(&back);
+
+	//exception
+	checkValidityOftm(back);
+
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(front) + KEYWORD_TO + convertFromTmToStr(back);
+
+	return newCommand;
+}
+
+std::string UIShow::generateShowMonthForNext(tm startDate){
+	time_t now;
+	struct tm nextMonth;
+
+	time(&now);
+	nextMonth = *localtime(&now);
+	nextMonth = startDate;
+	nextMonth.tm_mon ++;
+	std::mktime(&nextMonth);
+
+	//exception
+	checkValidityOftm(nextMonth);
+
+	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
+	std::string yearString = intToString(nextMonth.tm_year + 1900);
+
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + nextMonthString + BLANK_SPACE + yearString;
+	
+	return newCommand;
+}
+
+std::string UIShow::generateShowWeekForBack(tm endDate){
+	time_t now;
+	struct tm front;
+	struct tm back;
+
+	time(&now);
+	front = *localtime(&now);
+	back = *localtime(&now);
+
+	back = endDate;
+	back.tm_mday -= 7;
+	std::mktime(&back);
+
+	checkValidityOftm(back);
+
+	front = back;
+	front.tm_mday -= 6;
+	std::mktime(&front);
+
+	checkValidityOftm(front);
+
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(front) + KEYWORD_TO + convertFromTmToStr(back);
+
+	return newCommand;
+}
+
+std::string UIShow::generateShowMonthForBack(tm startDate){
+	//exception
+	checkValidityOftm(startDate);
+
+	time_t now;
+	struct tm backMonth;
+
+	time(&now);
+	backMonth = *localtime(&now);
+	backMonth = startDate;
+	backMonth.tm_mon --;
+	std::mktime(&backMonth);
+
+	//exception
+	checkValidityOftm(backMonth);
+
+	std::string backMonthString = intToMonth(backMonth.tm_mon);
+	std::string yearString = intToString(backMonth.tm_year + 1900);
+
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + backMonthString + BLANK_SPACE + yearString;
+		
+	return newCommand;
+}
+
+std::string UIShow::generateDateString(std::string date){
+	int index=0;
+	
+	std::string dateDay = NO_SPACE;
+	for (;date.size()>index && std::isdigit(date[index]);index++){
+		dateDay += date[index];
+	}
+
+	if(dateDay.empty()){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	int dateDayInt = stringToInt(dateDay);
+	
+	if(dateDayInt<1 || dateDayInt>31){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	index++;
+
+	std::string dateMonth = NO_SPACE;
+	for (;date.size()>index && std::isdigit(date[index]);index++){
+		dateMonth += date[index];
+	}
+
+	if(dateMonth.empty()){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	int dateMonthInt = stringToInt(dateMonth);
+
+	if(dateMonthInt<1 || dateMonthInt>12){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	std::string dateMonthString = intToMonth(dateMonthInt-1);
+
+	index++;
+
+	std::string dateYear = NO_SPACE;
+	for (;date.size()>index && std::isdigit(date[index]);index++){
+		dateYear += date[index];
+	}
+
+	if(dateYear.empty()){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	int dateYearInt = stringToInt(dateYear);
+
+	if(dateYearInt<=1970){
+		throw MESSAGE_YEAR_BEFORE_1971;
+	}
+
+	if(dateYearInt>=3000){
+		throw MESSAGE_YEAR_AFTER_2999;
+	}
+	
+	std::string dateString =  dateDay + dateMonthString + BLANK_SPACE + dateYear;
+	return dateString;
+}
+
+std::string UIShow::convertFromTmToStr(tm date){
+	//exception
+	checkValidityOftm(date);
+
+	std::string dateString = NO_SPACE;
+
+	dateString += intToString(date.tm_mday);
+	dateString += intToMonth(date.tm_mon);
+	dateString += BLANK_SPACE;
+	dateString += intToString(date.tm_year + 1900);
+
+	return dateString;
+}
+
+int UIShow::countNumDays(tm startDay, tm endDay){
+	//exception
+	checkValidityOftm(startDay);
+	checkValidityOftm(endDay);
+
+	initializeTime(startDay);
+	initializeTime(endDay);
+	std::time_t start = std::mktime(&startDay);
+	std::time_t end = std::mktime(&endDay);
+
+	int dayDifference = std::difftime(end,start)/(60*60*24);
+
+	return dayDifference;
+}
+
+void UIShow::initializeTime(tm date){
+	date.tm_hour = 0;
+	date.tm_min = 0;
+	date.tm_sec = 0;
+}
+
+bool UIShow::checkIsSingleDate(std::vector<tm> mainDisplayDate){
+	assert(mainDisplayDate.size() == 2);
+
+	bool isSingleDate = false;
+
+	if(mainDisplayDate[0].tm_mday == mainDisplayDate[1].tm_mday && mainDisplayDate[0].tm_mon == mainDisplayDate[1].tm_mon && mainDisplayDate[0].tm_year == mainDisplayDate[1].tm_year){
+			isSingleDate = true;
+		}
+	return isSingleDate;
+}
+
+std::string UIShow::intToString (int num){
+	assert(num>=0);
+
+	std::string outString;
+	std::ostringstream oss;
+	oss << num;
+	return oss.str();
+}
+
+int UIShow::stringToInt (std::string str){
+	//assert(!str.empty());
+
+	int outNum = 0;
+	std::istringstream in(str);
+	in >> outNum;
+	return outNum;
+}
+
+std::string UIShow::intToMonth (int monthInNum){
+	if(monthInNum == 0){
+		return KEYWORD_JAN;
+	} else if(monthInNum  == 1){
+		return KEYWORD_FEB;
+	} else if(monthInNum  == 2){
+		return KEYWORD_MAR;
+	} else if(monthInNum  == 3){
+		return KEYWORD_APR;
+	} else if(monthInNum  == 4){
+		return KEYWORD_MAY;
+	} else if(monthInNum  == 5){
+		return KEYWORD_JUN;
+	} else if(monthInNum  == 6){
+		return KEYWORD_JUL;
+	} else if(monthInNum  == 7){
+		return KEYWORD_AUG;
+	} else if(monthInNum  == 8){
+		return KEYWORD_SEP;
+	} else if(monthInNum  == 9){
+		return KEYWORD_OCT;
+	} else if(monthInNum  == 10){
+		return KEYWORD_NOV;
+	} else if(monthInNum  == 11){
+		return KEYWORD_DEC;
+	} else {
+		return KEYWORD_INVALID;
+	}
+}
+
+void UIShow::checkValidityOftm(tm date){
+	if(date.tm_year<=70){
+		throw MESSAGE_YEAR_BEFORE_1971;
+	}
+
+	if(date.tm_year>=1100){
+		throw MESSAGE_YEAR_AFTER_2999;
+	}
+	
+	if(date.tm_mday<1 || date.tm_mday>31){
+		throw MESSAGE_INVALID_DATE;
+	}
+
+	if(date.tm_mon<0 || date.tm_mon>11){
+		throw MESSAGE_INVALID_DATE;
+	}
+}
+
+
+
+
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIShow.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIShow.h
+	 */
+
+/**
+ * This class is used to generate commands related to "show" by calling the respective public methods and passing in the required data (if required)
+ * The commands generated should be passed to Logic for further execution
+ * [WARNING - This class does not execute any command, it purely generate command that are passed on for execution]
+ */
+
+#pragma once
+
+#ifndef UISHOW_H
+#define UISHOW_H
+
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <cctype>
+#include <vector>
+#include <sstream>
+#include <assert.h>
+#include <stdexcept>
+
+class UIShow
+{
+public:
+	//Constructor and destructor
+	UIShow(void);
+	~UIShow(void);
+
+/*
+* =================================================================================================================================================================== 
+* Static variables which contain the respective commands
+* ===================================================================================================================================================================
+*/
+public:
+	static const std::string COMMAND_SHOW;
+	static const std::string SHOW_DAY;
+	static const std::string SHOW_WEEK;
+	static const std::string SHOW_MONTH;
+	static const std::string SHOW_ALL;
+	static const std::string SHOW_DONE;
+	static const std::string SHOW_FLOAT;
+
+	static const std::string WORD_COMMANDS;
+	static const std::string WORD_HELP_INTRO;
+	static const std::string WORD_HELP;
+	static const std::string WORD_SEARCH_MODE;
+	static const std::string WORD_SEARCH;
+	static const std::string WORD_SHORTCUTS;
+
+	static const std::string LABEL_WEEK;
+	static const std::string LABEL_MONTH;
+
+	static const std::string MESSAGE_YEAR_BEFORE_1971;
+	static const std::string MESSAGE_YEAR_AFTER_2999;
+	static const std::string MESSAGE_INVALID_DATE;
+	static const std::string MESSAGE_START_LATER_THAN_END;
+
+	static const std::string KEYWORD_TO;
+	static const std::string BLANK_SPACE;
+	static const std::string NO_SPACE;
+
+	static const std::string KEYWORD_JAN;
+	static const std::string KEYWORD_FEB;
+	static const std::string KEYWORD_MAR;
+	static const std::string KEYWORD_APR;
+	static const std::string KEYWORD_MAY;
+	static const std::string KEYWORD_JUN;
+	static const std::string KEYWORD_JUL;
+	static const std::string KEYWORD_AUG;
+	static const std::string KEYWORD_SEP;
+	static const std::string KEYWORD_OCT;
+	static const std::string KEYWORD_NOV;
+	static const std::string KEYWORD_DEC;
+	static const std::string KEYWORD_INVALID;
+
+private:
+	std::string _currentCommand;
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public getters to retrive the respective commands
+* ===================================================================================================================================================================
+*/
+public:
+	std::string getShowDay();
+	std::string getShowWeek();
+	std::string getShowMonth();
+	std::string getShowAll();
+	std::string getShowDone();
+	std::string getShowFloat();
+
+	//Pre-condition : function setCurrentCommand must be executed first before this function is being called
+	std::string getCurrentCommand();
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions to support the execution of the Public methods below
+* ===================================================================================================================================================================
+*/
+	//Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display this same date(s)/labels based on what is has received 
+	//e.g. It takes in 10 Feb. It will return 10 Feb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 10 Feb - 20 Feb.
+	//e.g. It takes in Mar. It will return show Feb
+	std::string generateCurrentCommand(std::string, std::vector<tm>);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
+	//Pass in the date and the number of days to be shifted. It will return the shifted tm
+	//Can accept any int (positive and negative)
+	tm shiftDate(tm, int);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100)  
+	std::string generateShowWeekForNext(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
+	std::string generateShowMonthForNext(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100)  
+	std::string generateShowWeekForBack(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
+	std::string generateShowMonthForBack(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 1971 < year < 3000 )
+	//[WARNING - assertion failure if date is invalid]
+	//Pass in the date in dd/MM/YYYY form
+	//Returns date in dd Month YYYY std::string form
+	std::string generateDateString(std::string);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100) 
+	std::string convertFromTmToStr(tm);
+
+	//Pre-condition : Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100 )
+	//Pass in the 2 dates in tm type
+	//Return number of days between these 2 dates. 
+	//[Remarks - All return numbers will be non-negative regardless the order of dates passed in] 
+	int countNumDays(tm, tm);
+
+	void initializeTime(tm);
+	//Pre-condition : size of vector should be 2
+	//				  Valid date ( 1 <= month day <=31 , 1 <= month <= 12 , 70 < year < 1100 )
+	bool checkIsSingleDate(std::vector<tm>);
+	
+	//Pre-condition : string must not be empty
+	//[WARNING- if the string is made up of digits & non-digits, function will only return the first instances of digits 
+	//e.g. 8765hello432, function will return 8765]
+	//[WARNING- if the string is made up of non-digits at the front, function will return 0 
+	//e.g. hello432, function will return 0]
+	int stringToInt(std::string);
+
+	//Pre-condition : input integer cannot be negative
+	std::string intToString(int);
+
+	std::string intToMonth(int);
+
+	void checkValidityOftm(tm);
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Public methods and their respective APIs
+* ===================================================================================================================================================================
+*/
+	//Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display the next date(s)/labels based on what it has received
+	//Validity of the input and output dates are checked
+	//e.g. It takes in 10 Feb. It will return show 11feb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 20feb - 2mar (Next 10 days)
+	//e.g. It takes in Mar. It will return show Apr
+	std::string displayNext(std::string, std::vector<tm>);
+
+	//Pre-condition : Non
+	//This function takes in a string that contains that date(s)/labels that is being displayed in the main display currently
+	//It returns the string which contain the command to display the previous date(s)/labels based on what it has received
+	//Validity of the input and output dates are checked
+	//e.g. It takes in 10 Feb. It will return show 9beb
+	//e.g. It takes in 10 Feb - 20 Feb. It will return show 31jan - 9feb (Previous 10 days)
+	//e.g. It takes in Mar. It will return show Feb
+	std::string displayBack(std::string, std::vector<tm>);
+
+	//Pre-condition : Non
+	//This function should combine with COMMAND_SHOW (at the front) to generate a proper command 
+	//This function takes in a string that contains that date(s) from calendar in it's specific format of dd/mm/yyyy in string form
+	//and return it's equivalent show command
+	//Validity of the input and output dates are checked
+	std::string generateDisplayFromCalender(std::string,std::string);
+
+	//Pre-condition : Non
+	//Use in conjuction with function generateCurrentCommand & store it in currentCommand
+	void setCurrentCommand(std::string, std::vector<tm>);
+//===================================================================================================================================================================
+
+};
+#endif
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\UIShow.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UI\MapleSyrup.h
+	 */
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions to load GUI & data
+* ===================================================================================================================================================================
+*/
+//Pre-condition : None
+//To display the UI
+//Invoked by MapleSyrup.cpp
+private: System::Void MapleSyrup_Load(System::Object^  sender, System::EventArgs^  e) {
+			initializeAndUndisplayAll();
+			initializeSysCtrlPressed();
+			initializePreviousTextLength();
+			loadData();	
+}
+
+//Pre-condition : None
+//All user opened displays will be make invisible
+private: void initializeAndUndisplayAll(){
+			topCalenderDisplayed = false;
+		}
+
+private: void loadData(){
+			 DateTime current = DateTime::Now;
+			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
+			 log ("Program starts at:", convertToStd(timeToLog));
+
+			 std::string loadCommand1 = showPtr->getShowFloat();
+			 executeUserInput(loadCommand1);
+
+			 std::string loadCommand2 = showPtr->getShowDay();
+			 executeUserInput(loadCommand2); 
+
+			 commandBox->Select();
+		 }
+
+private: void clearAllLogFiles(){
+			 char* fileName[4] = {"EventLog.txt" , "GUILog.txt" ,"logicLog.txt" , "ParserLog.txt"};
+
+			 for (int i=0; i<4;i++){
+				std::ofstream out(fileName[i], std::ofstream::trunc);
+				out.close();
+			 }
+
+			 log ("Clear All Log Files:", "All log files cleared");
+		 }
+
+private: System::Void MapleSyrup_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+			closeCalendar();
+		 }
+
+private: System::Void MapleSyrup_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 DateTime current = DateTime::Now;
+			 String^ timeToLog = current.ToString("dd MMM,dddd, HH:mm:sss");
+			 log ("Program terminated at:", convertToStd(timeToLog));
+		 }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions to convert between std::String and System::String^ 
+* This is to essential for communication between various classes and this UI
+* ===================================================================================================================================================================
+*/
+
+//Pre-condition : None
+//Convert a System::String^ type to std::string type
+public: std::string convertToStd(String^ sysStr){
+			char buffer[999];
+			sprintf(buffer,"%s",sysStr);
+			std::string stdString(buffer);
+			return stdString;
+		}
+
+//Pre-condition : None
+//Convert a std::string type to System::String^ type
+public: String^ convertToSys(std::string stdStr){
+			String^ sysString = gcnew String(stdStr.c_str());
+			Console::WriteLine(sysString);
+			return sysString;
+		}
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions for UI shortcuts
+* ===================================================================================================================================================================
+*/
+private: bool isCtrlPressed;
+
+private: void initializeSysCtrlPressed(){
+			 isCtrlPressed = false;
+		 }
+
+private: System::Void MapleSyrup_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::Escape){
+				display->Select();
+			 }
+
+			 //Shortcuts that uses control key
+			 if (e->KeyCode == Keys::ControlKey){
+				 isCtrlPressed = true;
+			 }
+			  
+			 if ( isCtrlPressed && e->KeyCode == Keys::F){
+				 searchBox->Select();
+				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::D){
+				 executeCalendarShortcut();
+				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::ShiftKey){
+				 commandBox->Select();
+				 isCtrlPressed = false;
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::Z){
+				  undoLastCommand();
+			 }
+
+			 if ( isCtrlPressed && e->KeyCode == Keys::X){
+				  redoLastCommand();
+			 }
+
+		 }
+
+private: System::Void MapleSyrup_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::ControlKey){
+				 isCtrlPressed = false;
+			 }
+		 }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions to display information received from Logic.h to the various displays on UI; 
+* Namely main display, main display label, floating tasks display and feedback box.
+* ===================================================================================================================================================================
+*/
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function
+//Get the error string from Logic.h when invoked by function executeUserInput(). 
+//It proceed on to display this error string onto the feedbackBox of the UI.
+private: void displayErrorString(){
+			vector<std::string> displayErrorToFeedback = lGPtr->getFeedbackStrings();
+			displayToFeedbackBox(displayErrorToFeedback);
+
+			log ("Error string displayed:",displayErrorToFeedback.back());
+		}
+
+//Pre-condition : Ensure executeUserInput() from Logic.h is executed before calling this function 
+//Get the display vectors from Logic.h when invoked by function executeUserInput(). 
+//It proceed on to display these vectors to the respective displays, namely main display, 
+//floating tasks display and feedback box. 
+private:void displayToAllDisplays(){
+			vector<LogicUpdater::EVENT_STRING> displayToFloating = lGPtr->getFloatingStrings();
+			vector<LogicUpdater::EVENT_STRING> displayToMain = lGPtr->getMainStrings();
+			vector<std::string> displayToFeedback = lGPtr-> getFeedbackStrings();
+			std::string displayToMainLabel = lGPtr->getMainDisplayLabel();
+
+			displayToFeedbackBox (displayToFeedback);
+			displayToFloatingDisplay (displayToFloating);
+			displayToMainDisplay (displayToMain);
+			displayToMainDisplayLabel(displayToMainLabel);
+		}
+
+//Pre-condition : vector displayToFeedback to be correctly updated
+//Display feedback to feedbackBox
+private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
+			feedbackBox->Text = "";
+			for (unsigned int i = 0; i< displayToFeedback.size(); i++){
+				String^ temp = convertToSys(displayToFeedback[i]);
+				if(i==displayToFeedback.size()-1){
+					feedbackBox->SelectionFont = gcnew Drawing::Font(feedbackBox->SelectionFont->FontFamily,
+						feedbackBox->SelectionFont->Size, FontStyle::Bold);
+					feedbackBox->SelectedText = " " + temp ;
+					feedbackBox->ScrollToCaret();
+					}else{
+					feedbackBox->SelectedText = " " + temp + "\n" ;
+					}	
+				}
+
+			if (!displayToFeedback.empty()){
+				log ("Feedback displayed:", displayToFeedback.back());
+			}
+		}
+
+//Pre-condition : vector displayToFloating to be correctly updated
+//Display list of floating tasks to floating display
+private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displayToFloating){
+			floatingTasksDisplay->Text = "";
+
+				for (unsigned int i = 0; i < displayToFloating.size(); i++){
+					if (displayToFloating[i].isNew){
+						String^ date = convertToSys (displayToFloating[i].dateString);
+						floatingTasksDisplay->SelectionColor = Color::Green;
+
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+
+						floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+							floatingTasksDisplay->SelectionFont->Size, FontStyle::Bold);
+						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+						floatingTasksDisplay->ScrollToCaret();				
+					} 
+					
+					else {
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						if(displayToFloating[i].dateString != ""){
+						String^ date = convertToSys (displayToFloating[i].dateString);
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						floatingTasksDisplay->SelectedText = date;
+						}
+						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+						floatingTasksDisplay->SelectionColor = Color::Red;
+						
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						
+						if(importanceSymbolString != ""){
+							floatingTasksDisplay->SelectedText = importanceSymbolString;
+						}
+
+						String^  eventName= convertToSys (displayToFloating[i].eventString);
+						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						
+						if (displayToFloating[i].isCompleted){
+							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,
+								floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
+						}
+						floatingTasksDisplay->SelectedText = eventName + "\n";			
+					}
+				}
+				log ("Floating displayed:", "Successful");
+		}
+
+//Pre-condition : vector displayToMain to be correctly updated
+//Display information to main display
+private: void displayToMainDisplay(vector<LogicUpdater::EVENT_STRING> displayToMain){
+			display->Text = "";
+
+			for (unsigned int i = 0; i < displayToMain.size(); i++){
+				if (displayToMain[i].isMarker){
+					std::string markerinStdString = displayToMain[i].eventString;
+					String^ marker = convertToSys(markerinStdString);
+					display->SelectionColor = Color::Gray;
+					display->SelectedText =  marker + "\n";
+				} else if(displayToMain[i].isNew && displayToMain[i].isClash){
+					String^ date = convertToSys(displayToMain[i].dateString);
+					
+					std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+					String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+					String^  eventName= convertToSys (displayToMain[i].eventString);
+
+					display->SelectionColor = Color::Red;
+					display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+						display->SelectionFont->Size, FontStyle::Bold);
+					display->SelectedText = date + importanceSymbolString + eventName + "\n";
+					display->ScrollToCaret();
+				} else if (!displayToMain[i].isNew && displayToMain[i].isClash ){
+					String^ date = convertToSys(displayToMain[i].dateString);
+					
+					std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+					String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+					String^  eventName= convertToSys (displayToMain[i].eventString);
+
+					display->SelectionColor = Color::Red;
+					display->SelectedText = date + importanceSymbolString + eventName + "\n";
+				} else if(displayToMain[i].isNew && !displayToMain[i].isClash){
+						String^ date = convertToSys(displayToMain[i].dateString);
+					
+						std::string importanceSymbol = setImportancesymbol(displayToMain[i].importanceLevel);
+						String^ importanceSymbolString = convertToSys (importanceSymbol);
+
+						String^  eventName= convertToSys (displayToMain[i].eventString);
+
+						display->SelectionColor = Color::Green;
+						display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+							display->SelectionFont->Size, FontStyle::Bold);
+						display->SelectedText = date + importanceSymbolString + eventName + "\n";
+
+						display->ScrollToCaret();
+				} else {
+						displayNormalEventToMain(displayToMain[i]);
+					}
+			}
+
+			log ("Main displayed:" , "Successful");
+		 }
+
+
+private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
+			 if( normalEvent.isCompleted ){
+				 String^ date = convertToSys (normalEvent.dateString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectedText = date ;
+			 
+				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
+				 String^ importanceSymbolString = convertToSys (importanceSymbol);
+				 display->SelectionColor = Color::Red;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
+				 
+				 if(importanceSymbolString != ""){
+					display->SelectedText = importanceSymbolString;
+				 }
+				 String^  eventName= convertToSys (normalEvent.eventString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,
+					 display->SelectionFont->Size, FontStyle::Strikeout);
+				 display->SelectedText = eventName + "\n";
+			 } else {
+				 if(normalEvent.dateString != ""){
+				 String^ date = convertToSys (normalEvent.dateString);
+				 display->SelectionColor = Color::MidnightBlue;
+				 display->SelectedText = date;
+				 }
+				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
+				 String^ importanceSymbolString = convertToSys (importanceSymbol);
+				 display->SelectionColor = Color::Red;
+				 
+				 if(importanceSymbolString != ""){
+					display->SelectedText = importanceSymbolString;
+				 }
+				 
+				 String^  eventName= convertToSys (normalEvent.eventString);
+				 display->SelectionColor = Color::MidnightBlue;	
+				 display->SelectedText = eventName + "\n";		 
+			 }
+		 }
+
+//Pre-condition : vector displayToMain to be correctly updated
+//Display the label of what is being displayed on the main display onto mainDisplayLabel
+private: void displayToMainDisplayLabel (std::string displayToMainLabel){
+			 String^ mainLabelDisplay = convertToSys (displayToMainLabel);
+			 mainDisplayLabel->Text = mainLabelDisplay; 
+
+			 log ("Main label displayed:", displayToMainLabel);
+		}
+
+private: std::string setImportancesymbol(int importanceLevel){
+			 std::string importanceSymbol = "";
+
+			 for (unsigned int i=0; i<importanceLevel;i++){
+				 importanceSymbol += "!";
+			 }
+
+			 return importanceSymbol;
+		 }
+//===================================================================================================================================================================
+
+
+/*
+* =================================================================================================================================================================== 
+* Functions to check and decide whether input command should be executed by UI or pass to logic
+* It moves on to execute the command respectively
+* ===================================================================================================================================================================
+*/
+//Pre-condition : None
+//This function centralises all the calls from the various parts/event handlers from the UI 
+//It first checks and matches commands that are related to developer or UI-handled. 
+//If yes, it proceeds with executing these commands
+//If no, it proceed to pass command in string form to function to passCommandToLogic()
+public: void executeUserInput(std::string input){
+			log("executeUserInput:", input);
+
+			if (checkAndExecuteDeveloperCommands(input)){
+				return;
+			}
+
+			if (checkAndExecuteUIHandledCommands(input)){
+				return;
+			}
+		
+			//Pass userinput to logic when the command does not fit those handed by UI
+			passCommandToLogic(input);
+		}
+
+//Pre-condition : This function can only be called by function executeUserInput() of UI
+// [WARNING - Only for Developers to clear off data]
+// This function takes in a std::string and check whether it is a developer command
+// If yes, it will proceed on to execute the command and return true
+// If no, it will return false
+public: bool checkAndExecuteDeveloperCommands(std::string input){
+			bool isDeveloperCommand;
+
+			std::string inputInLowerCase = toLowerCase(input);
+
+			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "mapleclearlogs"){
+				clearAllLogFiles();
+				Application::Exit();
+				isDeveloperCommand = true;
+			} else if (inputInLowerCase.size() >=21 && inputInLowerCase.substr(0,21) == "maplesyrupclearall123"){
+				clearAllLogFiles();
+				clearAllStorageFiles();
+				Application::Exit();
+				isDeveloperCommand = true;
+			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
+				clearAllStorageFiles();
+				Application::Exit();
+				isDeveloperCommand = true;
+
+				log ("Developer command executed:", "mapleclearall" );
+			} else {
+				isDeveloperCommand = false;
+			}
+
+			return isDeveloperCommand;
+		}
+
+private: void clearAllStorageFiles(){
+			std::ofstream out1("myStorage.txt", std::ofstream::trunc);
+			out1.close();
+
+			std::ofstream out2("myCurrent.txt", std::ofstream::trunc);
+			out2.close();
+
+			std::ofstream out3("myBackup.txt", std::ofstream::trunc);
+			out3.close();
+		 }
+
+//Pre-condition : This function can only be called by function executeUserInput() of UI
+// This function takes in a std::string and check whether it is a UI-handled command
+// If yes, it will proceed on to execute the command and return true
+// If no, it will return false
+private: bool checkAndExecuteUIHandledCommands(std::string input){
+			bool isUIHandledCommand;
+
+			std::string inputInLowerCase = toLowerCase(input);
+
+			if (inputInLowerCase.size() >=4 &&  inputInLowerCase.substr(0,4) == "exit"){
+				Application::Exit();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "exit" );
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "help"){
+				displayHelpIntroduction();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "help" );
+			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "commands"){
+				displayHelpCommands();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "commands" );
+			} else if (inputInLowerCase.size() ==8 && inputInLowerCase.substr(0,8) == "calendar"){
+				executeCalendarShortcut();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "calendar" );
+			} else if (inputInLowerCase.size() ==6 && inputInLowerCase.substr(0,6) == "search"){
+				searchBox->Select();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "search" );
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) == "next"){
+				executeNextKey();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "next" );
+			} else if (inputInLowerCase.size() ==4 && inputInLowerCase.substr(0,4) =="back"){
+				executeBackKey();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "back" );
+			} else if (inputInLowerCase.size() ==9 && inputInLowerCase.substr(0,9) == "shortcuts"){
+				displayHelpShortCuts();
+				isUIHandledCommand = true;
+
+				log ("UI-handled command executed:", "shortcuts" );
+			} else{
+				isUIHandledCommand = false;
+
+			}
+			
+			return isUIHandledCommand;
+		 }
+
+//Pre-condition: Check that commmand does not belong to Develop/UI-handleded commands before passing to this function
+//				 This function can only be called by function executeUserInput() of UI
+//This function links UI to Logic.h by passing a command for logic.h to execute
+//Thereafter, based on the Boolean variable it received from Logic.h’s executeUserInput() function, 
+//it proceeds to call functions to display the relevant information to the various displays on the UI 
+private: void passCommandToLogic(std::string input){
+			 bool isExecuted = lGPtr->executeUserInput(input);
+			 log("Logic command executed & returns:", convertToStd(isExecuted.ToString()));
+
+			 if(isExecuted){
+				 displayToAllDisplays();
+			 } else {
+				 displayErrorString();
+			 }
+		 }
+
+std::string toLowerCase(std::string word){
+	for (int i=0;i<word.size();i++){
+		 word[i] = tolower(word[i]);
+	 }
+	return word;
+ }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link commandBar to CommandSuggestion.h to display the various suggestions  & colour the keywords
+* ===================================================================================================================================================================
+*/
+private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::Enter){
+				if (commandBox->Text == ""){
+					previousTextLength = 0;
+					e->Handled = true;
+					return;
+				}
+
+				String^ temp = commandBox->Text;
+				resetCommandBar();
+				unDisplaySuggestion();
+			 
+				std::string input = convertToStd(temp);
+				log("User Command:", input);
+				cSPtr->setUserActions(input);
+				
+				executeUserInput(input);
+				e->Handled = true;
+				return;
+			 }
+
+			 if (e->KeyCode == Keys::Up){
+				 std::string userAction = cSPtr->getSpecificUserAction();
+				 commandBox->Text = convertToSys(userAction);
+				 
+				 cSPtr->upKeyPressed();
+				 e->Handled = true;
+				 return;
+			 }
+
+			 if (e->KeyCode == Keys::Down){
+				 std::string userAction = cSPtr->getSpecificUserAction();
+				 commandBox->Text = convertToSys(userAction);
+				 cSPtr->downKeyPressed();
+				 e->Handled = true;
+				 return;
+			 }
+		 }
+
+public: void resetCommandBar(){
+			commandBox->Text = "";
+			initializePreviousTextLength();
+		}
+
+private: System::Void commandBox_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+
+		 }
+
+//Pre-condition : None 
+//Display the information in vector suggestion onto suggestBar
+private: void displaySuggestion(std::vector<std::string> suggestion){
+			suggestBar->Visible = true;
+			suggestBar->Text = "";
+
+			for (unsigned int i = 0; i < suggestion.size();i++){
+					std::string temp = suggestion[i];
+
+					if(temp == UICommandSuggestion::DASH || temp == UICommandSuggestion::SEMI_COLON ||
+						temp == UICommandSuggestion::WORD_DUE){	
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionColor = Color::RoyalBlue;
+						suggestBar->SelectedText = toAdd;
+					} else if (temp == UICommandSuggestion::COMMAND_ADD || temp == UICommandSuggestion::COMMAND_DELETE || 
+						temp == UICommandSuggestion::COMMAND_EDIT ||
+					temp == UICommandSuggestion::COMMAND_SEARCH || temp == UICommandSuggestion::COMMAND_SHOW){
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Bold);
+						suggestBar->SelectionColor = Color::SlateBlue;
+						suggestBar->SelectedText = toAdd;
+					} else {
+						String^ toAdd = convertToSys(" " + temp);
+						suggestBar->SelectionFont = gcnew Drawing::Font(suggestBar->SelectionFont->FontFamily,
+							suggestBar->SelectionFont->Size, FontStyle::Regular);
+						suggestBar->SelectionColor = Color::DimGray;
+						suggestBar->SelectedText = toAdd;
+					}
+			}
+		 }
+
+private: System::Void suggestBar_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
+			 if (suggestBar->Visible == true){
+				 pictureBox5->Visible = true;
+				 pictureBox5->BringToFront();
+				 suggestBar->BringToFront();
+			 } else {
+				 pictureBox5->Visible = false;
+				 pictureBox5->SendToBack();
+			 }
+		 }
+
+//Pre-condition : None 
+//Clear information in suggestBar and make it invisible
+private: void unDisplaySuggestion(){
+			suggestBar->Visible = false;
+			suggestBar->Text = "";
+		}
+
+//Pre-condition : None 
+//This function takes in a string, check whether it is a keyword, and colour it in the respective colour 
+// if it is, else it will colour the word black.
+// All these words will be read onto the commandBar
+private: void colourCommands(std::string token){
+			 std::vector<std::string> timeVect = cSPtr->getKeyWordTimeVect();
+			 for (int i=0; i<timeVect.size(); i++){
+				 if(token == timeVect[i]){
+					commandBox->SelectionColor = Color::SandyBrown;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+			 }
+
+			 std::vector<std::string> othersVect = cSPtr->getkeywordOthersVect();
+			 for (int i=0; i<othersVect.size(); i++){
+				 if(token == othersVect[i]){
+					commandBox->SelectionColor = Color::RoyalBlue;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+			 }
+
+			 std::vector<std::string> commandsVect = cSPtr->getKeyWordCommandsVect();
+			 for (int i=0; i<commandsVect.size(); i++){
+				 if(token == commandsVect[i]){
+					commandBox->SelectionColor = Color::SlateBlue;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+			 }
+
+			 std::vector<std::string> dayVect = cSPtr->getKeyWordDayVect();
+			 for (int i=0; i<dayVect.size(); i++){
+				 if(token == dayVect[i]){
+					commandBox->SelectionColor = Color::DimGray;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+			 }
+
+			 std::vector<std::string> monthsVect = cSPtr->getKeyWordMonthsVect();
+			 for (int i=0; i<monthsVect.size(); i++){
+				 if(token == monthsVect[i]){
+					commandBox->SelectionColor = Color::Gray;
+					commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+						commandBox->SelectionFont->Size, FontStyle::Bold);
+					commandBox->SelectedText = convertToSys(token);
+					return;
+				 }
+
+			 }
+
+			commandBox->SelectionColor = Color::Black;
+			commandBox->SelectionFont = gcnew Drawing::Font(commandBox->SelectionFont->FontFamily,
+				commandBox->SelectionFont->Size, FontStyle::Regular);
+			commandBox->SelectedText = convertToSys(token);
+
+		 }
+
+
+private: int previousTextLength;
+
+private: void initializePreviousTextLength(){
+			 previousTextLength = 0;
+		 }
+
+//This function is triggered whenever there is a textchange in the commandBox
+//Use to trigger suggestBox to display the respective suggestions to user
+private: System::Void commandBox_TextChanged_1(System::Object^  sender, System::EventArgs^  e) {
+			 if(commandBox->Text != ""){
+				 suggPic->Visible = true;
+			 } else {
+				 suggPic->Visible = false;
+				 previousTextLength = 0;
+			 }
+
+			 try{
+			 int cursorPosition = commandBox->SelectionStart;
+			 if(cursorPosition < 0){
+				 throw "Error: Please retype";
+			 }
+
+			 if(commandBox->Text->Length + 1 == previousTextLength || commandBox->Text->Length - 1 == previousTextLength){
+				 int indexToSearchFrom = 0;
+				 int selectionStartPoint = 0;
+				 
+				 if (cursorPosition == 0){
+					 selectionStartPoint = 0;  
+				 } else{
+					 indexToSearchFrom = cursorPosition - 1;
+					 selectionStartPoint = commandBox->Text->LastIndexOf(" ",indexToSearchFrom) + 1;
+				 }
+				 
+				 if(selectionStartPoint < 0 || cursorPosition < selectionStartPoint){
+					 throw "Error: Please retype";
+				 }
+
+				 commandBox->SelectionStart = selectionStartPoint;
+				 commandBox->SelectionLength = cursorPosition - selectionStartPoint;
+				 
+				 std::string tempString = convertToStd(commandBox->SelectedText);
+				 colourCommands(tempString);
+
+			 } else {
+				 std::string longCommands = convertToStd(commandBox->Text);
+				 resetCommandBar();
+				 std::vector<std::string> userActionToken = cSPtr->tokenizeString(longCommands);
+				 for (int i=0;i<userActionToken.size();i++){
+					 colourCommands(userActionToken[i]);
+				 }
+			 }
+
+			 commandBox->Select(cursorPosition,0);
+			 previousTextLength = commandBox->Text->Length;		 
+			 }
+			 catch(const std::string& errorMsg){
+				 log("Error from CommandBar:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+				 commandBox->Text = "";
+			 }
+
+			 std::string temp = convertToStd(commandBox->Text);	
+			 std::string tempCommand = toLowerCase(temp);
+			 displaySuggestionBox(tempCommand);
+		 }
+
+//Use to trigger suggestBox to display the respective suggestions to user
+private: void displaySuggestionBox(std::string comdInString){
+			 UICommandSuggestion::ComdType tempCommandType = cSPtr->getComdType(comdInString);
+			 switch(tempCommandType){
+			 case UICommandSuggestion::ADD_:{
+				 std::vector<std::string> suggestionAdd = cSPtr->getSuggestionAdd();
+				 displaySuggestion(suggestionAdd);
+				 break;
+										  }
+			 case UICommandSuggestion::DELETE_:{
+				 std::vector<std::string> suggestionDelete = cSPtr->getSuggestionDelete();
+				 displaySuggestion(suggestionDelete);
+				 break;
+										  }
+			 case UICommandSuggestion::EDIT_:{
+				 std::vector<std::string> suggestionEdit = cSPtr->getSuggestionEdit();
+				 displaySuggestion(suggestionEdit);
+				 break;
+										  }
+			 case UICommandSuggestion::SEARCH_:{
+				 std::vector<std::string> suggestionSearch = cSPtr->getSuggestionSearch();
+				 displaySuggestion(suggestionSearch);
+				 break;
+										  }
+			 case UICommandSuggestion::SHOW_:{
+				 std::vector<std::string> suggestionShow = cSPtr->getSuggestionShow();
+				 displaySuggestion(suggestionShow);
+				 break;
+										  }
+			 case UICommandSuggestion::UNDISPLAY_:{
+				 unDisplaySuggestion();
+				 break;
+										  }
+			 case UICommandSuggestion::INVALID_:{
+				 break;
+										  }
+			 }		
+
+
+
+		 }
+
+private: System::Void commandBox_Enter_1(System::Object^  sender, System::EventArgs^  e) {
+			 resetCommandBar();
+			 nagivationPicCombBar->Visible = true;
+			 nagivationPicCombBar->BringToFront();
+		 }
+
+private: System::Void commandBox_Leave_1(System::Object^  sender, System::EventArgs^  e) {
+			 resetCommandBar();
+			 commandBox->Text = " Type command here";
+			 nagivationPicCombBar->Visible = false;
+			 nagivationPicCombBar->SendToBack();
+			 suggPic->Visible = false;
+		 }
+
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions that link UI to UIHelp.h to display help information
+* They also update the mainDisplayLabel accordingly
+* ===================================================================================================================================================================
+*/
+private: void displayHelpIntroduction(){
+			 std::string toMainDisplayLabel = "Help Introduction";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpIntroduction = helpPtr->getHelpIntroduction();
+			 displayToMainDisplay(helpIntroduction);
+		 }
+
+private: void displayHelpCommands(){
+			 std::string toMainDisplayLabel = "Commands";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpCommands = helpPtr->getHelpCommands();
+			 displayToMainDisplay(helpCommands);
+		 }
+
+public: void displayHelpShortCuts(){
+			 std::string toMainDisplayLabel = "Shortcuts";
+			 displayToMainDisplayLabel(toMainDisplayLabel);
+
+			 vector<LogicUpdater::EVENT_STRING> helpShortcuts= helpPtr->getHelpShortcuts();
+			 displayToMainDisplay(helpShortcuts);
+		}
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Functions and attributes that control show and help column
+* Functions that are under the show column call UIShow.h directly to obtain the respective commands and 
+* pass them to function executeUserInput for execution
+* Functions that are under the help column call the respective help functions within this class
+* ===================================================================================================================================================================
+*/
+// To display & undisplay the Show column when clicked
+private: System::Void showButton_Click(System::Object^  sender, System::EventArgs^  e) {		
+			 showDropDown->Show(showButton,0,showButton->Height);		 
+		 }
+
+// Execute the respective show commands when clicked
+private: System::Void dayToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowDay();
+			 log("Called UIShow.getShowDay", "");
+			 executeUserInput(loadCommand);
+		 }
+
+private: System::Void weekToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowWeek();
+			 log("Called UIShow.getShowWeek", "");
+			 executeUserInput(loadCommand);
+		 }
+
+private: System::Void monthToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowMonth();
+			 log("Called UIShow.getShowMonth", "");
+			 executeUserInput(loadCommand);
+		 }
+
+private: System::Void allToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowAll();
+			 log("Called UIShow.getShowAll", "");
+			 executeUserInput(loadCommand);
+		 }
+
+private: System::Void archiveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 std::string loadCommand = showPtr->getShowDone();
+			 log("Called UIShow.getShowDone", "");
+			 executeUserInput(loadCommand);
+		 }
+
+
+// To display & undisplay the Help column when clicked
+private: System::Void helpButton_Click(System::Object^  sender, System::EventArgs^  e) {	 
+			 helpDropDown->Show(helpButton,0,helpButton->Height);	 
+		 }
+
+// Execute the respective help commands when clicked
+private: System::Void introductionToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpIntroduction();
+		 }
+
+private: System::Void commandsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpCommands();
+		 }
+
+private: System::Void shortcutsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 displayHelpShortCuts();
+		 }
+
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Calendar display functions
+* Functions that link to UIShow by passing the selected date(s) to the respective functions
+* and receive the respective commands to send to function executeUserInput() for execution.
+* ===================================================================================================================================================================
+*/
+private: bool topCalenderDisplayed;
+
+private: System::Void calenderTop_EnabledChanged(System::Object^  sender, System::EventArgs^  e) {
+			 calenderTop->Visible=false;
+		 }
+
+private: System::Void calenderIcon_Click(System::Object^  sender, System::EventArgs^  e) { 
+			executeCalendarShortcut();
+		 }
+
+private: System::Void calenderTop_Leave(System::Object^  sender, System::EventArgs^  e) {
+			executeCalendarShortcut();
+			navigationPicCalendar->Visible = false;
+			navigationPicCalendar->SendToBack();
+		 }
+
+private: System::Void calenderTop_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPicCalendar->Visible = true;
+			 navigationPicCalendar->BringToFront();
+			 calenderTop->BringToFront();
+		 }
+
+private: void executeCalendarShortcut(){
+			 if(!topCalenderDisplayed){
+				 openCalendar();
+			 } else{
+				 closeCalendar();
+			 }
+		 }
+
+private: void openCalendar(){
+			calenderTop->Visible = true;
+			calenderTop->BringToFront();
+			calenderTop->Select();
+			topCalenderDisplayed = true;
+		 }
+
+private: void closeCalendar(){
+			calenderTop->Visible = false;
+			topCalenderDisplayed = false;
+			calenderTop->SendToBack();
+		 }
+
+//Pre-condition : Only works when dates are chosen from the calendar
+//It receives the start and end date to be displayed from calendar and pass them 
+//to UIShow.h to generate a proper command
+//It moves on to pass this command to function executeUserInput for executition
+private: System::Void calenderTop_DateSelected(System::Object^  sender, System::Windows::Forms::DateRangeEventArgs^  e) {	 
+			 
+			 //Start date
+			 String^ tempStartDate = calenderTop->SelectionStart.ToString();
+			 std::string startDate = convertToStd(tempStartDate);
+
+			 //End date
+			 String^ tempEndDate = calenderTop->SelectionEnd.ToString();
+			 std::string endDate = convertToStd(tempEndDate);
+
+			 log("Calendar date(s) selected & sent to UIShow:", startDate + " to " + endDate);
+
+			 try{
+			 std::string command = showPtr->generateDisplayFromCalender(startDate, endDate);
+
+			 executeUserInput(command);
+			 }
+			 catch (const std::string& errorMsg){
+				 log("Error from calendar date(s) selection:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
+
+		 }
+//===================================================================================================================================================================
+
+/*
+* =================================================================================================================================================================== 
+* Search function and related functions that will be used in Search Mode
+* ===================================================================================================================================================================
+*/
+private: bool isSearchEnterPressed;
+private: bool isSearchBoxLeft;
+
+private: void noSearchInput(){
+			 String^ NO_SEARCH_INPUT = "No Search Input\n";
+			 display->Text = NO_SEARCH_INPUT;
+			 floatingTasksDisplay->Text = NO_SEARCH_INPUT;
+		 }
+
+private: System::Void searchBox_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+			 String^ tempToBeSearched = searchBox->Text;
+
+			 if(isSearchBoxLeft){
+				 return;
+			 } else if (tempToBeSearched == "" && !isSearchBoxLeft){
+				 noSearchInput();
+			 }
+			 
+			 std::string toBeSearched = convertToStd(tempToBeSearched);
+			 std::string COMMAND_SEARCH = "search";
+			 std::string searchCommand = COMMAND_SEARCH + " " + toBeSearched;
+			 executeUserInput(searchCommand);
+			 
+			 //Overwrite the maindisplaylabel with this
+			 displayToMainDisplayLabel("Search Mode");
+		 }
+
+private: System::Void searchBox_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 isSearchEnterPressed = false;
+			 isSearchBoxLeft = false;
+
+			 navigationPicSearchBar->Visible = true;
+			 navigationPicSearchBar->BringToFront();
+			 searchBox->Text = "";
+
+			 std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+			 std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+			 showPtr->setCurrentCommand(mainLabel,mainDisplayDate);
+			 
+			 noSearchInput();
+			 displayToMainDisplayLabel("Search Mode");
+		 }
+
+private: System::Void searchBox_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 isSearchBoxLeft = true;
+
+			 navigationPicSearchBar->Visible = false;
+			 navigationPicSearchBar->SendToBack();
+			 searchBox->Text = "";
+			 std::string currentShowCommand = showPtr->getCurrentCommand();
+
+
+			 if(!isSearchEnterPressed){
+				 //Reload floating display before search mode
+				 std::string loadCommandFloating = showPtr->getShowFloat();
+				 executeUserInput(loadCommandFloating);
+
+				 //Reload main display before search mode
+				 executeUserInput(currentShowCommand);
+			 }
+		 }
+
+private: System::Void searchBox_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if(e->KeyCode == Keys::Enter) {
+				 isSearchEnterPressed = true;
+			 }
+		 }
+//===================================================================================================================================================================			 
+
+/*
+* =================================================================================================================================================================== 
+* Functions that allow toggle between main display, floating display and commandBox.
+* Functions that allow toggle between previous and next day of main display
+* ===================================================================================================================================================================
+*/
+private: System::Void display_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		  if (e->KeyCode == Keys::Left){
+				 executeBackKey();
+				 display->SelectionStart = 0;
+				 e->Handled = true;
+			 }
+
+		  if (e->KeyCode == Keys::Right){
+				executeNextKey();
+				display->SelectionStart = 0;
+			 }
+
+		  if (e->KeyCode == Keys::Escape){
+			    floatingTasksDisplay->Select();
+			 }
+		 }
+
+private: void executeBackKey(){
+			 try{
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayBack(mainLabel,mainDisplayDate);
+				log("Called UIShow.displayBack", "");
+				executeUserInput(newShowCommand);
+			 }
+			 catch (const std::string& errorMsg){
+				 log("Error from UIShow.displayBack:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
+		 }
+
+private: void executeNextKey(){
+			 try{
+				std::vector<tm> mainDisplayDate = lGPtr->getTempMainDisplayLabel();
+				std::string mainLabel = convertToStd(mainDisplayLabel->Text);
+				std::string newShowCommand = showPtr->displayNext(mainLabel,mainDisplayDate);
+				log("Called UIShow.displayNext", "");
+				executeUserInput(newShowCommand);
+			 }
+			 catch (const std::string& errorMsg){
+				 log("Error from UIShow.displayNext:",errorMsg);
+				 String^ errorMsgInSys = convertToSys(errorMsg);
+				 MessageBox::Show(errorMsgInSys);
+			 }
+		 }
+
+private: System::Void display_Enter(System::Object^  sender, System::EventArgs^  e) {
+			 display->SelectionStart = 0;
+			 navigationPic->Visible = true;
+			 navigationPic->BringToFront();
+		 }
+
+private: System::Void display_Leave(System::Object^  sender, System::EventArgs^  e) {
+			 navigationPic->Visible = false;
+			 navigationPic->SendToBack();
+		 }
+
+
+private: System::Void floatingTasksDisplay_Enter(System::Object^  sender, System::EventArgs^  e) {
+			floatingTasksDisplay->SelectionStart = 0;
+			nagivationPicfloatingDis->Visible = true;
+			nagivationPicfloatingDis->BringToFront();
+		 }
+
+private: System::Void floatingTasksDisplay_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+			 if (e->KeyCode == Keys::Escape){
+			    commandBox->Select();
+			 }
+		 }
+
+private: System::Void floatingTasksDisplay_Leave(System::Object^  sender, System::EventArgs^  e) {
+			nagivationPicfloatingDis->Visible = false;
+			nagivationPicfloatingDis->SendToBack();
+		 }
+
+//===================================================================================================================================================================	
+
+/*
+* =================================================================================================================================================================== 
+* Undo and Redo Buttons and their functions
+* ===================================================================================================================================================================
+*/
+private: System::Void undoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 undoLastCommand();
+		 }
+
+private: void undoLastCommand(){
+			executeUserInput("undo");
+		 }
+
+private: System::Void redoButton_Click(System::Object^  sender, System::EventArgs^  e) {
+			 redoLastCommand();
+		 }
+
+private: void redoLastCommand(){
+			executeUserInput("redo");
+		 }
+//===================================================================================================================================================================	
+
+/*
+* =================================================================================================================================================================== 
+* Logging function
+* ===================================================================================================================================================================
+*/
+private: Void log(std::string label, std::string commands){
+			 std::ofstream outFile("GUILog.txt",std::ios::app);
+
+			 outFile << label + " " + commands + "\n";
+
+			 outFile.close();
+		 }
+//===================================================================================================================================================================
+};
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UI\MapleSyrup.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\LogicUpdaterTest.cpp
+	 */
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+
+#include "LogicUpdater.cpp"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{
+	TEST_CLASS(LogicUpdaterTest)
+	{
+	public:
+
+		LogicUpdater lgUpdater;
+
+		TEST_METHOD(LogicUpdater_isDisplayMonth_Test){
+			time_t now;
+			struct tm front;
+			struct tm back;
+			bool testResult;
+			bool expectedResult;
+
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+
+			// true
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// false - backdate 1 day before end of month
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 30;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// false - frontdate 1 day after start of month
+			front.tm_mon = 0; 
+			front.tm_mday = 2;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+
+			// weekMonthorNothing - month
+			front.tm_mon = 0; 
+			front.tm_mday = 8;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("Month");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// same date
+			front.tm_mon = 1; 
+			front.tm_mday = 8;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 8;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// all valid, different year 
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 116;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// all valid, different month
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 2;  
+			back.tm_mday = 31;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//boundary test - 1st jan 1971
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 71;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 71;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//boundary test - 31 dec 2999
+			front.tm_mon = 11; 
+			front.tm_mday = 1;
+			front.tm_year = 1099;
+			
+			back.tm_mon = 11;  
+			back.tm_mday = 31;
+			back.tm_year = 1099;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(LogicUpdater_isDisplayWeek_Test){
+			// boundary cases for validty of dates are not covered here as they are targetted at tesing function countNumDays, 
+			// which have been covered in the unit testing of UIShow.h as this function and implementation are the same 
+			
+			time_t now;
+			struct tm front;
+			struct tm back;
+			bool testResult;
+			bool expectedResult;
+
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+
+			// true
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayWeek(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// false - backdate 1 day before end of week
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 9;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayWeek(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// false - frontdate 1 day after start of week
+			front.tm_mon = 0; 
+			front.tm_mday = 5;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayWeek(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+
+			// weekMonthorNothing - month
+			front.tm_mon = 0; 
+			front.tm_mday = 5;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("Week");
+
+			expectedResult = true;
+			testResult = lgUpdater.isDisplayWeek(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// same date
+			front.tm_mon = 1; 
+			front.tm_mday = 8;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 8;
+			back.tm_year = 115;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayWeek(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			// all valid, different weeks
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 17;
+			back.tm_year = 116;
+
+			lgUpdater.setWeekMonthOrNothing("");
+
+			expectedResult = false;
+			testResult = lgUpdater.isDisplayMonth(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+					
+		}
+
+		TEST_METHOD(LogicUpdater_intToTime_Test){
+			int input;
+			std::string testResult;
+			std::string expectedResult;
+
+			// normal
+			input = 1531;
+			testResult = "03:31pm";
+			expectedResult=lgUpdater.intToTime(input);
+
+			Assert::AreEqual(expectedResult,testResult);
+
+			// boundary - 0000
+			input = 0000;
+			testResult = "00:00am";
+			expectedResult=lgUpdater.intToTime(input);
+
+			Assert::AreEqual(expectedResult,testResult);
+
+			// boundary - 2359
+			input = 2359;
+			testResult = "11:59pm";
+			expectedResult=lgUpdater.intToTime(input);
+
+			Assert::AreEqual(expectedResult,testResult);
+
+			// boundary - 1200
+			input = 1200;
+			testResult = "12:00pm";
+			expectedResult=lgUpdater.intToTime(input);
+
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(LogicUpdater_setSingleDayString_Test){
+			time_t now;
+			struct tm date;
+			std::string testResult;
+			std::string expectedResult;
+
+			time(&now);
+			date = *localtime(&now);
+
+			// normal
+			date.tm_mon = 0; 
+			date.tm_mday = 4;
+			date.tm_year = 115;
+
+			testResult = "4 January 2015, Sunday";
+
+			expectedResult=lgUpdater.setSingleDayString(date);
+
+			Assert::AreEqual(expectedResult,testResult);
+			
+			//boundary - 1st jan 1971
+			date.tm_mon = 0; 
+			date.tm_mday = 1;
+			date.tm_year = 71;
+
+			testResult = "1 January 1971, Friday";
+
+			expectedResult=lgUpdater.setSingleDayString(date);
+
+			Assert::AreEqual(expectedResult,testResult);
+
+			//boundary - 31 dec 2999
+			date.tm_mon = 11; 
+			date.tm_mday = 31;
+			date.tm_year = 1099;
+
+			testResult = "31 December 2999, Tuesday";
+
+			expectedResult=lgUpdater.setSingleDayString(date);
+
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+
+		TEST_METHOD(LogicUpdater_setMultipleDaysString_Test){
+			time_t now;
+			struct tm front;
+			struct tm back;
+			std::string testResult;
+			std::string expectedResult;
+
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+
+			// normal
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 20;
+			back.tm_year = 115;
+
+			expectedResult = "4 January - 20 January 2015";
+			testResult = lgUpdater.setMultipleDaysString(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//very very large dates
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 4;  
+			back.tm_mday = 20;
+			back.tm_year = 250;
+
+			expectedResult = "4 January 2015 - 20 May 2150";
+			testResult = lgUpdater.setMultipleDaysString(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//boundary test - 1st jan 1971 - 31 dec 2999
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 71;
+			
+			back.tm_mon = 11;  
+			back.tm_mday = 31;
+			back.tm_year = 1099;
+
+			expectedResult = "1 January 1971 - 31 December 2999";
+			testResult = lgUpdater.setMultipleDaysString(front,back);
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(LogicUpdater_setMainDisplayLabel_Test){
+			time_t now;
+			struct tm front;
+			struct tm back;
+			std::vector<tm> testVec;
+			std::string testResult;
+			std::string expectedResult;
+
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+
+			//today & tomorrow are not tested as they changes everyday
+
+			//week
+			front.tm_mon = 0; 
+			front.tm_mday = 4;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+
+			testVec.push_back(front);
+			testVec.push_back(back);
+
+			expectedResult = "[Week] 4 January - 10 January 2015";
+			lgUpdater.setMainDisplayLabel(testVec);
+			testResult = lgUpdater.getMainDisplayLabel();
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVec.clear();
+
+			//month
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 31;
+			back.tm_year = 115;
+
+			testVec.push_back(front);
+			testVec.push_back(back);
+
+			expectedResult = "[Month] 1 January - 31 January 2015";
+			lgUpdater.setMainDisplayLabel(testVec);
+			testResult = lgUpdater.getMainDisplayLabel();
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVec.clear();
+
+			//single date 
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 1;
+			back.tm_year = 115;
+
+			testVec.push_back(front);
+			testVec.push_back(back);
+
+			expectedResult = "1 January 2015, Thursday";
+			lgUpdater.setMainDisplayLabel(testVec);
+			testResult = lgUpdater.getMainDisplayLabel();
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVec.clear();
+
+			//boundary case - 1st jan 1971 - 31 dec 2999
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 71;
+			
+			back.tm_mon = 11;  
+			back.tm_mday = 31;
+			back.tm_year = 1099;
+
+			testVec.push_back(front);
+			testVec.push_back(back);
+
+			expectedResult = "1 January 1971 - 31 December 2999";
+			lgUpdater.setMainDisplayLabel(testVec);
+			testResult = lgUpdater.getMainDisplayLabel();
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVec.clear();
+		}
+
+		TEST_METHOD(LogicUpdater_setNormalEventDateString_Test){
+
+			Event input;
+			int inputIndex;
+			std::string expectedResult;
+			std::string testResult;
+
+			//normal
+			inputIndex = 10;
+			input.setStartDate(5,5,2015);
+			input.setStartTime(10,25);
+
+			input.setEndDate(5,5,2015);
+			input.setEndTime(11,45);
+
+			expectedResult = "10.	[10:25am-11:45am]	";
+			testResult= lgUpdater.setNormalEventDateString(input,inputIndex);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//DUE
+			inputIndex = 10;
+			input.setStartDate(5,5,2015);
+			input.setStartTime(11,45);
+
+			input.setEndDate(5,5,2015);
+			input.setEndTime(11,45);
+			input.setIsDeadline(true);
+
+			expectedResult = "10.	[*DUE*   11:45am]	";
+			testResult= lgUpdater.setNormalEventDateString(input,inputIndex);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//AllDay
+			inputIndex = 10;
+			input.setStartDate(5,5,2015);
+			input.setStartTime(00,00);
+
+			input.setEndDate(5,5,2015);
+			input.setEndTime(23,59);
+			input.setIsDeadline(false);
+
+			expectedResult = "10.	[    All Day    ]	";
+			testResult= lgUpdater.setNormalEventDateString(input,inputIndex);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//boundary - 1st jan 1971
+			inputIndex = 10;
+			input.setStartDate(5,5,1971);
+			input.setStartTime(00,00);
+
+			input.setEndDate(5,5,1971);
+			input.setEndTime(20,59);
+			input.setIsDeadline(false);
+
+			expectedResult = "10.	[00:00am-08:59pm]	";
+			testResult= lgUpdater.setNormalEventDateString(input,inputIndex);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//31 dec 2999
+			inputIndex = 10;
+			input.setStartDate(5,5,2999);
+			input.setStartTime(00,00);
+
+			input.setEndDate(5,5,2999);
+			input.setEndTime(20,59);
+			input.setIsDeadline(false);
+
+			expectedResult = "10.	[00:00am-08:59pm]	";
+			testResult= lgUpdater.setNormalEventDateString(input,inputIndex);
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(LogicUpdater_setNormalEventEventString_Test){
+			Event input;
+			std::string expectedResult;
+			std::string testResult;
+
+			//normal
+			input.setName("Hello");
+
+			expectedResult = "Hello";
+			testResult= lgUpdater.setNormalEventEventString(input);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//empty string
+			input.setName("");
+
+			expectedResult = "";
+			testResult= lgUpdater.setNormalEventEventString(input);
+			Assert::AreEqual(expectedResult,testResult);
+
+			//input string larger than 42
+			input.setName("qwertyuiopqwertyuiopqwertyuiopqwertyuiopqwertyuiopqwert");
+
+			expectedResult = "qwertyuiopqwertyuiopqwertyuiopqwertyuiopqw\n\t\t\t\t\tertyuiopqwert";
+			testResult= lgUpdater.setNormalEventEventString(input);
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+	};
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\LogicUpdaterTest.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\UITest.cpp
+	 */
+
+
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+#include <ctime>
+
+// Please include the .cpp of the file you are testing, else there will be error
+#include "UIShow.cpp"
+#include "UIHelp.cpp"
+#include "UICommandSuggestion.cpp"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+namespace UnitTest
+{	
+	// As a convention, put [name of file to be tested] + [Test]
+
+	//Unit test for UIShow class
+	TEST_CLASS(UIShowTest)
+	{
+	public:
+
+		UIShow show;
+		
+		// As a convention, put [name of class] + [_name of function] + [_Test]
+
+		TEST_METHOD(UIShow_getShowDay_Test)
+		{
+			//Correct string	
+			std::string testCommandShowDay1 = show.getShowDay();
+			std::string samepleCommandShowDay1= "show today";
+			Assert::AreEqual(samepleCommandShowDay1,testCommandShowDay1);
+
+			//Expected failing test: Incorrect string
+			std::string testCommandShowDay2 = show.getShowDay();
+			std::string samepleCommandShowDay2= "show today 12345";
+			Assert::AreNotEqual(samepleCommandShowDay2,testCommandShowDay2);
+		}
+
+		TEST_METHOD(UIShow_countNumDays_Test){
+			time_t now;
+			struct tm front;
+			struct tm back;
+			int testResult;
+			int expectedResult;
+
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+
+			//Case 1.1 : Safely within boundary - small days difference of 9 
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 9;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//Case 1.2 : Same day
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 1;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 0;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//Case 1.3 : Back day before front day
+			front.tm_mon = 1; 
+			front.tm_mday = 10;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 8;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = -2;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//Case 2.1 : Boundary test (year) - front year within boundary of 71
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 71;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 16080;
+
+			Assert::AreEqual(expectedResult,testResult);
+			
+			//Case 2.2 : Boundary test (year) - front year below boundary of 71
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 70;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 115;
+			
+			std::string expectedErrorString = "Error: Unable to display date before year 1971";
+			try{
+			testResult = show.countNumDays(front,back);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//Case 2.3 : Boundary test (year) - back year within boundary of 1099
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 1099;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 359408;
+			Assert::AreEqual(expectedResult,testResult);
+			
+			//Case 2.4 : Boundary test (year) - back year above boundary of 1099
+			front.tm_mon = 1; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 1;  
+			back.tm_mday = 10;
+			back.tm_year = 1100;
+
+			expectedErrorString = "Error: Unable to display date after year 2999";
+			try{
+			testResult = show.countNumDays(front,back);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//Case 3.1 : Safely within boundary - month value 0
+			front.tm_mon = 0; 
+			front.tm_mday = 1;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 5;
+			back.tm_year = 115;
+			testResult = show.countNumDays(front,back);
+
+			expectedResult = 4;
+			Assert::AreEqual(expectedResult,testResult);
+			
+			//Case 3.2 : Boundary test (month) - after adjustment year below 71
+			front.tm_mon = -549; 
+			front.tm_mday = 0;
+			front.tm_year = 115;
+			
+			back.tm_mon = 0;  
+			back.tm_mday = 0;
+			back.tm_year = 115;
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+			testResult = show.countNumDays(front,back);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+		}
+
+		TEST_METHOD(UIShow_isSingleDay_Test){
+			tm front;
+			tm back;
+			vector<tm> testVector;
+			bool testResult;
+			bool expectedResult;
+			
+			//Case 1.1: Same day, expected true
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 1;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 1;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = true;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Case 1.2: Different day, expected false
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 69;
+
+			back.tm_mday = 10;
+			back.tm_mon = 2;
+			back.tm_year = 1;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = false;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Case 2.1: boundary test - maximum negative int
+			front.tm_mday = -18446744073709551615;
+			front.tm_mon = -18446744073709551615;
+			front.tm_year = -18446744073709551615;
+
+			back.tm_mday = -18446744073709551615;
+			back.tm_mon = -18446744073709551615;
+			back.tm_year = -18446744073709551615;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = true;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Case 2.2: boundary test - maximum positive int
+			front.tm_mday = 18446744073709551615;
+			front.tm_mon = 18446744073709551615;
+			front.tm_year = 18446744073709551615;
+
+			back.tm_mday = 18446744073709551615;
+			back.tm_mon = 18446744073709551615;
+			back.tm_year = 18446744073709551615;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = true;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Case 2.3: boundary test - maximum difference
+			front.tm_mday = 18446744073709551615;
+			front.tm_mon = 18446744073709551615;
+			front.tm_year = 18446744073709551615;
+
+			back.tm_mday = 0;
+			back.tm_mon = 0;
+			back.tm_year = 0;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testResult = show.checkIsSingleDate(testVector);
+			expectedResult = false;
+
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+		}
+
+		TEST_METHOD(UIShow_checkValidityOftm_Test){
+			//Only out-of-range test cases are tested to test on the exception handling 
+			//Test cases within range are indirectly tested in TEST_METHOD(UIShow_countNumDays_Test)
+
+			time_t now;
+			struct tm date;
+			int testResult;
+			int expectedResult;
+
+			time(&now);
+			date = *localtime(&now);
+
+			//Boundary test (year) - year below boundary of 71
+			date.tm_mon = 1; 
+			date.tm_mday = 1;
+			date.tm_year = 70;
+			
+			std::string expectedErrorString = "Error: Unable to display date before year 1971";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//Boundary test (year) - year above boundary of 1099
+			date.tm_mon = 1; 
+			date.tm_mday = 1;
+			date.tm_year = 1100;
+
+			expectedErrorString = "Error: Unable to display date after year 2999";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//Boundary test (mday) - mday below 1
+			date.tm_mon = 1; 
+			date.tm_mday = 0;
+			date.tm_year = 115;
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//Boundary test (mday) - mday above 31
+			date.tm_mon = 1; 
+			date.tm_mday = 32;
+			date.tm_year = 115;
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//Boundary test (mon) - mday below 0
+			date.tm_mon = 0; 
+			date.tm_mday = 10;
+			date.tm_year = 115;
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+		
+			//Boundary test (mon) - mday above 11
+			date.tm_mon = 12; 
+			date.tm_mday = 10;
+			date.tm_year = 115;
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				show.checkValidityOftm(date);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+		}
+
+		TEST_METHOD(UIShow_convertFromTmToString_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
+			
+			time_t now;
+			struct tm date;
+			std::string testResult;
+			std::string expectedResult;
+			
+
+			time(&now);
+			date = *localtime(&now);
+
+			//Correct case
+			date.tm_mon = 1; 
+			date.tm_mday = 1;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong dayofmonth
+			date.tm_mon = 2; 
+			date.tm_mday = 1;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong month
+			date.tm_mon = 2; 
+			date.tm_mday = 6;
+			date.tm_year = 115;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+
+			//Expected failing test: wrong year
+			date.tm_mon = 2; 
+			date.tm_mday = 1;
+			date.tm_year = 118;
+			testResult = show.convertFromTmToStr (date);
+			expectedResult = "1feb 2015";
+			Assert::AreNotEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(UIShow_shiftDate_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
+
+			time_t now;
+			struct tm date;
+			tm testResult;
+			int expectedDay;
+			int expectedMonth;
+			int expectedYear;
+			
+			time(&now);
+			date = *localtime(&now);
+
+			date.tm_mday = 1;
+			date.tm_mon = 1; 
+			date.tm_year = 115;
+
+			//correct case : shifts dayOfMonth only
+			testResult = show.shiftDate(date,5);
+			expectedDay = 6;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+
+			//correct case : shifts dayOfMonth and Month
+			testResult = show.shiftDate(date,40);
+			expectedDay = 13;
+			expectedMonth = 2;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//correct case : shifts dayOfMonth and Month and Year
+			testResult = show.shiftDate(date,400);
+			expectedDay = 7;
+			expectedMonth = 2;
+			expectedYear = 116;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong dayOfMonth
+			testResult = show.shiftDate(date,5);
+			expectedDay = 2;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreNotEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong Month
+			testResult = show.shiftDate(date,40);
+			expectedDay = 13;
+			expectedMonth = 1;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreNotEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreEqual(expectedYear, testResult.tm_year);
+
+			//Expected failing test : wrong Year
+			testResult = show.shiftDate(date,400);
+			expectedDay = 7;
+			expectedMonth = 2;
+			expectedYear = 115;
+			Assert::AreEqual(expectedDay, testResult.tm_mday);
+			Assert::AreEqual(expectedMonth, testResult.tm_mon);
+			Assert::AreNotEqual(expectedYear, testResult.tm_year);
+		}
+
+		TEST_METHOD(UIShow_intToString_Test){
+			int testInput;
+			std::string testResult;
+			std::string expectedResult;
+
+			//normal int number
+			testInput = 8765432;
+			testResult = show.intToString(testInput);
+			expectedResult = "8765432";
+			Assert::AreEqual(expectedResult,testResult);
+
+			//maximum int number
+			testInput = 2147483647;
+			testResult = show.intToString(testInput);
+			expectedResult = "2147483647";
+			Assert::AreEqual(expectedResult,testResult);
+
+			//minimum int number
+			testInput = 0;
+			testResult = show.intToString(testInput);
+			expectedResult = "0";
+			Assert::AreEqual(expectedResult,testResult);
+		}
+
+		TEST_METHOD(UIShow_stringToInt_Test){
+			string testInput;
+			int testResult;
+			int expectedResult;
+
+			//normal positive number string
+			testInput = "8765432";
+			testResult = show.stringToInt(testInput);
+			expectedResult = 8765432;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//normal negative number string
+			testInput = "-8765432";
+			testResult = show.stringToInt(testInput);
+			expectedResult = -8765432;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//mixture of number and string (number first then string)
+			testInput = "8765hello432";
+			testResult = show.stringToInt(testInput);
+			expectedResult = 8765;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//mixture of number and string (string first then number)
+			testInput = "hello432";
+			testResult = show.stringToInt(testInput);
+			expectedResult = 0;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//minimum int number
+			testInput = "-2147483647";
+			testResult = show.stringToInt(testInput);
+			expectedResult = -2147483647;
+			Assert::AreEqual(expectedResult,testResult);
+
+			//maximum int number
+			testInput = "2147483647";
+			testResult = show.stringToInt(testInput);
+			expectedResult = 2147483647;
+			Assert::AreEqual(expectedResult,testResult);
+		
+		}
+
+		TEST_METHOD(UIShow_displayNext_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
+
+			time_t now;
+			tm front;
+			tm back;
+			
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+			
+			vector<tm> testVector;
+			std::string testMainDisplayLabel;
+
+			std::string testResult;
+			std::string expectedResult;
+			
+
+			//Correct case: Generate through identifying [Week]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Week]";
+			expectedResult = "show 17feb 2015 to 23feb 2015";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//Correct case: Generate through identifying [Month]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Month]";
+			expectedResult = "show mar 2015";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm> normal case 
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 17;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 18feb 2015 to 25feb 2015";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm> normal case - large days difference
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2015 to 11feb 2058";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit 3000
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 586;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+
+			std::string expectedErrorString = "Error: Unable to display date after year 2999";
+			try{
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit more than 3000
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 590;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - no day difference
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2015";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> front later than back
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 117;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2015 to 10feb 2013";
+			testResult = show.displayNext(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+		}
+
+		TEST_METHOD(UIShow_displayBack_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
+
+			time_t now;
+			tm front;
+			tm back;
+			
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+			
+			vector<tm> testVector;
+			std::string testMainDisplayLabel;
+
+			std::string testResult;
+			std::string expectedResult;
+			
+
+			//Correct case: Generate through identifying [Week]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Week]";
+			expectedResult = "show 3feb 2015 to 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//Correct case: Generate through identifying [Month]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Month]";
+			expectedResult = "show jan 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm> normal case 
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 17;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 2feb 2015 to 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+
+			//vector<tm>  - large days difference, year hit 70
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 21;
+			back.tm_mon = 2;
+			back.tm_year = 73;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			std::string expectedErrorString = "Error: Unable to display date before year 1971";
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit below 70
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 586;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - even larger days difference , year hit more than 3000
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 72;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 590;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 11feb 2450 to 13feb 2928";
+
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			testVector.clear();
+
+			//vector<tm> normal case - no day difference
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 9feb 2015";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> front later than back
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 117;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2019 to 9feb 2017";
+			testResult = show.displayBack(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+			
+			
+		}
+
+		TEST_METHOD(UIShow_generateDateString_Test){
+			std::string input;
+			std::string expectedResult;
+			std::string testResult;
+			std::string expectedErrorString;
+
+			//full valid date input
+			input = "21/8/2015";
+			testResult = show.generateDateString(input);
+			expectedResult = "21aug 2015";
+
+			Assert::AreEqual(expectedResult,testResult);
+
+			//no mday
+			input = "/8/2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//boundary test - mday < 1
+			input = "0/8/2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//boundary test - mday < 31
+			input = "32/8/2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+		
+			//no mon
+			input = "8//2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//boundary test - mon < 1
+			input = "8/0/2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//boundary test - mon > 12
+			input = "8/13/2015";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//no year
+			input = "8/8/";
+			expectedErrorString = "Error: Invalid Date(s) Selected / Date(s) out of range";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+
+			//boundary test - year < 1971
+			input = "8/1/1970";
+			expectedErrorString = "Error: Unable to display date before year 1971";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+			//boundary test - year > 2999
+			input = "8/1/3000";
+			expectedErrorString = "Error: Unable to display date after year 2999";
+			try{
+				testResult = show.generateDateString(input);
+			}
+			catch(const std::string& testErrorString){
+				Assert::AreEqual(expectedErrorString,testErrorString);
+			}
+			
+		}
+
+		TEST_METHOD(UIShow_generteCurrentCommand_Test){
+			//boundary tests of day,month & year of tm date is voided as they are being handled by function checkValidityOftm()
+			// and has already been tested in TEST_METHOD(UIShow_checkValidityOftm_Test)
+
+			time_t now;
+			tm front;
+			tm back;
+			
+			time(&now);
+			front = *localtime(&now);
+			back = *localtime(&now);
+			
+			vector<tm> testVector;
+			std::string testMainDisplayLabel;
+
+			std::string testResult;
+			std::string expectedResult;
+
+			//Case 1 : generate based on the word in main display label
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "Help Introduction";
+			expectedResult = "help";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Correct case: Generate through identifying [Week]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Week] 10Feb - 16Feb 2015";
+			expectedResult = "show week 10Feb - 16Feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//Correct case: Generate through identifying [Month]
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 16;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[Month] 10Feb - 16Feb 2015";
+			expectedResult = "show month 10Feb - 16Feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> normal case - single date 
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm> normal case - 2 different dates
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 115;
+
+			back.tm_mday = 17;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2015 to 17feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+
+			//vector<tm>  - boundary test - 1st Jan 1971
+			front.tm_mday = 1;
+			front.tm_mon = 0;
+			front.tm_year = 71;
+
+			back.tm_mday = 21;
+			back.tm_mon = 2;
+			back.tm_year = 73;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 1jan 1971 to 21mar 1973";
+
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVector.clear();
+
+			//vector<tm>  - boundary test - 31st Dec 2999
+			front.tm_mday = 10;
+			front.tm_mon = 5;
+			front.tm_year = 1099;
+
+			back.tm_mday = 31;
+			back.tm_mon = 11;
+			back.tm_year = 1099;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10jun 2999 to 31dec 2999";
+
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+
+			testVector.clear();
+
+			//vector<tm> front later than back
+			front.tm_mday = 10;
+			front.tm_mon = 1;
+			front.tm_year = 117;
+
+			back.tm_mday = 10;
+			back.tm_mon = 1;
+			back.tm_year = 115;
+
+			testVector.push_back(front);
+			testVector.push_back(back);
+
+			testMainDisplayLabel = "[weeergfwergwer";
+			expectedResult = "show 10feb 2017 to 10feb 2015";
+			testResult = show.generateCurrentCommand(testMainDisplayLabel,testVector);
+			Assert::AreEqual(expectedResult,testResult);
+			testVector.clear();
+		}
+
+	};
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\UITest.cpp
+
+
+
+
+

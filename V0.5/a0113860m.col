@@ -1,0 +1,3143 @@
+//@author: a0113860m
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventFacade.cpp
+	 */
+
+
+#include "EventFacade.h"
+
+EventFacade::EventFacade(void)
+{
+	EventStorage::storage();
+}
+
+EventFacade::~EventFacade(void)
+{
+}
+
+/*To EventModifer*/
+vector<Event> EventFacade::addEvent(Event newEvent){
+	logger.log(EventLog::FACADE + EventLog::ADD);
+	return modifier.add(newEvent); 
+}
+
+vector<Event> EventFacade::deleteEvent(Event deletedEvent){
+	logger.log(EventLog::FACADE + EventLog::DELETE);
+	return modifier.del(deletedEvent); 
+}
+
+vector<Event> EventFacade::editEvent(Event beforeEdit, Event afterEdit){
+	logger.log(EventLog::FACADE + EventLog::EDIT);
+	return modifier.edit(beforeEdit, afterEdit);
+}
+
+vector<Event> EventFacade::completeEvent(Event completedEvent){
+	logger.log(EventLog::FACADE + EventLog::COMPLETE);
+	return modifier.complete(completedEvent);
+}
+
+vector<Event> EventFacade::uncompleteEvent(Event uncompletedEvent){
+	logger.log(EventLog::FACADE + EventLog::UNCOMPLETE);
+	return modifier.uncomplete(uncompletedEvent);
+}
+
+/*To EventSearch*/
+vector<Event> EventFacade::findNameOccurrence(string eventName){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_NAME_OCCURRENCE);
+	return searcher.searchCurrentNameOccurrence(eventName);
+}
+
+vector<Event> EventFacade::findNameExact(string eventName){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_NAME_EXACT);
+	return searcher.searchCurrentNameExact(eventName);
+}
+
+vector<Event> EventFacade::findCompletedNameOccurrence(string eventName){
+	logger.log(EventLog::FACADE + EventLog::COMPLETE + EventLog::SEARCH_NAME_OCCURRENCE);
+	return searcher.searchCompletedNameOccurrence(eventName);
+}
+
+vector<Event> EventFacade::findCompletedNameExact(string eventName){
+	logger.log(EventLog::FACADE + EventLog::COMPLETE + EventLog::SEARCH_NAME_EXACT);
+	return searcher.searchCompletedNameExact(eventName);
+}
+
+vector<Event> EventFacade::findLevelImportance(int level){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_LEVEL_IMPORTANCE);
+	return searcher.searchLevelImportance(level);
+}
+
+vector<Event> EventFacade::findAllImportance(){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_ALL_IMPORTANCE);
+	return searcher.searchAllImportance();
+}
+
+Event EventFacade::findEventWithID(int eventID){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_EVENT_WITH_ID);
+	return searcher.searchEventWithID(eventID);
+}
+
+Event EventFacade::findCompletedEventWithID(int eventID){
+	logger.log(EventLog::FACADE + EventLog::SEARCH_COMPLETED_EVENT_WITH_ID);
+	return searcher.searchCompletedEventWithID(eventID);
+}
+
+/*To EventOrganiser*/
+vector<Event> EventFacade::showDates(Event eventWithStartEndTimes){
+	logger.log(EventLog::FACADE + EventLog::SHOW_DATES);
+	return organiser.showDatesFromNormalContent(eventWithStartEndTimes);
+}
+
+vector<Event> EventFacade::showAllNormalEvents(){
+	logger.log(EventLog::FACADE + EventLog::SHOW_ALL_FLOATING_CURRENT);
+	return organiser.showAllNormalCurrent();
+}
+
+vector<Event> EventFacade::showAllFloatingEvents(){
+	logger.log(EventLog::FACADE + EventLog::SHOW_ALL_FLOATING_CURRENT);
+	return organiser.showAllFloatingCurrent();
+}
+
+vector<Event> EventFacade::showAllNormalCompleted(){
+	logger.log(EventLog::FACADE + EventLog::SHOW_ALL_NORMAL_COMPLETED);
+	return organiser.showAllNormalCompleted();
+}
+
+vector<Event> EventFacade::showAllFloatingCompleted(){
+	logger.log(EventLog::FACADE + EventLog::SHOW_ALL_FLOATING_COMPLETED);
+	return organiser.showAllFloatingCompleted();
+}
+
+/*To EventStorage*/
+bool EventFacade::dataRead(){
+	logger.log(EventLog::FACADE + EventLog::DATA_READ);
+	return EventStorage::storage().getIsRead();
+}
+
+int EventFacade::getDataID(){
+	logger.log(EventLog::FACADE + EventLog::DATA_ID);
+	return EventStorage::storage().getLastID();
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventFacade.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventFacade.h
+	 */
+
+//========================================================================================
+//EventFacade is a thin class which provides a simple interface with all the important 
+//APIs to the client, hiding the internal complexity of the storage. It purely redirects 
+//desired function calls to the appropriate destination.
+//
+//The 4 main destinations for redirections are:
+// 1) EventModifier
+// 2) EventSearch
+// 3) EventOrgansier
+// 4) EventStorage
+//
+//When an EventFacade object is first created, it will construct the first storage instance.
+//Establising the internal and external(text file) storages. Subsequent access to storage 
+//will be through an instance.
+//
+//All redirections are logged.
+//
+//sample usage:
+//	EventFacade facade;
+//		facade.add(event);
+//		//returns vector<Event>
+//========================================================================================
+
+#pragma once
+
+#ifndef EVENTFACADE_H
+#define EVENTFACADE_H
+
+#include "EventModifier.h"
+
+class EventFacade{
+public:
+	EventFacade(void);
+	~EventFacade(void);
+
+	/*Redirection to appropriate destination*/
+	/*To EventModifer*/
+	vector<Event> addEvent(Event newEvent);
+	vector<Event> deleteEvent(Event deletedEvent);
+	vector<Event> editEvent(Event beforeEdit, Event afterEdit);
+	vector<Event> completeEvent(Event completedEvent);
+	vector<Event> uncompleteEvent(Event uncompletedEvent);
+
+	/*To EventSearch*/
+	vector<Event> findNameOccurrence(string eventName); 
+	vector<Event> findNameExact(string eventName); 
+	vector<Event> findCompletedNameOccurrence(string eventName);
+	vector<Event> findCompletedNameExact(string eventName);
+	vector<Event> findLevelImportance(int level);
+	vector<Event> findAllImportance();
+	Event findEventWithID(int eventID);
+	Event findCompletedEventWithID(int eventID);
+
+	/*To EventOrganiser*/
+	vector<Event> showDates(Event eventWithStartEndTimes);
+	vector<Event> showAllNormalEvents();	
+	vector<Event> showAllFloatingEvents();
+	vector<Event> showAllNormalCompleted();
+	vector<Event> showAllFloatingCompleted();
+
+	/*To EventStorage*/
+	bool dataRead();
+	int getDataID();
+
+private:
+
+	EventModifier modifier;
+	EventOrganiser organiser;
+	EventSearch searcher;
+	EventLog logger;
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventFacade.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventLog.cpp
+	 */
+
+
+#include "EventLog.h"
+
+const string EventLog::LOG_FILE_NAME = "EventLog.txt";
+
+const string EventLog::FACADE = "EventFacade ";
+
+const string EventLog::MODIFIER = "EventModifier ";
+const string EventLog::ADD = "Add ";
+const string EventLog::DELETE = "Delete ";
+const string EventLog::EDIT = "Edit ";
+const string EventLog::COMPLETE = "Complete ";
+const string EventLog::UNCOMPLETE = "Uncomplete ";
+const string EventLog::FLOAT_TO_NORMAL = "floatingToNormal ";
+const string EventLog::NORMAL_TO_FLOAT = "normalToFLoating ";
+const string EventLog::CORRECT_DATE = "correctDate ";
+
+const string EventLog::SEARCH = "EventSearch ";
+const string EventLog::SEARCH_NAME_OCCURRENCE = "searchNameOccurrence ";
+const string EventLog::SEARCH_NAME_EXACT = "searchNameExact ";
+const string EventLog::SEARCH_LEVEL_IMPORTANCE = "searchLevelImportance ";
+const string EventLog::SEARCH_ALL_IMPORTANCE = "searchAllImportance ";
+const string EventLog::SEARCH_INDEX_WITH_ID = "searchIndexWithID ";
+const string EventLog::SEARCH_EVENT_WITH_ID = "searchEventWithID ";
+const string EventLog::SEARCH_COMPLETED_EVENT_WITH_ID = "searchCompletedEventWithID ";
+
+const string EventLog::ORGANISER = "EventOrgansier ";
+const string EventLog::SHOW_DATES = "showDates ";
+const string EventLog::SHOW_ALL_NORMAL_CURRENT = "showAllNormalCurrent ";
+const string EventLog::SHOW_ALL_NORMAL_COMPLETED = "showAllNormalCompleted ";
+const string EventLog::SHOW_ALL_FLOATING_CURRENT = "showAllFloatingCurrent ";
+const string EventLog::SHOW_ALL_FLOATING_COMPLETED = "showAllFloatingCompleted ";
+const string EventLog::SHOW_EVENTS = "showEvents ";
+const string EventLog::SHOW_DATES_FROM_NORMAL_CONTENT = "showDatesFromNormalContent ";
+const string EventLog::DATE_RANGE = "dateRange ";
+const string EventLog::SHOW_DATE_RANGE = "showDateRange ";
+
+const string EventLog::STORAGE = "EventStorage ";
+const string EventLog::START_UP = "...Syncing with storages...";
+const string EventLog::READING_ERROR = "ERROR IN READING ";
+const string EventLog::GET_NORMAL_CONTENT = "getNormalContent ";
+const string EventLog::GET_FLOATING_CONTENT = "getFloatingContent ";
+const string EventLog::DATA_READ = "dataRead ";
+const string EventLog::DATA_ID = "dataID ";
+
+
+const string EventLog::NORMAL = "Normal "; 
+const string EventLog::FLOATING = "Floating ";
+const string EventLog::EXIT = "Exit ";
+const string EventLog::ERROR = "ERROR: ";
+
+EventLog::EventLog(){
+}
+
+void EventLog::log(string functionName){
+	std::ofstream writeFile;
+	writeFile.open(LOG_FILE_NAME, ios::app);
+	writeFile << functionName << endl;
+	writeFile.close();
+}
+
+void EventLog::log(string location, int data){
+	std::ofstream writeFile;
+	writeFile.open(LOG_FILE_NAME, ios::app);
+	writeFile << location << " " << data <<  endl;
+	writeFile.close();
+}
+
+void EventLog::log(int data){
+	std::ofstream writeFile;
+	writeFile.open(LOG_FILE_NAME, ios::app);
+	writeFile << data << endl;
+	writeFile.close();
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventLog.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventLog.h
+	 */
+
+//========================================================================================
+//EventLog is responsible for writing logs onto a text file(EventLog.txt) for reference 
+//and debugging. Combinations of log messages are used liberally throughout the storage 
+//component.
+//========================================================================================
+#pragma once
+
+#ifndef EVENTLOG_H
+#define EVENTLOG_H
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using std::string;
+using std::ofstream;
+using std::ostringstream;
+using std::ios;
+using std::endl;
+
+class EventLog {
+public:
+	EventLog();
+
+	/*EventFacade*/
+	static const string FACADE;
+	
+	/*EventModifier*/
+	static const string MODIFIER;
+	static const string ADD;
+	static const string DELETE;
+	static const string EDIT;
+	static const string COMPLETE;
+	static const string UNCOMPLETE;
+	static const string FLOAT_TO_NORMAL;
+	static const string NORMAL_TO_FLOAT;
+	static const string CORRECT_DATE;
+
+	/*EventSearch*/
+	static const string SEARCH;
+	static const string SEARCH_NAME_OCCURRENCE;
+	static const string SEARCH_NAME_EXACT;
+	static const string SEARCH_LEVEL_IMPORTANCE;
+	static const string SEARCH_ALL_IMPORTANCE;
+	static const string SEARCH_INDEX_WITH_ID;
+	static const string SEARCH_EVENT_WITH_ID;
+	static const string SEARCH_COMPLETED_EVENT_WITH_ID;
+
+	/*EventOrgansier*/
+	static const string ORGANISER;
+	static const string SHOW_DATES;
+	static const string SHOW_ALL_NORMAL_CURRENT;
+	static const string SHOW_ALL_NORMAL_COMPLETED;
+	static const string SHOW_ALL_FLOATING_CURRENT;
+	static const string SHOW_ALL_FLOATING_COMPLETED;
+	static const string SHOW_EVENTS;
+	static const string SHOW_DATES_FROM_NORMAL_CONTENT;
+	static const string DATE_RANGE;
+	static const string SHOW_DATE_RANGE;
+
+	/*EventStorage*/
+	static const string STORAGE;
+	static const string START_UP;
+	static const string READING_ERROR;
+	static const string GET_NORMAL_CONTENT;
+	static const string GET_FLOATING_CONTENT;
+	static const string DATA_READ;
+	static const string DATA_ID;
+
+	static const string NORMAL;
+	static const string FLOATING;
+	static const string EXIT;
+	static const string ERROR;
+
+	//Methods
+	void log(string functionName);
+	void log(string location, int data);
+	void log(int data);
+
+private:
+	static const std::string LOG_FILE_NAME;
+
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventLog.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventModifier.cpp
+	 */
+
+
+#include "EventModifier.h"
+
+const int EventModifier::NOT_FOUND = -1 ;
+const int EventModifier::DEFAULT = 100;
+
+
+EventModifier::EventModifier(void)
+{
+}
+
+EventModifier::~EventModifier(void)
+{
+}
+
+//Add method
+//returns a vector of Events of the added date
+vector<Event> EventModifier::add(Event newEvent){  
+	logger.log(EventLog::MODIFIER + EventLog::ADD);
+	vector<Event> toLogic;
+	if(newEvent.getIsFloating()){
+		addFloat(newEvent);
+		toLogic = organiser.showAllFloatingCurrent();	
+	} else{
+		addNormal(newEvent);
+		toLogic = organiser.showDatesFromNormalContent(newEvent);
+	}
+	return toLogic; 
+}
+
+void EventModifier::addFloat(Event newEvent){
+	logger.log(EventLog::MODIFIER + EventLog::ADD + EventLog::FLOATING);
+	vector<Event> tempContents;
+	tempContents = organiser.allFloatingCurrent();
+	tempContents.push_back(newEvent);
+	organiser.saveFloating(tempContents);
+}
+void EventModifier::addNormal(Event newEvent){
+	logger.log(EventLog::MODIFIER + EventLog::ADD + EventLog::NORMAL);
+	vector<Event> tempContents;
+	tempContents = organiser.allNormalCurrent();
+	tempContents.push_back(newEvent);
+	organiser.saveNormal(tempContents);
+}
+
+//========================================================================================
+//Delete method
+vector<Event> EventModifier::del(Event deletedEvent){
+	logger.log(EventLog::MODIFIER + EventLog::DELETE);
+	
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	if(deletedEvent.getIsFloating()){
+		index = findFloatingIndex(deletedEvent.getID());	//delete floating
+		assert(index > NOT_FOUND);
+		toLogic = deleteFloat(index);
+	} else{
+		index = findNormalIndex(deletedEvent.getID());	//delete normal
+		assert(index > NOT_FOUND);
+		toLogic = deleteNormal(index);
+	}
+	return toLogic;
+}
+
+vector<Event> EventModifier::deleteNormal(int index){
+	
+	vector<Event> tempContents = organiser.allNormalCurrent();
+	Event deletedEvent = tempContents[index];
+	tempContents.erase(tempContents.begin() + index);
+	organiser.saveNormal(tempContents);
+
+	logger.log(EventLog::MODIFIER + EventLog::DELETE + EventLog::NORMAL + deletedEvent.getName());
+	vector<Event> toLogic = organiser.showDatesFromNormalContent(deletedEvent);	
+	return toLogic;
+}
+
+vector<Event> EventModifier::deleteFloat(int index){
+	
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	Event deletedEvent = tempContents[index];
+	tempContents.erase(tempContents.begin() + index);
+	organiser.saveFloating(tempContents);
+
+	logger.log(EventLog::MODIFIER + EventLog::DELETE + EventLog::FLOATING + deletedEvent.getName());
+	vector<Event> toLogic = organiser.showAllFloatingCurrent();	
+	return toLogic;
+}
+
+//========================================================================================
+//Edit method
+vector<Event> EventModifier::edit(Event beforeEdit, Event afterEdit){
+	logger.log(EventLog::MODIFIER + EventLog::EDIT + beforeEdit.getName());
+	
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	if(beforeEdit.getIsFloating()){
+		if((afterEdit.getStartDate().tm_mday != DEFAULT) || (afterEdit.getStartDate().tm_hour != DEFAULT)){
+			index = findFloatingIndex(beforeEdit.getID()); //edit floatingToNormal
+			assert(index > NOT_FOUND);
+			toLogic = editFloatingToNormal(index, afterEdit);
+		} else{																			
+			index = findFloatingIndex(beforeEdit.getID()); //edit floating
+			assert(index > NOT_FOUND);
+			toLogic = editFloating(index, afterEdit);
+			}
+	} else{
+		if(afterEdit.getIsFloating()){
+			index = findNormalIndex(beforeEdit.getID());	//edit normalToFloat
+			assert(index > NOT_FOUND);
+			toLogic = editNormalToFloating(index, afterEdit);
+		} else{
+			index = findNormalIndex(beforeEdit.getID());	//edit normal
+			assert(index > NOT_FOUND);
+			toLogic = editNormal(index, afterEdit);
+			}
+	}
+	return toLogic;
+}
+
+vector<Event> EventModifier::editFloatingToNormal(int index, Event afterEdit){
+	logger.log(EventLog::MODIFIER + EventLog::EDIT + EventLog::FLOAT_TO_NORMAL);
+
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	Event beforeEdit = tempContents[index];
+	time_t t = time(0);
+	struct tm* now = localtime(&t);
+
+	tempContents[index].setIsFloating(false);
+
+	if(afterEdit.getName() != ""){
+		(tempContents[index]).setName(afterEdit.getName());		
+	}			
+	if(afterEdit.getImportanceLevel() != NOT_FOUND){
+		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
+	}
+	if((afterEdit.getStartDate().tm_mday != DEFAULT) && (afterEdit.getStartDate().tm_hour != DEFAULT)){  //Given both day & time
+		(tempContents[index]).setStartDate(afterEdit.getStartDate().tm_mday,afterEdit.getStartDate().tm_mon,afterEdit.getStartDate().tm_year);
+		(tempContents[index]).setStartTime(afterEdit.getStartDate().tm_hour,afterEdit.getStartDate().tm_min);
+		(tempContents[index]).setEndDate(afterEdit.getEndDate().tm_mday,afterEdit.getEndDate().tm_mon,afterEdit.getStartDate().tm_year); 
+		(tempContents[index]).setEndTime(afterEdit.getEndDate().tm_hour,afterEdit.getEndDate().tm_min);
+	} else if((afterEdit.getStartDate().tm_mday != DEFAULT) && (afterEdit.getStartDate().tm_hour == DEFAULT)){ //Given only have day, time = ALLDAY
+		(tempContents[index]).setStartDate(afterEdit.getStartDate().tm_mday,afterEdit.getStartDate().tm_mon,afterEdit.getStartDate().tm_year);
+		(tempContents[index]).setStartTime(0,0);
+		(tempContents[index]).setEndDate(afterEdit.getEndDate().tm_mday,afterEdit.getEndDate().tm_mon,afterEdit.getStartDate().tm_year);
+		(tempContents[index]).setEndTime(23,59);
+	} else if((afterEdit.getStartDate().tm_mday == DEFAULT) && (afterEdit.getStartDate().tm_hour != DEFAULT)){ //Given only have time, day = TODAY
+		(tempContents[index]).setStartDate(now->tm_mday,now->tm_mon,now->tm_year);
+		(tempContents[index]).setStartTime(afterEdit.getStartDate().tm_hour,afterEdit.getStartDate().tm_min);
+		(tempContents[index]).setEndDate(now->tm_mday,now->tm_mon,now->tm_year);
+		(tempContents[index]).setEndTime(afterEdit.getEndDate().tm_hour,afterEdit.getEndDate().tm_min);
+	}
+
+	correctDate(&tempContents[index]);
+
+	del(beforeEdit);  
+	tempContents = add(tempContents[index]);		
+	
+	return tempContents;
+}
+
+vector<Event> EventModifier::editFloating(int index, Event afterEdit){ 
+	logger.log(EventLog::MODIFIER + EventLog::EDIT + EventLog::FLOATING);
+
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	
+	if(afterEdit.getName() != ""){
+		(tempContents[index]).setName(afterEdit.getName());		
+	}			
+	if(afterEdit.getImportanceLevel() != NOT_FOUND){
+		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
+	}
+	organiser.saveFloating(tempContents);
+	tempContents = organiser.showAllFloatingCurrent();
+	
+	return tempContents;
+}
+
+vector<Event> EventModifier::editNormal(int index, Event afterEdit){
+	logger.log(EventLog::MODIFIER + EventLog::EDIT + EventLog::NORMAL);
+
+	vector<Event> tempContents = organiser.allNormalCurrent();
+
+	if(afterEdit.getName() != ""){
+		(tempContents[index]).setName(afterEdit.getName());
+	}
+	if(afterEdit.getStartDate().tm_mday != DEFAULT){ 
+		(tempContents[index]).setStartDate(afterEdit.getStartDate().tm_mday,afterEdit.getStartDate().tm_mon,afterEdit.getStartDate().tm_year);
+	}
+	if(afterEdit.getEndDate().tm_mday != DEFAULT){
+		(tempContents[index]).setEndDate(afterEdit.getEndDate().tm_mday,afterEdit.getEndDate().tm_mon,afterEdit.getStartDate().tm_year);
+	}
+	if(afterEdit.getStartDate().tm_hour != DEFAULT){
+		(tempContents[index]).setStartTime(afterEdit.getStartDate().tm_hour,afterEdit.getStartDate().tm_min);
+	}
+	if(afterEdit.getEndDate().tm_min != DEFAULT){
+		(tempContents[index]).setEndTime(afterEdit.getEndDate().tm_hour,afterEdit.getEndDate().tm_min);
+	}
+	if(afterEdit.getImportanceLevel() != NOT_FOUND){ 
+		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
+	}
+
+	correctDate(&tempContents[index]);
+
+	organiser.saveNormal(tempContents);
+	tempContents = organiser.showDatesFromNormalContent(tempContents[index]);
+	return tempContents;
+}
+
+vector<Event> EventModifier::editNormalToFloating(int index, Event afterEdit){
+	logger.log(EventLog::MODIFIER + EventLog::EDIT + EventLog::NORMAL_TO_FLOAT);
+
+	vector<Event> tempContents = organiser.allNormalCurrent();
+	Event beforeEdit = tempContents[index];
+
+	tempContents[index].setIsFloating(true);
+	tempContents[index].setStartDate(0,0,0);
+	tempContents[index].setStartTime(0,0);
+	tempContents[index].setEndDate(0,0,0); 
+	tempContents[index].setEndTime(0,0);
+
+	if(afterEdit.getName() != ""){
+		(tempContents[index]).setName(afterEdit.getName());
+	}
+	if(afterEdit.getImportanceLevel() != NOT_FOUND){ 
+		(tempContents[index]).setImportanceLevel(afterEdit.getImportanceLevel());
+	}
+
+	del(beforeEdit);  
+	tempContents = add(tempContents[index]);  
+
+	return tempContents;
+}
+
+void EventModifier::correctDate(Event *tempEvent) {
+	logger.log(EventLog::MODIFIER + EventLog::CORRECT_DATE);
+
+	struct tm* time;
+	time = &tempEvent->getStartDate();
+	mktime(time);
+	tempEvent->setStartDate(time->tm_mday,time->tm_mon,time->tm_year);
+	tempEvent->setStartTime(time->tm_hour,time->tm_min);
+	tempEvent->setStartWeekday(time->tm_wday);
+
+	time = &tempEvent->getEndDate();
+	mktime(time);
+	tempEvent->setEndDate(time->tm_mday,time->tm_mon,time->tm_year);
+	tempEvent->setEndTime(time->tm_hour,time->tm_min);
+	tempEvent->setEndWeekday(time->tm_wday);
+}
+
+//========================================================================================
+//Complete method
+vector<Event> EventModifier::complete(Event completedEvent){
+	logger.log(EventLog::MODIFIER + EventLog::COMPLETE);
+
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	if(completedEvent.getIsFloating()){
+		index = findFloatingIndex(completedEvent.getID()); //complete floating
+		assert(index > NOT_FOUND);
+		toLogic = completeFloat(index);
+	} else{
+		index = findNormalIndex(completedEvent.getID()); //complete normal
+		assert(index > NOT_FOUND);
+		toLogic = completeNormal(index, completedEvent);
+	}
+	return toLogic;
+}
+
+vector<Event> EventModifier::completeNormal(int index, Event completedEvent){  
+	logger.log(EventLog::MODIFIER + EventLog::COMPLETE + EventLog::NORMAL);
+
+	vector<Event> tempContents = organiser.allNormalCurrent();
+	
+	//mark complete in uncompleted vector of events
+	vector<Event> completedEventDate = organiser.showDatesFromNormalContent(tempContents[index]);
+	completedEventDate = markCompleted(completedEvent, completedEventDate);
+	
+	tempContents[index].setIsCompleted(true);
+	organiser.saveNormal(tempContents);
+
+	return completedEventDate;
+}
+
+vector<Event> EventModifier::markCompleted(Event completedEvent, vector<Event> completedEventDate){
+
+	for(auto i=0;i<completedEventDate.size();i++){
+		if(completedEventDate[i].getID() == completedEvent.getID()){
+			completedEventDate[i].setIsCompleted(true);
+		}
+	}
+	return completedEventDate;
+}
+
+vector<Event> EventModifier::completeFloat(int index){
+	logger.log(EventLog::MODIFIER + EventLog::COMPLETE + EventLog::FLOATING);
+
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	tempContents[index].setIsCompleted(true);
+	organiser.saveFloating(tempContents);
+	return tempContents;
+}
+
+//========================================================================================
+//Uncomplete Method
+vector<Event> EventModifier::uncomplete(Event uncompletedEvent){
+	logger.log(EventLog::MODIFIER + EventLog::UNCOMPLETE);
+	
+	int index = NOT_FOUND; 
+	vector<Event> toLogic;
+
+	if(uncompletedEvent.getIsFloating()){
+		index = findFloatingCompletedIndex(uncompletedEvent.getID()); //uncomplete floating
+		assert(index > NOT_FOUND);
+		toLogic = uncompleteFloat(index);
+	} else{
+		index = findNormalCompletedIndex(uncompletedEvent.getID()); //uncomplete normal
+		assert(index > NOT_FOUND);
+		toLogic = uncompleteNormal(index);
+	}
+	return toLogic;
+}
+vector<Event> EventModifier::uncompleteNormal(int index){  
+	logger.log(EventLog::MODIFIER + EventLog::UNCOMPLETE + EventLog::NORMAL);
+
+	vector<Event> tempContents = organiser.allNormalCompleted();
+
+	//mark uncomplete
+	tempContents[index].setIsCompleted(false);
+	organiser.saveNormalCompleted(tempContents);
+
+	return organiser.showDatesFromNormalContent(tempContents[index]);
+}
+
+vector<Event> EventModifier::uncompleteFloat(int index){
+	logger.log(EventLog::MODIFIER + EventLog::UNCOMPLETE + EventLog::FLOATING);
+
+	vector<Event> tempContents = organiser.allFloatingCompleted();
+
+	//mark uncomplete
+	tempContents[index].setIsCompleted(false);
+	organiser.saveFloatingCompleted(tempContents);
+
+	return organiser.allFloatingCurrent();
+}
+
+//========================================================================================
+//support methods
+int EventModifier::findNormalIndex(int eventID){
+	vector<Event> tempContents = organiser.allNormalCurrent();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}
+
+int EventModifier::findFloatingIndex(int eventID){
+	vector<Event> tempContents = organiser.allFloatingCurrent();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}
+
+int EventModifier::findNormalCompletedIndex(int eventID){
+	vector<Event> tempContents = organiser.allNormalCompleted();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}
+
+int EventModifier::findFloatingCompletedIndex(int eventID){
+	vector<Event> tempContents = organiser.allFloatingCompleted();
+	int index = searcher.searchIndexWithID(eventID,tempContents);
+	return index;
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventModifier.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventModifier.h
+	 */
+
+//==================================================================================================
+//EventModifier is a class that deals with the modification of an event or its attributes.
+//The internal and external storages are then updated based on the action executed.
+//
+//EventModifier comprises of 5 main methods:
+// 1)Adding an event
+// 2)Deleting an event
+// 3)Editing an event
+// 4)completing an event
+// 5)uncompleting an event
+//
+//The returning vectors varies according to the type of event modified:
+//		Event Modified			::			Output
+//	Current Normal Event		:: returns uncompleted events within the start and end date of the modified event.
+//	Current Floating Event		:: returns all uncompleted floating events.
+//	Completed Normal Event		:: returns completed events within the start and end date of the modified event.
+//	Completed Floating Event	:: returns all completed floating events.
+//
+//==================================================================================================
+#pragma once
+
+#ifndef EVENTMODIFIER_H
+#define EVENTMODIFIER_H
+
+#include "EventSearch.h"
+#include "EventOrganiser.h"
+#include <assert.h>
+
+class EventModifier{
+public:
+	EventModifier(void);
+	~EventModifier(void);
+	
+	/*Main Methods*/
+	vector<Event> add(Event newEvent);
+	vector<Event> del(Event deletedEvent);
+	vector<Event> edit(Event beforeEdit, Event afterEdit);	
+	vector<Event> complete(Event completedEvent);
+	vector<Event> uncomplete(Event uncompletedEvent);
+
+private:
+
+	//These are variables to improve readability
+	static const int EventModifier::NOT_FOUND;
+	static const int EventModifier::DEFAULT;
+
+	EventOrganiser organiser;
+	EventSearch searcher;
+	EventLog logger;
+
+	/*Add Method*/
+	void addNormal(Event newEvent);
+	void addFloat(Event newEvent);
+
+	/*Delete Method*/
+	vector<Event> deleteFloat(int index);
+	vector<Event> deleteNormal(int index);
+
+	/*Edit Method*/
+	vector<Event> editNormal(int index, Event afterEdit);
+	vector<Event> editFloating(int index, Event afterEdit);
+	vector<Event> editFloatingToNormal(int index, Event afterEdit);
+	vector<Event> editNormalToFloating(int index, Event afterEdit);
+	void correctDate(Event *tempEvent);
+
+	/*Complete Method*/
+	vector<Event> completeNormal(int index, Event completedEvent);
+	vector<Event> completeFloat(int index);
+	vector<Event> markCompleted(Event completedEvent, vector<Event> completedEventDate);
+	
+	/*Uncomplete Method*/
+	vector<Event> uncompleteNormal(int index);
+	vector<Event> uncompleteFloat(int index);
+
+	/*delete/edit/complete support methods*/
+	int findNormalIndex(int eventID);
+	int findFloatingIndex(int eventID);	
+	int findNormalCompletedIndex(int eventID);
+	int findFloatingCompletedIndex(int eventID);
+
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventModifier.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.cpp
+	 */
+
+
+#include "EventOrganiser.h"
+
+const int EventOrganiser::TOTAL_MONTHS_IN_A_YEAR = 12;
+
+//Marker info
+const int EventOrganiser::UNIQUE_ID = -123;
+const string EventOrganiser::MARKER_CODE = "-MSmsgjyw-";
+
+EventOrganiser::EventOrganiser(void)
+{
+}
+
+EventOrganiser::~EventOrganiser(void)
+{
+}
+
+//show all Methods
+vector<Event> EventOrganiser::showAllNormalCurrent(){
+	vector<Event> tempContent =	allNormalCurrent();
+	tempContent = showEvents(tempContent);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_CURRENT, tempContent.size());
+	return tempContent;
+}
+
+vector<Event> EventOrganiser::showAllNormalCompleted(){
+	vector<Event> tempContent = allNormalCompleted();
+	tempContent = showEvents(tempContent);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, tempContent.size());
+	return tempContent;
+}
+
+vector<Event> EventOrganiser::showAllFloatingCurrent(){
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_CURRENT);
+	return allFloatingCurrent();
+}
+
+vector<Event> EventOrganiser::showAllFloatingCompleted(){
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_COMPLETED);
+	return allFloatingCompleted();
+}
+
+//========================================================================================
+//shows the range of given eventVector, sorted and marked
+vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_EVENTS, eventsToShow.size());
+	
+	Event eventWithStartEndTime = dateRange(eventsToShow);
+	eventsToShow = showDateRange(eventWithStartEndTime,eventsToShow);
+
+	return eventsToShow;
+}
+
+//shows the range from currentContent of given event, sorted and marked
+vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEndTimes){
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATES_FROM_NORMAL_CONTENT);
+
+	vector<Event> tempContent = allNormalCurrent();
+	tempContent = showDateRange(eventWithStartEndTimes, tempContent);
+
+	return tempContent;
+}
+
+//========================================================================================
+//Filters  uncompleted / completed Events
+//get from internal storage vectors and returns filtered events
+vector<Event> EventOrganiser::allNormalCurrent(){
+	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+	vector<Event> results;
+
+	for(auto i = 0; i < tempContent.size(); i++){
+		if(tempContent[i].getIsCompleted() == false){
+			results.push_back(tempContent[i]);
+		}
+	}
+
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_CURRENT, results.size());
+	return results;
+}
+
+vector<Event> EventOrganiser::allFloatingCurrent(){
+	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
+	vector<Event> results;
+
+	for(auto i = 0; i < tempContent.size(); i++){
+		if(tempContent[i].getIsCompleted() == false){
+			results.push_back(tempContent[i]);
+		}
+	}
+
+	results = sortFloatingByID(results);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_CURRENT, results.size());
+	return results;
+}
+
+vector<Event> EventOrganiser::allNormalCompleted(){
+	vector<Event> tempContent = EventStorage::storage().getNormalContent();
+	vector<Event> results;
+
+	for(auto i = 0; i < tempContent.size(); i++){
+		if(tempContent[i].getIsCompleted() == true){
+			results.push_back(tempContent[i]);
+		}
+	}
+	
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_NORMAL_COMPLETED, results.size());
+	return results;
+}
+
+vector<Event> EventOrganiser::allFloatingCompleted(){
+	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
+	vector<Event> results;
+
+	for(auto i = 0; i < tempContent.size(); i++){
+		if(tempContent[i].getIsCompleted() == true){
+			results.push_back(tempContent[i]);
+		}
+	}
+
+	results = sortFloatingByID(results);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_ALL_FLOATING_COMPLETED, results.size());
+	return results;
+}
+
+//Setters
+void EventOrganiser::saveNormal(vector<Event> normalCurrent){
+	vector<Event> tempNormalCompleted = allNormalCompleted();
+	normalCurrent.insert( normalCurrent.end(), tempNormalCompleted.begin(), tempNormalCompleted.end() );
+	EventStorage::storage().setNormalContent(normalCurrent);
+}
+
+void EventOrganiser::saveFloating(vector<Event> floatingCurrent){
+	vector<Event> tempFloatingCompleted = allFloatingCompleted();
+	floatingCurrent.insert( floatingCurrent.end(), tempFloatingCompleted.begin(), tempFloatingCompleted.end() );
+	EventStorage::storage().setFloatingContent(floatingCurrent);
+}
+
+void EventOrganiser::saveNormalCompleted(vector<Event> normalCompleted){
+	vector<Event> tempNormalCurrent = allNormalCurrent();
+	tempNormalCurrent.insert( tempNormalCurrent.end(), normalCompleted.begin(), normalCompleted.end() );
+	EventStorage::storage().setNormalContent(tempNormalCurrent);
+}
+
+void EventOrganiser::saveFloatingCompleted(vector<Event> floatingCompleted){
+	vector<Event> tempFloatingCurrent = allFloatingCurrent();
+	tempFloatingCurrent.insert( tempFloatingCurrent.end(), floatingCompleted.begin(), floatingCompleted.end() );
+	EventStorage::storage().setFloatingContent(tempFloatingCurrent);
+}
+
+//========================================================================================
+//Show dates support methods
+//shows date range for vector items, sorted and marked
+vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter){
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATE_RANGE);
+
+	vector<Event> returnVector, sortResults;
+	vector<struct tm> wantedEventDates, exisitngEventDates;
+	bool isPushed = false;
+	time_t t = time(0);
+	struct tm* temp = localtime(&t);
+	Event tempEvent, marker;
+	marker.setName(MARKER_CODE);
+	marker.setID(UNIQUE_ID);
+	marker.setIsFloating(false);
+
+	sortResults = sortEventVectorByDate(eventsToFilter);
+	eventsToFilter = sortResults;
+
+	wantedEventDates = eventDateToVector(eventWithStartEndTimes);
+
+	for(int i = 0; i < wantedEventDates.size(); i++){
+		for(int j = 0; j < eventsToFilter.size(); j++){
+			exisitngEventDates = eventDateToVector(eventsToFilter[j]);
+			for(int k = 0; k<exisitngEventDates.size(); k++){
+				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) &&
+					(wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) &&
+					(wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
+					//check ALLDAY.. set starttime and endtime
+					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
+						tempEvent = eventsToFilter[j];
+						if(wantedEventDates[i].tm_mday == tempEvent.getStartDate().tm_mday){ //start of multiday
+							tempEvent.setEndTime(23, 59);
+						} else if(wantedEventDates[i].tm_mday == tempEvent.getEndDate().tm_mday){ //end of multiday
+							tempEvent.setStartTime(0, 0);
+						} else{ //days between multiday
+							tempEvent.setStartTime(0, 0);
+							tempEvent.setEndTime(23, 59);
+						}
+						returnVector.push_back(tempEvent);
+						isPushed = true;
+					} else{
+						returnVector.push_back(eventsToFilter[j]);
+						isPushed = true;
+					}
+				}
+			}
+		}
+		if(isPushed){
+			temp->tm_mday = wantedEventDates[i].tm_mday;
+			temp->tm_mon = wantedEventDates[i].tm_mon;
+			temp->tm_year = wantedEventDates[i].tm_year;
+			mktime(temp);
+			marker.setStartDate(temp->tm_mday, temp->tm_mon, temp->tm_year);
+			marker.setStartWeekday(temp->tm_wday);		
+			returnVector.push_back(marker);
+			isPushed = false;  //reset bool
+		}
+	}
+	returnVector = sortMarker(returnVector);
+	logger.log(EventLog::ORGANISER + EventLog::SHOW_DATE_RANGE + EventLog::EXIT, returnVector.size());
+	return returnVector;
+}
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.cpp
+	 */
+
+//shift marker up to before events
+vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
+	vector<Event> returnVector;
+	vector<Event> tempVector;
+
+	for(int i = 0; i < showResult.size(); i++){
+		if(showResult[i].getName() != MARKER_CODE){
+			tempVector.push_back(showResult[i]);
+		} else if(showResult[i].getName() == MARKER_CODE){
+			returnVector.push_back(showResult[i]);
+			for(int j = 0; j < tempVector.size(); j++){
+				returnVector.push_back(tempVector[j]);
+			}
+			tempVector.clear();
+		}
+	}
+	return returnVector;	
+}
+
+//Finds the earliest and latest day among all events in a vector of Events
+Event EventOrganiser::dateRange(vector<Event> eventsToFilter){
+	logger.log(EventLog::ORGANISER + EventLog::DATE_RANGE);
+	struct tm earliestDate, latestDate;
+	Event returnEvent;
+
+	if(!eventsToFilter.empty()){
+		eventsToFilter = sortEventVectorByDate(eventsToFilter);
+		earliestDate = eventsToFilter[0].getStartDate();
+		eventsToFilter = sortEventVectorByEndDate(eventsToFilter);
+		int lastIndex = eventsToFilter.size()-1;
+		latestDate = eventsToFilter[lastIndex].getEndDate();
+	
+		returnEvent.setStartDate(earliestDate.tm_mday, earliestDate.tm_mon, earliestDate.tm_year);	
+		returnEvent.setEndDate(latestDate.tm_mday, latestDate.tm_mon, latestDate.tm_year);
+	}
+
+	return returnEvent;
+}
+
+//Sorting methods
+//sort events by start date, earliest to latest
+vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){ 
+	Event temp;
+	
+	if(eventsToSort.size() <= 1){
+		return eventsToSort;
+	} else{
+		for(auto i = 0; i < (eventsToSort.size()-1); i++){
+			for(int j = i+1; j < eventsToSort.size(); j++){
+				int difference = findTimeDiff(eventsToSort[j].getStartDate(), eventsToSort[i].getStartDate());
+				if(difference >= 0 ){ 
+					temp = eventsToSort[i];
+					eventsToSort[i] = eventsToSort[j];
+					eventsToSort[j] = temp;
+				}
+			}
+		}
+	}
+	return eventsToSort;
+}
+
+ //sort events by end date, earliest to latest
+vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSort){
+	Event temp;
+	
+	if(eventsToSort.size() <= 1){
+		return eventsToSort;
+	} else{
+		for(auto i = 0; i < (eventsToSort.size()-1); i++){
+			for(int j = i+1; j < eventsToSort.size(); j++){
+				int difference = findTimeDiff(eventsToSort[j].getEndDate(), eventsToSort[i].getEndDate());
+				if(difference >= 0 ){ 
+					temp = eventsToSort[i];
+					eventsToSort[i] = eventsToSort[j];
+					eventsToSort[j] = temp;
+				}
+			}
+		}
+	}
+	return eventsToSort;
+}
+
+//time difference in seconds
+int EventOrganiser::findTimeDiff(tm startDay, tm endDay){
+	time_t start = mktime(&startDay);
+	time_t end = mktime(&endDay);
+
+	int difference = difftime(end, start);
+	return difference;
+}
+
+//sorts floating with ID in ascending order 
+vector<Event> EventOrganiser::sortFloatingByID(vector<Event> floating){
+	Event temp;
+
+	if(floating.size() <= 1){
+		return floating;
+	} else{
+		for(auto i = 0; i < (floating.size()-1); i++){
+			for(int j = i+1; j < floating.size(); j++){
+				if(floating[i].getID() > floating[j].getID()){ 
+					temp = floating[i];
+					floating[i] = floating[j];
+					floating[j] = temp;
+				}
+			}
+		}
+	}
+	return floating;
+}
+
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.h
+	 */
+
+//========================================================================================
+//EventOrganiser handles organisation and formatting of data from EventStorage. 
+//
+//There are 4 main types of functions in this class:
+//	1) filtering events from the internal storage vectors into 4 categories 
+//		1. Current Normal
+//		2. Current Floating
+//		3. Completed Normal
+//		4. Completed Floating
+//
+//	2) sorting the events by date and time and separating them with a marker.
+//
+//	3) shows the events or dates of concern. (sorted and marked)
+//
+//	4) merge completed and uncompleted events and saves them in the internal and external 
+//	storage.
+//
+//========================================================================================
+
+#pragma once
+
+#ifndef EVENTORGANISER_H
+#define EVENTORGANISER_H
+
+#include "EventStorage.h"
+
+class EventOrganiser{
+public:
+	EventOrganiser(void);
+	~EventOrganiser(void);
+	
+	//Show normal method
+	vector<Event> showAllNormalCurrent();
+	vector<Event> showAllNormalCompleted();
+
+	//Show floating method
+	vector<Event> showAllFloatingCurrent();
+	vector<Event> showAllFloatingCompleted();
+	
+	//Show dates method
+	vector<Event> showEvents(vector<Event> eventsToShow);
+	vector<Event> showDatesFromNormalContent(Event eventWithStartEndTimes);
+
+	//getters -- filters complete / uncompleted 
+	vector<Event> allNormalCurrent();
+	vector<Event> allFloatingCurrent();
+	vector<Event> allNormalCompleted();
+	vector<Event> allFloatingCompleted();
+
+	//setters -- merges complete / uncompleted
+	void saveNormal(vector<Event> normalCurrent);
+	void saveFloating(vector<Event> floatingCurrent);	
+	void saveNormalCompleted(vector<Event> normalCompleted);
+	void saveFloatingCompleted(vector<Event> floatingCompleted);
+
+private:
+	static const int TOTAL_MONTHS_IN_A_YEAR;
+	static const int UNIQUE_ID;
+	static const string MARKER_CODE;
+	
+	EventLog logger;
+	Conversion convertor;
+
+	//Show support methods
+	vector<Event> showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter);
+	vector<struct tm> eventDateToVector(Event showEventDates);
+	vector<Event> sortMarker(vector<Event> showResult);
+	Event dateRange(vector<Event> eventsToFilter);
+
+	//Sorting methods
+	vector<Event> sortEventVectorByDate(vector<Event> eventsToSort);
+	vector<Event> sortEventVectorByEndDate(vector<Event> eventsToSort);
+	int findTimeDiff(tm startDay, tm endDay);
+	vector<Event> sortFloatingByID(vector<Event> floating);
+
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventOrganiser.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventSearch.cpp
+	 */
+
+
+#include "EventSearch.h"
+
+const int EventSearch::NOT_FOUND = -1;
+const int EventSearch::MAX_LEVEL = 3;
+const int EventSearch::MIN_LEVEL = 1;
+const string EventSearch::ERROR_1 =  "Level greater than 3";
+
+EventSearch::EventSearch()
+{
+}
+
+EventSearch::~EventSearch()
+{
+}
+
+//Main methods
+//checking method 1 --- search event with matching string name and returns sorted with marker
+vector<Event> EventSearch::searchCurrentNameOccurrence(string eventName){
+
+	vector<Event> floatingCurrent = organiser.allFloatingCurrent();
+	vector<Event> normalCurrent = organiser.allNormalCurrent();
+
+	vector<Event> toLogic = searchNameOccurrence(eventName, normalCurrent, floatingCurrent);
+	return toLogic;
+}
+
+vector<Event> EventSearch::searchCurrentNameExact(string eventName){
+	
+	vector<Event> floatingCurrent =  organiser.allFloatingCurrent();
+	vector<Event> normalCurrent = organiser.allNormalCurrent();
+
+	vector<Event> toLogic = searchNameExact(eventName, normalCurrent, floatingCurrent);
+	return toLogic;
+}
+
+//========================================================================================
+//checking method 2 --- search completed with matching string name and returns sorted with marker
+vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
+	
+	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+
+	vector<Event> toLogic = searchNameOccurrence(eventName, normalCompleted, floatingCompleted);
+	return toLogic;
+}
+
+vector<Event> EventSearch::searchCompletedNameExact(string eventName){
+
+	vector<Event> floatingCompleted = organiser.allFloatingCompleted();
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+
+	vector<Event> toLogic = searchNameExact(eventName, normalCompleted, floatingCompleted);
+	return toLogic;
+}
+
+//========================================================================================
+//method 3 --- search level of importance
+vector<Event> EventSearch::searchLevelImportance(int level){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
+	
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+	
+	floatingEvents = searchEventWithImportance(level, floatingEvents);
+	normalEvents = searchEventWithImportance(level, normalEvents);
+
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//search method finds all important events
+vector<Event> EventSearch::searchAllImportance(){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_ALL_IMPORTANCE);
+	vector<Event> returnVector;
+	
+	vector<Event> floatingEvents =  organiser.allFloatingCurrent();
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+
+	floatingEvents = searchEventWithAllImportance(floatingEvents);
+	normalEvents = searchEventWithAllImportance(normalEvents);	
+
+	return combineResults(floatingEvents, normalEvents);
+}
+
+//========================================================================================
+//method 4 --- search event with eventID
+Event EventSearch::searchEventWithID(int eventID){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_EVENT_WITH_ID, eventID);
+
+	vector<Event> normalEvents = organiser.allNormalCurrent();
+	Event noResults;
+	noResults.setID(NOT_FOUND);
+
+	for(auto i = 0; i < normalEvents.size(); i++){
+		if(normalEvents[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_EVENT_WITH_ID + EventLog::EXIT, i);
+			return normalEvents[i];
+		}
+	} 
+	return noResults;
+}
+
+Event EventSearch::searchCompletedEventWithID(int eventID){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_COMPLETED_EVENT_WITH_ID, eventID);
+
+	vector<Event> normalCompleted = organiser.allNormalCompleted();
+	Event noResults;
+	noResults.setID(NOT_FOUND);
+
+	for(auto i = 0; i < normalCompleted.size(); i++){
+		if(normalCompleted[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_COMPLETED_EVENT_WITH_ID + EventLog::EXIT, i);
+			return normalCompleted[i];
+		}
+	} 
+	return noResults;
+}
+
+//========================================================================================
+//find index in internal storages with ID (DEL / EDIT SUPPORT)
+int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_INDEX_WITH_ID, eventID);
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
+		if(eventVectorToSearch[i].getID() == eventID){
+			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
+			return i;
+		}
+	} 
+	return NOT_FOUND;
+}
+
+//========================================================================================
+//support methods
+//Support for method 1 --- finds string name match
+vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + eventName);
+	
+	//search through names
+	floating = searchEventWithName(eventName, floating);
+	normal = searchEventWithName(eventName, normal);
+
+	floating = combineResults(floating, normal);
+
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_OCCURRENCE + EventLog::EXIT, floating.size());
+	return floating;
+}
+
+vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> eventVectorToSearch){
+
+	vector<Event> returnVector;
+
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
+		int position = eventVectorToSearch[i].getName().find(eventName);
+		if(position > NOT_FOUND){
+			returnVector.push_back(eventVectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//Support for method 2 --- find exact string name match
+vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> normal, vector<Event> floating){
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + eventName);	
+
+	floating = searchExactString(eventName, floating);
+	normal = searchExactString(eventName, normal);
+
+	floating = combineResults(floating, normal);
+
+	logger.log(EventLog::SEARCH + EventLog::SEARCH_NAME_EXACT + EventLog::EXIT, floating.size());
+	return floating;
+}
+
+vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eventVectorToSearch){
+	vector<Event> returnVector;
+
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
+		if(eventName == eventVectorToSearch[i].getName()){
+			returnVector.push_back(eventVectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//Support for method 3--- finds importance match
+vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> vectorToSearch){
+
+	vector<Event> returnVector;
+	try{
+		if(level > 3){
+			if(level > MAX_LEVEL){
+				level = MAX_LEVEL;
+			} 
+			if( level < MIN_LEVEL){
+				level = MIN_LEVEL;
+			}
+			string exception = ERROR_1;
+			throw exception;
+		}
+	} catch(string e){
+		logger.log(EventLog::ERROR + e);
+	}
+
+	for(auto i = 0; i < vectorToSearch.size(); i++){
+		if(level == vectorToSearch[i].getImportanceLevel()){
+			returnVector.push_back(vectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//finds all events with importance level > 0
+vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSearch){
+
+	vector<Event> returnVector;
+
+	for(auto i = 0; i < vectorToSearch.size(); i++){
+		if(vectorToSearch[i].getImportanceLevel() >= MIN_LEVEL){
+			returnVector.push_back(vectorToSearch[i]);
+		}
+	}
+	return returnVector;
+}
+
+//Support method
+vector<Event> EventSearch::combineResults(vector<Event> floatingEvents, vector<Event> normalEvents){
+	normalEvents = organiser.showEvents(normalEvents);
+	floatingEvents.insert(floatingEvents.end(), normalEvents.begin(), normalEvents.end() );
+	return floatingEvents;
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventSearch.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventSearch.h
+	 */
+
+//========================================================================================
+//EventSearch class is responsible for locating an event in storage. Searches can be based
+//on name, importance, or ID.
+//
+//Search by name and importance are the basic APIs for an external client to call through
+//eventFacade. Search by ID on the other hand is mostly used within Storage.
+//
+//It also utilises EventOrganiser to obtain the necessary filtered data and to format the
+//data by date.
+//========================================================================================
+#pragma once
+
+#ifndef EVENTSEARCH_H
+#define EVENTSEARCH_H
+
+#include "EventOrganiser.h"
+
+class EventSearch{
+public:
+	EventSearch(void);
+	~EventSearch(void);
+	
+	//Main methods
+	//2 main checks for multiple current event names
+	vector<Event> searchCurrentNameOccurrence(string eventName);
+	vector<Event> searchCurrentNameExact(string eventName);
+
+	//2 main checks for multiple completed event names
+	vector<Event> searchCompletedNameOccurrence(string eventName);	
+	vector<Event> searchCompletedNameExact(string eventName);
+
+	//Importance searches
+	vector<Event> searchLevelImportance(int level);
+	vector<Event> searchAllImportance();
+
+	//general search method
+	Event searchEventWithID(int eventID);
+	Event searchCompletedEventWithID(int eventID);
+
+	//Support methods for del and edit
+	int searchIndexWithID(int eventID, vector<Event> eventVectorToSearch);
+
+private:
+	
+	//These are results to improve readability
+	static const int EventSearch::NOT_FOUND;
+	static const int EventSearch::MAX_LEVEL;
+	static const int EventSearch::MIN_LEVEL;
+	static const string EventSearch::ERROR_1;
+	
+	EventOrganiser organiser;
+	EventLog logger;
+
+	//Support methods for APIs
+	vector<Event> searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating);
+	vector<Event> searchNameExact(string eventName, vector<Event> normal, vector<Event> floating);
+	vector<Event> searchEventWithName(string eventName, vector<Event> eventVectorToSearch);
+	vector<Event> searchExactString(string eventName, vector<Event> eventVectorToSearch);
+	vector<Event> searchEventWithImportance(int level, vector<Event> vectorToSearch);	
+	vector<Event> searchEventWithAllImportance(vector<Event> vectorToSearch);	
+	vector<Event> combineResults(vector<Event> floatingEvents, vector<Event> normalEvents);
+
+};
+
+#endif
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventSearch.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventStorage.cpp
+	 */
+
+
+#include "EventStorage.h"
+	
+const string EventStorage::currentFile = "myCurrent.txt";
+const string EventStorage::backupFile = "myBackup.txt";
+
+//CONSTRUCTOR, DESTRUCTOR
+EventStorage::EventStorage(void)
+{
+	isRead = true;
+	lastID = 0;
+	startUpFiles();
+}
+
+EventStorage::~EventStorage(void)
+{
+}
+
+//Methods
+//Reads from text file upon start up.
+//If read successful, copy to backupFile (set: isRead = true)
+//If read fails, load backupFile and copy backup to currentFile (set: isRead = false)
+void EventStorage::startUpFiles(){
+	logger.log(EventLog::STORAGE + EventLog::START_UP);
+	checkFileExist();
+	readToContent(currentFile);
+	if(isRead){
+		writeToFile(backupFile); 
+	} else{
+		normalContent.clear();	
+		floatingContent.clear();
+		readToContent(backupFile);
+		writeToFile(currentFile);
+	}
+}
+
+void EventStorage::checkFileExist(){
+	std::ofstream outCurrent(currentFile, std::ios::app);
+	outCurrent.close();
+	std::ofstream outBackup(backupFile, std::ios::app);
+	outBackup.close();
+}
+
+void EventStorage::writeToFile(string fileName){
+	std::ofstream out(fileName);
+	
+	exportNormal(out);
+	exportFloating(out);
+
+	out.close();
+}
+
+void EventStorage::readToContent(string fileName){
+	
+	std::ifstream in(fileName);
+	std::string textLine;
+
+	getline(in, textLine);
+	while(!in.eof()){
+		Event* tempEvent = new Event;
+
+		if(textLine == (LABEL_ISFLOATING + "0")){	//Normal case 
+			try{
+				tempEvent->setIsFloating(false); 
+				importNormal(in, tempEvent);
+			} catch(const string &e){
+				isRead = false;
+				logger.log(EventLog::READING_ERROR + e);
+			}
+		} else if(textLine == (LABEL_ISFLOATING + "1")){  //floatingEvent
+			try{
+				tempEvent->setIsFloating(true); 
+				importFloat(in, tempEvent);
+			} catch(const string &e){
+				isRead = false;
+				logger.log(EventLog::READING_ERROR + e);
+			}
+		}
+		delete tempEvent;
+		getline(in, textLine);			//takes in 0/1 for isFloating check
+	}
+	in.close();
+}
+
+//==================================================================================================
+//Support Methods
+void EventStorage::importNormal(std::istream& in, Event* tempEvent){
+	importName(in, tempEvent);
+	importDate(in, tempEvent);
+	importDeadLine(in, tempEvent);
+	importCompleted(in, tempEvent);
+	importImportance(in, tempEvent);
+	importID(in, tempEvent);
+	importSpace(in);
+	normalContent.push_back(*tempEvent);
+}
+
+void EventStorage::importFloat(std::istream& in, Event* tempEvent){
+	importName(in, tempEvent);
+	importFloatDate(in);
+	importDeadLine(in, tempEvent);
+	importCompleted(in, tempEvent);
+	importImportance(in, tempEvent);
+	importID(in, tempEvent);
+	importSpace(in);
+	floatingContent.push_back(*tempEvent);
+}
+
+void EventStorage::importFloatDate(std::istream& in){
+	std::string startYear, startMonth, startDay, startHour, startMin, endYear, endMonth, endDay, endHour, endMin;
+	
+	getline(in, startYear);
+	getline(in, startMonth);
+	getline(in, startDay);
+	getline(in, startHour);
+	getline(in, startMin);
+	getline(in, endYear);
+	getline(in, endMonth);
+	getline(in, endDay);
+	getline(in, endHour);
+	getline(in, endMin);
+
+	if(startYear.substr(0, LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
+		throw LABEL_STARTYEAR;
+	} else if(startMonth.substr(0, LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
+		throw LABEL_STARTMONTH;
+	} else if(startDay.substr(0, LABEL_STARTDAY.size()) != LABEL_STARTDAY){
+		throw LABEL_STARTDAY;
+	} 
+	if(startHour.substr(0, LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
+		throw LABEL_STARTHOUR;
+	} else if(startMin.substr(0, LABEL_STARTMIN.size()) != LABEL_STARTMIN){
+		throw LABEL_STARTMIN;
+	}
+	if(endYear.substr(0, LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
+		throw LABEL_ENDYEAR;
+	} else if(endMonth.substr(0, LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
+		throw LABEL_ENDMONTH;
+	} else if(endDay.substr(0, LABEL_ENDDAY.size()) != LABEL_ENDDAY){
+		throw LABEL_ENDDAY;
+	}	
+	if(endHour.substr(0, LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
+		throw LABEL_ENDHOUR;
+	} else if(endMin.substr(0, LABEL_ENDMIN.size()) != LABEL_ENDMIN){
+		throw LABEL_ENDMIN;
+	}
+}
+
+void EventStorage::importName(std::istream& in, Event* tempEvent){
+	string name;
+	getline(in, name);
+	if(name.substr(0, LABEL_EVENTNAME.size()) == LABEL_EVENTNAME){
+		tempEvent->setName(name.substr(LABEL_EVENTNAME.size()));
+	} else{
+		throw LABEL_EVENTNAME;
+	}
+}
+
+void EventStorage::importDate(std::istream& in, Event* tempEvent){
+	std::string startYear, startMonth, startDay, startHour, startMin, endYear, endMonth, endDay, endHour, endMin;
+	
+	getline(in, startYear);
+	getline(in, startMonth);
+	getline(in, startDay);
+	getline(in, startHour);
+	getline(in, startMin);
+	getline(in, endYear);
+	getline(in, endMonth);
+	getline(in, endDay);
+	getline(in, endHour);
+	getline(in, endMin);
+
+	if(startYear.substr(0, LABEL_STARTYEAR.size()) != LABEL_STARTYEAR){
+		throw LABEL_STARTYEAR;
+	} else if(startMonth.substr(0, LABEL_STARTMONTH.size()) != LABEL_STARTMONTH){
+		throw LABEL_STARTMONTH;
+	} else if(startDay.substr(0, LABEL_STARTDAY.size()) != LABEL_STARTDAY){
+		throw LABEL_STARTDAY;
+	} else{
+		tempEvent->setStartDate(atoi((startDay.substr(LABEL_STARTDAY.size())).c_str()),
+			atoi((startMonth.substr(LABEL_STARTMONTH.size())).c_str()), atoi((startYear.substr(LABEL_STARTYEAR.size())).c_str()));
+	}
+	
+	if(startHour.substr(0, LABEL_STARTHOUR.size()) != LABEL_STARTHOUR){
+		throw LABEL_STARTHOUR;
+	} else if(startMin.substr(0, LABEL_STARTMIN.size()) != LABEL_STARTMIN){
+		throw LABEL_STARTMIN;
+	} else{
+		tempEvent->setStartTime(atoi((startHour.substr(LABEL_STARTHOUR.size())).c_str()), atoi((startMin.substr(LABEL_STARTMIN.size())).c_str()));
+	} 
+
+	if(endYear.substr(0, LABEL_ENDYEAR.size()) != LABEL_ENDYEAR){
+		throw LABEL_ENDYEAR;
+	} else if(endMonth.substr(0, LABEL_ENDMONTH.size()) != LABEL_ENDMONTH){
+		throw LABEL_ENDMONTH;
+	} else if(endDay.substr(0, LABEL_ENDDAY.size()) != LABEL_ENDDAY){
+		throw LABEL_ENDDAY;
+	} else{
+		tempEvent->setEndDate(atoi((endDay.substr(LABEL_ENDDAY.size())).c_str()),
+			atoi((endMonth.substr(LABEL_ENDMONTH.size())).c_str()), atoi((endYear.substr(LABEL_ENDYEAR.size())).c_str()));
+	}
+	if(endHour.substr(0, LABEL_ENDHOUR.size()) != LABEL_ENDHOUR){
+		throw LABEL_ENDHOUR;
+	} else if(endMin.substr(0, LABEL_ENDMIN.size()) != LABEL_ENDMIN){
+		throw LABEL_ENDMIN;
+	} else{
+		tempEvent->setEndTime(atoi((endHour.substr(LABEL_ENDHOUR.size())).c_str()), atoi((endMin.substr(LABEL_ENDMIN.size())).c_str()));
+	}
+}
+
+void EventStorage::importDeadLine(std::istream& in, Event* tempEvent){
+	string deadline;
+	getline(in, deadline);
+	if(deadline.substr(0, LABEL_ISDEADLINE.size()) == LABEL_ISDEADLINE){
+		tempEvent->setIsDeadline(conversion.stringToBool(deadline.substr(LABEL_ISDEADLINE.size())));
+	} else{
+		throw LABEL_ISDEADLINE;
+	}
+}
+
+void EventStorage::importCompleted(std::istream& in, Event* tempEvent){
+	string completed;
+	getline(in, completed);
+	if(completed.substr(0, LABEL_ISCOMPLETED.size()) == LABEL_ISCOMPLETED){
+		tempEvent->setIsCompleted(conversion.stringToBool(completed.substr(LABEL_ISCOMPLETED.size())));
+	} else{
+		throw LABEL_ISCOMPLETED;
+	}
+}
+	
+void EventStorage::importImportance(std::istream& in, Event* tempEvent){
+	string importance;
+	getline(in, importance);
+	if(importance.substr(0, LABEL_IMPORTANCE.size()) == LABEL_IMPORTANCE){
+		tempEvent->setImportanceLevel(atoi((importance.substr(LABEL_IMPORTANCE.size())).c_str()));
+	} else{
+		throw LABEL_IMPORTANCE;
+	}
+}
+
+void EventStorage::importID(std::istream& in, Event* tempEvent){
+	string id;
+	getline(in, id);
+	if(id.substr(0, LABEL_ID.size()) == LABEL_ID){
+		int ID = (atoi((id.substr(LABEL_ID.size())).c_str()));
+		setLastID(ID);
+		tempEvent->setID(ID);
+	} else{
+		throw LABEL_ID;
+	}
+}
+
+void EventStorage::importSpace(std::istream& in){
+	string space;
+	getline(in, space);
+	if(space != ""){
+		throw BLANK;
+	}
+}
+
+void EventStorage::setLastID(int ID){
+	if(ID > lastID){
+		lastID = ID;
+	}
+}
+
+int EventStorage::getLastID(){
+	return lastID;
+}
+
+void EventStorage::exportNormal(std::ostream& out){
+	for(auto i = 0; i < normalContent.size(); i++){
+		out 
+			<< LABEL_ISFLOATING << conversion.boolToString(normalContent[i].getIsFloating()) << std::endl 
+			<< LABEL_EVENTNAME << normalContent[i].getName() << std::endl 
+			<< conversion.tmToString(normalContent[i]) << std::endl
+			<< LABEL_ISDEADLINE << conversion.boolToString(normalContent[i].getIsDeadline()) << std::endl
+			<< LABEL_ISCOMPLETED << conversion.boolToString(normalContent[i].getIsCompleted()) << std::endl
+			<< LABEL_IMPORTANCE << normalContent[i].getImportanceLevel() << std::endl
+			<< LABEL_ID << normalContent[i].getID() << std::endl << std::endl;
+	}
+}
+
+void EventStorage::exportFloating(std::ostream& out){
+	for(auto i = 0; i < floatingContent.size(); i++){
+		out 
+			<< LABEL_ISFLOATING << conversion.boolToString(floatingContent[i].getIsFloating()) << std::endl 
+			<< LABEL_EVENTNAME << floatingContent[i].getName() << std::endl 
+			<< conversion.tmToString(floatingContent[i]) << std::endl
+			<< LABEL_ISDEADLINE << conversion.boolToString(floatingContent[i].getIsDeadline()) << std::endl
+			<< LABEL_ISCOMPLETED << conversion.boolToString(floatingContent[i].getIsCompleted()) << std::endl
+			<< LABEL_IMPORTANCE << floatingContent[i].getImportanceLevel() << std::endl
+			<< LABEL_ID << floatingContent[i].getID() << std::endl << std::endl;	
+	}
+}
+
+//getters
+vector<Event> EventStorage::getNormalContent(){
+	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, normalContent.size());
+	return normalContent;
+}
+
+vector<Event> EventStorage::getFloatingContent(){
+	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, floatingContent.size());
+	return floatingContent;
+}
+
+//setters
+void EventStorage::setNormalContent(vector<Event> newNormalContent){
+	normalContent = newNormalContent;
+	writeToFile(currentFile);
+}
+void EventStorage::setFloatingContent(vector<Event> newFloatingContent){
+	floatingContent = newFloatingContent;
+	writeToFile(currentFile);
+}
+
+bool EventStorage::getIsRead(){
+	return isRead;
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventStorage.cpp
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventStorage.h
+	 */
+
+//========================================================================================
+//EventStorage class is responsible for the internal and external storages. 
+//It adopts the singleton pattern to ensure that only one storage object is created to
+//prevent read/write errors and duplicates.
+//
+//Hence, only an instance of storage will be distributed when needed.
+//		sample usages to request for instance:
+//			EventStorage::storage().getNormalContent();
+//			Output: internal storage (normalContent)
+//
+//External storages are held in 2 text files:
+//	1)myCurrent 
+//	2)myBackUp
+//
+//myBackup:
+//In the event that the user accidentally deleted or corrupted the main text file(myCurrent)
+//that it is deemed unreadable, the program will automatically load the backup file. myCurrent
+//will also be updated. The myBackup file is written upon program start up if the main text 
+//file is successfully read.
+//
+//Internal storages are held in 2 vectors:
+//	1) normalContent
+//	2) floatingContent
+//
+//========================================================================================
+#pragma once
+
+#ifndef EVENTSTORAGE_H
+#define EVENTSTORAGE_H
+
+#include <fstream>
+#include <string>
+#include <sstream>
+#include "Event.h"
+#include "Conversion.h"
+#include "EventLog.h"
+
+//for documentation and readability
+const string LABEL_EVENTNAME = "Name: " ;
+const string LABEL_ISFLOATING = "Is Floating: ";
+const string LABEL_ID = "ID: ";
+const string LABEL_FEEDBACK = "Feedback: ";
+const string LABEL_IMPORTANCE = "Importance: ";
+const string LABEL_ISCOMPLETED = "Is Completed: ";
+const string LABEL_ISDEADLINE = "Is Deadline: ";
+const string BLANK = "Blank Space";
+
+class EventStorage{
+public:
+	//Returns a new storage instance if one does not exist. 
+	//else, it simply returns a reference to created storage. 
+	static EventStorage& storage(){
+        static EventStorage store;   		
+        return store;			
+	}
+
+	//getters
+	vector<Event> getNormalContent();
+	vector<Event> getFloatingContent();
+	bool getIsRead();
+	int getLastID();
+
+	//setters
+	void setNormalContent(vector<Event> newNormalContent);
+	void setFloatingContent(vector<Event> newFloatingContent);
+	void setLastID(int ID);
+
+private:
+
+	//These are external storages
+	static const string currentFile;
+	static const string backupFile;
+
+	//These are internal storages
+	vector<Event> normalContent;
+	vector<Event> floatingContent;
+
+	//These are indicator attributes
+	bool isRead;
+	int lastID;
+
+	Conversion conversion;
+	EventLog logger;
+
+	EventStorage(void);						//constructor is private
+	~EventStorage(void);
+	EventStorage(EventStorage const&);      //copy constructor is private
+    void operator=(EventStorage const&);	//assignment operator is private
+
+	//Import / Export Methods only called by EventStorage. 
+	void startUpFiles();
+	void checkFileExist(); 
+	void writeToFile(string fileName);
+	void readToContent(string fileName);
+	
+	void importNormal(std::istream& in, Event* tempEvent);
+	void importName(std::istream& in, Event* tempEvent);
+	void importDate(std::istream& in, Event* tempEvent);
+	void importDeadLine(std::istream& in, Event* tempEvent);
+	void importCompleted(std::istream& in, Event* tempEvent);
+	void importImportance(std::istream& in, Event* tempEvent);
+	void importID(std::istream& in, Event* tempEvent);
+	void importSpace(std::istream& in);
+	void importFloat(std::istream& in, Event* tempEvent);
+	void importFloatDate(std::istream& in);
+
+	void exportNormal(std::ostream& out);
+	void exportFloating(std::ostream& out);
+
+};
+#endif
+
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\Library\EventStorage.h
+
+
+
+
+
+	/**
+	 * origin: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\StorageTest.cpp
+	 */
+
+
+#include "stdafx.h"
+#include "CppUnitTest.h"
+
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+#include "EventFacade.h"
+#include "EventOrganiser.h"
+#include "EventSearch.h"
+
+namespace UnitTest
+{
+	TEST_CLASS(EventModifierTest)
+	{
+	public:
+		EventModifier modifier;
+
+		//finds event index in currentContent vector with event ID
+		TEST_METHOD(EventModifier_add_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, marker, testFloat2;
+			vector<Event> testNormalContent, expected, result;
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(10,10);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			/*test case: add single event in empty storage*/
+			result = modifier.add(testEvent1);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*test case: add single event with exisiting event in storage*/
+			result.clear();
+			expected.clear();
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(5,3,115);
+			testEvent2.setEndDate(5,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			result = modifier.add(testEvent2);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			expected.push_back(testEvent1);	
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+
+
+			/*test case: add single floating event with empty storage*/
+			result.clear();
+			expected.clear();
+
+			Event testFloat1;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testFloat1.setName("event1");
+			testFloat1.setIsFloating(true);
+			testFloat1.setID(1);
+			testFloat1.setIsCompleted(false);	
+
+			expected.push_back(testFloat1);
+			result = modifier.add(testFloat1);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+
+			/*test case: add single floating event with exisitng normal in storage*/
+			result.clear();
+			expected.clear();
+			testNormalContent.clear();
+
+			//creating stub contentVector
+			testNormalContent.push_back(testEvent1);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			expected.push_back(testFloat1);
+			result = modifier.add(testFloat1);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+		
+			/*test case: add single normal event with exisitng float in storage*/
+			result.clear();
+			expected.clear();
+			testFloatContent.clear();
+
+			//creating stub contentVector
+			testFloatContent.push_back(testEvent1);
+			EventStorage::storage().setFloatingContent(testFloatContent);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+
+			result = modifier.add(testEvent1);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+		}
+
+		TEST_METHOD(EventModifier_del_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testFloat1, testEvent2, testFloat2, marker;
+			vector<Event> testNormalContent, testFloatingContent, expected, result;
+			
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(10,10);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test float 1
+			testFloat1.setName("event1");
+			testFloat1.setIsFloating(true);
+			testFloat1.setID(1426225500);
+			testFloat1.setIsCompleted(false);
+
+			//set storage stub
+			testNormalContent.push_back(testEvent1);
+			testFloatingContent.push_back(testFloat1);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			/*test case: delete single normal event in storage*/
+			result = modifier.del(testEvent1);
+			Assert::IsTrue(result.empty());
+			
+			/*test case: delete single float event in storage*/
+			result.clear();
+			result = modifier.del(testFloat1);
+			Assert::IsTrue(result.empty());
+
+			/*test case: delete single normal event with multiple events in storage*/
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(5,3,115);
+			testEvent2.setEndDate(5,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//set stub storage
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+
+			result = modifier.del(testEvent2);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*test case: delete single floating event with multiple events in storage*/
+			expected.clear();
+			result.clear();
+			//creating test event 1
+			testFloat2.setName("event2");
+			testFloat2.setIsFloating(true);
+			testFloat2.setID(1426225501);
+			testFloat2.setIsCompleted(false);
+
+			//set stub storage
+			testFloatingContent.push_back(testFloat2);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			expected.push_back(testFloat1);
+
+			result = modifier.del(testFloat2);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+
+		}
+	};
+
+	TEST_CLASS(EventSearchTest)
+	{
+	public:
+		EventSearch searcher;
+
+		//finds event index in currentContent vector with event ID
+		TEST_METHOD(EventSearch_searchIndexWithID_Test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3, testEvent4;
+			vector<Event> testCurrentContent;
+
+			//creating test event 1
+			testEvent1.setName("event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(111);
+
+			//creating test event 2
+			testEvent2.setName("event2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(222);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(7,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(333);
+
+			//creating test event vector
+			testCurrentContent.push_back(testEvent1);
+			testCurrentContent.push_back(testEvent2);
+			testCurrentContent.push_back(testEvent3);
+			
+			int result, expected;
+			/*successful case: 1 search result*/
+			expected = 1;
+			result = searcher.searchIndexWithID(222, testCurrentContent);
+			Assert::AreEqual(expected, result);
+
+			/*boundary case: unsuccessful search */
+			expected = -1;
+			result = searcher.searchIndexWithID(000, testCurrentContent);
+			Assert::AreEqual(expected, result);
+		
+			//creating test event 4
+			testEvent4.setName("event4");
+			testEvent4.setStartDate(11,3,115);
+			testEvent4.setEndDate(11,3,115);
+			testEvent4.setStartTime(2,30);
+			testEvent4.setEndTime(3,10);
+			testEvent4.setIsFloating(false);
+			testEvent4.setID(222);
+			
+			//adding test cevent 4 to the vector
+			testCurrentContent.push_back(testEvent4);
+			
+			/*boundary case: more than 1 search, takes first result */
+			expected = 1;
+			result = searcher.searchIndexWithID(222,testCurrentContent);
+			Assert::AreEqual(expected,result);
+		}
+
+		//finds any name occurrences and returns events sorted by date with markers
+		TEST_METHOD(EventSearch_searchCurrentNameOccurrence_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+
+			//creating test event 2
+			testEvent2.setName("event3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+
+			//creating test floating event 4
+			/*test case: ignore completed*/
+			testEvent3.setName("event999");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225542);
+			testEvent3.setIsCompleted(true);
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			vector<Event> result, expected;
+			/*test case: Successful search returns vector of events*/
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			result = searcher.searchCurrentNameOccurrence("event");
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+			Assert::AreEqual(expected[3].getName(), result[3].getName());
+
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchCurrentNameOccurrence("inexistentEvent");
+			Assert::IsTrue(result.empty());
+		}
+
+		//find exact string name match and returns events sorted by date with markers
+		TEST_METHOD(EventSearch_searchCurrentNameExact_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+
+			//creating test event 2
+			testEvent2.setName("event111");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+
+			//creating test floating event 4
+			/*test case: ignore completed*/
+			testEvent3.setName("event999");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225542);
+			testEvent3.setIsCompleted(true);
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			vector<Event> result, expected;
+			/*test case: Successful search returns vector of events*/
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			result = searcher.searchCurrentNameExact("event111");
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchCurrentNameExact("inexistentEvent");
+			Assert::IsTrue(result.empty());
+		}
+
+		//finds importance level match
+		TEST_METHOD(EventSearch_searchLevelImportance_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setImportanceLevel(3);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setImportanceLevel(1);
+
+			//creating test event 3
+			/*test case: finding floating importance*/
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setImportanceLevel(3);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");			
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			vector<Event> result, expected;
+			/*test case: Successful search returns vector of events*/
+			expected.push_back(testEvent3);
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			result = searcher.searchLevelImportance(3);
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*test boundary case: Unsuccessful search returns empty vector */
+			result = searcher.searchLevelImportance(2);
+			Assert::IsTrue(result.empty());
+		}
+
+		//finds all events with importance level greater than 0
+		TEST_METHOD(EventSearch_searchAllImportance_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3, marker;
+			vector<Event> testNormalContent, testFloatingContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setImportanceLevel(3);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setImportanceLevel(0);
+
+			//creating test event 3
+			/*test case: finding floating importance*/
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setImportanceLevel(3);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testFloatingContent.push_back(testEvent3);
+			
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			vector<Event> result, expected;
+			/*test successful boundary case: 2 important events*/
+			expected.push_back(testEvent3);
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			result = searcher.searchAllImportance();
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+
+			/*test boundary case: 0 important events*/
+			testNormalContent.clear();
+			testFloatingContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+			result = searcher.searchAllImportance();
+			Assert::IsTrue(result.empty());
+		}
+	};
+	TEST_CLASS(EventOrganiserTest)
+	{
+	public:
+		EventOrganiser organiser;
+
+		//filters normalContent vector for uncompleted events
+		TEST_METHOD(EventOrganiser_allNormalCurrent_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("3");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("event3");
+			testEvent3.setStartDate(7,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: 1 uncompleted event*/
+			expected.push_back(testEvent2);
+			result = organiser.allNormalCurrent();
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+
+			/*boundary case: 0 uncompleted events*/
+			testNormalContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			result = organiser.allNormalCurrent();
+			Assert::IsTrue(result.empty());
+		}
+	
+		//filters floatingContent vector for uncompleted events
+		TEST_METHOD(EventOrganiser_allFloatingCurrent_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("float2");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testFloatContent.push_back(testEvent1);
+			testFloatContent.push_back(testEvent2);
+			testFloatContent.push_back(testEvent3);
+
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: 1 uncompleted event*/
+			expected.push_back(testEvent2);
+			result = organiser.allFloatingCurrent();
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+
+			/*boundary case: 0 uncompleted events*/
+			testFloatContent.clear();
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			result = organiser.allFloatingCurrent();
+			Assert::IsTrue(result.empty());
+		}
+
+
+		//filters normalContent vector for completed events
+		TEST_METHOD(EventOrgansier_allNormalCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("Event3");
+			testEvent3.setStartDate(7,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			testNormalContent.push_back(testEvent3);
+
+			EventStorage::storage().setNormalContent(testNormalContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = organiser.allNormalCompleted();
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 0 completed events*/
+			testNormalContent.clear();
+			EventStorage::storage().setNormalContent(testNormalContent);
+			result = organiser.allNormalCompleted();
+			Assert::IsTrue(result.empty());
+		}
+
+		//filters floatingContent for completed events
+		TEST_METHOD(EventOrganiser_allFloatingCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("floating");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating test event 3
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+
+			//creating test event vector
+			testFloatContent.push_back(testEvent1);
+			testFloatContent.push_back(testEvent2);
+			testFloatContent.push_back(testEvent3);
+
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = organiser.allFloatingCompleted();
+			
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 0 completed events*/
+			testFloatContent.clear();
+			EventStorage::storage().setFloatingContent(testFloatContent);
+			result = organiser.allFloatingCompleted();
+			Assert::IsTrue(result.empty());
+		}
+
+		//set normalContents by appending current task onto completed task 
+		TEST_METHOD(EventOrganiser_saveNormal_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+			
+			//setting currentContent stub
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			//creating test event 3
+			testEvent3.setName("Event num 3");
+			testEvent3.setStartDate(7,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(false);
+			
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: existing completed event*/
+
+			organiser.saveNormal(testNormalContent);
+			
+			expected.push_back(testEvent3);
+			expected.push_back(testEvent1);
+			result = EventStorage::storage().getNormalContent();
+
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 0 completed events, 1 uncompleted*/
+			//setting curretnContent stub
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			//set temp
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+		
+			organiser.saveNormal(testNormalContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+		}
+
+		//set floatingContent by appending current task onto completed task 
+		TEST_METHOD(EventOrganiser_saveFloating_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testContent;
+
+			//creating test event 1
+			testEvent1.setName("event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(true);
+
+			//creating test event 2
+			testEvent2.setName("event2");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+			
+			//setting currentContent stub
+			testContent.push_back(testEvent1);
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+
+			//creating test event 3
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(false);
+			
+			testContent.clear();
+			testContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: There is existing completed event*/
+			organiser.saveFloating(testContent);
+			
+			expected.push_back(testEvent3);
+			expected.push_back(testEvent1);
+			result = EventStorage::storage().getFloatingContent();
+
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 0 completed events, 1 uncompleted*/
+			//setting curretnContent stub
+			testContent.clear();
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+			//set temp
+			testContent.clear();
+			testContent.push_back(testEvent3);
+		
+			organiser.saveFloating(testContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+		}
+
+		//set normalContents by appending completed task onto current task 
+		TEST_METHOD(EventOrganiser_saveNormalCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(8,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(true);
+			
+			//setting currentContent stub
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			//creating test event 3
+			testEvent3.setName("Event 3");
+			testEvent3.setStartDate(5,3,115);
+			testEvent3.setEndDate(7,3,115);
+			testEvent3.setStartTime(1,30);
+			testEvent3.setEndTime(6,40);
+			testEvent3.setIsFloating(false);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+			
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+						
+			vector<Event> result, expected;
+			/*boundary case: existing uncompleted event*/
+			organiser.saveNormalCompleted(testNormalContent);
+			
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 1 completed event, 0 uncompleted*/
+			//setting curretnContent stub
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			//set temp
+			testNormalContent.clear();
+			testNormalContent.push_back(testEvent3);
+		
+			organiser.saveNormalCompleted(testNormalContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getNormalContent();
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+		}
+			
+		//set floatingContent by appending completed task onto current task 
+		TEST_METHOD(EventOrganiser_saveFloatingCompleted_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, testEvent3;
+			vector<Event> testContent;
+
+			//creating test event 1
+			testEvent1.setName("event1");
+			testEvent1.setIsFloating(true);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test event 2
+			testEvent2.setName("event2");
+			testEvent2.setIsFloating(true);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(true);
+			
+			//setting floating Content stub
+			testContent.push_back(testEvent1);
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+
+			//creating test event 3
+			testEvent3.setName("float3");
+			testEvent3.setIsFloating(true);
+			testEvent3.setID(1426225532);
+			testEvent3.setIsCompleted(true);
+			
+			//setting vector to save
+			testContent.clear();
+			testContent.push_back(testEvent3);
+
+			vector<Event> result, expected;
+			/*boundary case: There are existing uncompleted events when saving*/
+			organiser.saveFloatingCompleted(testContent);
+			
+			expected.push_back(testEvent1);
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+
+			/*boundary case: 1 completed event, 0 uncompleted*/
+			//setting curretnContent stub
+			testContent.clear();
+			testContent.push_back(testEvent2);
+			EventStorage::storage().setFloatingContent(testContent);
+			//set temp
+			testContent.clear();
+			testContent.push_back(testEvent3);
+		
+			organiser.saveFloatingCompleted(testContent);
+
+			expected.clear();
+			result.clear();
+			expected.push_back(testEvent3);
+			result = EventStorage::storage().getFloatingContent();
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+		}
+		
+		TEST_METHOD(EventOrganiser_showEvents_Test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, marker;
+			vector<Event> testNormalContent;
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(5,5);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(6,3,115);
+			testEvent2.setEndDate(6,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//creating stub contentVector
+			testNormalContent.push_back(testEvent1);
+			testNormalContent.push_back(testEvent2);
+			
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			vector<Event> result, expected;
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			
+			/*successful case*/
+			result = organiser.showEvents(testNormalContent);
+			Assert::AreEqual(expected[0].getName(), result[0].getName());
+			Assert::AreEqual(expected[1].getName(), result[1].getName());
+			Assert::AreEqual(expected[2].getName(), result[2].getName());
+			Assert::AreEqual(expected[3].getName(), result[3].getName());
+
+			/*empty case:*/
+			expected.clear();
+			result.clear();
+			testNormalContent.clear();
+			result = organiser.showEvents(testNormalContent);
+			Assert::IsTrue(result.empty());
+
+		}
+	};
+
+	
+}
+	// End of segment: D:\Work\NUS\CS2103\Projects\f112c-CS2103\UnitTest\StorageTest.cpp
+
+
+
+
+
