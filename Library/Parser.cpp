@@ -235,6 +235,9 @@ std::string Parser::createFeedback(std::string errorCode) {
 	if (errorCode == ParserExceptions::ERROR_MISSING_INPUT) {
 		tempFeedback = "Error: Invalid input.";
 	}
+	if (errorCode == ParserExceptions::ERROR_NO_NAME) {
+		tempFeedback = "Error: No event name found.";
+	}
 	if (errorCode == ParserExceptions::ERROR_TOO_MANY_DATES) {
 		tempFeedback = "Error: Exceeded maximum of 2 date inputs.";
 	}

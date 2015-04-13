@@ -41,7 +41,14 @@ private:
 	static const int LOWER_RANGE_YEAR = 1970;
 	static const int HIGHER_RANGE_YEAR = 3000;
 	static const int TM_YEAR_ADJUSTMENT = 1900;
+	static const int POSSIBLE_YEAR_INTEGER = 1300;
 	static const int INVALID_NUMBER = -1;
+	static const int MAX_HOUR = 12;
+	static const int MAX_MINUTE = 60;
+	static const int MORNING_TIME = 12;
+	static const int MIDNIGHT_TIME = 0;
+	static const int MORNING_AFTERNOON_DIFFERENTIAL = 12;
+	static const int DO_NOT_TOUCH = 100;
 
 	std::string keywordMonths[NUMBER_OF_KEYWORDS_MONTHS];
 	std::string keywordTime[NUMBER_OF_KEYWORDS_TIME];

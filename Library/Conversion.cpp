@@ -1,6 +1,6 @@
+//@author A0111379H
+
 #include "Conversion.h"
-
-
 
 const int Conversion::base = 10;
 
@@ -8,11 +8,9 @@ Conversion::Conversion(void)
 {
 }
 
-
 Conversion::~Conversion(void)
 {
 }
-
 
 std::string Conversion::boolToString(bool isFloatingBool){
 	if (isFloatingBool){

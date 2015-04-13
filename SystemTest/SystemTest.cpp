@@ -113,10 +113,10 @@ namespace SystemTest
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 2: Del with event name
-			l.executeUserInput("add systemtest4;");
-			Assert::AreEqual(l.executeUserInput("del systemtest4"),true);
+			l.executeUserInput("add systemtest10");
+			Assert::AreEqual(l.executeUserInput("del systemtest10"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "deleted: systemtest4";
+			expectedFeedback = "deleted: systemtest10";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 		}
 

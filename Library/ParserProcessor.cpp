@@ -131,7 +131,9 @@ Event ParserProcessor::processAddEvent(std::vector<std::string> fragmentedWords_
 			matchFound = false;
 		}
 
-		tempEventStore.setName(setEventName(nameIndex));
+		if(nameIndex != INVALID_NUMBER){
+			tempEventStore.setName(setEventName(nameIndex));
+		}
 		if(!startDayFound && !startTimeFound && !deadlineFound && !importanceFound && !nameFound && !firstTriggerKeyword){
 			nameFound = true;
 			logger.logParserIdentified(IDENTIFY_EVENT_NAME);
@@ -278,9 +280,6 @@ void ParserProcessor::identifyEventName(int shiftedIndex){
 
 //Sets the name of event to that name if found, removing the ';' at the end. Returns nameFound as true if found.
 std::string ParserProcessor::setEventName(int index) {
-	if(nameIndex == INVALID_NUMBER){
-		return "";
-	}
 	std::string tempName = "";
 	for(int i = 0; i <= index; i++){
 		if(i == index){
@@ -447,7 +446,7 @@ int ParserProcessor::checkYear(int tempIndex, int* indexShift) {
 		try {
 			auto tempStoi = std::stoi(fragmentedWords[tempIndex+1]);
 			tempInt = tempStoi;
-			if(tempInt > 1300){
+			if(tempInt > POSSIBLE_YEAR_INTEGER){
 				if (tempInt > LOWER_RANGE_YEAR && tempInt < HIGHER_RANGE_YEAR) {
 					year = tempInt - TM_YEAR_ADJUSTMENT;
 					fragmentedWords[tempIndex+1] = LOCKUP_USED_INFORMATION;
@@ -634,38 +633,38 @@ ParserProcessor::timeSet ParserProcessor::extractHourMin(int tempIndex, int firs
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 		}
 		hour = firstTimeInteger/100;
-		if (hour > 12) {
+		if (hour > MAX_HOUR) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
 		}
 		if (afterTwelve) {
-			if (hour < 12) {
-				hour = hour + 12;
+			if (hour < MORNING_TIME) {
+				hour = hour + MORNING_AFTERNOON_DIFFERENTIAL;
 			}
 		} else {
-			if (hour == 12) {
-				hour = 0;
+			if (hour == MORNING_TIME) {
+				hour = MIDNIGHT_TIME;
 			}
 		}
 	} else if (firstTimeInteger < 100) {  //For time input with hour only
 		tempIndex--;
 		hour = firstTimeInteger;
 		minute = 0;
-		if (minute > 60) {
+		if (minute > MAX_MINUTE) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 		}
-		if (hour > 12) {
+		if (hour > MAX_HOUR) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
 		}
 		if (afterTwelve) {
-			if (hour < 12) {
-				hour = hour + 12;
+			if (hour < MORNING_TIME) {
+				hour = hour + MORNING_AFTERNOON_DIFFERENTIAL;
 			}
 		} else {
-			if (hour == 12) {
-				hour = 0;
+			if (hour == MORNING_TIME) {
+				hour = MIDNIGHT_TIME;
 			}
 		}
 	}
@@ -701,42 +700,42 @@ ParserProcessor::timeSet ParserProcessor::extractHourMinTo(int tempIndex, int* i
 
 					if (tempInt >= 100) {   //For time input in the form of combined hour & minute. E.g. 930 1045 1230
 						toMinute = tempInt%100;
-						if (toMinute > 60) {
+						if (toMinute > MAX_MINUTE) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 						}
 						toHour = tempInt/100;
-						if (toHour > 12) {
+						if (toHour > MAX_HOUR) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
 						}
 						if (afterTwelve) {
-							if (toHour < 12) {
-								toHour = toHour + 12;
+							if (toHour < MORNING_TIME) {
+								toHour = toHour + MORNING_AFTERNOON_DIFFERENTIAL;
 							}
 						} else {
-							if (toHour == 12) {
-								toHour = 0;
+							if (toHour == MORNING_TIME) {
+								toHour = MIDNIGHT_TIME;
 							}
 						}
 					} else if (tempInt < 100) {   //For time input with hour only
 						toHour = tempInt;
 						toMinute = 0;
-						if (toMinute > 60) {
+						if (toMinute > MAX_MINUTE) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 						}
-						if (toHour > 12) {
+						if (toHour > MAX_HOUR) {
 							logger.logParserError(ParserExceptions::ERROR_UNKNOWN_HOUR);
 							throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_HOUR);
 						}
 						if (afterTwelve) {
-							if (toHour < 12) {
-								toHour = toHour + 12;
+							if (toHour < MORNING_TIME) {
+								toHour = toHour + MORNING_AFTERNOON_DIFFERENTIAL;
 							}
 						} else {
-							if (toHour == 12) {
-								toHour = 0;
+							if (toHour == MORNING_TIME) {
+								toHour = MIDNIGHT_TIME;
 							}
 						}
 					}
@@ -1054,12 +1053,12 @@ void ParserProcessor::editEventCorrector() {
 		tempEventStore.setName("");
 	}
 	if (!startDayFound) {
-		tempEventStore.setStartDate(100,100,100);
-		tempEventStore.setEndDate(100,100,100);
+		tempEventStore.setStartDate(DO_NOT_TOUCH,DO_NOT_TOUCH,DO_NOT_TOUCH);
+		tempEventStore.setEndDate(DO_NOT_TOUCH,DO_NOT_TOUCH,DO_NOT_TOUCH);
 	}
 	if (!startTimeFound) {
-		tempEventStore.setStartTime(100,100);
-		tempEventStore.setEndTime(100,100);
+		tempEventStore.setStartTime(DO_NOT_TOUCH,DO_NOT_TOUCH);
+		tempEventStore.setEndTime(DO_NOT_TOUCH,DO_NOT_TOUCH);
 	}
 	if (!importanceFound) {
 		tempEventStore.setImportanceLevel(-1);
@@ -1165,7 +1164,7 @@ bool ParserProcessor::checkShowByYear(int tempIndex) {
 	try {      //Check if first word is a year integer. E.g. 2015
 		auto tempStoi = std::stoi(firstWord);
 		tempInt = tempStoi;
-		if(tempInt > 1300){
+		if(tempInt > POSSIBLE_YEAR_INTEGER){
 			if (tempInt > LOWER_RANGE_YEAR && tempInt < HIGHER_RANGE_YEAR) {
 				if (year == tempInt - TM_YEAR_ADJUSTMENT) {
 					tempEventStore.setStartDate(day,month,year);
