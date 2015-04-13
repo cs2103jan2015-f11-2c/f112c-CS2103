@@ -32,9 +32,20 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 	}
 	
 	std::string::size_type strCutIndex;
+	std::string tempStr;
+	
 	strCutIndex = input.find_first_not_of(" ");
-	strCutIndex = input.find_first_of(" ",strCutIndex);
-	std::string tempStr = input.substr(0,strCutIndex);
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
+	tempStr = input.substr(strCutIndex);
+	strCutIndex = tempStr.find_first_of(" ");
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
+	tempStr = tempStr.substr(0,strCutIndex);
 	for(unsigned int i = 0; i < tempStr.size(); i++){
 		tempStr[i] = std::tolower(tempStr[i]);
 	}
@@ -64,18 +75,26 @@ std::string InputStringSplit::extractDetails(std::string input){
 	}
 
 	std::string::size_type strCutIndex;
-	strCutIndex = input.find_first_of(" ");
+	strCutIndex = input.find_first_not_of(" ");
 	if(strCutIndex == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
 	}
-	strCutIndex = input.find_first_not_of(" ",strCutIndex);
+	std::string tempStr = input.substr(strCutIndex);
+	strCutIndex = tempStr.find_first_of(" ");
+	if(strCutIndex == std::string::npos){
+		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
+		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
+	}
+	tempStr = tempStr.substr(strCutIndex);
+
+	strCutIndex = tempStr.find_first_not_of(" ");
 	if(strCutIndex == std::string::npos){
 		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
 	}
 
-	std::string tempStr = input.substr(strCutIndex);
+	tempStr = tempStr.substr(strCutIndex);
 	if(tempStr.empty()){
 		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
 		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
@@ -213,45 +232,3 @@ std::vector<std::string> InputStringSplit::fragmentString(std::string input){
 	}
 	return fragmentedWords;
 }
-/*
-//Splits the input string into a vector of strings for show events, first by checking if there is an event name, and then separating the remaining string by 
-//finding delimiters ( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or insufficient info. Returns a vector of strings.
-std::vector<std::string> InputStringSplit::fragmentShowString(std::string input){
-	logger.logParserEnterFunc(FRAGMENT_SHOW_STRING);
-	assert(!input.empty());
-
-	if(input.empty()){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-	}
-	std::string::size_type strCutIndex;
-	std::vector<std::string> fragmentedWords;
-	bool endOfString = false;
-
-	if(input.find_first_not_of(" -.") == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-		throw ParserExceptions(ParserExceptions::ERROR_INSUFFICIENT_INFO);
-	}
-
-	for(unsigned int i = 0; i < input.size(); i++){
-		input[i] = std::tolower(input[i]);
-	}
-
-	while(!endOfString){
-		strCutIndex = input.find_first_of(" -.");
-		fragmentedWords.push_back(input.substr(0,strCutIndex));
-		if(strCutIndex != std::string::npos){
-			if(input.at(strCutIndex) == '-'){
-				fragmentedWords.push_back("to");
-			}
-		}
-		strCutIndex = input.find_first_not_of(" -.",strCutIndex);
-		if(strCutIndex == std::string::npos){
-			endOfString = true;
-		} else {
-			input = input.substr(strCutIndex);
-		}
-	}
-	return fragmentedWords;
-}
-*/

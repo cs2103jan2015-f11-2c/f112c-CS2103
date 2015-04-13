@@ -39,7 +39,7 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 4: Input with starting spaces
-			testInput = "     add";
+			testInput = "     add hello";
 			testOutput = splitter.extractFirstWord(testInput);
 			expectedOutput = "add";
 			Assert::AreEqual(expectedOutput,testOutput);
@@ -60,12 +60,8 @@ namespace UnitTest
 
 			//Case 2: One word plus spaces and symbols
 			testInput = "del     ;;;";
-			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
-			try {
-				testOutput = splitter.extractDetails(testInput);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
+			testOutput = splitter.extractDetails(testInput);
+			expectedOutput = ";;;";
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 3: Multiple Words
@@ -82,8 +78,12 @@ namespace UnitTest
 
 			//Case 5: Input with starting spaces
 			testInput = "     add";
-			testOutput = splitter.extractDetails(testInput);
-			expectedOutput = "add";
+			expectedOutput = ParserExceptions::ERROR_MISSING_INPUT;
+			try { 
+				testOutput = splitter.extractDetails(testInput);
+			} catch (ParserExceptions& e){
+				testOutput = e.getExceptionCode();
+			}
 			Assert::AreEqual(expectedOutput,testOutput);
 		}
 		

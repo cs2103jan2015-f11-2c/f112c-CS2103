@@ -233,7 +233,7 @@ bool Parser::checkCommandUndoRedo() {
 std::string Parser::createFeedback(std::string errorCode) {
 	std::string tempFeedback;
 	if (errorCode == ParserExceptions::ERROR_MISSING_INPUT) {
-		tempFeedback = "Error: Missing input.";
+		tempFeedback = "Error: Invalid input.";
 	}
 	if (errorCode == ParserExceptions::ERROR_TOO_MANY_DATES) {
 		tempFeedback = "Error: Exceeded maximum of 2 date inputs.";
