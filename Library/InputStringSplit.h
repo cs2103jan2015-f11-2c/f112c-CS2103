@@ -27,6 +27,7 @@ public:
 	static const std::string FRAGMENT_SHOW_STRING;
 
 	static const std::string CONVERT_NORMAL_TO_FLOAT;
+	static const int SECOND_INSTANCE = 2;
 
 	InputStringSplit();
 

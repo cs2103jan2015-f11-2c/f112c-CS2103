@@ -54,7 +54,6 @@ std::string Parser::getNameOfEvent() {
 	return nameOfEvent;
 }
 
-//MAIN METHODS
 //Function takes in the input from the user and determines the command type and organises the information provided into an Event form. Throws exception if the command is unknown.
 //These are done by calling InputStringSplit object to separate the input string into its components, and then calling the ParserProcessor object to retrieve the information 
 //and organise them into the Event format. 

@@ -15,8 +15,7 @@ const std::string InputStringSplit::CONVERT_NORMAL_TO_FLOAT = "to>>>float";
 InputStringSplit::InputStringSplit(){
 }
 
-//Finds the first instance of a spacing and extract out what comes BEFORE the spacing.
-//Throws exception if no input is found. Returns the extracted string.
+//Finds the first word and extracts it out. Throws exception if no input is found. Returns the extracted string.
 std::string InputStringSplit::extractFirstWord(std::string input){
 	logger.logParserEnterFunc(EXTRACT_FIRST_WORD);
 
@@ -53,7 +52,7 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 	return tempStr;
 }
 
-//Finds the first instance of a spacing and extract out what comes AFTER the spacing.
+//Remove the first word and extract out what comes AFTER the first word.
 //Throws exception if no input is found after the spacing. Returns the extracted string.
 std::string InputStringSplit::extractDetails(std::string input){
 	logger.logParserEnterFunc(EXTRACT_DETAILS);
@@ -98,7 +97,7 @@ std::string InputStringSplit::extractDetails(std::string input){
 	return tempStr;
 }
 
-//Finds the event name by searching for ';', or the event index if event name is not found, and extracts this info.
+//Finds the event name and index by searching for ';', and extracts this info.
 //Throws exception if no event name/ event index is found. Returns the extracted event name/index in string format.
 std::string InputStringSplit::extractEditEventName(std::string input){
 	logger.logParserEnterFunc(EXTRACT_EDIT_EVENT_NAME);
@@ -132,7 +131,7 @@ std::string InputStringSplit::extractEditEventName(std::string input){
 	return tempStr;
 }
 
-//Removes the event name/index from the input string. Throws exception if input is empty, or if there is no additional information after the event name/index
+//Removes the event name/index from the input string.
 //Returns the remaining string after removing the event name/event index.
 std::string InputStringSplit::removeEditEventName(std::string input, std::string eventName){
 	logger.logParserEnterFunc(REMOVE_EDIT_EVENT_NAME);
@@ -159,8 +158,8 @@ std::string InputStringSplit::removeEditEventName(std::string input, std::string
 	return tempStr;
 }
 
-//Splits the input string into a vector of strings for add events, first by taking out the event name, and then separating the remaining string by finding delimiters 
-//( .-) and removing them. Replaces '-' with the word "to". Throws exception if there is no input, or no event name. Returns a vector of strings.
+//Splits the input string into a vector of strings for add events, by finding spaces, dots and numbers and splits the string accordingly. 
+//Replaces '-' with the word "to". Throws exception if there is no input. Returns a vector of strings.
 std::vector<std::string> InputStringSplit::fragmentString(std::string input){
 	logger.logParserEnterFunc(FRAGMENT_STRING);
 	assert(!input.empty());
@@ -213,8 +212,9 @@ std::vector<std::string> InputStringSplit::fragmentString(std::string input){
 			if(dotFound){
 				dotCounter++;
 			}
-			if(dotCounter == 2 && fragmentedWords.size() >= 2){
-				fragmentedWords[fragmentedWords.size()-2] = fragmentedWords[fragmentedWords.size()-2] + fragmentedWords[fragmentedWords.size()-1];
+			if(dotCounter == SECOND_INSTANCE && fragmentedWords.size() >= SECOND_INSTANCE){
+				fragmentedWords[fragmentedWords.size()-SECOND_INSTANCE] = 
+					fragmentedWords[fragmentedWords.size()-SECOND_INSTANCE] + fragmentedWords[fragmentedWords.size()-1];
 				fragmentedWords.pop_back();
 				dotFound = false;
 				dotCounter = 0;

@@ -628,7 +628,7 @@ ParserProcessor::timeSet ParserProcessor::extractHourMin(int tempIndex, int firs
 	if (firstTimeInteger >= 100) {  //For time input in the form of combined hour & minute. E.g. 930 1045 1230
 		tempIndex--;
 		minute = firstTimeInteger%100;
-		if (minute > 60) {
+		if (minute > MAX_MINUTE) {
 			logger.logParserError(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 			throw ParserExceptions(ParserExceptions::ERROR_UNKNOWN_MINUTE);
 		}
@@ -807,7 +807,7 @@ void ParserProcessor::assignTime(ParserProcessor::timeSet hourMin, ParserProcess
 	}
 }
 
-//Checks the string at the current index of the fragmented string vector for the keyword "due", indicating a deadline event.
+//Checks the string at the current index of the fragmented string vector for the keyword "due" or "by", indicating a deadline event.
 //Sets the temporary Event isDeadline to true, and toggles the startDayFound and startTimeFound to true to prevent more than 2 day & time input. 
 //Returns matchFound as true if found. 
 int ParserProcessor::identifyDeadline(int index) {
