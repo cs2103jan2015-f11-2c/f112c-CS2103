@@ -25,6 +25,51 @@ Event::Event() {
 	ID = time(0);
 }
 
+Event::Event(string eventName) : name(eventName) {
+}
+
+Event::Event(string eventName, int day, int month, int year) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = 0;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_mday++;
+	mktime(&endDateTime);
+}
+
+Event::Event(string eventName, int day, int month, int year, int startTime) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = startTime;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_hour++;
+	mktime(&endDateTime);
+}
+
+Event::Event(string eventName, int day, int month, int year, int startTime, int endTime) : name(eventName) {
+	startDateTime.tm_sec = 0;
+	startDateTime.tm_min = 0;
+	startDateTime.tm_hour = startTime;
+	startDateTime.tm_mday = day;
+	startDateTime.tm_mon = month;
+	startDateTime.tm_year = year;
+	mktime(&startDateTime);
+	
+	endDateTime = startDateTime;
+	endDateTime.tm_hour = endTime;
+	mktime(&endDateTime);
+}
+
 
 //getters
 string Event::getName() {
@@ -156,53 +201,3 @@ void Event::setFeedback(string feedbackToUser) {
 void Event::setID(int number) {
 	ID = number;
 }
-
-
-//@author A0111089L-unused
-//These were the original ways events would be constructed but we decided to use setters instead
-/*
-Event::Event(string eventName) : name(eventName) {
-}
-
-Event::Event(string eventName, int day, int month, int year) : name(eventName) {
-	startDateTime.tm_sec = 0;
-	startDateTime.tm_min = 0;
-	startDateTime.tm_hour = 0;
-	startDateTime.tm_mday = day;
-	startDateTime.tm_mon = month;
-	startDateTime.tm_year = year;
-	mktime(&startDateTime);
-	
-	endDateTime = startDateTime;
-	endDateTime.tm_mday++;
-	mktime(&endDateTime);
-}
-
-Event::Event(string eventName, int day, int month, int year, int startTime) : name(eventName) {
-	startDateTime.tm_sec = 0;
-	startDateTime.tm_min = 0;
-	startDateTime.tm_hour = startTime;
-	startDateTime.tm_mday = day;
-	startDateTime.tm_mon = month;
-	startDateTime.tm_year = year;
-	mktime(&startDateTime);
-	
-	endDateTime = startDateTime;
-	endDateTime.tm_hour++;
-	mktime(&endDateTime);
-}
-
-Event::Event(string eventName, int day, int month, int year, int startTime, int endTime) : name(eventName) {
-	startDateTime.tm_sec = 0;
-	startDateTime.tm_min = 0;
-	startDateTime.tm_hour = startTime;
-	startDateTime.tm_mday = day;
-	startDateTime.tm_mon = month;
-	startDateTime.tm_year = year;
-	mktime(&startDateTime);
-	
-	endDateTime = startDateTime;
-	endDateTime.tm_hour = endTime;
-	mktime(&endDateTime);
-}
-*/
