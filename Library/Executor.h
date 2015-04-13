@@ -16,10 +16,11 @@ private:
 	LogicLog logger;
 
 public:
+	//constructor, destructor
 	Executor();
 	~Executor();
 
-	//methods for executing commands
+	//api
 	Command* execute(Command* command);
 	Command* undo();
 	Command* redo();

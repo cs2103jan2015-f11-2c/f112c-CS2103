@@ -28,7 +28,7 @@ Executor::~Executor() {
 }
 
 
-//MAIN METHODS
+//API
 Command* Executor::execute(Command* command) {
 	command->execute();
 

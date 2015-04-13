@@ -8,6 +8,7 @@ const int Command::SIZE_ONE = 1;
 const int Command::SIZE_TWO = 2;
 
 
+//COMMON API
 vector<Event> Command::getEventVector() {
 	return eventsToShow;
 }

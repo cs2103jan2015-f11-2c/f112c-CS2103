@@ -24,7 +24,8 @@ public:
 	virtual Event getEvent() = 0;
 	virtual void undo() = 0;
 
-	//common methods
+
+	//common api
 	vector<Event> getEventVector();
 	bool getIsFloating();
 	bool getIsExecuted();
@@ -50,6 +51,7 @@ protected:
 
 
 
+//Add Command
 class AddCommand : public Command {
 private:
 	Event userEvent;
@@ -64,6 +66,7 @@ public:
 
 
 
+//Complete Command
 class CompleteCommand : public Command {
 private:
 	int id;
@@ -82,6 +85,8 @@ public:
 
 
 
+
+//Uncomplete Command
 class UncompleteCommand : public Command {
 private:
 	int id;
@@ -99,6 +104,8 @@ public:
 
 
 
+
+//Delete Command
 class DeleteCommand : public Command {
 private:
 	int id;
@@ -117,6 +124,7 @@ public:
 
 
 
+//Edit Command
 class EditCommand : public Command {
 private:
 	int id;
@@ -137,6 +145,7 @@ public:
 
 
 
+//Search Command
 class SearchCommand : public Command {
 private:
 	string searchString;
@@ -151,6 +160,7 @@ public:
 
 
 
+//Show Command
 class ShowCommand : public Command {
 private:
 	Event eventRangeToShow;
@@ -165,6 +175,7 @@ public:
 
 
 
+//Show All Command
 class ShowAllCommand : public Command {
 private:
 
@@ -178,6 +189,7 @@ public:
 
 
 
+//Show All Important Command
 class ShowAllImportantCommand : public Command {
 private:
 
@@ -191,6 +203,7 @@ public:
 
 
 
+//Show Completed Command
 class ShowCompletedCommand : public Command {
 private:
 
@@ -204,6 +217,7 @@ public:
 
 
 
+//Show Float Command
 class ShowFloatCommand : public Command {
 private:
 
@@ -217,6 +231,7 @@ public:
 
 
 
+//Show Importance Command
 class ShowImportanceCommand : public Command {
 private:
 	int importanceLevel;
@@ -231,6 +246,7 @@ public:
 
 
 
+//Null Command
 class NullCommand : public Command {
 private:
 
