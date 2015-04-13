@@ -1014,16 +1014,16 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 
 			std::string inputInLowerCase = toLowerCase(input);
 
-			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "mapleclearlogs"){
+			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "\mapleclearlogs"){
 				clearAllLogFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
-			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "maplesyrup"){
+			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "\maplesyrup"){
 				clearAllLogFiles();
 				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
-			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
+			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "\mapleclearall"){
 				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
@@ -1678,6 +1678,7 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 		  if (e->KeyCode == Keys::Left){
 				 executeBackKey();
 				 display->SelectionStart = 0;
+				 e->Handled = true;
 			 }
 
 		  if (e->KeyCode == Keys::Right){
@@ -1687,7 +1688,6 @@ private: System::Void display_KeyDown(System::Object^  sender, System::Windows::
 
 		  if (e->KeyCode == Keys::Escape){
 			    floatingTasksDisplay->Select();
-				
 			 }
 		 }
 
