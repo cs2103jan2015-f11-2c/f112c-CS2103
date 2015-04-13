@@ -40,35 +40,35 @@ namespace SystemTest
 			//Case 1: Add with no event name
 			Assert::AreEqual(l.executeUserInput("add "),false);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Missing input.";
+			expectedFeedback = "Error: Not enough information to execute command.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 2: Add floating
-			Assert::AreEqual(l.executeUserInput("add cs1;"),true);
+			Assert::AreEqual(l.executeUserInput("add systemtest1;"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs1 added";
+			expectedFeedback = "added: systemtest1";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 			
 			//Case 3: Add normal event
-			Assert::AreEqual(l.executeUserInput("add cs2; 23-24apr 3-4pm"),true);
+			Assert::AreEqual(l.executeUserInput("add systemtest2; 23-24apr 3-4pm"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs2 added: 23 April - 24 April 2015";
+			expectedFeedback = "added: systemtest2, 23 April - 24 April 2015";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 4: Add normal event with invalid dates
-			Assert::AreEqual(l.executeUserInput("add cs2; 31apr"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; 31apr"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Unknown date input.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 5: Add normal event with invalid hour input
-			Assert::AreEqual(l.executeUserInput("add cs2; 23apr 11-13pm"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; 23apr 11-13pm"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Invalid hour input for time.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 6: Add normal event with invalid min input
-			Assert::AreEqual(l.executeUserInput("add cs2; 23apr 11.30-11.61pm"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; 23apr 11.30-11.61pm"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Invalid minutes input for time.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
@@ -76,27 +76,27 @@ namespace SystemTest
 
 			//Deadline events
 			//Case 2: Add deadline event with no dates
-			Assert::AreEqual(l.executeUserInput("add cs3; due"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; due"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Wrong formatting, not all information has been successfully recorded.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 2: Add deadline event
-			Assert::AreEqual(l.executeUserInput("add cs3; due 27may 5pm"),true);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; due 27may 5pm"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs3 added: 27 May, Wednesday";
+			expectedFeedback = "added: systemtest3, 27 May 2015, Wednesday";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 3: Add deadline event with too many dates
-			Assert::AreEqual(l.executeUserInput("add cs3; due 22-23may 11pm"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; due 22-23may 11pm"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Too many date inputs detected. Maximum of 1 date input for deadline events.";
+			expectedFeedback = "Error: Exceeded maximum of 1 date input for deadline events.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 4: Add deadline event with too many time
-			Assert::AreEqual(l.executeUserInput("add cs3; due 22may 10-11pm"),false);
+			Assert::AreEqual(l.executeUserInput("add systemtest3; due 22may 10-11pm"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Too many time inputs detected. Maximum of 1 time input for deadline events";
+			expectedFeedback = "Error: Exceeded maximum of 1 time input for deadline events";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 		}
@@ -109,27 +109,14 @@ namespace SystemTest
 			//Case 1: Del with no event name/index
 			Assert::AreEqual(l.executeUserInput("del "),false);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Missing input.";
+			expectedFeedback = "Error: Not enough information to execute command.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 2: Del with event name
-			l.executeUserInput("add cs4; 24apr");
-			Assert::AreEqual(l.executeUserInput("del cs4;"),true);
+			l.executeUserInput("add systemtest4;");
+			Assert::AreEqual(l.executeUserInput("del systemtest4"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs4 deleted";
-			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
-			
-			//Case 3: Del with event index
-			l.executeUserInput("add cs1;");
-			Assert::AreEqual(l.executeUserInput("del 1"),true);
-			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs1 deleted";
-			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
-			
-			//Case 4: Del with more than 1 event index
-			Assert::AreEqual(l.executeUserInput("del 2 3"),false);
-			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Too many inputs detected. Input index only, or event name only ending with ';'.";
+			expectedFeedback = "deleted: systemtest4";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 		}
 
@@ -137,49 +124,43 @@ namespace SystemTest
 		{
 			std::string expectedFeedback;
 			std::vector<std::string> tempFeedbackVector;
-			l.executeUserInput("add cs5; 21apr 5-6pm");
+			l.executeUserInput("add systemtest5 28apr 5-6pm");
 
 			//Case 1: Edit with no event name/index
 			Assert::AreEqual(l.executeUserInput("edit "),false);
-			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Missing input.";
-			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
-
-			//Case 2: Edit with event name/index but no additional input
-			Assert::AreEqual(l.executeUserInput("edit cs5;"),false);
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Not enough information to execute command.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 3: Edit event name
-			Assert::AreEqual(l.executeUserInput("edit 1 cs6;"),true);
+			Assert::AreEqual(l.executeUserInput("edit systemtest5; systemtest6"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs5 edited";
+			expectedFeedback = "edited: systemtest5, 28 April 2015, Tuesday";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 4: Edit event date
-			Assert::AreEqual(l.executeUserInput("edit 1 26may"),true);
+			Assert::AreEqual(l.executeUserInput("edit systemtest6; 30apr"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs6 edited";
+			expectedFeedback = "edited: systemtest6, 28 April 2015, Tuesday";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 5: Edit event time
-			Assert::AreEqual(l.executeUserInput("edit 1 10-11pm"),true);
+			Assert::AreEqual(l.executeUserInput("edit systemtest6; 10-11pm"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs6 edited";
+			expectedFeedback = "edited: systemtest6, 30 April 2015, Thursday";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 5: Multiple edits
-			Assert::AreEqual(l.executeUserInput("edit 1 cs7; 10jun 10am-13jun 11pm"),true);
+			Assert::AreEqual(l.executeUserInput("edit systemtest6; systemtest7 10jun 10am-13jun 11pm"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs6 edited";
+			expectedFeedback = "edited: systemtest6, 30 April 2015, Thursday";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 6: Edit floating event
 			l.executeUserInput("show float");
-			Assert::AreEqual(l.executeUserInput("edit 1 cs8;"),true);
+			Assert::AreEqual(l.executeUserInput("edit systemtest7; systemtest8"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "cs1 edited";
+			expectedFeedback = "edited: systemtest7, 10 June - 13 June 2015";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 		}
 
@@ -191,7 +172,7 @@ namespace SystemTest
 			//Case 1: Show with no event name/index
 			Assert::AreEqual(l.executeUserInput("show "),false);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "Error: Missing input.";
+			expectedFeedback = "Error: Not enough information to execute command.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 2: Show with no registered show-type
@@ -201,15 +182,15 @@ namespace SystemTest
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 3: System-show type
-			Assert::AreEqual(l.executeUserInput("show mth"),true);
+			Assert::AreEqual(l.executeUserInput("show may"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "showing mth";
+			expectedFeedback = "showing: 1 May - 31 May 2015";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 
 			//Case 4: User show type
 			Assert::AreEqual(l.executeUserInput("show 23-24apr"),true);
 			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "showing 23-24apr";
+			expectedFeedback = "showing: 23 April - 24 April 2015";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 		}
 

@@ -41,10 +41,6 @@ std::string InputStringSplit::extractFirstWord(std::string input){
 	}
 	tempStr = input.substr(strCutIndex);
 	strCutIndex = tempStr.find_first_of(" ");
-	if(strCutIndex == std::string::npos){
-		logger.logParserError(ParserExceptions::ERROR_MISSING_INPUT);
-		throw ParserExceptions(ParserExceptions::ERROR_MISSING_INPUT);
-	}
 	tempStr = tempStr.substr(0,strCutIndex);
 	for(unsigned int i = 0; i < tempStr.size(); i++){
 		tempStr[i] = std::tolower(tempStr[i]);

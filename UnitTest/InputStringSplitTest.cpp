@@ -141,14 +141,10 @@ namespace UnitTest
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 2: Remove index with no additional input after that
-			testInput = "21";
+			testInput = "21;";
 			eventName = splitter.extractEditEventName(testInput);
-			expectedOutput = ParserExceptions::ERROR_INSUFFICIENT_INFO;
-			try {
-				testOutput = splitter.removeEditEventName(testInput,eventName);
-			} catch (ParserExceptions& e){
-				testOutput = e.getExceptionCode();
-			}
+			testOutput = splitter.removeEditEventName(testInput,eventName);
+			expectedOutput = "to>>>float";
 			Assert::AreEqual(expectedOutput,testOutput);
 
 			//Case 3: Remove by index
