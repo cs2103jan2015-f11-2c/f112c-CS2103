@@ -59,6 +59,10 @@ const string LogicUpdater::FULL_STOP = ".";
 const string LogicUpdater::COMMA = ",";
 const string LogicUpdater::DASH_WITH_SPACES = " - ";
 const string LogicUpdater::DASH_WITHOUT_SPACES = "-";
+const string LogicUpdater::EQUAL_LINE = "==============================================================";
+
+const string LogicUpdater::TIME_ZERO_4 = "00:00am";
+const string LogicUpdater::TIME_TWO_THREE_FIVE_NINE = "11:59pm";
 
 //constructor
 LogicUpdater::LogicUpdater() {
@@ -513,7 +517,7 @@ std::string LogicUpdater::setMarkerEventString(Event marker, int index) {
 	out << intToDayOfWeek(dayOfWeekInt);
 
 	out << CLOSE_SQUARE_BRACKET;
-	out << "==============================================================";
+	out << EQUAL_LINE;
 	out << LEAVE_A_LINE;
 
 	return out.str();
@@ -620,8 +624,8 @@ void LogicUpdater::setNoEventsMessage(vector<EVENT_STRING>& displayVec) {
 //===================================================================================================================================================================
 
 void LogicUpdater::initializeEventString(LogicUpdater::EVENT_STRING &item) {
-	item.dateString = "";
-	item.eventString = "";
+	item.dateString.clear();
+	item.eventString.clear();
 	item.isNew = false;
 	item.isClash = false;
 	item.isMarker = false;
@@ -701,7 +705,7 @@ bool LogicUpdater::isAllDay(Event eventToDisplay) {
 	int endTime = getEndTime(eventToDisplay);
 	string endTimeInString = intToTime(endTime);
 
-	if (startTimeInString == "00:00am"  && endTimeInString == "11:59pm") {
+	if (startTimeInString == TIME_ZERO_4  && endTimeInString == TIME_TWO_THREE_FIVE_NINE) {
 		isAllDayEvent = true;
 	}
 

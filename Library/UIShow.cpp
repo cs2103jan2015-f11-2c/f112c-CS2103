@@ -36,6 +36,24 @@ const std::string UIShow::MESSAGE_YEAR_AFTER_2999 = "Error: Unable to display da
 const std::string UIShow::MESSAGE_INVALID_DATE = "Error: Invalid Date(s) Selected / Date(s) out of range";
 const std::string UIShow::MESSAGE_START_LATER_THAN_END = "Error: Invalid Date(s) - Start date is later than End date";
 
+const std::string UIShow::KEYWORD_TO = " to ";
+const std::string UIShow::BLANK_SPACE = " ";
+const std::string UIShow::NO_SPACE = "";
+
+const std::string UIShow::KEYWORD_JAN = "jan";
+const std::string UIShow::KEYWORD_FEB = "feb";
+const std::string UIShow::KEYWORD_MAR = "mar";
+const std::string UIShow::KEYWORD_APR = "apr";
+const std::string UIShow::KEYWORD_MAY = "may";
+const std::string UIShow::KEYWORD_JUN = "jun";
+const std::string UIShow::KEYWORD_JUL = "jul";
+const std::string UIShow::KEYWORD_AUG = "aug";
+const std::string UIShow::KEYWORD_SEP = "sep";
+const std::string UIShow::KEYWORD_OCT = "oct";
+const std::string UIShow::KEYWORD_NOV = "nov";
+const std::string UIShow::KEYWORD_DEC = "dec";
+const std::string UIShow::KEYWORD_INVALID = "Invalid month";
+
 std::string UIShow::getShowDay(){
 	return SHOW_DAY;
 }
@@ -96,7 +114,7 @@ std::string UIShow::displayNext(std::string currentMainDisplayLabel, std::vector
 		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
 		tm newStartDate = shiftDate(mainDisplayDate[0], numDaysToShift);
 		tm newEndDate = shiftDate(mainDisplayDate[1], numDaysToShift);
-		std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
+		std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(newStartDate) + KEYWORD_TO + convertFromTmToStr(newEndDate);
 		return newCommand;
 	}
 }
@@ -133,7 +151,7 @@ std::string UIShow::displayBack(std::string currentMainDisplayLabel, std::vector
 		int numDaysToShift = countNumDays (mainDisplayDate[0], mainDisplayDate[1]) + 1;
 		tm newStartDate = shiftDate(mainDisplayDate[0], -numDaysToShift);
 		tm newEndDate = shiftDate(mainDisplayDate[1], -numDaysToShift);
-		std:: string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(newStartDate) + " to " + convertFromTmToStr(newEndDate);
+		std:: string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(newStartDate) + KEYWORD_TO + convertFromTmToStr(newEndDate);
 		return newCommand;
 	}
 }
@@ -142,7 +160,7 @@ std::string  UIShow::generateDisplayFromCalender(std::string startDate, std::str
 	std::string startDateString = generateDateString(startDate);
 	std::string endDateString = generateDateString(endDate);
 
-	std::string command = COMMAND_SHOW + " " + startDateString  + " to " + endDateString;
+	std::string command = COMMAND_SHOW + BLANK_SPACE + startDateString  + KEYWORD_TO + endDateString;
 	return command;
 }
 
@@ -173,14 +191,14 @@ std::string UIShow::generateCurrentCommand(std::string currentMainDisplayLabel, 
 		std::string newShowCommand = SHOW_MONTH + currentMainDisplayLabel.substr(7);
 		return newShowCommand;
 	} else {
-		std::string newShowCommand = "";
+		std::string newShowCommand = NO_SPACE;
 
 		bool isSingleDate = checkIsSingleDate(mainDisplayDate);
 
 		if ( isSingleDate ){
-			newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]);
+			newShowCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(mainDisplayDate[0]);
 		} else {
-			newShowCommand = COMMAND_SHOW + " " + convertFromTmToStr(mainDisplayDate[0]) + " to " + convertFromTmToStr(mainDisplayDate[1]);
+			newShowCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(mainDisplayDate[0]) + KEYWORD_TO + convertFromTmToStr(mainDisplayDate[1]);
 		}
 
 		return newShowCommand;
@@ -231,7 +249,7 @@ std::string UIShow::generateShowWeekForNext(tm endDate){
 	//exception
 	checkValidityOftm(back);
 
-	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(front) + KEYWORD_TO + convertFromTmToStr(back);
 
 	return newCommand;
 }
@@ -252,7 +270,7 @@ std::string UIShow::generateShowMonthForNext(tm startDate){
 	std::string nextMonthString = intToMonth(nextMonth.tm_mon);
 	std::string yearString = intToString(nextMonth.tm_year + 1900);
 
-	std::string newCommand = COMMAND_SHOW + " " + nextMonthString + " " + yearString;
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + nextMonthString + BLANK_SPACE + yearString;
 	
 	return newCommand;
 }
@@ -278,7 +296,7 @@ std::string UIShow::generateShowWeekForBack(tm endDate){
 
 	checkValidityOftm(front);
 
-	std::string newCommand = COMMAND_SHOW + " " + convertFromTmToStr(front) + " to " + convertFromTmToStr(back);
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + convertFromTmToStr(front) + KEYWORD_TO + convertFromTmToStr(back);
 
 	return newCommand;
 }
@@ -302,7 +320,7 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 	std::string backMonthString = intToMonth(backMonth.tm_mon);
 	std::string yearString = intToString(backMonth.tm_year + 1900);
 
-	std::string newCommand = COMMAND_SHOW + " " + backMonthString + " " + yearString;
+	std::string newCommand = COMMAND_SHOW + BLANK_SPACE + backMonthString + BLANK_SPACE + yearString;
 		
 	return newCommand;
 }
@@ -310,7 +328,7 @@ std::string UIShow::generateShowMonthForBack(tm startDate){
 std::string UIShow::generateDateString(std::string date){
 	int index=0;
 	
-	std::string dateDay = "";
+	std::string dateDay = NO_SPACE;
 	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateDay += date[index];
 	}
@@ -327,7 +345,7 @@ std::string UIShow::generateDateString(std::string date){
 
 	index++;
 
-	std::string dateMonth = "";
+	std::string dateMonth = NO_SPACE;
 	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateMonth += date[index];
 	}
@@ -346,7 +364,7 @@ std::string UIShow::generateDateString(std::string date){
 
 	index++;
 
-	std::string dateYear = "";
+	std::string dateYear = NO_SPACE;
 	for (;date.size()>index && std::isdigit(date[index]);index++){
 		dateYear += date[index];
 	}
@@ -365,7 +383,7 @@ std::string UIShow::generateDateString(std::string date){
 		throw MESSAGE_YEAR_AFTER_2999;
 	}
 	
-	std::string dateString =  dateDay + dateMonthString + " " + dateYear;
+	std::string dateString =  dateDay + dateMonthString + BLANK_SPACE + dateYear;
 	return dateString;
 }
 
@@ -373,11 +391,11 @@ std::string UIShow::convertFromTmToStr(tm date){
 	//exception
 	checkValidityOftm(date);
 
-	std::string dateString = "";
+	std::string dateString = NO_SPACE;
 
 	dateString += intToString(date.tm_mday);
 	dateString += intToMonth(date.tm_mon);
-	dateString += " ";
+	dateString += BLANK_SPACE;
 	dateString += intToString(date.tm_year + 1900);
 
 	return dateString;
@@ -435,31 +453,31 @@ int UIShow::stringToInt (std::string str){
 
 std::string UIShow::intToMonth (int monthInNum){
 	if(monthInNum == 0){
-		return "jan";
+		return KEYWORD_JAN;
 	} else if(monthInNum  == 1){
-		return "feb";
+		return KEYWORD_FEB;
 	} else if(monthInNum  == 2){
-		return "mar";
+		return KEYWORD_MAR;
 	} else if(monthInNum  == 3){
-		return "apr";
+		return KEYWORD_APR;
 	} else if(monthInNum  == 4){
-		return "may";
+		return KEYWORD_MAY;
 	} else if(monthInNum  == 5){
-		return "jun";
+		return KEYWORD_JUN;
 	} else if(monthInNum  == 6){
-		return "jul";
+		return KEYWORD_JUL;
 	} else if(monthInNum  == 7){
-		return "aug";
+		return KEYWORD_AUG;
 	} else if(monthInNum  == 8){
-		return "sep";
+		return KEYWORD_SEP;
 	} else if(monthInNum  == 9){
-		return "oct";
+		return KEYWORD_OCT;
 	} else if(monthInNum  == 10){
-		return "nov";
+		return KEYWORD_NOV;
 	} else if(monthInNum  == 11){
-		return "dec";
+		return KEYWORD_DEC;
 	} else {
-		return "Invalid month";
+		return KEYWORD_INVALID;
 	}
 }
 

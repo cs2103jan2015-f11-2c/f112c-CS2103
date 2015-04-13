@@ -793,6 +793,7 @@ private: void displayToFeedbackBox(vector<std::string> displayToFeedback){
 				if(i==displayToFeedback.size()-1){
 					feedbackBox->SelectionFont = gcnew Drawing::Font(feedbackBox->SelectionFont->FontFamily,feedbackBox->SelectionFont->Size, FontStyle::Bold);
 					feedbackBox->SelectedText = " " + temp ;
+					feedbackBox->ScrollToCaret();
 					}else{
 					feedbackBox->SelectedText = " " + temp + "\n" ;
 					}
@@ -823,29 +824,39 @@ private: void displayToFloatingDisplay(vector<LogicUpdater::EVENT_STRING> displa
 						floatingTasksDisplay->SelectedText = date + importanceSymbolString + eventName + "\n";
 
 						floatingTasksDisplay->ScrollToCaret();				
-					} else {
-						String^ date = convertToSys (displayToFloating[i].dateString);
+					} 
+					
+					else {
 						if (displayToFloating[i].isCompleted){
 							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
+						if(displayToFloating[i].dateString != ""){
+						String^ date = convertToSys (displayToFloating[i].dateString);
 						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
 						floatingTasksDisplay->SelectedText = date;
-
+						}
 						std::string importanceSymbol = setImportancesymbol(displayToFloating[i].importanceLevel);
 						String^ importanceSymbolString = convertToSys (importanceSymbol);
 						floatingTasksDisplay->SelectionColor = Color::Red;
+						
 						if (displayToFloating[i].isCompleted){
 							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
-						floatingTasksDisplay->SelectedText = importanceSymbolString;
 						
+						if(importanceSymbolString != ""){
+							floatingTasksDisplay->SelectedText = importanceSymbolString;
+						}
+
 						String^  eventName= convertToSys (displayToFloating[i].eventString);
 						floatingTasksDisplay->SelectionColor = Color::MidnightBlue;
+						
 						if (displayToFloating[i].isCompleted){
 							floatingTasksDisplay->SelectionFont = gcnew Drawing::Font(floatingTasksDisplay->SelectionFont->FontFamily,floatingTasksDisplay->SelectionFont->Size, FontStyle::Strikeout);
 						}
 						floatingTasksDisplay->SelectedText = eventName + "\n";
+						
 					}
+					
 				}
 
 				log ("Floating displayed:", "Successful");
@@ -911,31 +922,38 @@ private: void displayNormalEventToMain(LogicUpdater::EVENT_STRING normalEvent){
 				 String^ date = convertToSys (normalEvent.dateString);
 				 display->SelectionColor = Color::MidnightBlue;
 				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
-				 display->SelectedText = date;
-
+				 display->SelectedText = date ;
+			 
 				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
 				 String^ importanceSymbolString = convertToSys (importanceSymbol);
 				 display->SelectionColor = Color::Red;
 				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
-				 display->SelectedText = importanceSymbolString;
-						
+				 
+				 if(importanceSymbolString != ""){
+					display->SelectedText = importanceSymbolString;
+				 }
 				 String^  eventName= convertToSys (normalEvent.eventString);
 				 display->SelectionColor = Color::MidnightBlue;
 				 display->SelectionFont = gcnew Drawing::Font(display->SelectionFont->FontFamily,display->SelectionFont->Size, FontStyle::Strikeout);
 				 display->SelectedText = eventName + "\n";
 			 } else {
+				 if(normalEvent.dateString != ""){
 				 String^ date = convertToSys (normalEvent.dateString);
 				 display->SelectionColor = Color::MidnightBlue;
 				 display->SelectedText = date;
-
+				 }
 				 std::string importanceSymbol = setImportancesymbol(normalEvent.importanceLevel);
 				 String^ importanceSymbolString = convertToSys (importanceSymbol);
 				 display->SelectionColor = Color::Red;
-				 display->SelectedText = importanceSymbolString;
-						
+				 
+				 if(importanceSymbolString != ""){
+					display->SelectedText = importanceSymbolString;
+				 }
+				 
 				 String^  eventName= convertToSys (normalEvent.eventString);
 				 display->SelectionColor = Color::MidnightBlue;	
 				 display->SelectedText = eventName + "\n";
+				 
 			 }
 
 		 }
@@ -1120,6 +1138,7 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 			 if (e->KeyCode == Keys::Enter){
 				if (commandBox->Text == ""){
 					previousTextLength = 0;
+					e->Handled = true;
 					return;
 				}
 
@@ -1132,6 +1151,7 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 				cSPtr->setUserActions(input);
 				
 				executeUserInput(input);
+				e->Handled = true;
 				return;
 			 }
 
@@ -1140,6 +1160,7 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 				 commandBox->Text = convertToSys(userAction);
 				 
 				 cSPtr->upKeyPressed();
+				 e->Handled = true;
 				 return;
 			 }
 
@@ -1147,6 +1168,7 @@ private: System::Void commandBox_KeyDown_1(System::Object^  sender, System::Wind
 				 std::string userAction = cSPtr->getSpecificUserAction();
 				 commandBox->Text = convertToSys(userAction);
 				 cSPtr->downKeyPressed();
+				 e->Handled = true;
 				 return;
 			 }
 		 }

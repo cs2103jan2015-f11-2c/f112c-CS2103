@@ -55,6 +55,24 @@ public:
 	static const std::string MESSAGE_INVALID_DATE;
 	static const std::string MESSAGE_START_LATER_THAN_END;
 
+	static const std::string KEYWORD_TO;
+	static const std::string BLANK_SPACE;
+	static const std::string NO_SPACE;
+
+	static const std::string KEYWORD_JAN;
+	static const std::string KEYWORD_FEB;
+	static const std::string KEYWORD_MAR;
+	static const std::string KEYWORD_APR;
+	static const std::string KEYWORD_MAY;
+	static const std::string KEYWORD_JUN;
+	static const std::string KEYWORD_JUL;
+	static const std::string KEYWORD_AUG;
+	static const std::string KEYWORD_SEP;
+	static const std::string KEYWORD_OCT;
+	static const std::string KEYWORD_NOV;
+	static const std::string KEYWORD_DEC;
+	static const std::string KEYWORD_INVALID;
+
 private:
 	std::string _currentCommand;
 //===================================================================================================================================================================

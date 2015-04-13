@@ -150,18 +150,15 @@ public:
 	//This function returns a std::vector<std::string> object> which contain the command suggestion related to command show
 	std::vector<std::string> getSuggestionShow();
 
+	//This function store the lastest user's command when it is being entered into the system
 	void setUserActions(std::string);
 
-	void initializeUserActionsIndex();
-
-	void setUserActionsIndex(int);
-
+	//This function returns the specific user's command when summoned, according to the numer of times up/down is pressed
 	std::string getSpecificUserAction();
 
 	void upKeyPressed();
 
 	void downKeyPressed();
-
 //===================================================================================================================================================================
 
 	void setKeywordCommands();
@@ -178,6 +175,8 @@ public:
 	std::vector<std::string> getKeyWordDayVect();
 	std::vector<std::string> getkeywordOthersVect();
 
-
+	void initializeUserActionsIndex();
+	
+	void setUserActionsIndex(int);
 };
 #endif
