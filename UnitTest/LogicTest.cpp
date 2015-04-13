@@ -19,24 +19,6 @@ namespace UnitTest
 		}
 
 
-		TEST_METHOD(Logic_isNumber_Test)
-		{
-			//test partition of string with only nondigits
-			string s = "ab!@";
-			Assert::AreEqual(logic.isNumber(s), false);
-
-
-			//test partition of string with only digits
-			s = "1234";
-			Assert::AreEqual(logic.isNumber(s), true);
-
-
-			//test partition of string with both digits and nondigits
-			s = "1234ab!@";
-			Assert::AreEqual(logic.isNumber(s), false);
-		}
-
-
 		TEST_METHOD(Logic_isSameDate_Test)
 		{
 			//test partition of both dates same
@@ -121,6 +103,24 @@ namespace UnitTest
 		}
 
 
+		TEST_METHOD(Logic_isNumber_Test)
+		{
+			//test partition of string with only nondigits
+			string s = "ab!@";
+			Assert::AreEqual(logic.isNumber(s), false);
+
+
+			//test partition of string with only digits
+			s = "1234";
+			Assert::AreEqual(logic.isNumber(s), true);
+
+
+			//test partition of string with both digits and nondigits
+			s = "1234ab!@";
+			Assert::AreEqual(logic.isNumber(s), false);
+		}
+
+
 		TEST_METHOD(Logic_removeLabel_Test)
 		{
 			//test partition of label in front of desired string
@@ -134,6 +134,4 @@ namespace UnitTest
 			Assert::AreEqual(input, expected);
 		}
 	};
-
-
 }
