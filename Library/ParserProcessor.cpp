@@ -282,14 +282,16 @@ void ParserProcessor::identifyEventName(int shiftedIndex){
 std::string ParserProcessor::setEventName(int index) {
 	std::string tempName = "";
 	for(int i = 0; i <= index; i++){
-		if(i == index){
-			if(i == semiColonIndex){
-				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ;")+1);
+		if(fragmentedWords[i] != LOCKUP_USED_INFORMATION){
+			if(i == index){
+				if(i == semiColonIndex){
+					tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ;")+1);
+				} else {
+					tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+				}
 			} else {
-				tempName = tempName + fragmentedWords[i].substr(0,fragmentedWords[i].find_last_not_of(" ")+1);
+				tempName = tempName + fragmentedWords[i];
 			}
-		} else {
-			tempName = tempName + fragmentedWords[i];
 		}
 	}
 	return tempName;
