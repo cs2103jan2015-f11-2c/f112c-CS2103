@@ -296,17 +296,17 @@ void EventStorage::exportFloating(std::ostream& out){
 //getters
 vector<Event> EventStorage::getNormalContent(){
 	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, normalContent.size());
-	normalContent.clear();
-	floatingContent.clear();
-	readToContent(currentFile);
+//	normalContent.clear();
+//	floatingContent.clear();
+//	readToContent(currentFile);
 	return normalContent;
 }
 
 vector<Event> EventStorage::getFloatingContent(){
 	logger.log(EventLog::STORAGE + EventLog::GET_NORMAL_CONTENT, floatingContent.size());
-	normalContent.clear();
-	floatingContent.clear();
-	readToContent(currentFile);
+//	normalContent.clear();
+//	floatingContent.clear();
+//	readToContent(currentFile);
 	return floatingContent;
 }
 
