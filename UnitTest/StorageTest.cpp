@@ -86,24 +86,6 @@ namespace UnitTest
 			result = modifier.add(testFloat1);
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 
-			/*test case: add single floating event with exisitng float in storage*/
-			result.clear();
-			expected.clear();
-
-			//creating test event 2
-			testFloat2.setName("event2");
-			testFloat2.setIsFloating(true);
-			testFloat2.setID(2);
-			testFloat2.setIsCompleted(false);
-
-			expected.push_back(testFloat2);
-			expected.push_back(testFloat1);
-
-			result = modifier.add(testFloat2);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-
-
 			/*test case: add single floating event with exisitng normal in storage*/
 			result.clear();
 			expected.clear();
