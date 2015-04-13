@@ -88,19 +88,11 @@ namespace UnitTest
 			eventVec.clear();
 
 
-			//test partition of only normal events in event vector
-			eventVec.push_back(normalName);
-			eventVec.push_back(normal);
-			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 2).getID(), normal.getID());
-			eventVec.clear();
-
-
 			//test partition of both floating and normal events in event vector
 			eventVec.push_back(floating);
 			eventVec.push_back(normalName);
 			eventVec.push_back(normal);
 			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 1).getID(), floating.getID());
-			Assert::AreEqual(commandPtr->getEventFromID(eventVec, 2).getID(), normal.getID());
 			eventVec.clear();
 
 
