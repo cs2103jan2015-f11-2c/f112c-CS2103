@@ -51,14 +51,15 @@ public:
 	bool executeUserInput(string input);
 	
 
-	//supporting methods
+	//supporting api
 	bool isProperCommand(Parser::CommandType commandType);
 	bool isSameDate(tm date1, tm date2);
-	void removeLabel(string& feedback);
 	bool isNumber(string s);
+	void removeLabel(string& feedback);
+
 
 private:
-	//main api
+	//main private methods
 	bool isDataRead();
 	Command* queueCommand(Parser::CommandType command, Event& userEvent, string nameOfEvent);
 	void setUpdater(Command* commandPtr, Parser::CommandType, Event userEvent, string nameOfEvent);
@@ -68,8 +69,9 @@ private:
 	void deleteParserPtr();
 
 
-	//supporting methods
+	//other private methods
 	int convertNameToID(string input);
+	bool isEventsCompleted(vector<Event>);
 	string showTypeToString(Parser::CommandType cmd, int importance);	
 	void setNewID(Event& userEvent);
 	void clearRedo();

@@ -259,7 +259,7 @@ void UncompleteCommand::execute() {
 
 	switch (numResults) {
 
-		//no exact match
+	//no exact match
 	case SIZE_ZERO: {
 		logger.log(LogicLog::CASE_0 + LogicLog::UNCOMPLETE);
 		userEvent = createInvalidEvent();
@@ -267,12 +267,12 @@ void UncompleteCommand::execute() {
 		return;
 					}
 
-					//1 exact match
+	//1 exact match
 	case SIZE_ONE: {
 		logger.log(LogicLog::CASE_1 + LogicLog::UNCOMPLETE);
 
 		userEvent = eventsToShow[SIZE_ZERO];
-		if (userEvent.getID() <= INVALID_NUMBER) {
+		if (userEvent.getID() <= INVALID_NUMBER) { //index [0] was a marker
 			userEvent = eventsToShow[SIZE_ONE];
 		}
 		uncompleteImmediately();
@@ -281,7 +281,7 @@ void UncompleteCommand::execute() {
 		return;
 				   }
 
-				   //more than 1 exact match
+	//more than 1 exact match
 	default: {
 		logger.log(LogicLog::DEFAULT + LogicLog::UNCOMPLETE);
 		userEvent = createInvalidEvent();

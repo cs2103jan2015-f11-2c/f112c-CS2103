@@ -27,6 +27,7 @@ const string LogicUpdater::SHOWIMPORTANT_MESSAGE = "showing: importance level ";
 const string LogicUpdater::EVENT_NOT_FOUND_MESSAGE = " not found";
 const string LogicUpdater::PARTIAL_EVENT_FOUND_MESSAGE = " not found, showing partial matches..";
 const string LogicUpdater::CHOOSE_EVENT_MESSAGE = "multiple results! please select an index.";
+const string LogicUpdater::EVENT_NOT_COMPLETED_MESSAGE = "that event is not yet completed!";
 const string LogicUpdater::DONE_EVENT_ERROR_MESSAGE = "sorry, you can't change a completed event :(";
 const string LogicUpdater::DEADLINE_EVENT_ERROR_MESSAGE = "deadline events can only happen within 1 day!";
 const string LogicUpdater::NEW_DAY_MESSAGE = "-MSmsgjyw-";

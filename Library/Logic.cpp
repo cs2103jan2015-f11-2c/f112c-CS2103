@@ -84,6 +84,79 @@ bool Logic::executeUserInput(string input) {
 	return isDone;
 }
 
+
+
+//SUPPORTING API
+bool Logic::isProperCommand(Parser::CommandType commandType) {
+	return ( (commandType == Parser::ADD) |
+		(commandType == Parser::ADDFLOAT) |
+		(commandType == Parser::COMPLETE) |
+		(commandType == Parser::UNCOMPLETE) |
+		(commandType == Parser::DELETE_) |
+		(commandType == Parser::EDIT) |
+		(commandType == Parser::SEARCH) |
+		(commandType == Parser::SHOW) |
+		(commandType == Parser::SHOWWEEK) |
+		(commandType == Parser::SHOWMONTH) |
+		(commandType == Parser::SHOWALL) |
+		(commandType == Parser::SHOWALLIMPORTANT) |
+		(commandType == Parser::SHOWCOMPLETE) |
+		(commandType == Parser::SHOWFLOAT) |
+		(commandType == Parser::SHOWIMPORTANT) |
+		(commandType == Parser::UNDO) |
+		(commandType == Parser::REDO) |
+		(commandType == Parser::ERROR_) );
+}
+
+//returns true if 2 input dates have same mday and mon and year, false otherwise
+bool Logic::isSameDate(tm date1, tm date2) {
+	return(date1.tm_mday == date2.tm_mday &&
+		date1.tm_mon == date2.tm_mon &&
+		date1.tm_year == date2.tm_year);
+}
+
+//returns true if input string consists of only numeric digits, false otherwise
+bool Logic::isNumber(string s) {
+	//log if input string is empty
+	try {
+		if (s.size() == Command::SIZE_ZERO) {
+			throw false;
+		} else {
+			throw true;
+		}
+	} catch (bool isEmpty) {
+		if (isEmpty == false) {
+			logger.log(LogicLog::ISNUMBER_INPUT_EMPTY);
+			return false;
+		}
+	}
+
+
+	for (unsigned int i = 0; i < s.size(); i++) {
+		if (!isdigit(s[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+//removes label enclosed by "[]" from input string
+void Logic::removeLabel(string& feedback) {
+	for (int i = 0; i < feedback.size(); i++) {
+		if (feedback[i] == CHAR_OPEN_SQUARE_BRACKET) {
+			feedback.erase(feedback.begin() + i);
+			while (feedback[i] != CHAR_CLOSE_SQUARE_BRACKET) {
+				feedback.erase(feedback.begin() + i);
+			}
+			feedback.erase(feedback.begin() + i);
+			feedback.erase(feedback.begin() + i);
+		}
+	}
+}
+
+
+
+//MAIN PRIVATE METHODS
 //returns true if data successfully read from file, false otherwise
 bool Logic::isDataRead() {
 	if (!eventFacade.dataRead()) {
@@ -124,6 +197,12 @@ Command* Logic::queueCommand(Parser::CommandType command, Event& userEvent, stri
 		case Parser::UNCOMPLETE: {
 			vector<Event> resultEvents = getExactMatches(nameOfEvent);
 			
+			if (resultEvents.size() > Command::SIZE_ZERO) {
+				if (!isEventsCompleted(resultEvents)) {
+					return new NullCommand;
+				}
+			}
+
 			Command* uncompleteCommand = new UncompleteCommand(&eventFacade, resultEvents, updater.getTempMainDisplayLabel());
 			logger.log(LogicLog::CREATED + LogicLog::UNCOMPLETE);
 			return executor.execute(uncompleteCommand);
@@ -330,17 +409,20 @@ void Logic::setUpdater(Command* commandPtr, Parser::CommandType command, Event u
 		case Parser::UNCOMPLETE: {
 			vector<Event> tempEvents = commandPtr->getEventVector();
 
-			//more than 1 exact match
-			if (!commandPtr->getIsExecuted()) { 
-				setEventVectors(normalEvents, floatingEvents, tempEvents);
-				vector<tm> tmVec = getTmVecFromEvents(normalEvents);
-				updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+			if (!commandPtr->getIsExecuted()) {
+				if (commandPtr->getEventVector().size() > Command::SIZE_ZERO) { //more than 1 exact match
+					setEventVectors(normalEvents, floatingEvents, tempEvents);
+					vector<tm> tmVec = getTmVecFromEvents(normalEvents);
+					updater.setAllEvents(normalEvents, floatingEvents, LogicUpdater::CHOOSE_EVENT_MESSAGE, tmVec, LogicUpdater::GARBAGE_INT, lastShowType);
+				} else { //user tried to uncomplete event that is not completed
+					updater.setFeedbackStrings(LogicUpdater::EVENT_NOT_COMPLETED_MESSAGE);
+				}
 				return;
 			}
 
+
 			Event uncompletedEvent = commandPtr->getEvent();
 			int id = uncompletedEvent.getID();
-			
 			//no event found 
 			if (id == Command::INVALID_NUMBER) {
 				string feedback = nameOfEvent + LogicUpdater::EVENT_NOT_FOUND_MESSAGE;
@@ -604,58 +686,33 @@ void Logic::deleteParserPtr() {
 
 
 
-//SUPPORTING METHODS
-bool Logic::isProperCommand(Parser::CommandType commandType) {
-	return ( (commandType == Parser::ADD) |
-		(commandType == Parser::ADDFLOAT) |
-		(commandType == Parser::COMPLETE) |
-		(commandType == Parser::UNCOMPLETE) |
-		(commandType == Parser::DELETE_) |
-		(commandType == Parser::EDIT) |
-		(commandType == Parser::SEARCH) |
-		(commandType == Parser::SHOW) |
-		(commandType == Parser::SHOWWEEK) |
-		(commandType == Parser::SHOWMONTH) |
-		(commandType == Parser::SHOWALL) |
-		(commandType == Parser::SHOWALLIMPORTANT) |
-		(commandType == Parser::SHOWCOMPLETE) |
-		(commandType == Parser::SHOWFLOAT) |
-		(commandType == Parser::SHOWIMPORTANT) |
-		(commandType == Parser::UNDO) |
-		(commandType == Parser::REDO) |
-		(commandType == Parser::ERROR_) );
+//OTHER PRIVATE METHODS
+//returns id of event if found in updater, -1 otherwise
+int Logic::convertNameToID(string name) {
+	if (isNumber(name)) {
+		int index = std::stoi(name);
+
+		if (index <= Command::SIZE_ZERO) {
+			return Command::INVALID_NUMBER;
+		}
+
+		if (index > updater.getTotalNumEvents()) {
+			return Command::INVALID_NUMBER;
+		} else {
+			return updater.getIDFromIndex(index);
+		}
+	} else {
+		return Command::INVALID_NUMBER;
+	}
 }
 
-//returns true if input string consists of only numeric digits, false otherwise
-bool Logic::isNumber(string s) {
-	//log if input string is empty
-	try {
-		if (s.size() == Command::SIZE_ZERO) {
-			throw false;
-		} else {
-			throw true;
-		}
-	} catch (bool isEmpty) {
-		if (isEmpty == false) {
-			logger.log(LogicLog::ISNUMBER_INPUT_EMPTY);
-			return false;
-		}
-	}
-
-
-	for (unsigned int i = 0; i < s.size(); i++) {
-		if (!isdigit(s[i])) {
+bool Logic::isEventsCompleted(vector<Event> eventVec) {
+	for (int i = 0; i < eventVec.size(); i++) {
+		if (eventVec[i].getName() != LogicUpdater::NEW_DAY_MESSAGE && !eventVec[i].getIsCompleted()) {
 			return false;
 		}
 	}
 	return true;
-}
-
-//returns true if 2 input dates have same mday and mon and year, false otherwise
-bool Logic::isSameDate(tm date1, tm date2) {
-	return(date1.tm_mday == date2.tm_mday &&
-		date1.tm_mon == date2.tm_mon &&
-		date1.tm_year == date2.tm_year);
 }
 
 string Logic::showTypeToString(Parser::CommandType cmd, int importance) {
@@ -688,45 +745,11 @@ string Logic::showTypeToString(Parser::CommandType cmd, int importance) {
 	}
 }
 
-//returns id of event if found in updater, -1 otherwise
-int Logic::convertNameToID(string name) {
-	if (isNumber(name)) {
-		int index = std::stoi(name);
-
-		if (index <= Command::SIZE_ZERO) {
-			return Command::INVALID_NUMBER;
-		}
-
-		if (index > updater.getTotalNumEvents()) {
-			return Command::INVALID_NUMBER;
-		} else {
-			return updater.getIDFromIndex(index);
-		}
-	} else {
-		return Command::INVALID_NUMBER;
-	}
-}
-
-//removes label enclosed by "[]" from input string
-void Logic::removeLabel(string& feedback) {
-	for (int i = 0; i < feedback.size(); i++) {
-		if (feedback[i] == CHAR_OPEN_SQUARE_BRACKET) {
-			feedback.erase(feedback.begin() + i);
-			while (feedback[i] != CHAR_CLOSE_SQUARE_BRACKET) {
-				feedback.erase(feedback.begin() + i);
-			}
-			feedback.erase(feedback.begin() + i);
-			feedback.erase(feedback.begin() + i);
-		}
-	}
-}
-
 //set id for newly added event
 void Logic::setNewID(Event& userEvent) {
 	userEvent.setID(lastID);
 	lastID++;
 }
-
 
 void Logic::clearRedo() {
 	executor.clearRedo();
@@ -754,3 +777,4 @@ vector<Event> Logic::getExactMatches(string name) {
 	
 	return updater.getExactNameMatches(index, name);
 }
+
