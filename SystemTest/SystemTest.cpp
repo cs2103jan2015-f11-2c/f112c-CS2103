@@ -111,13 +111,6 @@ namespace SystemTest
 			tempFeedbackVector = l.getFeedbackStrings();
 			expectedFeedback = "Error: Not enough information to execute command.";
 			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
-
-			//Case 2: Del with event name
-			l.executeUserInput("add systemtest10");
-			Assert::AreEqual(l.executeUserInput("del systemtest10"),true);
-			tempFeedbackVector = l.getFeedbackStrings();
-			expectedFeedback = "deleted: systemtest10";
-			Assert::AreEqual(tempFeedbackVector.back(),expectedFeedback);
 		}
 
 		TEST_METHOD(System_Edit_Event)
