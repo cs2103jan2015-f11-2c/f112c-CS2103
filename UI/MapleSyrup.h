@@ -1014,16 +1014,16 @@ public: bool checkAndExecuteDeveloperCommands(std::string input){
 
 			std::string inputInLowerCase = toLowerCase(input);
 
-			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "\mapleclearlogs"){
+			if (inputInLowerCase.size() >=14 && inputInLowerCase.substr(0,14) == "mapleclearlogs"){
 				clearAllLogFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
-			} else if (inputInLowerCase.size() >=10 && inputInLowerCase.substr(0,10) == "\maplesyrup"){
+			} else if (inputInLowerCase.size() >=21 && inputInLowerCase.substr(0,21) == "maplesyrupclearall123"){
 				clearAllLogFiles();
 				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
-			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "\mapleclearall"){
+			} else if (inputInLowerCase.size() >=13 && inputInLowerCase.substr(0,13) == "mapleclearall"){
 				clearAllStorageFiles();
 				Application::Exit();
 				isDeveloperCommand = true;
