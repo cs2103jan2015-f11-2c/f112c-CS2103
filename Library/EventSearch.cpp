@@ -36,7 +36,7 @@ vector<Event> EventSearch::searchCurrentNameExact(string eventName){
 	return toLogic;
 }
 
-//==================================================================================================
+//========================================================================================
 //checking method 2 --- search completed with matching string name and returns sorted with marker
 vector<Event> EventSearch::searchCompletedNameOccurrence(string eventName){
 	
@@ -58,7 +58,7 @@ vector<Event> EventSearch::searchCompletedNameExact(string eventName){
 	return toLogic;
 }
 
-//==================================================================================================
+//========================================================================================
 //method 3 --- search level of importance
 vector<Event> EventSearch::searchLevelImportance(int level){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_LEVEL_IMPORTANCE, level);
@@ -86,7 +86,7 @@ vector<Event> EventSearch::searchAllImportance(){
 	return combineResults(floatingEvents, normalEvents);
 }
 
-//==================================================================================================
+//========================================================================================
 //method 4 --- search event with eventID
 Event EventSearch::searchEventWithID(int eventID){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_EVENT_WITH_ID, eventID);
@@ -95,7 +95,7 @@ Event EventSearch::searchEventWithID(int eventID){
 	Event noResults;
 	noResults.setID(NOT_FOUND);
 
-	for(auto i=0;i<normalEvents.size();i++){
+	for(auto i = 0; i < normalEvents.size(); i++){
 		if(normalEvents[i].getID() == eventID){
 			logger.log(EventLog::SEARCH_EVENT_WITH_ID + EventLog::EXIT, i);
 			return normalEvents[i];
@@ -111,7 +111,7 @@ Event EventSearch::searchCompletedEventWithID(int eventID){
 	Event noResults;
 	noResults.setID(NOT_FOUND);
 
-	for(auto i=0;i<normalCompleted.size();i++){
+	for(auto i = 0; i < normalCompleted.size(); i++){
 		if(normalCompleted[i].getID() == eventID){
 			logger.log(EventLog::SEARCH_COMPLETED_EVENT_WITH_ID + EventLog::EXIT, i);
 			return normalCompleted[i];
@@ -120,11 +120,11 @@ Event EventSearch::searchCompletedEventWithID(int eventID){
 	return noResults;
 }
 
-//==================================================================================================
+//========================================================================================
 //find index in internal storages with ID (DEL / EDIT SUPPORT)
 int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearch){
 	logger.log(EventLog::SEARCH + EventLog::SEARCH_INDEX_WITH_ID, eventID);
-	for(auto i=0;i<eventVectorToSearch.size();i++){
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
 		if(eventVectorToSearch[i].getID() == eventID){
 			logger.log(EventLog::SEARCH_INDEX_WITH_ID + EventLog::EXIT, i);
 			return i;
@@ -133,7 +133,7 @@ int EventSearch::searchIndexWithID(int eventID, vector<Event> eventVectorToSearc
 	return NOT_FOUND;
 }
 
-//==================================================================================================
+//========================================================================================
 //support methods
 //Support for method 1 --- finds string name match
 vector<Event> EventSearch::searchNameOccurrence(string eventName, vector<Event> normal, vector<Event> floating){
@@ -153,7 +153,7 @@ vector<Event> EventSearch::searchEventWithName(string eventName, vector<Event> e
 
 	vector<Event> returnVector;
 
-	for(auto i=0;i<eventVectorToSearch.size();i++){
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
 		int position = eventVectorToSearch[i].getName().find(eventName);
 		if(position > NOT_FOUND){
 			returnVector.push_back(eventVectorToSearch[i]);
@@ -178,7 +178,7 @@ vector<Event> EventSearch::searchNameExact(string eventName, vector<Event> norma
 vector<Event> EventSearch::searchExactString(string eventName, vector<Event> eventVectorToSearch){
 	vector<Event> returnVector;
 
-	for(auto i=0;i<eventVectorToSearch.size();i++){
+	for(auto i = 0; i < eventVectorToSearch.size(); i++){
 		if(eventName == eventVectorToSearch[i].getName()){
 			returnVector.push_back(eventVectorToSearch[i]);
 		}
@@ -205,7 +205,7 @@ vector<Event> EventSearch::searchEventWithImportance(int level, vector<Event> ve
 		logger.log(EventLog::ERROR + e);
 	}
 
-	for(auto i=0;i<vectorToSearch.size();i++){
+	for(auto i = 0; i < vectorToSearch.size(); i++){
 		if(level == vectorToSearch[i].getImportanceLevel()){
 			returnVector.push_back(vectorToSearch[i]);
 		}
@@ -218,7 +218,7 @@ vector<Event> EventSearch::searchEventWithAllImportance(vector<Event> vectorToSe
 
 	vector<Event> returnVector;
 
-	for(auto i=0;i<vectorToSearch.size();i++){
+	for(auto i = 0; i < vectorToSearch.size(); i++){
 		if(vectorToSearch[i].getImportanceLevel() >= MIN_LEVEL){
 			returnVector.push_back(vectorToSearch[i]);
 		}

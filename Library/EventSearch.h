@@ -1,13 +1,14 @@
 //@author A0113860M
-//==================================================================================================
-//EventSearch class is responsible for locating an event in storage. Searches can be based on name,
-//importance, or ID.
+//========================================================================================
+//EventSearch class is responsible for locating an event in storage. Searches can be based
+//on name, importance, or ID.
 //
-//Search by name and importance are the basic APIs for an external client to call through eventFacade.
-//Search by ID on the other hand is mostly used within Storage.
+//Search by name and importance are the basic APIs for an external client to call through
+//eventFacade. Search by ID on the other hand is mostly used within Storage.
 //
-//It also utilises EventOrganiser to obtain the necessary filtered data and to format the data by date.
-//==================================================================================================
+//It also utilises EventOrganiser to obtain the necessary filtered data and to format the
+//data by date.
+//========================================================================================
 #pragma once
 
 #ifndef EVENTSEARCH_H

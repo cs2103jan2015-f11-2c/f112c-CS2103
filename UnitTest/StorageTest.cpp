@@ -11,6 +11,211 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTest
 {
+	TEST_CLASS(EventModifierTest)
+	{
+	public:
+		EventModifier modifier;
+
+		//finds event index in currentContent vector with event ID
+		TEST_METHOD(EventModifier_add_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testEvent2, marker, testFloat2;
+			vector<Event> testNormalContent, expected, result;
+
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(10,10);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			/*test case: add single event in empty storage*/
+			result = modifier.add(testEvent1);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*test case: add single event with exisiting event in storage*/
+			result.clear();
+			expected.clear();
+
+			//creating test event 2
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(5,3,115);
+			testEvent2.setEndDate(5,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			result = modifier.add(testEvent2);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent2);
+			expected.push_back(testEvent1);	
+			
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[2].getName(),result[2].getName());
+
+
+			/*test case: add single floating event with empty storage*/
+			result.clear();
+			expected.clear();
+
+			Event testFloat1;
+			vector<Event> testFloatContent;
+
+			//creating test event 1
+			testFloat1.setName("event1");
+			testFloat1.setIsFloating(true);
+			testFloat1.setID(1426225500);
+			testFloat1.setIsCompleted(false);	
+
+			expected.push_back(testFloat1);
+			result = modifier.add(testFloat1);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+
+			/*test case: add single floating event with exisitng float in storage*/
+			result.clear();
+			expected.clear();
+
+			//creating test event 2
+			testFloat2.setName("event2");
+			testFloat2.setIsFloating(true);
+			testFloat2.setID(1426225501);
+			testFloat2.setIsCompleted(false);
+
+			expected.push_back(testFloat1);
+			expected.push_back(testFloat2);
+
+			result = modifier.add(testFloat2);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+
+			/*test case: add single floating event with exisitng normal in storage*/
+			result.clear();
+			expected.clear();
+			testNormalContent.clear();
+
+			//creating stub contentVector
+			testNormalContent.push_back(testEvent1);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			expected.push_back(testFloat1);
+			result = modifier.add(testFloat1);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+		
+			/*test case: add single normal event with exisitng float in storage*/
+			result.clear();
+			expected.clear();
+			testFloatContent.clear();
+
+			//creating stub contentVector
+			testFloatContent.push_back(testEvent1);
+			EventStorage::storage().setFloatingContent(testFloatContent);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+
+			result = modifier.add(testEvent1);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+		}
+
+		TEST_METHOD(EventModifier_del_test)
+		{
+			/*creating testing objects*/
+			Event testEvent1, testFloat1, testEvent2, testFloat2, marker;
+			vector<Event> testNormalContent, testFloatingContent, expected, result;
+			
+			//creating marker
+			marker.setName("-MSmsgjyw-");
+
+			//creating test event 1
+			testEvent1.setName("This is event1");
+			testEvent1.setStartDate(5,3,115);
+			testEvent1.setEndDate(5,3,115);
+			testEvent1.setStartTime(10,10);
+			testEvent1.setEndTime(6,6);
+			testEvent1.setIsFloating(false);
+			testEvent1.setID(1426225500);
+			testEvent1.setIsCompleted(false);
+
+			//creating test float 1
+			testFloat1.setName("event1");
+			testFloat1.setIsFloating(true);
+			testFloat1.setID(1426225500);
+			testFloat1.setIsCompleted(false);
+
+			//set storage stub
+			testNormalContent.push_back(testEvent1);
+			testFloatingContent.push_back(testFloat1);
+			EventStorage::storage().setNormalContent(testNormalContent);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			/*test case: delete single normal event in storage*/
+			result = modifier.del(testEvent1);
+			Assert::IsTrue(result.empty());
+			
+			/*test case: delete single float event in storage*/
+			result.clear();
+			result = modifier.del(testFloat1);
+			Assert::IsTrue(result.empty());
+
+			/*test case: delete single normal event with multiple events in storage*/
+			testEvent2.setName("test2");
+			testEvent2.setStartDate(5,3,115);
+			testEvent2.setEndDate(5,3,115);
+			testEvent2.setStartTime(5,30);
+			testEvent2.setEndTime(6,40);
+			testEvent2.setIsFloating(false);
+			testEvent2.setID(1426225502);
+			testEvent2.setIsCompleted(false);
+
+			//set stub storage
+			testNormalContent.push_back(testEvent2);
+			EventStorage::storage().setNormalContent(testNormalContent);
+
+			expected.push_back(marker);
+			expected.push_back(testEvent1);
+
+			result = modifier.del(testEvent2);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+			/*test case: delete single floating event with multiple events in storage*/
+			//creating test event 1
+			testFloat2.setName("event2");
+			testFloat2.setIsFloating(true);
+			testFloat2.setID(1426225501);
+			testFloat2.setIsCompleted(false);
+
+			//set stub storage
+			testFloatingContent.push_back(testFloat2);
+			EventStorage::storage().setFloatingContent(testFloatingContent);
+
+			expected.push_back(marker);
+			expected.push_back(testFloat1);
+
+			result = modifier.del(testFloat2);
+			Assert::AreEqual(expected[0].getName(),result[0].getName());
+			Assert::AreEqual(expected[1].getName(),result[1].getName());
+
+		}
+	};
+
 	TEST_CLASS(EventSearchTest)
 	{
 	public:
@@ -26,7 +231,7 @@ namespace UnitTest
 			//creating test event 1
 			testEvent1.setName("event1");
 			testEvent1.setStartDate(5,3,115);
-			testEvent1.setEndDate(7,3,115);
+			testEvent1.setEndDate(5,3,115);
 			testEvent1.setStartTime(5,5);
 			testEvent1.setEndTime(6,6);
 			testEvent1.setIsFloating(false);
@@ -35,7 +240,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("event2");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -43,7 +248,7 @@ namespace UnitTest
 
 			//creating test event 3
 			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
+			testEvent3.setStartDate(7,3,115);
 			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
 			testEvent3.setEndTime(6,40);
@@ -69,7 +274,7 @@ namespace UnitTest
 			//creating test event 4
 			testEvent4.setName("event4");
 			testEvent4.setStartDate(11,3,115);
-			testEvent4.setEndDate(12,3,115);
+			testEvent4.setEndDate(11,3,115);
 			testEvent4.setStartTime(2,30);
 			testEvent4.setEndTime(3,10);
 			testEvent4.setIsFloating(false);
@@ -164,7 +369,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("event111");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -231,7 +436,7 @@ namespace UnitTest
 
 			//creating test event 3
 			/*test case: finding floating importance*/
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setImportanceLevel(3);
@@ -282,7 +487,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("3");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -291,7 +496,7 @@ namespace UnitTest
 
 			//creating test event 3
 			/*test case: finding floating importance*/
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setImportanceLevel(3);
@@ -316,6 +521,7 @@ namespace UnitTest
 			
 			Assert::AreEqual(expected[0].getName(),result[0].getName());
 			Assert::AreEqual(expected[1].getName(),result[1].getName());
+			Assert::AreEqual(expected[2].getName(),result[2].getName());
 
 			/*test boundary case: 0 important events*/
 			testNormalContent.clear();
@@ -351,7 +557,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("3");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -360,7 +566,7 @@ namespace UnitTest
 
 			//creating test event 3
 			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
+			testEvent3.setStartDate(7,3,115);
 			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
 			testEvent3.setEndTime(6,40);
@@ -403,13 +609,13 @@ namespace UnitTest
 			testEvent1.setIsCompleted(true);
 
 			//creating test event 2
-			testEvent2.setName("floating");
+			testEvent2.setName("float2");
 			testEvent2.setIsFloating(true);
 			testEvent2.setID(1426225502);
 			testEvent2.setIsCompleted(false);
 
 			//creating test event 3
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setIsCompleted(true);
@@ -456,7 +662,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("test2");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -464,8 +670,8 @@ namespace UnitTest
 			testEvent2.setIsCompleted(false);
 
 			//creating test event 3
-			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
+			testEvent3.setName("Event3");
+			testEvent3.setStartDate(7,3,115);
 			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
 			testEvent3.setEndTime(6,40);
@@ -516,7 +722,7 @@ namespace UnitTest
 			testEvent2.setIsCompleted(false);
 
 			//creating test event 3
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setIsCompleted(true);
@@ -564,7 +770,7 @@ namespace UnitTest
 			//creating test event 2
 			testEvent2.setName("test2");
 			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(8,3,115);
+			testEvent2.setEndDate(6,3,115);
 			testEvent2.setStartTime(5,30);
 			testEvent2.setEndTime(6,40);
 			testEvent2.setIsFloating(false);
@@ -577,8 +783,8 @@ namespace UnitTest
 			EventStorage::storage().setNormalContent(testNormalContent);
 
 			//creating test event 3
-			testEvent3.setName("event3");
-			testEvent3.setStartDate(5,3,115);
+			testEvent3.setName("Event num 3");
+			testEvent3.setStartDate(7,3,115);
 			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
 			testEvent3.setEndTime(6,40);
@@ -644,7 +850,7 @@ namespace UnitTest
 			EventStorage::storage().setFloatingContent(testContent);
 
 			//creating test event 3
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setIsCompleted(false);
@@ -714,7 +920,7 @@ namespace UnitTest
 			EventStorage::storage().setNormalContent(testNormalContent);
 
 			//creating test event 3
-			testEvent3.setName("event3");
+			testEvent3.setName("Event 3");
 			testEvent3.setStartDate(5,3,115);
 			testEvent3.setEndDate(7,3,115);
 			testEvent3.setStartTime(1,30);
@@ -780,7 +986,7 @@ namespace UnitTest
 			EventStorage::storage().setFloatingContent(testContent);
 
 			//creating test event 3
-			testEvent3.setName("event3");
+			testEvent3.setName("float3");
 			testEvent3.setIsFloating(true);
 			testEvent3.setID(1426225532);
 			testEvent3.setIsCompleted(true);
@@ -874,114 +1080,5 @@ namespace UnitTest
 		}
 	};
 
-	TEST_CLASS(EventFacadeTest)
-	{
-	public:
-		EventFacade facade;
-
-		//finds event index in currentContent vector with event ID
-		TEST_METHOD(EventFacade_addEvent_test)
-		{
-			/*creating testing objects*/
-			Event testEvent1, testEvent2, marker;
-			vector<Event> testNormalContent, expected, result;
-
-			//creating marker
-			marker.setName("-MSmsgjyw-");
-
-			//creating test event 1
-			testEvent1.setName("This is event1");
-			testEvent1.setStartDate(5,3,115);
-			testEvent1.setEndDate(5,3,115);
-			testEvent1.setStartTime(5,5);
-			testEvent1.setEndTime(6,6);
-			testEvent1.setIsFloating(false);
-			testEvent1.setID(1426225500);
-			testEvent1.setIsCompleted(false);
-
-			/*test case: add single event in empty storage*/
-			result = facade.addEvent(testEvent1);
-
-			expected.push_back(marker);
-			expected.push_back(testEvent1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-
-			/*test case: add single event with exisiting event in storage*/
-			result.clear();
-			expected.clear();
-
-			//creating stub contentVector
-			testNormalContent.push_back(testEvent1);
-			EventStorage::storage().setNormalContent(testNormalContent);
-
-			//creating test event 2
-			testEvent2.setName("test2");
-			testEvent2.setStartDate(6,3,115);
-			testEvent2.setEndDate(6,3,115);
-			testEvent2.setStartTime(5,30);
-			testEvent2.setEndTime(6,40);
-			testEvent2.setIsFloating(false);
-			testEvent2.setID(1426225502);
-			testEvent2.setIsCompleted(false);
-
-			result = facade.addEvent(testEvent2);
-
-			expected.push_back(marker);
-			expected.push_back(testEvent2);
-			expected.push_back(marker);
-			expected.push_back(testEvent1);
-			
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-		//	Assert::AreEqual(expected[2].getName(),result[2].getName());
-		//	Assert::AreEqual(expected[3].getName(),result[3].getName());
-
-			/*test case: add single floating event with empty storage*/
-			result.clear();
-			expected.clear();
-
-			Event testFloat1;
-			vector<Event> testFloatContent;
-
-			//creating test event 1
-			testFloat1.setName("event1");
-			testFloat1.setIsFloating(true);
-			testFloat1.setID(1426225500);
-			testFloat1.setIsCompleted(false);	
-
-			expected.push_back(testFloat1);
-			result = facade.addEvent(testFloat1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-
-			/*test case: add single floating event with exisitng normal in storage*/
-			result.clear();
-			expected.clear();
-			testNormalContent.clear();
-
-			//creating stub contentVector
-			testNormalContent.push_back(testEvent1);
-			EventStorage::storage().setNormalContent(testNormalContent);
-
-			expected.push_back(testFloat1);
-			result = facade.addEvent(testFloat1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-		
-			/*test case: add single normal event with exisitng float in storage*/
-			result.clear();
-			expected.clear();
-			testFloatContent.clear();
-
-			//creating stub contentVector
-			testFloatContent.push_back(testEvent1);
-			EventStorage::storage().setFloatingContent(testFloatContent);
-
-			expected.push_back(marker);
-			expected.push_back(testEvent1);
-
-			result = facade.addEvent(testEvent1);
-			Assert::AreEqual(expected[0].getName(),result[0].getName());
-			Assert::AreEqual(expected[1].getName(),result[1].getName());
-		}
-	};
+	
 }

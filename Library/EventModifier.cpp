@@ -45,7 +45,7 @@ void EventModifier::addNormal(Event newEvent){
 	organiser.saveNormal(tempContents);
 }
 
-//==================================================================================================
+//========================================================================================
 //Delete method
 vector<Event> EventModifier::del(Event deletedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::DELETE);
@@ -89,7 +89,7 @@ vector<Event> EventModifier::deleteFloat(int index){
 	return toLogic;
 }
 
-//==================================================================================================
+//========================================================================================
 //Edit method
 vector<Event> EventModifier::edit(Event beforeEdit, Event afterEdit){
 	logger.log(EventLog::MODIFIER + EventLog::EDIT + beforeEdit.getName());
@@ -252,7 +252,7 @@ void EventModifier::correctDate(Event *tempEvent) {
 	tempEvent->setEndWeekday(time->tm_wday);
 }
 
-//==================================================================================================
+//========================================================================================
 //Complete method
 vector<Event> EventModifier::complete(Event completedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::COMPLETE);
@@ -306,7 +306,7 @@ vector<Event> EventModifier::completeFloat(int index){
 	return tempContents;
 }
 
-//==================================================================================================
+//========================================================================================
 //Uncomplete Method
 vector<Event> EventModifier::uncomplete(Event uncompletedEvent){
 	logger.log(EventLog::MODIFIER + EventLog::UNCOMPLETE);
@@ -349,7 +349,7 @@ vector<Event> EventModifier::uncompleteFloat(int index){
 	return organiser.allFloatingCurrent();
 }
 
-//==================================================================================================
+//========================================================================================
 //support methods
 int EventModifier::findNormalIndex(int eventID){
 	vector<Event> tempContents = organiser.allNormalCurrent();

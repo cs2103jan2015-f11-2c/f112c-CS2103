@@ -41,7 +41,7 @@ vector<Event> EventOrganiser::showAllFloatingCompleted(){
 	return allFloatingCompleted();
 }
 
-//==================================================================================================
+//========================================================================================
 //shows the range of given eventVector, sorted and marked
 vector<Event> EventOrganiser::showEvents(vector<Event> eventsToShow){
 	logger.log(EventLog::ORGANISER + EventLog::SHOW_EVENTS, eventsToShow.size());
@@ -62,14 +62,14 @@ vector<Event> EventOrganiser::showDatesFromNormalContent(Event eventWithStartEnd
 	return tempContent;
 }
 
-//==================================================================================================
+//========================================================================================
 //Filters  uncompleted / completed Events
 //get from internal storage vectors and returns filtered events
 vector<Event> EventOrganiser::allNormalCurrent(){
 	vector<Event> tempContent = EventStorage::storage().getNormalContent();
 	vector<Event> results;
 
-	for(auto i=0;i<tempContent.size();i++){
+	for(auto i = 0; i < tempContent.size(); i++){
 		if(tempContent[i].getIsCompleted() == false){
 			results.push_back(tempContent[i]);
 		}
@@ -83,7 +83,7 @@ vector<Event> EventOrganiser::allFloatingCurrent(){
 	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
 	vector<Event> results;
 
-	for(auto i=0;i<tempContent.size();i++){
+	for(auto i = 0; i < tempContent.size(); i++){
 		if(tempContent[i].getIsCompleted() == false){
 			results.push_back(tempContent[i]);
 		}
@@ -98,7 +98,7 @@ vector<Event> EventOrganiser::allNormalCompleted(){
 	vector<Event> tempContent = EventStorage::storage().getNormalContent();
 	vector<Event> results;
 
-	for(auto i=0;i<tempContent.size();i++){
+	for(auto i = 0; i < tempContent.size(); i++){
 		if(tempContent[i].getIsCompleted() == true){
 			results.push_back(tempContent[i]);
 		}
@@ -112,7 +112,7 @@ vector<Event> EventOrganiser::allFloatingCompleted(){
 	vector<Event> tempContent = EventStorage::storage().getFloatingContent();
 	vector<Event> results;
 
-	for(auto i=0;i<tempContent.size();i++){
+	for(auto i = 0; i < tempContent.size(); i++){
 		if(tempContent[i].getIsCompleted() == true){
 			results.push_back(tempContent[i]);
 		}
@@ -148,7 +148,7 @@ void EventOrganiser::saveFloatingCompleted(vector<Event> floatingCompleted){
 	EventStorage::storage().setFloatingContent(tempFloatingCurrent);
 }
 
-//==================================================================================================
+//========================================================================================
 //Show dates support methods
 //shows date range for vector items, sorted and marked
 vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector<Event> eventsToFilter){
@@ -172,11 +172,12 @@ vector<Event> EventOrganiser::showDateRange(Event eventWithStartEndTimes, vector
 
 	wantedEventDates = eventDateToVector(eventWithStartEndTimes);
 
-	for(int i=0;i<wantedEventDates.size();i++){
-		for(int j=0; j<eventsToFilter.size();j++){
+	for(int i = 0; i < wantedEventDates.size(); i++){
+		for(int j = 0; j < eventsToFilter.size(); j++){
 			exisitngEventDates = eventDateToVector(eventsToFilter[j]);
-			for(int k=0; k<exisitngEventDates.size();k++){
-				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon) && (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
+			for(int k = 0; k<exisitngEventDates.size(); k++){
+				if((wantedEventDates[i].tm_year == exisitngEventDates[k].tm_year) && (wantedEventDates[i].tm_mon == exisitngEventDates[k].tm_mon)
+					&& (wantedEventDates[i].tm_mday == exisitngEventDates[k].tm_mday)){
 					//check ALLDAY.. set starttime and endtime
 					if(eventsToFilter[j].getStartDate().tm_mday != eventsToFilter[j].getEndDate().tm_mday){ //if multi day event
 						tempEvent = eventsToFilter[j];
@@ -272,12 +273,12 @@ vector<Event> EventOrganiser::sortMarker(vector<Event> showResult){
 	vector<Event> returnVector;
 	vector<Event> tempVector;
 
-	for(int i=0;i<showResult.size();i++){
+	for(int i = 0; i < showResult.size(); i++){
 		if(showResult[i].getName() != MARKER_CODE){
 			tempVector.push_back(showResult[i]);
 		} else if(showResult[i].getName() == MARKER_CODE){
 			returnVector.push_back(showResult[i]);
-			for(int j=0;j<tempVector.size();j++){
+			for(int j = 0; j < tempVector.size(); j++){
 				returnVector.push_back(tempVector[j]);
 			}
 			tempVector.clear();
@@ -314,8 +315,8 @@ vector<Event> EventOrganiser::sortEventVectorByDate(vector<Event> eventsToSort){
 	if(eventsToSort.size()<=1){
 		return eventsToSort;
 	} else{
-		for(auto i=0;i<(eventsToSort.size()-1);i++){
-			for(int j=i+1;j<eventsToSort.size();j++){
+		for(auto i = 0; i < (eventsToSort.size()-1); i++){
+			for(int j = i+1; j < eventsToSort.size(); j++){
 				int difference = findTimeDiff(eventsToSort[j].getStartDate(),eventsToSort[i].getStartDate());
 				if(difference >= 0 ){ 
 					temp = eventsToSort[i];
@@ -335,8 +336,8 @@ vector<Event> EventOrganiser::sortEventVectorByEndDate(vector<Event> eventsToSor
 	if(eventsToSort.size()<=1){
 		return eventsToSort;
 	} else{
-		for(auto i=0;i<(eventsToSort.size()-1);i++){
-			for(int j=i+1;j<eventsToSort.size();j++){
+		for(auto i = 0; i < (eventsToSort.size()-1); i++){
+			for(int j = i+1; j < eventsToSort.size(); j++){
 				int difference = findTimeDiff(eventsToSort[j].getEndDate(),eventsToSort[i].getEndDate());
 				if(difference >= 0 ){ 
 					temp = eventsToSort[i];
@@ -365,7 +366,7 @@ vector<Event> EventOrganiser::sortFloatingByID(vector<Event> floating){
 	if(floating.size()<=1){
 		return floating;
 	} else{
-		for(auto i=0;i<(floating.size()-1);i++){
+		for(auto i = 0; i < (floating.size()-1); i++){
 			for(int j=i+1;j<floating.size();j++){
 				if(floating[i].getID() > floating[j].getID()){ 
 					temp = floating[i];

@@ -1,5 +1,5 @@
 //@author A0113860M
-//==================================================================================================
+//========================================================================================
 //EventStorage class is responsible for the internal and external storages. 
 //It adopts the singleton pattern to ensure that only one storage object is created to prevent 
 //read/write errors and duplicates.
@@ -14,15 +14,16 @@
 //	2)myBackUp
 //
 //myBackup:
-//In the event that the user accidentally deleted or corrupted the main text file(myCurrent) that it is deemed
-//unreadable, the program will automatically load the backup file. myCurrent will also be updated.
-//The myBackup file is written upon program start up if the main text file is successfully read.
+//In the event that the user accidentally deleted or corrupted the main text file(myCurrent)
+//that it is deemed unreadable, the program will automatically load the backup file. myCurrent
+//will also be updated. The myBackup file is written upon program start up if the main text 
+//file is successfully read.
 //
 //Internal storages are held in 2 vectors:
 //	1) normalContent
 //	2) floatingContent
 //
-//==================================================================================================
+//========================================================================================
 #pragma once
 
 #ifndef EVENTSTORAGE_H

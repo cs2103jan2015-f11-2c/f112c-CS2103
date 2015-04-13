@@ -1,5 +1,5 @@
 //@author A0113860M
-//==================================================================================================
+//========================================================================================
 //EventOrganiser handles organisation and formatting of data from EventStorage. 
 //
 //There are 4 main types of functions in this class:
@@ -16,7 +16,7 @@
 //	4) merge completed and uncompleted events and saves them in the internal and external 
 //	storage.
 //
-//==================================================================================================
+//========================================================================================
 
 #pragma once
 
